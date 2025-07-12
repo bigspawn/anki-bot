@@ -42,11 +42,17 @@ class ProgressRepository:
 
                 current = cursor.fetchone()
                 if not current:
-                    logger.info(f"No learning progress found for user {user_id}, word {word_id}. Creating initial record.")
+                    logger.info(
+                        f"No learning progress found for user {user_id}, word {word_id}. "
+                        "Creating initial record."
+                    )
                     # Create initial learning progress record
                     cursor = conn.execute(
                         """
-                        INSERT INTO learning_progress (user_id, word_id, repetitions, easiness_factor, interval_days, next_review_date)
+                        INSERT INTO learning_progress (
+                            user_id, word_id, repetitions, easiness_factor,
+                            interval_days, next_review_date
+                        )
                         VALUES (?, ?, 0, 2.5, 1, ?)
                         """,
                         (user_id, word_id, datetime.now())
@@ -63,7 +69,10 @@ class ProgressRepository:
                     from ....spaced_repetition import get_srs_system
                     srs = get_srs_system()
                     result = srs.calculate_review(
-                        rating, current["repetitions"], current["interval_days"], current["easiness_factor"]
+                        rating,
+                        current["repetitions"],
+                        current["interval_days"],
+                        current["easiness_factor"],
                     )
                     new_interval = result.new_interval
                     new_easiness = result.new_easiness_factor

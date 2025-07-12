@@ -58,7 +58,9 @@ class DatabaseManager:
         """Check if word exists in user's learning progress"""
         return self.word_repo.check_word_exists(user_id, lemma)
 
-    def check_multiple_words_exist(self, user_id: int, lemmas: list[str]) -> dict[str, bool]:
+    def check_multiple_words_exist(
+        self, user_id: int, lemmas: list[str]
+    ) -> dict[str, bool]:
         """Check existence of multiple words at once, including potential lemma forms"""
         result = {}
 
@@ -70,7 +72,10 @@ class DatabaseManager:
                 # Try potential lemma forms
                 potential_lemmas = self._get_potential_lemmas(lemma)
                 for potential in potential_lemmas:
-                    if potential != lemma and self.word_repo.check_word_exists(user_id, potential):
+                    if (
+                        potential != lemma
+                        and self.word_repo.check_word_exists(user_id, potential)
+                    ):
                         exists = True
                         break
 
@@ -82,15 +87,21 @@ class DatabaseManager:
         """Get all words for a user with learning progress"""
         return self.word_repo.get_words_by_user(user_id)
 
-    def get_due_words(self, user_id: int, limit: int = 10, randomize: bool = True) -> list[dict[str, Any]]:
+    def get_due_words(
+        self, user_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
         """Get words due for review"""
         return self.word_repo.get_due_words(user_id, limit, randomize)
 
-    def get_new_words(self, user_id: int, limit: int = 10, randomize: bool = True) -> list[dict[str, Any]]:
+    def get_new_words(
+        self, user_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
         """Get new words (never reviewed)"""
         return self.word_repo.get_new_words(user_id, limit, randomize)
 
-    def get_difficult_words(self, user_id: int, limit: int = 10, randomize: bool = True) -> list[dict[str, Any]]:
+    def get_difficult_words(
+        self, user_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
         """Get difficult words (low easiness factor)"""
         return self.word_repo.get_difficult_words(user_id, limit, randomize)
 
@@ -121,7 +132,9 @@ class DatabaseManager:
             user_id, word_id, rating, response_time_ms=response_time_ms
         )
 
-    def get_learning_progress(self, user_id: int, word_id: int) -> dict[str, Any] | None:
+    def get_learning_progress(
+        self, user_id: int, word_id: int
+    ) -> dict[str, Any] | None:
         """Get learning progress for a specific word"""
         return self.progress_repo.get_learning_progress(user_id, word_id)
 
@@ -143,18 +156,28 @@ class DatabaseManager:
         """Add a single word to user's learning progress"""
         return self.add_word_to_user(user_id, word_data)
 
-    def add_words_batch(self, user_id: int, words_data: list[dict[str, Any]]) -> list[int]:
+    def add_words_batch(
+        self, user_id: int, words_data: list[dict[str, Any]]
+    ) -> list[int]:
         """Add multiple words and return list of word IDs"""
         count = self.add_words_to_user(user_id, words_data)
         # Return mock list of IDs for now - this could be improved
         return list(range(1, count + 1))
 
-    def get_existing_words_from_list(self, user_id: int, lemmas: list[str]) -> list[str]:
+    def get_existing_words_from_list(
+        self, user_id: int, lemmas: list[str]
+    ) -> list[str]:
         """Get existing words from a list of lemmas"""
         existence_map = self.check_multiple_words_exist(user_id, lemmas)
         return [lemma for lemma, exists in existence_map.items() if exists]
 
-    def add_review_record(self, user_id: int, word_id: int, rating: int, response_time_ms: int = 0) -> bool:
+    def add_review_record(
+        self,
+        user_id: int,
+        word_id: int,
+        rating: int,
+        response_time_ms: int = 0,
+    ) -> bool:
         """Add a review record - alias for update_learning_progress"""
         return self.update_learning_progress(user_id, word_id, rating, response_time_ms)
 

@@ -222,7 +222,10 @@ class DatabaseConnection:
             # Check if confidence column exists in words table
             cursor = conn.execute("PRAGMA table_info(words)")
             table_info = cursor.fetchall()
-            columns = {row[1]: {"type": row[2], "notnull": row[3], "default": row[4]} for row in table_info}
+            columns = {
+                row[1]: {"type": row[2], "notnull": row[3], "default": row[4]}
+                for row in table_info
+            }
 
             if "confidence" not in columns:
                 logger.info("Adding missing confidence column to words table")
@@ -233,13 +236,23 @@ class DatabaseConnection:
             # Check if response_time_ms column exists in review_history table
             cursor = conn.execute("PRAGMA table_info(review_history)")
             review_table_info = cursor.fetchall()
-            review_columns = {row[1]: {"type": row[2], "notnull": row[3], "default": row[4]} for row in review_table_info}
+            review_columns = {
+                row[1]: {"type": row[2], "notnull": row[3], "default": row[4]}
+                for row in review_table_info
+            }
 
             if "response_time_ms" not in review_columns:
-                logger.info("Adding missing response_time_ms column to review_history table")
-                conn.execute("ALTER TABLE review_history ADD COLUMN response_time_ms INTEGER DEFAULT 0")
+                logger.info(
+                    "Adding missing response_time_ms column to review_history table"
+                )
+                conn.execute(
+                    "ALTER TABLE review_history ADD COLUMN response_time_ms "
+                    "INTEGER DEFAULT 0"
+                )
                 conn.commit()
-                logger.info("Successfully added response_time_ms column to review_history table")
+                logger.info(
+                    "Successfully added response_time_ms column to review_history table"
+                )
 
             # Check if word column exists and is NOT NULL - make it optional
             if "word" in columns and columns["word"]["notnull"] == 1:
@@ -286,7 +299,10 @@ class DatabaseConnection:
                     select_parts.append("CURRENT_TIMESTAMP as updated_at")
 
                 select_query = f"""
-                    INSERT INTO words_new (id, lemma, part_of_speech, article, translation, example, additional_forms, confidence, created_at, updated_at)
+                    INSERT INTO words_new (
+                        id, lemma, part_of_speech, article, translation,
+                        example, additional_forms, confidence, created_at, updated_at
+                    )
                     SELECT {', '.join(select_parts)}
                     FROM words
                 """

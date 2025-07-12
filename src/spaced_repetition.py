@@ -316,13 +316,12 @@ if __name__ == "__main__":
     interval = 1
     easiness = 2.5
 
-    for i, rating in enumerate([3, 3, 2, 3, 4]):
+    for repetitions, rating in enumerate([3, 3, 2, 3, 4]):
         result = srs.calculate_review(rating, repetitions, interval, easiness)
         print(
-            f"Review {i+1}: rating={rating} -> interval={result.new_interval}, "
+            f"Review {repetitions+1}: rating={rating} -> interval={result.new_interval}, "
             f"ef={result.new_easiness_factor:.2f}, next={result.next_review_date}"
         )
 
-        repetitions += 1
         interval = result.new_interval
         easiness = result.new_easiness_factor

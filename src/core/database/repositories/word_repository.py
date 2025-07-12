@@ -23,7 +23,10 @@ class WordRepository:
             with self.db_connection.get_connection() as conn:
                 cursor = conn.execute(
                     """
-                    INSERT INTO words (lemma, part_of_speech, article, translation, example, additional_forms, confidence)
+                    INSERT INTO words (
+                        lemma, part_of_speech, article, translation,
+                        example, additional_forms, confidence
+                    )
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                     """,
                     (

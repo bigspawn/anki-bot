@@ -32,7 +32,9 @@ class ProcessedWord:
     confidence: float = 1.0
 
 
-def validate_article(article: str | None, lemma: str, part_of_speech: str) -> str | None:
+def validate_article(
+    article: str | None, lemma: str, part_of_speech: str
+) -> str | None:
     """
     Валидация артикля для немецких существительных
 
@@ -51,7 +53,9 @@ def validate_article(article: str | None, lemma: str, part_of_speech: str) -> st
     # First check for plural nouns
     if is_likely_plural(lemma):
         if article and article != 'None':
-            logger.warning(f"Removed article for plural noun '{lemma}': '{article}' -> None")
+            logger.warning(
+                f"Removed article for plural noun '{lemma}': '{article}' -> None"
+            )
         return None
 
     # If lemma is empty, return None
@@ -62,15 +66,25 @@ def validate_article(article: str | None, lemma: str, part_of_speech: str) -> st
     corrected_article = get_correct_article_from_dict(lemma)
     if corrected_article is not None:
         if corrected_article != article:
-            logger.warning(f"Corrected article for '{lemma}': '{article}' -> '{corrected_article}'")
+            logger.warning(
+                f"Corrected article for '{lemma}': '{article}' -> "
+                f"'{corrected_article}'"
+            )
         return corrected_article
 
     # If article is empty or incorrect, try to fix it
-    if not article or article == 'None' or article not in ["der", "die", "das"]:
+    if (
+        not article
+        or article == 'None'
+        or article not in ["der", "die", "das"]
+    ):
         # If not in dictionary, try to guess by ending
         guessed_article = guess_article_by_ending(lemma)
         if guessed_article and guessed_article != article:
-            logger.warning(f"Guessed article for '{lemma}': '{article}' -> '{guessed_article}' (by ending)")
+            logger.warning(
+                f"Guessed article for '{lemma}': '{article}' -> "
+                f"'{guessed_article}' (by ending)"
+            )
             return guessed_article
 
         # If this is clearly a noun but article is wrong
@@ -165,10 +179,15 @@ def is_likely_plural(lemma: str) -> bool:
     # Plural endings
     plural_endings = ['en', 'er', 'e', 's']
     for ending in plural_endings:
-        if lemma_lower.endswith(ending) and len(lemma) > 3:
-            # Additional check for typical plural words
-            if any(indicator in lemma_lower for indicator in ['kinder', 'menschen', 'leute']):
-                return True
+        if (
+            lemma_lower.endswith(ending)
+            and len(lemma) > 3
+            and any(
+                indicator in lemma_lower
+                for indicator in ['kinder', 'menschen', 'leute']
+            )
+        ):
+            return True
 
     return False
 
@@ -489,7 +508,9 @@ Be accurate and provide high-quality linguistic analysis for all words."""
     def _create_fallback_word(self, word: str) -> ProcessedWord | None:
         """Create fallback ProcessedWord when OpenAI fails - returns None to skip invalid words"""
         # Don't create fallback words with invalid translations
-        logger.warning(f"Skipping word '{word}' due to translation failure - no fallback created")
+        logger.warning(
+            f"Skipping word '{word}' due to translation failure - no fallback created"
+        )
         return None
 
     @retry_on_exception(max_retries=3, delay=1.0, backoff=2.0)
@@ -512,7 +533,9 @@ Be accurate and provide high-quality linguistic analysis for all words."""
             return []
 
         if len(words) > 30:  # Reduced max batch size to prevent JSON truncation
-            logger.warning(f"Batch size {len(words)} too large, processing first 30 words")
+            logger.warning(
+                f"Batch size {len(words)} too large, processing first 30 words"
+            )
             words = words[:30]
 
         if self.request_count >= self.max_requests_per_day:
@@ -530,7 +553,8 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                     {"role": "system", "content": self._get_batch_system_prompt()},
                     {"role": "user", "content": prompt},
                 ],
-                max_completion_tokens=self.max_tokens * min(4, len(words) // 5 + 1),  # Dynamic token scaling based on batch size
+                max_completion_tokens=self.max_tokens * min(4, len(words) // 5 + 1),
+                # Dynamic token scaling based on batch size
                 temperature=self.temperature,
                 response_format={"type": "json_object"},
             )
@@ -556,7 +580,10 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                 logger.error(f"Failed to parse OpenAI batch response as JSON: {e}")
                 logger.debug(f"Response content length: {len(content)} chars")
                 logger.debug(f"Response content preview: {content[:500]}...")
-                logger.warning(f"JSON parsing failed for batch of {len(words)} words - consider reducing batch size")
+                logger.warning(
+                    f"JSON parsing failed for batch of {len(words)} words - "
+                    "consider reducing batch size"
+                )
                 return []  # Return empty list for JSON parsing errors
 
         except Exception as e:
@@ -577,7 +604,10 @@ Be accurate and provide high-quality linguistic analysis for all words."""
 
                     # Validate translation
                     if not self._is_valid_translation(translation):
-                        logger.warning(f"Invalid translation for word '{word}': '{translation}' - skipping word")
+                        logger.warning(
+                            f"Invalid translation for word '{word}': '{translation}' - "
+                            "skipping word"
+                        )
                         continue
 
                     processed_word = ProcessedWord(
@@ -646,14 +676,19 @@ Be accurate and provide high-quality linguistic analysis for all words."""
             else:
                 new_words.append(word)
 
-        logger.info(f"Found {len(existing_words)} existing words, processing {len(new_words)} new words in batches")
+        logger.info(
+            f"Found {len(existing_words)} existing words, processing "
+            f"{len(new_words)} new words in batches"
+        )
 
         # Process new words in smaller batches to avoid JSON truncation
         batch_size = 20  # Reduced batch size for better reliability
 
         for i in range(0, len(new_words), batch_size):
             batch = new_words[i : i + batch_size]
-            batch_contexts = {word: contexts.get(word) for word in batch if word in contexts}
+            batch_contexts = {
+                word: contexts.get(word) for word in batch if word in contexts
+            }
 
             # Process entire batch in single OpenAI request
             batch_results = await self.process_words_batch(batch, batch_contexts)
