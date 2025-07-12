@@ -1,10 +1,6 @@
 name: Security Scan
 
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch: # Manual trigger only
 
 jobs:

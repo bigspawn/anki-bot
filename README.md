@@ -244,10 +244,10 @@ The project includes comprehensive GitHub Actions workflows:
 - **Registry**: Published to GitHub Container Registry (ghcr.io)
 - **Security**: Container vulnerability scanning with Trivy
 
-### Dependency Management
-- **Dependabot**: Automated dependency updates
-- **Security Alerts**: Automatic vulnerability detection
-- **Weekly Updates**: Scheduled dependency reviews
+### Security & Quality
+- **Manual Security Scans**: On-demand vulnerability scanning with Trivy
+- **Code Quality**: Automated linting and type checking
+- **Manual Triggers**: All security scans run only when needed
 
 ### Release Automation
 ```bash
