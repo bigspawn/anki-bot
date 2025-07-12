@@ -77,12 +77,12 @@ class TestDatabaseManager:
         """Test user creation"""
         user = temp_db.create_user(**sample_user_data)
         assert user is not None
-        assert user["id"] > 0
+        assert user["telegram_id"] > 0
         assert user["telegram_id"] == sample_user_data["telegram_id"]
 
         # Test getting existing user
         existing_user = temp_db.get_user_by_telegram_id(sample_user_data["telegram_id"])
-        assert existing_user["id"] == user["id"]
+        assert existing_user["telegram_id"] == user["telegram_id"]
 
     def test_get_user_by_telegram_id(self, temp_db, sample_user_data):
         """Test getting user by Telegram ID"""
@@ -96,7 +96,7 @@ class TestDatabaseManager:
         # Get user
         user = temp_db.get_user_by_telegram_id(sample_user_data["telegram_id"])
         assert user is not None
-        assert user["id"] == created_user["id"]
+        assert user["telegram_id"] == created_user["telegram_id"]
         assert user["telegram_id"] == sample_user_data["telegram_id"]
         assert user["username"] == sample_user_data["username"]
 
@@ -104,7 +104,7 @@ class TestDatabaseManager:
         """Test adding words"""
         # Create user first
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Add word
         word = temp_db.add_word(user_id, sample_word_data)
@@ -119,7 +119,7 @@ class TestDatabaseManager:
     def test_add_words_batch(self, temp_db, sample_user_data):
         """Test adding multiple words in batch"""
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Prepare batch data
         words_batch = [
@@ -175,7 +175,7 @@ class TestDatabaseManager:
     def test_check_word_exists(self, temp_db, sample_user_data, sample_word_data):
         """Test checking if word exists"""
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Word doesn't exist
         exists = temp_db.check_word_exists(user_id, sample_word_data["lemma"])
@@ -191,7 +191,7 @@ class TestDatabaseManager:
     def test_get_words_by_user(self, temp_db, sample_user_data, sample_word_data):
         """Test getting words by user"""
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # No words initially
         words = temp_db.get_words_by_user(user_id)
@@ -208,7 +208,7 @@ class TestDatabaseManager:
     def test_get_due_words(self, temp_db, sample_user_data, sample_word_data):
         """Test getting due words"""
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         word = temp_db.add_word(user_id, sample_word_data)
         word_id = word["id"]
 
@@ -220,7 +220,7 @@ class TestDatabaseManager:
     def test_get_new_words(self, temp_db, sample_user_data, sample_word_data):
         """Test getting new words"""
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         word = temp_db.add_word(user_id, sample_word_data)
         word_id = word["id"]
 
@@ -235,7 +235,7 @@ class TestDatabaseManager:
     ):
         """Test updating learning progress"""
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         word = temp_db.add_word(user_id, sample_word_data)
         word_id = word["id"]
 
@@ -257,13 +257,13 @@ class TestDatabaseManager:
     def test_add_review_record(self, temp_db, sample_user_data, sample_word_data):
         """Test adding review records"""
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         word = temp_db.add_word(user_id, sample_word_data)
         word_id = word["id"]
 
         # Add review record
         temp_db.add_review_record(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word_id,
             rating=3,
             response_time_ms=1500
@@ -272,7 +272,7 @@ class TestDatabaseManager:
         # Verify record was added
         with temp_db.get_connection() as conn:
             cursor = conn.execute(
-                "SELECT COUNT(*) as count FROM review_history WHERE user_id = ? AND word_id = ?",
+                "SELECT COUNT(*) as count FROM review_history WHERE telegram_id = ? AND word_id = ?",
                 (user_id, word_id),
             )
             count = cursor.fetchone()["count"]
@@ -281,7 +281,7 @@ class TestDatabaseManager:
     def test_get_user_stats(self, temp_db, sample_user_data, sample_word_data):
         """Test getting user statistics"""
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # No words initially
         stats = temp_db.get_user_stats(user_id)
@@ -327,7 +327,7 @@ class TestDatabaseManager:
     ):
         """Test getting existing words from a list"""
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Test with empty list
         existing = temp_db.get_existing_words_from_list(user_id, [])
@@ -370,7 +370,7 @@ class TestDatabaseManager:
     ):
         """Test checking existence of multiple words"""
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Test with empty list
         result = temp_db.check_multiple_words_exist(user_id, [])
@@ -415,7 +415,7 @@ class TestDatabaseManager:
     def test_german_verb_inflection_detection(self, temp_db, sample_user_data):
         """Test detection of German verb inflections (bedeutet case)"""
         user = temp_db.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Add base form of verb "bedeuten"
         bedeuten_data = {

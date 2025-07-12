@@ -143,7 +143,7 @@ class CommandHandlers:
             return
 
         # Get due words
-        due_words = self.db_manager.get_due_words(db_user["id"], limit=10)
+        due_words = self.db_manager.get_due_words(db_user["telegram_id"], limit=10)
 
         if not due_words:
             await self._safe_reply(
@@ -173,7 +173,7 @@ class CommandHandlers:
             )
             return
 
-        new_words = self.db_manager.get_new_words(db_user["id"], limit=10)
+        new_words = self.db_manager.get_new_words(db_user["telegram_id"], limit=10)
 
         if not new_words:
             await self._safe_reply(
@@ -202,7 +202,7 @@ class CommandHandlers:
             )
             return
 
-        difficult_words = self.db_manager.get_difficult_words(db_user["id"], limit=10)
+        difficult_words = self.db_manager.get_difficult_words(db_user["telegram_id"], limit=10)
 
         if not difficult_words:
             await self._safe_reply(
@@ -229,7 +229,7 @@ class CommandHandlers:
             )
             return
 
-        stats = self.db_manager.get_user_stats(db_user["id"])
+        stats = self.db_manager.get_user_stats(db_user["telegram_id"])
         stats_message = format_progress_stats(stats)
 
         await self._safe_reply(update, stats_message)

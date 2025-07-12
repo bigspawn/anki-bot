@@ -69,13 +69,13 @@ class TestMultiUserStudySession:
         ]
 
         for user in users:
-            user_id = user["id"]
+            user_id = user["telegram_id"]
             added_count = temp_db_manager.add_words_to_user(user_id, words_data)
             assert added_count == 3
 
         # Create study sessions for each user
         for user in users:
-            user_id = user["id"]
+            user_id = user["telegram_id"]
             words = temp_db_manager.get_new_words(user_id, limit=3)
 
             # Create mock update object
@@ -147,7 +147,7 @@ class TestMultiUserStudySession:
             "username": "testuser5",
         }
         user = temp_db_manager.create_user(**user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Add a word
         word_data = {
@@ -206,7 +206,7 @@ class TestMultiUserStudySession:
                 "username": f"user{telegram_id}",
             }
             user = temp_db_manager.create_user(**user_data)
-            user_id = user["id"]
+            user_id = user["telegram_id"]
 
             # Add words to create potentially large word IDs
             words_data = [

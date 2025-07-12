@@ -74,7 +74,7 @@ class TestExerciseCompletionWorkflow:
         # 1. Create user
         user = temp_db_manager.create_user(**sample_user_data)
         assert user is not None
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # 2. Add words to user's learning progress
         added_count = temp_db_manager.add_words_to_user(user_id, sample_words_data)
@@ -142,7 +142,7 @@ class TestExerciseCompletionWorkflow:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         added_count = temp_db_manager.add_words_to_user(user_id, sample_words_data)
         assert added_count == 3
 
@@ -179,7 +179,7 @@ class TestExerciseCompletionWorkflow:
 
         # Create user and add one word
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         added_count = temp_db_manager.add_words_to_user(user_id, [sample_words_data[0]])
         assert added_count == 1
 
@@ -206,7 +206,7 @@ class TestExerciseCompletionWorkflow:
 
         # Create user and word manually without learning progress
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Create word directly without learning progress
         word_data = {
@@ -246,7 +246,7 @@ class TestExerciseCompletionWorkflow:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         added_count = temp_db_manager.add_words_to_user(user_id, sample_words_data)
         assert added_count == 3
 

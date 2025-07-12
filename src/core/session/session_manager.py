@@ -23,9 +23,9 @@ logger = logging.getLogger(__name__)
 class StudySession:
     """Represents a single study session"""
 
-    def __init__(self, session_id: str, user_id: int, words: list[dict], session_type: str):
+    def __init__(self, session_id: str, telegram_id: int, words: list[dict], session_type: str):
         self.session_id = session_id
-        self.user_id = user_id
+        self.telegram_id = telegram_id
         self.words = words
         self.session_type = session_type
         self.current_word_index = 0
@@ -78,20 +78,20 @@ class SessionManager:
         session_type: str
     ):
         """Start a new study session"""
-        user_id = update.effective_user.id
+        telegram_id = update.effective_user.id
 
         # Log session start
-        logger.info(f"Starting {session_type} study session for user {user_id} with {len(words)} words")
+        logger.info(f"Starting {session_type} study session for telegram_id {telegram_id} with {len(words)} words")
 
         # Create session with compact ID
         # Use only last 6 digits of timestamp for uniqueness while staying compact
         timestamp = int(datetime.now().timestamp())
         compact_timestamp = timestamp % 1000000  # Last 6 digits
-        session_id = f"{user_id}_{compact_timestamp}"
-        session = StudySession(session_id, user_id, words, session_type)
+        session_id = f"{telegram_id}_{compact_timestamp}"
+        session = StudySession(session_id, telegram_id, words, session_type)
 
         # Store session
-        self.user_sessions[user_id] = session
+        self.user_sessions[telegram_id] = session
         session.timer.start()
 
         # Show first card
@@ -125,8 +125,8 @@ class SessionManager:
 
     async def handle_show_answer(self, query, data: dict):
         """Handle showing the answer to a flashcard"""
-        user_id = query.from_user.id
-        session = self.user_sessions.get(user_id)
+        telegram_id = query.from_user.id
+        session = self.user_sessions.get(telegram_id)
 
         if not session:
             await query.edit_message_text("❌ Сессия истекла. Начните новую с /study")
@@ -183,10 +183,10 @@ class SessionManager:
         if not word_id or not rating:
             logger.error("Missing word_id or rating in callback data")
             return
-            
+
         # Update word progress - now using telegram_id directly
         logger.info(f"Updating statistics: telegram_id {telegram_user_id}, word {word_id}, rating {rating}")
-        success = self.db_manager.update_learning_progress(telegram_user_id, word_id, rating)
+        self.db_manager.update_learning_progress(telegram_user_id, word_id, rating)
         logger.info(f"Statistics updated successfully for telegram_id {telegram_user_id}, word {word_id}")
 
         # Record answer statistics
@@ -245,8 +245,8 @@ class SessionManager:
         await self._safe_reply(update, completion_text, parse_mode="HTML")
 
         # Clean up session
-        if session.user_id in self.user_sessions:
-            del self.user_sessions[session.user_id]
+        if session.telegram_id in self.user_sessions:
+            del self.user_sessions[session.telegram_id]
 
     async def _finish_session_from_query(self, query, session: StudySession):
         """Finish the study session from a callback query"""
@@ -268,8 +268,8 @@ class SessionManager:
         await self._safe_edit(query, completion_text, parse_mode="HTML")
 
         # Clean up session
-        if session.user_id in self.user_sessions:
-            del self.user_sessions[session.user_id]
+        if session.telegram_id in self.user_sessions:
+            del self.user_sessions[session.telegram_id]
 
     async def handle_study_callback(self, query):
         """Handle study-related callback queries"""
@@ -289,8 +289,8 @@ class SessionManager:
 
     async def _handle_next_card(self, query, data: dict):
         """Handle next card button"""
-        user_id = query.from_user.id
-        session = self.user_sessions.get(user_id)
+        telegram_id = query.from_user.id
+        session = self.user_sessions.get(telegram_id)
 
         if not session:
             await query.edit_message_text("❌ Сессия истекла. Начните новую с /study")
@@ -300,8 +300,8 @@ class SessionManager:
 
     async def _handle_finish_session(self, query, data: dict):
         """Handle finish session button"""
-        user_id = query.from_user.id
-        session = self.user_sessions.get(user_id)
+        telegram_id = query.from_user.id
+        session = self.user_sessions.get(telegram_id)
 
         if not session:
             await query.edit_message_text("❌ Сессия истекла")
@@ -309,20 +309,20 @@ class SessionManager:
 
         await self._finish_session_from_query(query, session)
 
-    def get_session(self, user_id: int) -> StudySession | None:
+    def get_session(self, telegram_id: int) -> StudySession | None:
         """Get active session for user"""
-        return self.user_sessions.get(user_id)
+        return self.user_sessions.get(telegram_id)
 
     def cleanup_expired_sessions(self, max_age_hours: int = 24):
         """Clean up expired sessions"""
         current_time = datetime.now()
         expired_sessions = []
 
-        for user_id, session in self.user_sessions.items():
+        for telegram_id, session in self.user_sessions.items():
             age = (current_time - session.created_at).total_seconds() / 3600
             if age > max_age_hours:
-                expired_sessions.append(user_id)
+                expired_sessions.append(telegram_id)
 
-        for user_id in expired_sessions:
-            del self.user_sessions[user_id]
-            logger.info(f"Cleaned up expired session for user {user_id}")
+        for telegram_id in expired_sessions:
+            del self.user_sessions[telegram_id]
+            logger.info(f"Cleaned up expired session for telegram_id {telegram_id}")

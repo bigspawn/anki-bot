@@ -56,7 +56,7 @@ class TestRandomizationFeature:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         added_count = temp_db_manager.add_words_to_user(user_id, large_word_set)
         assert added_count == 20, f"Expected 20 words to be added, got {added_count}"
@@ -77,7 +77,7 @@ class TestRandomizationFeature:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         added_count = temp_db_manager.add_words_to_user(user_id, large_word_set)
         assert added_count == 20
@@ -98,7 +98,7 @@ class TestRandomizationFeature:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         added_count = temp_db_manager.add_words_to_user(user_id, large_word_set)
         assert added_count == 20
@@ -123,7 +123,7 @@ class TestRandomizationFeature:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         added_count = temp_db_manager.add_words_to_user(user_id, large_word_set)
         assert added_count == 20
@@ -154,7 +154,7 @@ class TestRandomizationFeature:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         added_count = temp_db_manager.add_words_to_user(user_id, large_word_set)
         assert added_count == 20
@@ -179,7 +179,7 @@ class TestRandomizationFeature:
 
         # Create user and add only 3 words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         small_word_set = [
             {"lemma": "word1", "part_of_speech": "noun", "translation": "слово1", "example": "Example 1."},

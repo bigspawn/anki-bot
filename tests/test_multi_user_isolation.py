@@ -6,7 +6,7 @@ Tests for multi-user word isolation functionality
 import pytest
 
 from src.config import Settings
-from src.core.database.database_manager import get_db_manager
+from src.core.database.database_manager import DatabaseManager
 
 
 class TestMultiUserWordIsolation:
@@ -16,7 +16,7 @@ class TestMultiUserWordIsolation:
         """Helper to create user and return ID"""
         user = db_manager.user_repo.create_user(**user_data)
         assert user is not None, f"User should be created with data: {user_data}"
-        return user["id"]
+        return user["telegram_id"]
 
     def _clean_test_data(self, db_manager):
         """Clean test data to avoid interference between tests"""
@@ -41,7 +41,7 @@ class TestMultiUserWordIsolation:
     @pytest.fixture
     def db_manager(self, settings):
         """Test database manager with in-memory database"""
-        db_mgr = get_db_manager(settings.database_url)
+        db_mgr = DatabaseManager(settings.database_url)
         # Initialize the database
         db_mgr.init_database()
         return db_mgr

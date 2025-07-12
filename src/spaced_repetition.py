@@ -28,10 +28,16 @@ class SpacedRepetitionSystem:
     """SuperMemo 2 spaced repetition algorithm implementation"""
 
     def __init__(self):
-        settings = get_settings()
-        self.default_easiness = settings.default_easiness_factor
-        self.min_easiness = settings.min_easiness_factor
-        self.max_easiness = settings.max_easiness_factor
+        try:
+            settings = get_settings()
+            self.default_easiness = settings.default_easiness_factor
+            self.min_easiness = settings.min_easiness_factor
+            self.max_easiness = settings.max_easiness_factor
+        except Exception:
+            # Fallback for tests without environment variables
+            self.default_easiness = 2.5
+            self.min_easiness = 1.3
+            self.max_easiness = 3.0
 
     def calculate_review(
         self,

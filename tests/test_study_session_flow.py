@@ -6,7 +6,7 @@ Test complete study session flow to verify progress persistence
 import pytest
 
 from src.config import Settings
-from src.core.database.database_manager import get_db_manager
+from src.core.database.database_manager import DatabaseManager
 
 
 class TestStudySessionFlow:
@@ -25,7 +25,7 @@ class TestStudySessionFlow:
     @pytest.fixture
     def db_manager(self, settings):
         """Test database manager with in-memory database"""
-        db_mgr = get_db_manager(settings.database_url)
+        db_mgr = DatabaseManager(settings.database_url)
         db_mgr.init_database()
         return db_mgr
 
@@ -44,7 +44,7 @@ class TestStudySessionFlow:
 
     def test_study_session_removes_words_from_due_list(self, db_manager, test_user):
         """Test that studying words removes them from due list (main user complaint)"""
-        user_id = test_user["id"]
+        user_id = test_user["telegram_id"]
 
         # Add test words
         sample_words = [
@@ -86,7 +86,7 @@ class TestStudySessionFlow:
         word_to_study = initial_due_words[0]
 
         success = db_manager.progress_repo.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word_to_study["id"],
             rating=3,  # Good rating
             new_interval=2,  # Move to 2-day interval
@@ -114,7 +114,7 @@ class TestStudySessionFlow:
 
     def test_study_session_with_easy_rating(self, db_manager, test_user):
         """Test that 'Easy' rating removes word from due list for longer period"""
-        user_id = test_user["id"]
+        user_id = test_user["telegram_id"]
 
         # Add test word
         sample_words = [{
@@ -135,7 +135,7 @@ class TestStudySessionFlow:
 
         # Study with "Easy" rating (4)
         success = db_manager.progress_repo.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word["id"],
             rating=4,  # Easy rating
             new_interval=4,  # Move to 4-day interval
@@ -151,7 +151,7 @@ class TestStudySessionFlow:
 
     def test_study_session_with_again_rating(self, db_manager, test_user):
         """Test that 'Again' rating keeps word in due list"""
-        user_id = test_user["id"]
+        user_id = test_user["telegram_id"]
 
         # Add test word
         sample_words = [{
@@ -172,7 +172,7 @@ class TestStudySessionFlow:
 
         # Study with "Again" rating (1) - should reset progress
         success = db_manager.progress_repo.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word["id"],
             rating=1,  # Again rating
             new_interval=0,  # Reset to immediate review
@@ -195,7 +195,7 @@ class TestStudySessionFlow:
 
     def test_multiple_study_sessions_persistence(self, db_manager, test_user):
         """Test that multiple study sessions correctly track progress"""
-        user_id = test_user["id"]
+        user_id = test_user["telegram_id"]
 
         # Add test word
         sample_words = [{
@@ -214,7 +214,7 @@ class TestStudySessionFlow:
 
         # First study session - Good rating
         success1 = db_manager.progress_repo.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word["id"],
             rating=3,
             new_interval=1,
@@ -229,7 +229,7 @@ class TestStudySessionFlow:
 
         # Second study session - Easy rating
         success2 = db_manager.progress_repo.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word["id"],
             rating=4,
             new_interval=3,
@@ -253,7 +253,7 @@ class TestStudySessionFlow:
 
     def test_user_complaint_scenario_fixed(self, db_manager, test_user):
         """Specific test for the user's complaint: same words appearing every time"""
-        user_id = test_user["id"]
+        user_id = test_user["telegram_id"]
 
         # Add the same words user might have
         sample_words = [
@@ -274,7 +274,7 @@ class TestStudySessionFlow:
             interval = [2, 4, 1][i]  # Different intervals
 
             success = db_manager.progress_repo.update_learning_progress(
-                user_id=user_id,
+                telegram_id=user_id,
                 word_id=word["id"],
                 rating=rating,
                 new_interval=interval,

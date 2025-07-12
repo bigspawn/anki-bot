@@ -27,7 +27,7 @@ class UserRepository:
         """Create a new user"""
         try:
             with self.db_connection.get_connection() as conn:
-                cursor = conn.execute(
+                conn.execute(
                     """
                     INSERT INTO users (telegram_id, first_name, last_name, username)
                     VALUES (?, ?, ?, ?)
@@ -100,13 +100,13 @@ class UserRepository:
             logger.error(f"Error updating user: {e}")
             return False
 
-    def deactivate_user(self, user_id: int) -> bool:
+    def deactivate_user(self, telegram_id: int) -> bool:
         """Deactivate a user"""
         try:
             with self.db_connection.get_connection() as conn:
                 cursor = conn.execute(
-                    "UPDATE users SET is_active = 0, updated_at = ? WHERE id = ?",
-                    (datetime.now(), user_id)
+                    "UPDATE users SET is_active = 0, updated_at = ? WHERE telegram_id = ?",
+                    (datetime.now(), telegram_id)
                 )
                 conn.commit()
                 return cursor.rowcount > 0
@@ -114,7 +114,7 @@ class UserRepository:
             logger.error(f"Error deactivating user: {e}")
             return False
 
-    def get_user_stats(self, user_id: int) -> UserStats | None:
+    def get_user_stats(self, telegram_id: int) -> UserStats | None:
         """Get comprehensive user statistics"""
         try:
             with self.db_connection.get_connection() as conn:
@@ -128,9 +128,9 @@ class UserRepository:
                         SUM(CASE WHEN lp.repetitions >= 3 THEN 1 ELSE 0 END) as learned_words,
                         SUM(CASE WHEN lp.easiness_factor < 2.0 THEN 1 ELSE 0 END) as difficult_words
                     FROM learning_progress lp
-                    WHERE lp.user_id = ?
+                    WHERE lp.telegram_id = ?
                     """,
-                    (user_id,)
+                    (telegram_id,)
                 )
 
                 row = cursor.fetchone()
@@ -144,9 +144,9 @@ class UserRepository:
                     """
                     SELECT AVG(CASE WHEN rating >= 3 THEN 1.0 ELSE 0.0 END) as avg_accuracy
                     FROM review_history
-                    WHERE user_id = ? AND reviewed_at >= datetime('now', '-30 days')
+                    WHERE telegram_id = ? AND reviewed_at >= datetime('now', '-30 days')
                     """,
-                    (user_id,)
+                    (telegram_id,)
                 )
 
                 accuracy_row = cursor.fetchone()
@@ -158,9 +158,9 @@ class UserRepository:
                     SELECT
                         COUNT(DISTINCT word_id) as reviews_today
                     FROM review_history
-                    WHERE user_id = ? AND date(reviewed_at) = date('now')
+                    WHERE telegram_id = ? AND date(reviewed_at) = date('now')
                     """,
-                    (user_id,)
+                    (telegram_id,)
                 )
 
                 today_row = cursor.fetchone()

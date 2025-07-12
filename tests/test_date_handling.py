@@ -99,7 +99,7 @@ class TestDateHandling:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         added_count = temp_db_manager.add_words_to_user(user_id, sample_words_data)
         assert added_count == 2
@@ -126,7 +126,7 @@ class TestDateHandling:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         added_count = temp_db_manager.add_words_to_user(user_id, sample_words_data)
         assert added_count == 2
@@ -139,7 +139,7 @@ class TestDateHandling:
         with temp_db_manager.get_connection() as conn:
             past_date = datetime.now() - timedelta(days=1)
             conn.execute(
-                "UPDATE learning_progress SET next_review_date = ? WHERE user_id = ? AND word_id = ?",
+                "UPDATE learning_progress SET next_review_date = ? WHERE telegram_id = ? AND word_id = ?",
                 (past_date.isoformat(), user_id, first_word_id)
             )
             conn.commit()
@@ -157,7 +157,7 @@ class TestDateHandling:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         added_count = temp_db_manager.add_words_to_user(user_id, sample_words_data)
         assert added_count == 2
@@ -169,7 +169,7 @@ class TestDateHandling:
             future_date = datetime.now() + timedelta(days=1)
             for word in words:
                 conn.execute(
-                    "UPDATE learning_progress SET next_review_date = ? WHERE user_id = ? AND word_id = ?",
+                    "UPDATE learning_progress SET next_review_date = ? WHERE telegram_id = ? AND word_id = ?",
                     (future_date.isoformat(), user_id, word["id"])
                 )
             conn.commit()
@@ -183,7 +183,7 @@ class TestDateHandling:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         added_count = temp_db_manager.add_words_to_user(user_id, sample_words_data)
         assert added_count == 2
@@ -206,7 +206,7 @@ class TestDateHandling:
 
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         added_count = temp_db_manager.add_words_to_user(user_id, sample_words_data)
         assert added_count == 2

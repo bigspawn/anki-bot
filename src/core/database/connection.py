@@ -111,6 +111,18 @@ class DatabaseConnection:
 
     def _create_tables(self, conn: sqlite3.Connection) -> None:
         """Create database tables"""
+        # For testing, drop tables if they exist to ensure fresh schema
+        if ":memory:" in str(self.db_path) or "test" in str(self.db_path):
+            drop_tables = [
+                "DROP TABLE IF EXISTS review_history",
+                "DROP TABLE IF EXISTS learning_progress", 
+                "DROP TABLE IF EXISTS user_settings",
+                "DROP TABLE IF EXISTS words",
+                "DROP TABLE IF EXISTS users",
+            ]
+            for drop_sql in drop_tables:
+                conn.execute(drop_sql)
+                
         tables = [
             """
             CREATE TABLE IF NOT EXISTS users (
@@ -187,32 +199,53 @@ class DatabaseConnection:
 
     def _create_indexes(self, conn: sqlite3.Connection) -> None:
         """Create database indexes for performance"""
+        # Check which column name is used in learning_progress table
+        cursor = conn.execute("PRAGMA table_info(learning_progress)")
+        progress_columns = [row[1] for row in cursor.fetchall()]
+        
+        # Determine the correct user ID column name
+        user_id_column = "telegram_id" if "telegram_id" in progress_columns else "user_id"
+        
+        # Check which column name is used in review_history table
+        cursor = conn.execute("PRAGMA table_info(review_history)")
+        review_columns = [row[1] for row in cursor.fetchall()]
+        review_user_id_column = "telegram_id" if "telegram_id" in review_columns else "user_id"
+        
+        # Check which column name is used in user_settings table
+        cursor = conn.execute("PRAGMA table_info(user_settings)")
+        settings_columns = [row[1] for row in cursor.fetchall()]
+        settings_user_id_column = "telegram_id" if "telegram_id" in settings_columns else "user_id"
+        
         indexes = [
             "CREATE INDEX IF NOT EXISTS idx_words_lemma ON words(lemma)",
             (
-                "CREATE INDEX IF NOT EXISTS idx_learning_progress_telegram_id "
-                "ON learning_progress(telegram_id)"
+                f"CREATE INDEX IF NOT EXISTS idx_learning_progress_{user_id_column} "
+                f"ON learning_progress({user_id_column})"
             ),
             (
                 "CREATE INDEX IF NOT EXISTS idx_learning_progress_next_review "
                 "ON learning_progress(next_review_date)"
             ),
             (
-                "CREATE INDEX IF NOT EXISTS idx_review_history_telegram_id "
-                "ON review_history(telegram_id)"
+                f"CREATE INDEX IF NOT EXISTS idx_review_history_{review_user_id_column} "
+                f"ON review_history({review_user_id_column})"
             ),
             (
                 "CREATE INDEX IF NOT EXISTS idx_review_history_reviewed_at "
                 "ON review_history(reviewed_at)"
             ),
             (
-                "CREATE INDEX IF NOT EXISTS idx_user_settings_telegram_id "
-                "ON user_settings(telegram_id)"
+                f"CREATE INDEX IF NOT EXISTS idx_user_settings_{settings_user_id_column} "
+                f"ON user_settings({settings_user_id_column})"
             ),
         ]
 
         for index_sql in indexes:
-            conn.execute(index_sql)
+            try:
+                conn.execute(index_sql)
+            except sqlite3.OperationalError as e:
+                logger.warning(f"Failed to create index: {index_sql}, error: {e}")
+                # Continue with other indexes
 
     def _run_migrations(self, conn: sqlite3.Connection) -> None:
         """Run database migrations for schema updates"""

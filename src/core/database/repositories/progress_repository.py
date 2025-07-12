@@ -48,7 +48,7 @@ class ProgressRepository:
                     )
                     # Set initial values for calculation
                     current = {"repetitions": 0, "easiness_factor": 2.5, "interval_days": 1}
-                    
+
                     # Create initial learning progress record with calculated values
                     # We'll calculate the new values first, then insert them directly
                     from ....spaced_repetition import get_srs_system
@@ -59,34 +59,34 @@ class ProgressRepository:
                         current["interval_days"],
                         current["easiness_factor"],
                     )
-                    
+
                     # Calculate next review date
                     next_review_date = datetime.now()
                     if result.new_interval > 0:
                         from datetime import timedelta
                         next_review_date = datetime.now() + timedelta(days=result.new_interval)
-                    
+
                     cursor = conn.execute(
                         """
                         INSERT INTO learning_progress (
-                            user_id, word_id, repetitions, easiness_factor,
+                            telegram_id, word_id, repetitions, easiness_factor,
                             interval_days, next_review_date, last_reviewed, created_at, updated_at
                         )
                         VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?)
                         """,
-                        (user_id, word_id, result.new_easiness_factor, result.new_interval, 
+                        (telegram_id, word_id, result.new_easiness_factor, result.new_interval,
                          next_review_date, datetime.now(), datetime.now(), datetime.now())
                     )
-                    
+
                     # Add to review history
                     cursor = conn.execute(
                         """
-                        INSERT INTO review_history (user_id, word_id, rating, response_time_ms, reviewed_at)
+                        INSERT INTO review_history (telegram_id, word_id, rating, response_time_ms, reviewed_at)
                         VALUES (?, ?, ?, ?, ?)
                         """,
-                        (user_id, word_id, rating, response_time_ms, datetime.now())
+                        (telegram_id, word_id, rating, response_time_ms, datetime.now())
                     )
-                    
+
                     conn.commit()
                     return True
                 else:
@@ -122,7 +122,7 @@ class ProgressRepository:
                         next_review_date = ?,
                         last_reviewed = ?,
                         updated_at = ?
-                    WHERE user_id = ? AND word_id = ?
+                    WHERE telegram_id = ? AND word_id = ?
                     """,
                     (
                         new_easiness,
@@ -130,7 +130,7 @@ class ProgressRepository:
                         next_review_date,
                         datetime.now(),
                         datetime.now(),
-                        user_id,
+                        telegram_id,
                         word_id
                     )
                 )
@@ -138,10 +138,10 @@ class ProgressRepository:
                 # Add to review history
                 cursor = conn.execute(
                     """
-                    INSERT INTO review_history (user_id, word_id, rating, response_time_ms, reviewed_at)
+                    INSERT INTO review_history (telegram_id, word_id, rating, response_time_ms, reviewed_at)
                     VALUES (?, ?, ?, ?, ?)
                     """,
-                    (user_id, word_id, rating, response_time_ms, datetime.now())
+                    (telegram_id, word_id, rating, response_time_ms, datetime.now())
                 )
 
                 conn.commit()
@@ -151,16 +151,16 @@ class ProgressRepository:
             logger.error(f"Error updating learning progress: {e}")
             return False
 
-    def get_learning_progress(self, user_id: int, word_id: int) -> LearningProgress | None:
+    def get_learning_progress(self, telegram_id: int, word_id: int) -> LearningProgress | None:
         """Get learning progress for a specific word"""
         try:
             with self.db_connection.get_connection() as conn:
                 cursor = conn.execute(
                     """
                     SELECT * FROM learning_progress
-                    WHERE user_id = ? AND word_id = ?
+                    WHERE telegram_id = ? AND word_id = ?
                     """,
-                    (user_id, word_id)
+                    (telegram_id, word_id)
                 )
                 row = cursor.fetchone()
                 return dict(row) if row else None
@@ -170,7 +170,7 @@ class ProgressRepository:
 
     def get_review_history(
         self,
-        user_id: int,
+        telegram_id: int,
         word_id: int | None = None,
         limit: int = 100
     ) -> list[ReviewHistory]:
@@ -181,21 +181,21 @@ class ProgressRepository:
                     cursor = conn.execute(
                         """
                         SELECT * FROM review_history
-                        WHERE user_id = ? AND word_id = ?
+                        WHERE telegram_id = ? AND word_id = ?
                         ORDER BY reviewed_at DESC
                         LIMIT ?
                         """,
-                        (user_id, word_id, limit)
+                        (telegram_id, word_id, limit)
                     )
                 else:
                     cursor = conn.execute(
                         """
                         SELECT * FROM review_history
-                        WHERE user_id = ?
+                        WHERE telegram_id = ?
                         ORDER BY reviewed_at DESC
                         LIMIT ?
                         """,
-                        (user_id, limit)
+                        (telegram_id, limit)
                     )
 
                 return [dict(row) for row in cursor.fetchall()]
@@ -203,7 +203,7 @@ class ProgressRepository:
             logger.error(f"Error getting review history: {e}")
             return []
 
-    def get_recent_reviews(self, user_id: int, days: int = 7) -> list[dict[str, Any]]:
+    def get_recent_reviews(self, telegram_id: int, days: int = 7) -> list[dict[str, Any]]:
         """Get recent reviews with word information"""
         try:
             with self.db_connection.get_connection() as conn:
@@ -212,17 +212,17 @@ class ProgressRepository:
                     SELECT rh.*, w.lemma, w.translation
                     FROM review_history rh
                     JOIN words w ON rh.word_id = w.id
-                    WHERE rh.user_id = ? AND rh.reviewed_at >= datetime('now', '-{days} days')
+                    WHERE rh.telegram_id = ? AND rh.reviewed_at >= datetime('now', '-{days} days')
                     ORDER BY rh.reviewed_at DESC
                     """,  # noqa: S608  # Safe: days is int parameter
-                    (user_id,)
+                    (telegram_id,)
                 )
                 return [dict(row) for row in cursor.fetchall()]
         except Exception as e:
             logger.error(f"Error getting recent reviews: {e}")
             return []
 
-    def get_performance_stats(self, user_id: int, days: int = 30) -> dict[str, Any]:
+    def get_performance_stats(self, telegram_id: int, days: int = 30) -> dict[str, Any]:
         """Get performance statistics for user"""
         try:
             with self.db_connection.get_connection() as conn:
@@ -234,9 +234,9 @@ class ProgressRepository:
                         SUM(CASE WHEN rating >= 3 THEN 1 ELSE 0 END) as good_reviews,
                         AVG(response_time_ms) as avg_response_time
                     FROM review_history
-                    WHERE user_id = ? AND reviewed_at >= datetime('now', '-{days} days')
+                    WHERE telegram_id = ? AND reviewed_at >= datetime('now', '-{days} days')
                     """,  # noqa: S608  # Safe: days is int parameter
-                    (user_id,)
+                    (telegram_id,)
                 )
 
                 row = cursor.fetchone()
@@ -261,7 +261,7 @@ class ProgressRepository:
                 'avg_response_time': 0.0
             }
 
-    def reset_word_progress(self, user_id: int, word_id: int) -> bool:
+    def reset_word_progress(self, telegram_id: int, word_id: int) -> bool:
         """Reset learning progress for a specific word"""
         try:
             with self.db_connection.get_connection() as conn:
@@ -274,9 +274,9 @@ class ProgressRepository:
                         next_review_date = ?,
                         last_reviewed = NULL,
                         updated_at = ?
-                    WHERE user_id = ? AND word_id = ?
+                    WHERE telegram_id = ? AND word_id = ?
                     """,
-                    (datetime.now(), datetime.now(), user_id, word_id)
+                    (datetime.now(), datetime.now(), telegram_id, word_id)
                 )
 
                 conn.commit()
@@ -285,49 +285,49 @@ class ProgressRepository:
             logger.error(f"Error resetting word progress: {e}")
             return False
 
-    def create_learning_progress(self, user_id: int, word_id: int) -> bool:
+    def create_learning_progress(self, telegram_id: int, word_id: int) -> bool:
         """Create initial learning progress record for a word"""
         try:
             with self.db_connection.get_connection() as conn:
                 # Check if already exists
                 cursor = conn.execute(
-                    "SELECT 1 FROM learning_progress WHERE user_id = ? AND word_id = ?",
-                    (user_id, word_id)
+                    "SELECT 1 FROM learning_progress WHERE telegram_id = ? AND word_id = ?",
+                    (telegram_id, word_id)
                 )
                 if cursor.fetchone():
-                    logger.debug(f"Learning progress already exists for user {user_id}, word {word_id}")
+                    logger.debug(f"Learning progress already exists for telegram_id {telegram_id}, word {word_id}")
                     return True
 
                 # Create new record
                 cursor = conn.execute(
                     """
-                    INSERT INTO learning_progress (user_id, word_id, repetitions, easiness_factor, interval_days, next_review_date)
+                    INSERT INTO learning_progress (telegram_id, word_id, repetitions, easiness_factor, interval_days, next_review_date)
                     VALUES (?, ?, 0, 2.5, 1, ?)
                     """,
-                    (user_id, word_id, datetime.now())
+                    (telegram_id, word_id, datetime.now())
                 )
 
                 conn.commit()
-                logger.info(f"Created learning progress for user {user_id}, word {word_id}")
+                logger.info(f"Created learning progress for telegram_id {telegram_id}, word {word_id}")
                 return True
         except Exception as e:
             logger.error(f"Error creating learning progress: {e}")
             return False
 
-    def delete_word_progress(self, user_id: int, word_id: int) -> bool:
+    def delete_word_progress(self, telegram_id: int, word_id: int) -> bool:
         """Delete learning progress and review history for a word"""
         try:
             with self.db_connection.get_connection() as conn:
                 # Delete review history first (due to foreign key constraints)
                 conn.execute(
-                    "DELETE FROM review_history WHERE user_id = ? AND word_id = ?",
-                    (user_id, word_id)
+                    "DELETE FROM review_history WHERE telegram_id = ? AND word_id = ?",
+                    (telegram_id, word_id)
                 )
 
                 # Delete learning progress
                 cursor = conn.execute(
-                    "DELETE FROM learning_progress WHERE user_id = ? AND word_id = ?",
-                    (user_id, word_id)
+                    "DELETE FROM learning_progress WHERE telegram_id = ? AND word_id = ?",
+                    (telegram_id, word_id)
                 )
 
                 conn.commit()

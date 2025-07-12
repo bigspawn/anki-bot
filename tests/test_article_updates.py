@@ -47,7 +47,7 @@ class TestArticleUpdates:
             {"lemma": "Teppich", "part_of_speech": "noun", "article": "der", "translation": "ковёр", "example": "Der Teppich ist schön."},
         ]
 
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         added_count = db_manager.add_words_to_user(user_id, test_words)
         assert added_count == len(test_words)
 
@@ -213,7 +213,7 @@ class TestArticleUpdates:
 
                 # Добавляем к пользователю
                 conn.execute(
-                    "INSERT INTO learning_progress (user_id, word_id) VALUES (?, ?)",
+                    "INSERT INTO learning_progress (telegram_id, word_id) VALUES (?, ?)",
                     (user_id, word_id)
                 )
             conn.commit()
@@ -246,7 +246,7 @@ class TestArticleUpdates:
             "username": "seconduser",
         }
         second_user = db_manager.create_user(**user_data)
-        second_user_id = second_user["id"]
+        second_user_id = second_user["telegram_id"]
 
         # Добавляем те же слова второму пользователю
         test_words = [

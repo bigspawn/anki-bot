@@ -77,7 +77,7 @@ class WordRepository:
             logger.error(f"Error getting word by lemma: {e}")
             return None
 
-    def check_word_exists(self, user_id: int, lemma: str) -> bool:
+    def check_word_exists(self, telegram_id: int, lemma: str) -> bool:
         """Check if word exists in user's learning progress"""
         try:
             with self.db_connection.get_connection() as conn:
@@ -85,16 +85,16 @@ class WordRepository:
                     """
                     SELECT 1 FROM learning_progress lp
                     JOIN words w ON lp.word_id = w.id
-                    WHERE lp.user_id = ? AND LOWER(w.lemma) = LOWER(?)
+                    WHERE lp.telegram_id = ? AND LOWER(w.lemma) = LOWER(?)
                     """,
-                    (user_id, lemma)
+                    (telegram_id, lemma)
                 )
                 return cursor.fetchone() is not None
         except Exception as e:
             logger.error(f"Error checking word existence: {e}")
             return False
 
-    def check_multiple_words_exist(self, user_id: int, lemmas: list[str]) -> dict[str, bool]:
+    def check_multiple_words_exist(self, telegram_id: int, lemmas: list[str]) -> dict[str, bool]:
         """Check existence of multiple words at once"""
         try:
             with self.db_connection.get_connection() as conn:
@@ -105,9 +105,9 @@ class WordRepository:
                     f"""
                     SELECT w.lemma FROM learning_progress lp
                     JOIN words w ON lp.word_id = w.id
-                    WHERE lp.user_id = ? AND LOWER(w.lemma) IN ({placeholders})
+                    WHERE lp.telegram_id = ? AND LOWER(w.lemma) IN ({placeholders})
                     """,  # noqa: S608  # Safe: placeholders contains only ? chars
-                    [user_id] + [lemma.lower() for lemma in lemmas]
+                    [telegram_id] + [lemma.lower() for lemma in lemmas]
                 )
 
                 existing_lemmas = {row["lemma"].lower() for row in cursor.fetchall()}
@@ -117,7 +117,7 @@ class WordRepository:
             logger.error(f"Error checking multiple words existence: {e}")
             return dict.fromkeys(lemmas, False)
 
-    def get_words_by_user(self, user_id: int) -> list[dict[str, Any]]:
+    def get_words_by_user(self, telegram_id: int) -> list[dict[str, Any]]:
         """Get all words for a user with learning progress"""
         try:
             with self.db_connection.get_connection() as conn:
@@ -127,17 +127,17 @@ class WordRepository:
                            lp.next_review_date, lp.last_reviewed
                     FROM words w
                     JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.user_id = ?
+                    WHERE lp.telegram_id = ?
                     ORDER BY lp.created_at DESC
                     """,
-                    (user_id,)
+                    (telegram_id,)
                 )
                 return [dict(row) for row in cursor.fetchall()]
         except Exception as e:
             logger.error(f"Error getting words by user: {e}")
             return []
 
-    def get_due_words(self, user_id: int, limit: int = 10, randomize: bool = True) -> list[dict[str, Any]]:
+    def get_due_words(self, telegram_id: int, limit: int = 10, randomize: bool = True) -> list[dict[str, Any]]:
         """Get words due for review"""
         try:
             with self.db_connection.get_connection() as conn:
@@ -150,18 +150,18 @@ class WordRepository:
                            lp.next_review_date, lp.last_reviewed
                     FROM words w
                     JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.user_id = ? AND lp.next_review_date <= datetime('now')
+                    WHERE lp.telegram_id = ? AND lp.next_review_date <= datetime('now')
                     {order_clause}
                     LIMIT ?
                     """,  # noqa: S608  # Safe: order_clause is from predefined strings
-                    (user_id, limit)
+                    (telegram_id, limit)
                 )
                 return [dict(row) for row in cursor.fetchall()]
         except Exception as e:
             logger.error(f"Error getting due words: {e}")
             return []
 
-    def get_new_words(self, user_id: int, limit: int = 10, randomize: bool = True) -> list[dict[str, Any]]:
+    def get_new_words(self, telegram_id: int, limit: int = 10, randomize: bool = True) -> list[dict[str, Any]]:
         """Get new words (never reviewed)"""
         try:
             with self.db_connection.get_connection() as conn:
@@ -174,18 +174,18 @@ class WordRepository:
                            lp.next_review_date, lp.last_reviewed
                     FROM words w
                     JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.user_id = ? AND lp.repetitions = 0
+                    WHERE lp.telegram_id = ? AND lp.repetitions = 0
                     {order_clause}
                     LIMIT ?
                     """,  # noqa: S608  # Safe: order_clause is from predefined strings
-                    (user_id, limit)
+                    (telegram_id, limit)
                 )
                 return [dict(row) for row in cursor.fetchall()]
         except Exception as e:
             logger.error(f"Error getting new words: {e}")
             return []
 
-    def get_difficult_words(self, user_id: int, limit: int = 10, randomize: bool = True) -> list[dict[str, Any]]:
+    def get_difficult_words(self, telegram_id: int, limit: int = 10, randomize: bool = True) -> list[dict[str, Any]]:
         """Get difficult words (low easiness factor)"""
         try:
             with self.db_connection.get_connection() as conn:
@@ -198,22 +198,22 @@ class WordRepository:
                            lp.next_review_date, lp.last_reviewed
                     FROM words w
                     JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.user_id = ? AND lp.easiness_factor < 2.0 AND lp.repetitions > 0
+                    WHERE lp.telegram_id = ? AND lp.easiness_factor < 2.0 AND lp.repetitions > 0
                     {order_clause}
                     LIMIT ?
                     """,  # noqa: S608  # Safe: order_clause is from predefined strings
-                    (user_id, limit)
+                    (telegram_id, limit)
                 )
                 return [dict(row) for row in cursor.fetchall()]
         except Exception as e:
             logger.error(f"Error getting difficult words: {e}")
             return []
 
-    def add_words_to_user(self, user_id: int, words_data: list[dict[str, Any]]) -> int:
+    def add_words_to_user(self, telegram_id: int, words_data: list[dict[str, Any]]) -> int:
         """Add multiple words to user's learning progress"""
         added_count = 0
 
-        logger.info(f"Starting to add {len(words_data)} words to user {user_id}")
+        logger.info(f"Starting to add {len(words_data)} words to user {telegram_id}")
         for i, word_data in enumerate(words_data):
             logger.info(f"Word {i+1}/{len(words_data)}: '{word_data.get('lemma')}' - '{word_data.get('translation')}'")
 
@@ -262,25 +262,25 @@ class WordRepository:
 
                         # Check if user already has this word
                         cursor = conn.execute(
-                            "SELECT 1 FROM learning_progress WHERE user_id = ? AND word_id = ?",
-                            (user_id, word_id)
+                            "SELECT 1 FROM learning_progress WHERE telegram_id = ? AND word_id = ?",
+                            (telegram_id, word_id)
                         )
 
                         existing_progress = cursor.fetchone()
                         if not existing_progress:
                             # Add to user's learning progress
-                            logger.debug(f"Adding '{lemma}' to learning progress for user {user_id}")
+                            logger.debug(f"Adding '{lemma}' to learning progress for user {telegram_id}")
                             cursor = conn.execute(
                                 """
-                                INSERT INTO learning_progress (user_id, word_id, repetitions, easiness_factor, interval_days, next_review_date)
+                                INSERT INTO learning_progress (telegram_id, word_id, repetitions, easiness_factor, interval_days, next_review_date)
                                 VALUES (?, ?, 0, 2.5, 1, datetime('now'))
                                 """,
-                                (user_id, word_id)
+                                (telegram_id, word_id)
                             )
                             added_count += 1
-                            logger.info(f"SUCCESS: Added '{lemma}' to user {user_id}'s learning progress")
+                            logger.info(f"SUCCESS: Added '{lemma}' to user {telegram_id}'s learning progress")
                         else:
-                            logger.warning(f"SKIP REASON 2: Word '{lemma}' already exists in learning progress for user {user_id}")
+                            logger.warning(f"SKIP REASON 2: Word '{lemma}' already exists in learning progress for user {telegram_id}")
 
                     except Exception as e:
                         logger.error(f"Error adding word {word_data.get('lemma', 'unknown')}: {e}")
@@ -291,7 +291,7 @@ class WordRepository:
         except Exception as e:
             logger.error(f"Error adding words to user: {e}")
 
-        logger.info(f"FINAL RESULT: Successfully added {added_count} out of {len(words_data)} words to user {user_id}")
+        logger.info(f"FINAL RESULT: Successfully added {added_count} out of {len(words_data)} words to user {telegram_id}")
         if added_count < len(words_data):
             skipped = len(words_data) - added_count
             logger.warning(f"SUMMARY: {skipped} words were skipped during addition process")

@@ -116,7 +116,7 @@ class TestArticleHandling:
 
         # Create user and add word with article
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         word_data = {
             "lemma": "Buch",
@@ -149,7 +149,7 @@ class TestArticleHandling:
 
         # Create user and add word without article
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         word_data = {
             "lemma": "Eltern",
@@ -182,7 +182,7 @@ class TestArticleHandling:
 
         # Create user and add word with 'None' string article
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Manually insert a word with 'None' string article (edge case)
         with temp_db_manager.get_connection() as conn:
@@ -194,7 +194,7 @@ class TestArticleHandling:
 
             # Add to user via learning_progress table
             conn.execute(
-                "INSERT INTO learning_progress (user_id, word_id) VALUES (?, ?)",
+                "INSERT INTO learning_progress (telegram_id, word_id) VALUES (?, ?)",
                 (user_id, word_id)
             )
             conn.commit()
@@ -219,7 +219,7 @@ class TestArticleHandling:
 
         # Create user
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Test words with different article scenarios
         test_words = [
