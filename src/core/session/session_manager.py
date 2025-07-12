@@ -182,7 +182,9 @@ class SessionManager:
             return
 
         # Update word progress
+        logger.info(f"Updating statistics: user {user_id}, word {word_id}, rating {rating}")
         self.db_manager.update_learning_progress(user_id, word_id, rating)
+        logger.info(f"Statistics updated successfully for user {user_id}, word {word_id}")
 
         # Record answer statistics
         session.record_answer(rating >= 3)  # Consider 3+ as correct

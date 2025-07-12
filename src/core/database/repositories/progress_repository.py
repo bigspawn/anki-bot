@@ -46,19 +46,49 @@ class ProgressRepository:
                         f"No learning progress found for user {user_id}, word {word_id}. "
                         "Creating initial record."
                     )
-                    # Create initial learning progress record
+                    # Set initial values for calculation
+                    current = {"repetitions": 0, "easiness_factor": 2.5, "interval_days": 1}
+                    
+                    # Create initial learning progress record with calculated values
+                    # We'll calculate the new values first, then insert them directly
+                    from ....spaced_repetition import get_srs_system
+                    srs = get_srs_system()
+                    result = srs.calculate_review(
+                        rating,
+                        current["repetitions"],
+                        current["interval_days"],
+                        current["easiness_factor"],
+                    )
+                    
+                    # Calculate next review date
+                    next_review_date = datetime.now()
+                    if result.new_interval > 0:
+                        from datetime import timedelta
+                        next_review_date = datetime.now() + timedelta(days=result.new_interval)
+                    
                     cursor = conn.execute(
                         """
                         INSERT INTO learning_progress (
                             user_id, word_id, repetitions, easiness_factor,
-                            interval_days, next_review_date
+                            interval_days, next_review_date, last_reviewed, created_at, updated_at
                         )
-                        VALUES (?, ?, 0, 2.5, 1, ?)
+                        VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?)
                         """,
-                        (user_id, word_id, datetime.now())
+                        (user_id, word_id, result.new_easiness_factor, result.new_interval, 
+                         next_review_date, datetime.now(), datetime.now(), datetime.now())
                     )
-                    # Set initial values for calculation
-                    current = {"repetitions": 0, "easiness_factor": 2.5, "interval_days": 1}
+                    
+                    # Add to review history
+                    cursor = conn.execute(
+                        """
+                        INSERT INTO review_history (user_id, word_id, rating, response_time_ms, reviewed_at)
+                        VALUES (?, ?, ?, ?, ?)
+                        """,
+                        (user_id, word_id, rating, response_time_ms, datetime.now())
+                    )
+                    
+                    conn.commit()
+                    return True
                 else:
                     # Convert row to dict for consistent access
                     current = dict(current)

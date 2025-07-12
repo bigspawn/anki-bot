@@ -329,3 +329,93 @@ class TestLearningProgress:
         # Should handle gracefully - either succeed (by creating record) or fail gracefully
         # The exact behavior depends on implementation, but it shouldn't crash
         assert isinstance(success, bool), "Should return boolean result"
+
+    def test_first_time_study_creates_and_updates_progress(self, db_manager):
+        """Test that first-time study creates learning progress correctly for existing users"""
+        # Create user with unique telegram_id
+        import random
+        user_data = {
+            "telegram_id": random.randint(100000, 999999),
+            "first_name": "Test",
+            "last_name": "User", 
+            "username": "testuser_stats"
+        }
+        user = db_manager.user_repo.create_user(**user_data)
+        assert user is not None, "User should be created"
+        
+        # Add word to user (this creates initial learning progress)
+        word_data = {
+            "lemma": "haus",
+            "part_of_speech": "noun",
+            "article": "das",
+            "translation": "дом",
+            "example": "Das Haus ist groß."
+        }
+        added_count = db_manager.word_repo.add_words_to_user(user["id"], [word_data])
+        assert added_count == 1, "Word should be added"
+        
+        # Get the word
+        words = db_manager.word_repo.get_words_by_user(user["id"])
+        assert len(words) == 1, "User should have 1 word"
+        word = words[0]
+        
+        # Verify initial learning progress exists (created automatically)
+        initial_progress = db_manager.progress_repo.get_learning_progress(user["id"], word["id"])
+        assert initial_progress is not None, "Learning progress should exist after adding word"
+        assert initial_progress["repetitions"] == 0, "Initial repetitions should be 0"
+        assert initial_progress["easiness_factor"] == 2.5, "Initial easiness factor should be 2.5"
+        assert initial_progress["interval_days"] == 1, "Initial interval should be 1 day"
+        assert initial_progress["last_reviewed"] is None, "Should not have been reviewed yet"
+        
+        # No review history should exist yet
+        initial_history = db_manager.progress_repo.get_review_history(user["id"], word["id"])
+        assert len(initial_history) == 0, "Should have no review history initially"
+        
+        # First study session - user rates word as "Again" (rating 1)
+        success = db_manager.progress_repo.update_learning_progress(
+            user_id=user["id"],
+            word_id=word["id"], 
+            rating=1,
+            response_time_ms=1500
+        )
+        assert success, "Learning progress update should succeed"
+        
+        # Verify progress was updated correctly after first study
+        updated_progress = db_manager.progress_repo.get_learning_progress(user["id"], word["id"])
+        assert updated_progress is not None, "Learning progress should still exist"
+        assert updated_progress["repetitions"] == 1, "Should have 1 repetition after first study"
+        assert updated_progress["easiness_factor"] == 2.3, "Easiness should decrease for rating 1"
+        assert updated_progress["interval_days"] == 0, "Interval should be 0 for rating 1 (immediate review)"
+        assert updated_progress["last_reviewed"] is not None, "Should have last_reviewed timestamp"
+        
+        # Verify review history was created
+        updated_history = db_manager.progress_repo.get_review_history(user["id"], word["id"])
+        assert len(updated_history) == 1, "Should have one review in history"
+        assert updated_history[0]["rating"] == 1, "Rating should be 1"
+        assert updated_history[0]["response_time_ms"] == 1500, "Response time should be recorded"
+        assert updated_history[0]["user_id"] == user["id"], "User ID should match"
+        assert updated_history[0]["word_id"] == word["id"], "Word ID should match"
+        
+        # Second study session - user rates word as "Good" (rating 3)
+        success = db_manager.progress_repo.update_learning_progress(
+            user_id=user["id"],
+            word_id=word["id"],
+            rating=3,
+            response_time_ms=1200
+        )
+        assert success, "Second learning progress update should succeed"
+        
+        # Verify progress after second study
+        final_progress = db_manager.progress_repo.get_learning_progress(user["id"], word["id"])
+        assert final_progress is not None, "Learning progress should still exist"
+        assert final_progress["repetitions"] == 2, "Should have 2 repetitions after second study"
+        assert final_progress["easiness_factor"] >= 2.3, "Easiness should increase for rating 3"
+        assert final_progress["interval_days"] > 0, "Interval should be positive for rating 3"
+        
+        # Verify review history has both entries
+        final_history = db_manager.progress_repo.get_review_history(user["id"], word["id"])
+        assert len(final_history) == 2, "Should have two reviews in history"
+        
+        # Check that reviews are ordered by most recent first
+        assert final_history[0]["rating"] == 3, "Most recent review should be rating 3"
+        assert final_history[1]["rating"] == 1, "Older review should be rating 1"
