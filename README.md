@@ -196,13 +196,22 @@ make test-cov
 ### Code Quality
 
 ```bash
-# Formatting
-uv run black src/ tests/
-uv run isort src/ tests/
+# Formatting and linting with Ruff
+make format
+make lint
 
-# Linting
-uv run flake8 src/ tests/
-uv run mypy src/
+# Security checks
+make security
+
+# All development checks
+make dev
+
+# Legacy tools (if needed)
+uv run ruff format src/ tests/
+uv run ruff check src/ tests/
+uv run mypy src/ --ignore-missing-imports
+uv run bandit -r src/
+uv run safety check
 
 # Pre-commit hooks
 uv run pre-commit install
@@ -218,6 +227,39 @@ from src.word_processor import get_word_processor
 
 # Use mock processor (no API calls)
 processor = get_word_processor(use_mock=True)
+```
+
+## 🚀 CI/CD Pipeline
+
+The project includes comprehensive GitHub Actions workflows:
+
+### Automated Testing
+- **Tests**: Run on every push and PR
+- **Coverage**: Codecov integration with detailed reports
+- **Security Scans**: Bandit, Safety, and Trivy vulnerability scanning
+- **Multi-platform**: Linux AMD64 and ARM64 support
+
+### Docker Images
+- **Automatic Builds**: Multi-architecture Docker images on every release
+- **Registry**: Published to GitHub Container Registry (ghcr.io)
+- **Security**: Container vulnerability scanning with Trivy
+
+### Dependency Management
+- **Dependabot**: Automated dependency updates
+- **Security Alerts**: Automatic vulnerability detection
+- **Weekly Updates**: Scheduled dependency reviews
+
+### Release Automation
+```bash
+# Create a new release
+git tag v1.0.0
+git push origin v1.0.0
+
+# This automatically:
+# 1. Runs all tests and security scans
+# 2. Builds multi-platform Docker images
+# 3. Creates GitHub release with changelog
+# 4. Publishes to GitHub Container Registry
 ```
 
 ## 🐳 Docker Deployment

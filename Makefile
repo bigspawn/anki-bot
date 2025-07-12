@@ -47,13 +47,18 @@ test-cov:
 
 # Run linting
 lint:
-	uv run flake8 src/ tests/
-	uv run mypy src/
+	uv run ruff check src/ tests/
+	uv run mypy src/ --ignore-missing-imports
 
 # Format code
 format:
-	uv run black src/ tests/
-	uv run isort src/ tests/
+	uv run ruff format src/ tests/
+	uv run ruff check --fix src/ tests/
+
+# Security checks
+security:
+	uv run bandit -r src/
+	uv run safety check
 
 # Initialize database
 init-db:
@@ -82,7 +87,7 @@ docker-stop:
 all: install test lint format
 
 # Development workflow
-dev: format lint test
+dev: format lint security test
 
 # Quick check before commit
 check: format lint test-cov
