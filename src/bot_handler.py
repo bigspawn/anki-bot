@@ -2,6 +2,7 @@
 Refactored Telegram bot handler using modular architecture
 """
 
+import contextlib
 import logging
 from functools import wraps
 
@@ -252,7 +253,8 @@ class BotHandler:
         if not self.lock_manager.acquire_lock(user.id, "add_words"):
             await self._safe_reply(
                 update,
-                "❌ Не удалось заблокировать пользователя для обработки. Попробуйте позже."
+                "❌ Не удалось заблокировать пользователя для обработки. "
+                "Попробуйте позже."
             )
             return
 
@@ -310,7 +312,9 @@ class BotHandler:
                 )
 
                 # Process with word processor
-                processed_words = await self.word_processor.process_text(" ".join(new_words), max_words=len(new_words))
+                processed_words = await self.word_processor.process_text(
+                    " ".join(new_words), max_words=len(new_words)
+                )
 
                 if processed_words:
                     # Convert to dict format for database
@@ -327,15 +331,25 @@ class BotHandler:
                         })
 
                     # Add to database
-                    added_count = self.db_manager.add_words_to_user(db_user["id"], words_data)
+                    added_count = self.db_manager.add_words_to_user(
+                        db_user["id"], words_data
+                    )
 
                     # Log detailed results
                     processed_count = len(processed_words)
                     if added_count != processed_count:
                         skipped_count = processed_count - added_count
-                        logger.warning(f"Word addition mismatch: processed {processed_count} words, but only {added_count} were added to database. {skipped_count} words were skipped.")
+                        logger.warning(
+                            f"Word addition mismatch: processed {processed_count} "
+                            f"words, "
+                            f"but only {added_count} were added to database. "
+                            f"{skipped_count} words were skipped."
+                        )
                         for pw in processed_words:
-                            logger.info(f"Processed word details: '{pw.lemma}' ({pw.part_of_speech}) - '{pw.translation}'")
+                            logger.info(
+                                f"Processed word details: '{pw.lemma}' "
+                                f"({pw.part_of_speech}) - '{pw.translation}'"
+                            )
 
                     timer.stop()
 
@@ -367,13 +381,11 @@ class BotHandler:
 
         except Exception as e:
             logger.error(f"Error processing text: {e}")
-            try:
+            with contextlib.suppress(Exception):
                 await processing_msg.edit_text(
                     "❌ Произошла ошибка при обработке текста.\n"
                     "Попробуйте позже или обратитесь к администратору."
                 )
-            except Exception:
-                pass  # If we can't edit the message, that's okay
         finally:
             # Always release the lock
             self.lock_manager.release_lock(user.id)

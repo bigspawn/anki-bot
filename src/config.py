@@ -60,7 +60,11 @@ class Settings(BaseSettings):
         if not self.allowed_users.strip():
             return []
         # Parse comma-separated string of user IDs
-        return [int(user_id.strip()) for user_id in self.allowed_users.split(",") if user_id.strip()]
+        return [
+            int(user_id.strip())
+            for user_id in self.allowed_users.split(",")
+            if user_id.strip()
+        ]
 
     model_config = SettingsConfigDict(
         env_file=".env",

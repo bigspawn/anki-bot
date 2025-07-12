@@ -79,13 +79,15 @@ class DatabaseConnection:
                             return datetime.strptime(datetime_str, fmt)
                         except ValueError:
                             continue
-                    raise ValueError(f"Invalid datetime format: {datetime_str}")
+                    raise ValueError(f"Invalid datetime format: {datetime_str}") from None
 
             sqlite3.register_adapter(date, adapt_date)
             sqlite3.register_adapter(datetime, adapt_datetime)
             sqlite3.register_converter("date", convert_date)
             sqlite3.register_converter("datetime", convert_datetime)
-            sqlite3.register_converter("timestamp", convert_datetime)  # Handle TIMESTAMP type
+            sqlite3.register_converter(
+                "timestamp", convert_datetime
+            )  # Handle TIMESTAMP type
 
             yield conn
         except Exception as e:
@@ -189,11 +191,26 @@ class DatabaseConnection:
         indexes = [
             "CREATE INDEX IF NOT EXISTS idx_users_telegram_id ON users(telegram_id)",
             "CREATE INDEX IF NOT EXISTS idx_words_lemma ON words(lemma)",
-            "CREATE INDEX IF NOT EXISTS idx_learning_progress_user_id ON learning_progress(user_id)",
-            "CREATE INDEX IF NOT EXISTS idx_learning_progress_next_review ON learning_progress(next_review_date)",
-            "CREATE INDEX IF NOT EXISTS idx_review_history_user_id ON review_history(user_id)",
-            "CREATE INDEX IF NOT EXISTS idx_review_history_reviewed_at ON review_history(reviewed_at)",
-            "CREATE INDEX IF NOT EXISTS idx_user_settings_user_id ON user_settings(user_id)",
+            (
+                "CREATE INDEX IF NOT EXISTS idx_learning_progress_user_id "
+                "ON learning_progress(user_id)"
+            ),
+            (
+                "CREATE INDEX IF NOT EXISTS idx_learning_progress_next_review "
+                "ON learning_progress(next_review_date)"
+            ),
+            (
+                "CREATE INDEX IF NOT EXISTS idx_review_history_user_id "
+                "ON review_history(user_id)"
+            ),
+            (
+                "CREATE INDEX IF NOT EXISTS idx_review_history_reviewed_at "
+                "ON review_history(reviewed_at)"
+            ),
+            (
+                "CREATE INDEX IF NOT EXISTS idx_user_settings_user_id "
+                "ON user_settings(user_id)"
+            ),
         ]
 
         for index_sql in indexes:

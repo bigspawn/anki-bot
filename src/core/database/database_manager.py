@@ -186,9 +186,6 @@ class DatabaseManager:
 
         return list(set(potential_lemmas))
 
-    def get_connection(self):
-        """Get database connection"""
-        return self.db_connection.get_connection()
 
 
 # Global instance

@@ -98,10 +98,7 @@ class GermanTextParser:
 
         # Skip words that are mostly punctuation
         letter_count = len(re.findall(r"[a-zA-ZäöüßÄÖÜ]", word))
-        if letter_count < len(word) * 0.7:  # At least 70% letters
-            return False
-
-        return True
+        return letter_count >= len(word) * 0.7  # At least 70% letters
 
     def extract_sentences(self, text: str) -> list[str]:
         """Extract sentences from German text"""
@@ -259,12 +256,12 @@ class GermanTextParser:
                                 else:
                                     german_indicators += 1
                         # For verbs: require German verbal morphology
-                        elif token.pos_ == "VERB" and has_verb_features:
+                        elif (token.pos_ == "VERB" and has_verb_features) or (
+                            token.pos_ == "ADJ"
+                            and (has_case or "Degree=" in morph_str)
+                            and token.text.lower() not in foreign_words_blacklist
+                        ):
                             german_indicators += 1
-                        # For adjectives: require case or degree
-                        elif token.pos_ == "ADJ" and (has_case or "Degree=" in morph_str):
-                            if token.text.lower() not in foreign_words_blacklist:
-                                german_indicators += 1
 
             # Decision logic based on SpaCy analysis
             if total_tokens == 0:
