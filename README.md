@@ -6,9 +6,13 @@ A Telegram bot for learning German language through intelligent word addition an
 
 - **Smart Word Addition**: Extract German words from text with automatic analysis
 - **Spaced Repetition**: SuperMemo 2 algorithm for optimal learning
-- **OpenAI Integration**: Automatic word processing with translations and examples
+- **OpenAI Integration**: Automatic word processing with translations and examples (GPT-4/O1 models)
 - **Progress Tracking**: Detailed learning statistics and progress monitoring
 - **User-Friendly Interface**: Intuitive Telegram bot commands
+- **Multi-User Support**: Isolated user sessions with concurrent study support
+- **Rate Limiting**: Built-in protection against API abuse and system overload
+- **User Authorization**: Configurable access control with allowed users list
+- **Docker Support**: Full containerization for easy deployment
 
 ## 🚀 Quick Start
 
@@ -37,8 +41,10 @@ cp .env.example .env
 # Initialize database
 uv run python -c "from src.database import init_db; init_db()"
 
-# Start bot
+# Start bot (or use Makefile)
 uv run python main.py
+# OR
+make run
 ```
 
 ## 🤖 Bot Commands
@@ -75,7 +81,7 @@ The bot will:
 Interactive flashcard session with:
 - Word presentation (German side)
 - Show answer button
-- Rating system: 🔴 Again | 🟡 Hard | 🟢 Good | 🔵 Easy
+- Rating system: ❌ Again | ➖ Hard | ➕ Good | ✅ Easy
 - Automatic interval calculation using SuperMemo 2
 
 ### Automatic Text Processing
@@ -139,10 +145,40 @@ CREATE TABLE learning_progress (
 
 ## 🧪 Development
 
+### Makefile Commands
+
+```bash
+# Show all available commands
+make help
+
+# Install dependencies
+make install
+
+# Run the bot
+make run
+
+# Run tests
+make test
+
+# Run tests with coverage
+make test-cov
+
+# Lint code
+make lint
+
+# Format code
+make format
+
+# Complete development workflow (format + lint + test)
+make dev
+```
+
 ### Running Tests
 
 ```bash
 # All tests
+make test
+# OR manually:
 uv run pytest tests/ -v
 
 # Specific test suite
@@ -152,6 +188,9 @@ uv run pytest tests/test_word_processor.py -v
 
 # Integration tests
 uv run pytest tests/test_integration.py -v
+
+# With coverage
+make test-cov
 ```
 
 ### Code Quality
@@ -226,23 +265,49 @@ docker run -d --name german-bot \
 | `LOG_LEVEL` | Logging level | `INFO` | ❌ |
 | `MAX_WORDS_PER_REQUEST` | Max words per /add | `50` | ❌ |
 | `MAX_WORDS_PER_DAY` | Daily word limit | `100` | ❌ |
+| `MAX_OPENAI_REQUESTS_PER_DAY` | Daily OpenAI API limit | `200` | ❌ |
+| `ALLOWED_USERS` | Comma-separated user IDs | `""` (all blocked) | ❌ |
+| `POLLING_INTERVAL` | Bot polling interval | `1.0` | ❌ |
 
 ### OpenAI Settings
 
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `OPENAI_MODEL` | Model to use | `gpt-4` |
-| `OPENAI_MAX_TOKENS` | Max tokens | `1000` |
-| `OPENAI_TEMPERATURE` | Creativity (0-1) | `0.3` |
+| `OPENAI_MAX_TOKENS` | Max completion tokens | `1000` |
+| `OPENAI_TEMPERATURE` | Model temperature | `1.0` |
+
+**Note**: GPT-4 and O1 models require `OPENAI_TEMPERATURE=1.0`. Use `max_completion_tokens` instead of deprecated `max_tokens`.
+
+### User Authorization
+
+Control access to your bot with the `ALLOWED_USERS` environment variable:
+
+```bash
+# Allow specific users only (comma-separated Telegram user IDs)
+ALLOWED_USERS="321,123,456"
+
+# Allow single user
+ALLOWED_USERS="321"
+
+# Block all users (default behavior)
+ALLOWED_USERS=""
+```
+
+**Security Features:**
+- Empty or unset `ALLOWED_USERS` blocks all access
+- Unauthorized users receive polite denial message
+- Access attempts are logged for monitoring
+- User IDs can be found in Telegram logs when users interact with bot
 
 ## 📊 Spaced Repetition System
 
 Uses SuperMemo 2 algorithm with four difficulty ratings:
 
-- **🔴 Again** (< 1 min): Reset interval, review in current session
-- **🟡 Hard** (< 6 min): Interval × 1.2, decrease easiness factor
-- **🟢 Good** (< 10 min): Interval × easiness factor
-- **🔵 Easy** (4 days): Interval × easiness factor × 1.3
+- **❌ Again** (< 1 min): Reset interval, review in current session
+- **➖ Hard** (< 6 min): Interval × 1.2, decrease easiness factor
+- **➕ Good** (< 10 min): Interval × easiness factor
+- **✅ Easy** (4 days): Interval × easiness factor × 1.3
 
 ### Learning Algorithm
 
