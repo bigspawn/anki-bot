@@ -1,0 +1,94 @@
+# German Learning Bot Makefile
+
+.PHONY: help install run test test-cov lint format clean init-db docker-build docker-run docker-stop all
+
+# Default target
+help:
+	@echo "Available commands:"
+	@echo "  install     - Install dependencies"
+	@echo "  run         - Run the bot (ENV_FILE=.env.custom to use custom env file)"
+	@echo "  test        - Run tests"
+	@echo "  test-cov    - Run tests with coverage"
+	@echo "  lint        - Run linting"
+	@echo "  format      - Format code"
+	@echo "  init-db     - Initialize database"
+	@echo "  clean       - Clean temporary files"
+	@echo "  docker-build - Build Docker image"
+	@echo "  docker-run  - Run with Docker"
+	@echo "  docker-stop - Stop Docker container"
+	@echo "  all         - Install, test, lint, format"
+
+# Install dependencies
+install:
+	uv sync --dev
+
+# Run the bot (requires .env file with TELEGRAM_BOT_TOKEN and OPENAI_API_KEY)
+# Usage: make run [ENV_FILE=.env.custom]
+run:
+	@ENV_FILE=${ENV_FILE}; \
+	if [ -z "$$ENV_FILE" ]; then \
+		ENV_FILE=.env; \
+	fi; \
+	if [ ! -f "$$ENV_FILE" ]; then \
+		echo "Error: $$ENV_FILE file not found. Please create $$ENV_FILE file with TELEGRAM_BOT_TOKEN and OPENAI_API_KEY"; \
+		echo "You can copy .env.example to $$ENV_FILE and edit it with your tokens"; \
+		exit 1; \
+	fi; \
+	echo "Using environment file: $$ENV_FILE"; \
+	export $$(grep -v '^#' "$$ENV_FILE" | xargs) && uv run python main.py
+
+# Run tests
+test:
+	TELEGRAM_BOT_TOKEN=test_token OPENAI_API_KEY=test_key uv run pytest tests/ -v
+
+# Run tests with coverage
+test-cov:
+	TELEGRAM_BOT_TOKEN=test_token OPENAI_API_KEY=test_key uv run pytest tests/ -v --cov=src --cov-report=html --cov-report=term
+
+# Run linting
+lint:
+	uv run flake8 src/ tests/
+	uv run mypy src/
+
+# Format code
+format:
+	uv run black src/ tests/
+	uv run isort src/ tests/
+
+# Initialize database
+init-db:
+	uv run python -c "from src.database import init_db; init_db()"
+
+# Clean temporary files
+clean:
+	find . -type f -name "*.pyc" -delete
+	find . -type d -name "__pycache__" -delete
+	find . -type d -name "*.egg-info" -exec rm -rf {} +
+	rm -rf .pytest_cache/
+	rm -rf htmlcov/
+	rm -rf .coverage
+
+# Docker commands
+docker-build:
+	docker build -t german-bot -f docker/Dockerfile .
+
+docker-run:
+	docker-compose up --build -d
+
+docker-stop:
+	docker-compose down
+
+# Run everything
+all: install test lint format
+
+# Development workflow
+dev: format lint test
+
+# Quick check before commit
+check: format lint test-cov
+
+# Install spacy
+install-spacy:
+	uv add spacy
+	uv add pip
+	uv run spacy download de_core_news_sm

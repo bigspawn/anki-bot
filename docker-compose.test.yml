@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  test-runner:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: ["uv", "run", "pytest", "tests/", "-v", "--cov=src", "--cov-report=html"]
+    environment:
+      - DATABASE_URL=sqlite:///data/test.db
+      - LOG_LEVEL=DEBUG
+    volumes:
+      - ./tests:/app/tests
+      - ./src:/app/src
+      - ./test-results:/app/htmlcov
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
