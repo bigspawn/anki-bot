@@ -5,9 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  schedule:
-    # Run security scan weekly on Sundays at 6 AM UTC
-    - cron: '0 6 * * 0'
+  workflow_dispatch: # Manual trigger only
 
 jobs:
   security:
