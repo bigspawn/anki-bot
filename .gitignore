@@ -182,3 +182,4 @@ Thumbs.db
 .env
 .env.prod
 sqlite:/
+.env.test
