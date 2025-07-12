@@ -182,3 +182,10 @@ Thumbs.db
 .env
 .env.prod
 sqlite:/
+.env.test
+
+# Claude AI configuration
+.claude/
+
+# Development documentation
+PLANNED_FEATURES.md
