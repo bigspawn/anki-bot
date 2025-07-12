@@ -150,7 +150,7 @@ class WordRepository:
                            lp.next_review_date, lp.last_reviewed
                     FROM words w
                     JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.telegram_id = ? AND lp.next_review_date <= datetime('now')
+                    WHERE lp.telegram_id = ? AND datetime(lp.next_review_date) <= datetime('now', 'localtime')
                     {order_clause}
                     LIMIT ?
                     """,  # noqa: S608  # Safe: order_clause is from predefined strings

@@ -124,7 +124,7 @@ class UserRepository:
                     SELECT
                         COUNT(*) as total_words,
                         SUM(CASE WHEN lp.repetitions = 0 THEN 1 ELSE 0 END) as new_words,
-                        SUM(CASE WHEN lp.next_review_date <= datetime('now') AND lp.repetitions > 0 THEN 1 ELSE 0 END) as due_words,
+                        SUM(CASE WHEN datetime(lp.next_review_date) <= datetime('now', 'localtime') AND lp.repetitions > 0 THEN 1 ELSE 0 END) as due_words,
                         SUM(CASE WHEN lp.repetitions >= 3 THEN 1 ELSE 0 END) as learned_words,
                         SUM(CASE WHEN lp.easiness_factor < 2.0 THEN 1 ELSE 0 END) as difficult_words
                     FROM learning_progress lp

@@ -99,7 +99,7 @@ class TestTextFormatting:
             "total_words": 150,
             "due_words": 25,
             "new_words": 10,
-            "avg_success_rate": 0.85,
+            "average_accuracy": 0.85,
         }
 
         result = format_progress_stats(stats)

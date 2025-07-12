@@ -67,7 +67,7 @@ def format_progress_stats(stats: dict[str, Any]) -> str:
     total_words = stats.get("total_words", 0)
     due_words = stats.get("due_words", 0)
     new_words = stats.get("new_words", 0)
-    avg_success_rate = stats.get("avg_success_rate", 0.0)
+    avg_success_rate = stats.get("average_accuracy", 0.0)
 
     result = "📊 Ваша статистика:\n\n"
     result += f"📚 Всего слов: {total_words}\n"

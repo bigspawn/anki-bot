@@ -294,7 +294,7 @@ class BotHandler:
 
             # Check which words already exist
             word_existence = self.db_manager.check_multiple_words_exist(
-                db_user["id"], extracted_words
+                db_user["telegram_id"], extracted_words
             )
 
             existing_words = [word for word, exists in word_existence.items() if exists]
@@ -332,7 +332,7 @@ class BotHandler:
 
                     # Add to database
                     added_count = self.db_manager.add_words_to_user(
-                        db_user["id"], words_data
+                        db_user["telegram_id"], words_data
                     )
 
                     # Log detailed results

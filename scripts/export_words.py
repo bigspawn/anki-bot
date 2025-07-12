@@ -24,48 +24,24 @@ def export_words_data(db_path: str, output_path: str) -> bool:
         words = [dict(row) for row in cursor.fetchall()]
         print(f"  📝 Found {len(words)} words")
         
-        # Detect schema type (old vs new)
-        cursor = conn.execute("PRAGMA table_info(users)")
-        user_columns = [col[1] for col in cursor.fetchall()]
-        has_old_schema = 'id' in user_columns
-        
-        # Export users (handle both old and new schemas)
-        if has_old_schema:
-            cursor = conn.execute("SELECT * FROM users ORDER BY id")
-        else:
-            cursor = conn.execute("SELECT * FROM users ORDER BY telegram_id")
+        # Export users (current schema uses telegram_id as PK)
+        cursor = conn.execute("SELECT * FROM users ORDER BY telegram_id")
         users = [dict(row) for row in cursor.fetchall()]
         print(f"  👥 Found {len(users)} users")
         
-        # Export learning progress
-        if has_old_schema:
-            cursor = conn.execute("""
-                SELECT lp.*, u.telegram_id 
-                FROM learning_progress lp 
-                JOIN users u ON lp.user_id = u.id 
-                ORDER BY lp.id
-            """)
-        else:
-            cursor = conn.execute("""
-                SELECT * FROM learning_progress 
-                ORDER BY id
-            """)
+        # Export learning progress (current schema uses telegram_id)
+        cursor = conn.execute("""
+            SELECT * FROM learning_progress 
+            ORDER BY id
+        """)
         learning_progress = [dict(row) for row in cursor.fetchall()]
         print(f"  📊 Found {len(learning_progress)} learning progress records")
         
-        # Export review history
-        if has_old_schema:
-            cursor = conn.execute("""
-                SELECT rh.*, u.telegram_id 
-                FROM review_history rh 
-                JOIN users u ON rh.user_id = u.id 
-                ORDER BY rh.id
-            """)
-        else:
-            cursor = conn.execute("""
-                SELECT * FROM review_history 
-                ORDER BY id
-            """)
+        # Export review history (current schema uses telegram_id)
+        cursor = conn.execute("""
+            SELECT * FROM review_history 
+            ORDER BY id
+        """)
         review_history = [dict(row) for row in cursor.fetchall()]
         print(f"  📈 Found {len(review_history)} review history records")
         
@@ -74,7 +50,8 @@ def export_words_data(db_path: str, output_path: str) -> bool:
             "export_info": {
                 "exported_at": datetime.now().isoformat(),
                 "database_path": db_path,
-                "script_version": "1.0"
+                "script_version": "2.0",
+                "schema_version": "telegram_id_only"
             },
             "words": words,
             "users": users,

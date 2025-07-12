@@ -38,7 +38,9 @@ def import_words_data(json_path: str, db_path: str) -> bool:
         # Import the database connection class to initialize schema
         import sys
         import os
-        sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(script_dir)
+        sys.path.insert(0, project_root)
         
         from src.core.database.connection import DatabaseConnection
         db_manager = DatabaseConnection(db_path)
@@ -108,7 +110,7 @@ def import_words_data(json_path: str, db_path: str) -> bool:
                      next_review_date, last_reviewed, created_at, updated_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (
-                    progress['telegram_id'],  # Use telegram_id from JOIN
+                    progress['telegram_id'],
                     progress['word_id'],
                     progress['repetitions'],
                     progress['easiness_factor'],
@@ -134,7 +136,7 @@ def import_words_data(json_path: str, db_path: str) -> bool:
                     (telegram_id, word_id, rating, response_time_ms, reviewed_at)
                     VALUES (?, ?, ?, ?, ?)
                 """, (
-                    review['telegram_id'],  # Use telegram_id from JOIN
+                    review['telegram_id'],
                     review['word_id'],
                     review['rating'],
                     review.get('response_time_ms', 0),
