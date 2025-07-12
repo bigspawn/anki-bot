@@ -305,7 +305,7 @@ class DatabaseConnection:
                     )
                     SELECT {', '.join(select_parts)}
                     FROM words
-                """
+                """  # noqa: S608  # Safe: select_parts contains only column names
 
                 conn.execute(select_query)
 

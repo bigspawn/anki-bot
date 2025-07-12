@@ -105,7 +105,7 @@ class UserRepository:
                 params.append(user_id)
 
                 cursor = conn.execute(
-                    f"UPDATE users SET {', '.join(updates)} WHERE id = ?",
+                    f"UPDATE users SET {', '.join(updates)} WHERE id = ?",  # noqa: S608
                     params
                 )
                 conn.commit()

@@ -106,7 +106,7 @@ class WordRepository:
                     SELECT w.lemma FROM learning_progress lp
                     JOIN words w ON lp.word_id = w.id
                     WHERE lp.user_id = ? AND LOWER(w.lemma) IN ({placeholders})
-                    """,
+                    """,  # noqa: S608  # Safe: placeholders contains only ? chars
                     [user_id] + [lemma.lower() for lemma in lemmas]
                 )
 
@@ -153,7 +153,7 @@ class WordRepository:
                     WHERE lp.user_id = ? AND lp.next_review_date <= datetime('now')
                     {order_clause}
                     LIMIT ?
-                    """,
+                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
                     (user_id, limit)
                 )
                 return [dict(row) for row in cursor.fetchall()]
@@ -177,7 +177,7 @@ class WordRepository:
                     WHERE lp.user_id = ? AND lp.repetitions = 0
                     {order_clause}
                     LIMIT ?
-                    """,
+                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
                     (user_id, limit)
                 )
                 return [dict(row) for row in cursor.fetchall()]
@@ -201,7 +201,7 @@ class WordRepository:
                     WHERE lp.user_id = ? AND lp.easiness_factor < 2.0 AND lp.repetitions > 0
                     {order_clause}
                     LIMIT ?
-                    """,
+                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
                     (user_id, limit)
                 )
                 return [dict(row) for row in cursor.fetchall()]

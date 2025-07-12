@@ -184,7 +184,7 @@ class ProgressRepository:
                     JOIN words w ON rh.word_id = w.id
                     WHERE rh.user_id = ? AND rh.reviewed_at >= datetime('now', '-{days} days')
                     ORDER BY rh.reviewed_at DESC
-                    """,
+                    """,  # noqa: S608  # Safe: days is int parameter
                     (user_id,)
                 )
                 return [dict(row) for row in cursor.fetchall()]
@@ -205,7 +205,7 @@ class ProgressRepository:
                         AVG(response_time_ms) as avg_response_time
                     FROM review_history
                     WHERE user_id = ? AND reviewed_at >= datetime('now', '-{days} days')
-                    """,
+                    """,  # noqa: S608  # Safe: days is int parameter
                     (user_id,)
                 )
 

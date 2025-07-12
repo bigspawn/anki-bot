@@ -21,11 +21,6 @@ select = [
 
 # Ignore specific rules
 ignore = [
-    "S101",  # Use of assert
-    "S301",  # pickle can be unsafe
-    "S608",  # SQL injection (we use SQLite with safe queries)
-    "T201",  # print statements (used for debugging)
-    "B008",  # Do not perform function calls in argument defaults
     "RUF001", # Ambiguous characters (Russian/German text is intentional)
     "E501",  # Line too long (handled by formatter, acceptable in complex business logic)
 ]

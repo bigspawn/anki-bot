@@ -853,28 +853,28 @@ if __name__ == "__main__":
         processor = WordProcessor()
 
         # Test connection
-        print("Testing OpenAI connection...")
+        logger.info("Testing OpenAI connection...")
         connected = await processor.test_connection()
-        print(f"Connection successful: {connected}")
+        logger.info(f"Connection successful: {connected}")
 
         if connected:
             # Test single word
-            print("\nTesting single word processing...")
+            logger.info("Testing single word processing...")
             result = await processor.process_word("Haus")
             if result:
-                print(f"Word: {result.word}")
-                print(f"Lemma: {result.lemma}")
-                print(f"Translation: {result.translation}")
-                print(f"Example: {result.example}")
+                logger.info(f"Word: {result.word}")
+                logger.info(f"Lemma: {result.lemma}")
+                logger.info(f"Translation: {result.translation}")
+                logger.info(f"Example: {result.example}")
 
             # Test text processing
-            print("\nTesting text processing...")
+            logger.info("Testing text processing...")
             text = "Das schöne Haus steht am Berg."
             results = await processor.process_text(text, max_words=5)
-            print(f"Processed {len(results)} words from text")
+            logger.info(f"Processed {len(results)} words from text")
 
             for word in results:
-                print(f"- {word.lemma}: {word.translation}")
+                logger.info(f"- {word.lemma}: {word.translation}")
 
     # Run test
     asyncio.run(test_processor())

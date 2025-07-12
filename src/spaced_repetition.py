@@ -11,6 +11,8 @@ from .config import get_settings
 
 logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
+
 
 @dataclass
 class ReviewResult:
@@ -309,7 +311,7 @@ if __name__ == "__main__":
     srs = SpacedRepetitionSystem()
 
     # Test sequence of reviews
-    print("Testing SRS system:")
+    logger.info("Testing SRS system:")
 
     # Initial state
     repetitions = 0
@@ -318,7 +320,7 @@ if __name__ == "__main__":
 
     for repetitions, rating in enumerate([3, 3, 2, 3, 4]):
         result = srs.calculate_review(rating, repetitions, interval, easiness)
-        print(
+        logger.info(
             f"Review {repetitions+1}: rating={rating} -> interval={result.new_interval}, "
             f"ef={result.new_easiness_factor:.2f}, next={result.next_review_date}"
         )
