@@ -59,8 +59,8 @@ exclude = [
 ]
 
 [lint.per-file-ignores]
-# Tests can use magic values, assertions, print statements
-"tests/**/*.py" = ["S101", "T201", "S105", "S106"]
+# Tests can use magic values, assertions, print statements, and long lines
+"tests/**/*.py" = ["S101", "T201", "S105", "S106", "E501"]
 
 [format]
 # Like Black, use double quotes for strings.
