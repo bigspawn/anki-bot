@@ -80,6 +80,9 @@ class SessionManager:
         """Start a new study session"""
         user_id = update.effective_user.id
 
+        # Log session start
+        logger.info(f"Starting {session_type} study session for user {user_id} with {len(words)} words")
+
         # Create session with compact ID
         # Use only last 6 digits of timestamp for uniqueness while staying compact
         timestamp = int(datetime.now().timestamp())
@@ -167,8 +170,8 @@ class SessionManager:
 
     async def handle_word_rating(self, query, data: dict):
         """Handle word rating"""
-        user_id = query.from_user.id
-        session = self.user_sessions.get(user_id)
+        telegram_user_id = query.from_user.id
+        session = self.user_sessions.get(telegram_user_id)
 
         if not session:
             await query.edit_message_text("❌ Сессия истекла. Начните новую с /study")
@@ -180,11 +183,11 @@ class SessionManager:
         if not word_id or not rating:
             logger.error("Missing word_id or rating in callback data")
             return
-
-        # Update word progress
-        logger.info(f"Updating statistics: user {user_id}, word {word_id}, rating {rating}")
-        self.db_manager.update_learning_progress(user_id, word_id, rating)
-        logger.info(f"Statistics updated successfully for user {user_id}, word {word_id}")
+            
+        # Update word progress - now using telegram_id directly
+        logger.info(f"Updating statistics: telegram_id {telegram_user_id}, word {word_id}, rating {rating}")
+        success = self.db_manager.update_learning_progress(telegram_user_id, word_id, rating)
+        logger.info(f"Statistics updated successfully for telegram_id {telegram_user_id}, word {word_id}")
 
         # Record answer statistics
         session.record_answer(rating >= 3)  # Consider 3+ as correct

@@ -35,27 +35,12 @@ class UserRepository:
                     (telegram_id, first_name, last_name, username),
                 )
 
-                user_id = cursor.lastrowid
                 conn.commit()
 
                 # Return the created user
-                return self.get_user_by_id(user_id)
+                return self.get_user_by_telegram_id(telegram_id)
         except Exception as e:
             logger.error(f"Error creating user: {e}")
-            return None
-
-    def get_user_by_id(self, user_id: int) -> User | None:
-        """Get user by ID"""
-        try:
-            with self.db_connection.get_connection() as conn:
-                cursor = conn.execute(
-                    "SELECT * FROM users WHERE id = ?",
-                    (user_id,)
-                )
-                row = cursor.fetchone()
-                return dict(row) if row else None
-        except Exception as e:
-            logger.error(f"Error getting user by ID: {e}")
             return None
 
     def get_user_by_telegram_id(self, telegram_id: int) -> User | None:
@@ -74,7 +59,7 @@ class UserRepository:
 
     def update_user(
         self,
-        user_id: int,
+        telegram_id: int,
         first_name: str | None = None,
         last_name: str | None = None,
         username: str | None = None,
@@ -102,10 +87,10 @@ class UserRepository:
 
                 updates.append("updated_at = ?")
                 params.append(datetime.now())
-                params.append(user_id)
+                params.append(telegram_id)
 
                 cursor = conn.execute(
-                    f"UPDATE users SET {', '.join(updates)} WHERE id = ?",  # noqa: S608
+                    f"UPDATE users SET {', '.join(updates)} WHERE telegram_id = ?",  # noqa: S608
                     params
                 )
                 conn.commit()

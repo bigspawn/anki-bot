@@ -114,8 +114,7 @@ class DatabaseConnection:
         tables = [
             """
             CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                telegram_id INTEGER UNIQUE NOT NULL,
+                telegram_id INTEGER PRIMARY KEY,
                 first_name TEXT NOT NULL,
                 last_name TEXT,
                 username TEXT,
@@ -141,7 +140,7 @@ class DatabaseConnection:
             """
             CREATE TABLE IF NOT EXISTS learning_progress (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
+                telegram_id INTEGER NOT NULL,
                 word_id INTEGER NOT NULL,
                 repetitions INTEGER DEFAULT 0,
                 easiness_factor REAL DEFAULT 2.5,
@@ -150,35 +149,35 @@ class DatabaseConnection:
                 last_reviewed TIMESTAMP,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                FOREIGN KEY (telegram_id) REFERENCES users(telegram_id) ON DELETE CASCADE,
                 FOREIGN KEY (word_id) REFERENCES words(id) ON DELETE CASCADE,
-                UNIQUE(user_id, word_id)
+                UNIQUE(telegram_id, word_id)
             )
             """,
             """
             CREATE TABLE IF NOT EXISTS review_history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
+                telegram_id INTEGER NOT NULL,
                 word_id INTEGER NOT NULL,
                 rating INTEGER NOT NULL,
                 response_time_ms INTEGER DEFAULT 0,
                 reviewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                FOREIGN KEY (telegram_id) REFERENCES users(telegram_id) ON DELETE CASCADE,
                 FOREIGN KEY (word_id) REFERENCES words(id) ON DELETE CASCADE
             )
             """,
             """
             CREATE TABLE IF NOT EXISTS user_settings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
+                telegram_id INTEGER NOT NULL,
                 cards_per_session INTEGER DEFAULT 10,
                 daily_reminder_time TEXT,
                 timezone TEXT DEFAULT 'UTC',
                 difficulty_level INTEGER DEFAULT 2,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-                UNIQUE(user_id)
+                FOREIGN KEY (telegram_id) REFERENCES users(telegram_id) ON DELETE CASCADE,
+                UNIQUE(telegram_id)
             )
             """,
         ]
@@ -189,27 +188,26 @@ class DatabaseConnection:
     def _create_indexes(self, conn: sqlite3.Connection) -> None:
         """Create database indexes for performance"""
         indexes = [
-            "CREATE INDEX IF NOT EXISTS idx_users_telegram_id ON users(telegram_id)",
             "CREATE INDEX IF NOT EXISTS idx_words_lemma ON words(lemma)",
             (
-                "CREATE INDEX IF NOT EXISTS idx_learning_progress_user_id "
-                "ON learning_progress(user_id)"
+                "CREATE INDEX IF NOT EXISTS idx_learning_progress_telegram_id "
+                "ON learning_progress(telegram_id)"
             ),
             (
                 "CREATE INDEX IF NOT EXISTS idx_learning_progress_next_review "
                 "ON learning_progress(next_review_date)"
             ),
             (
-                "CREATE INDEX IF NOT EXISTS idx_review_history_user_id "
-                "ON review_history(user_id)"
+                "CREATE INDEX IF NOT EXISTS idx_review_history_telegram_id "
+                "ON review_history(telegram_id)"
             ),
             (
                 "CREATE INDEX IF NOT EXISTS idx_review_history_reviewed_at "
                 "ON review_history(reviewed_at)"
             ),
             (
-                "CREATE INDEX IF NOT EXISTS idx_user_settings_user_id "
-                "ON user_settings(user_id)"
+                "CREATE INDEX IF NOT EXISTS idx_user_settings_telegram_id "
+                "ON user_settings(telegram_id)"
             ),
         ]
 

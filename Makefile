@@ -1,6 +1,6 @@
 # German Learning Bot Makefile
 
-.PHONY: help install run test test-cov lint format clean init-db docker-build docker-run docker-stop all
+.PHONY: help install run test test-cov lint format clean init-db docker-build docker-run docker-stop all export-words import-words
 
 # Default target
 help:
@@ -16,6 +16,8 @@ help:
 	@echo "  docker-build - Build Docker image"
 	@echo "  docker-run  - Run with Docker"
 	@echo "  docker-stop - Stop Docker container"
+	@echo "  export-words - Export words data to JSON"
+	@echo "  import-words - Import words data from JSON"
 	@echo "  all         - Install, test, lint, format"
 
 # Install dependencies
@@ -97,3 +99,17 @@ install-spacy:
 	uv add spacy
 	uv add pip
 	uv run spacy download de_core_news_sm
+
+# Export words data to JSON
+export-words:
+	@DB_PATH=$${DB_PATH:-data/bot.db}; \
+	OUTPUT_PATH=$${OUTPUT_PATH:-data/bot_words.json}; \
+	echo "Exporting from $$DB_PATH to $$OUTPUT_PATH"; \
+	python scripts/export_words.py "$$DB_PATH" "$$OUTPUT_PATH"
+
+# Import words data from JSON
+import-words:
+	@JSON_PATH=$${JSON_PATH:-data/bot_words.json}; \
+	DB_PATH=$${DB_PATH:-data/bot_new.db}; \
+	echo "Importing from $$JSON_PATH to $$DB_PATH"; \
+	python scripts/import_words.py "$$JSON_PATH" "$$DB_PATH"

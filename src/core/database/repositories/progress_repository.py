@@ -20,7 +20,7 @@ class ProgressRepository:
 
     def update_learning_progress(
         self,
-        user_id: int,
+        telegram_id: int,
         word_id: int,
         rating: int,
         new_interval: int | None = None,
@@ -35,15 +35,15 @@ class ProgressRepository:
                     """
                     SELECT repetitions, easiness_factor, interval_days
                     FROM learning_progress
-                    WHERE user_id = ? AND word_id = ?
+                    WHERE telegram_id = ? AND word_id = ?
                     """,
-                    (user_id, word_id)
+                    (telegram_id, word_id)
                 )
 
                 current = cursor.fetchone()
                 if not current:
                     logger.info(
-                        f"No learning progress found for user {user_id}, word {word_id}. "
+                        f"No learning progress found for telegram_id {telegram_id}, word {word_id}. "
                         "Creating initial record."
                     )
                     # Set initial values for calculation

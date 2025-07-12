@@ -42,9 +42,9 @@ class DatabaseManager:
         """Get user by Telegram ID"""
         return self.user_repo.get_user_by_telegram_id(telegram_id)
 
-    def get_user_stats(self, user_id: int) -> UserStats | None:
+    def get_user_stats(self, telegram_id: int) -> UserStats | None:
         """Get comprehensive user statistics"""
-        return self.user_repo.get_user_stats(user_id)
+        return self.user_repo.get_user_stats(telegram_id)
 
     # Word methods
     def get_word_by_lemma(self, lemma: str) -> Word | None:
