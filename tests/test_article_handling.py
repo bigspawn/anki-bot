@@ -2,14 +2,13 @@
 Test article handling in word display and formatting functions
 """
 
-import pytest
-import tempfile
 import os
-from unittest.mock import Mock
+import tempfile
+
+import pytest
 
 from src.core.database.database_manager import DatabaseManager
 from src.utils import format_word_display
-from src.core.session.session_manager import SessionManager
 
 
 class TestArticleHandling:
@@ -48,9 +47,9 @@ class TestArticleHandling:
             "translation": "house",
             "example": "Das Haus ist groß."
         }
-        
+
         result = format_word_display(word_data)
-        
+
         # Should include article in display
         assert "das Haus" in result
         assert "None" not in result
@@ -68,9 +67,9 @@ class TestArticleHandling:
             "translation": "parents",
             "example": "Meine Eltern sind nett."
         }
-        
+
         result = format_word_display(word_data)
-        
+
         # Should not include article in display
         assert "🇩🇪 Eltern" in result
         assert "None" not in result
@@ -87,9 +86,9 @@ class TestArticleHandling:
             "translation": "test",
             "example": "This is a test."
         }
-        
+
         result = format_word_display(word_data)
-        
+
         # Should not include 'None' string in display
         assert "🇩🇪 Test" in result
         assert "None" not in result
@@ -104,9 +103,9 @@ class TestArticleHandling:
             "translation": "test",
             "example": "This is a test."
         }
-        
+
         result = format_word_display(word_data)
-        
+
         # Should not include empty article in display
         assert "🇩🇪 Test" in result
         assert "None" not in result
@@ -114,11 +113,11 @@ class TestArticleHandling:
 
     def test_session_manager_word_display_with_article(self, temp_db_manager, sample_user_data):
         """Test SessionManager handles words with articles correctly"""
-        
+
         # Create user and add word with article
         user = temp_db_manager.create_user(**sample_user_data)
         user_id = user["id"]
-        
+
         word_data = {
             "lemma": "Buch",
             "part_of_speech": "noun",
@@ -126,32 +125,32 @@ class TestArticleHandling:
             "translation": "book",
             "example": "Das Buch ist interessant."
         }
-        
+
         added_count = temp_db_manager.add_words_to_user(user_id, [word_data])
         assert added_count == 1
-        
+
         # Get the word back
         words = temp_db_manager.get_words_by_user(user_id)
         assert len(words) == 1
         word = words[0]
-        
+
         # Test the session manager formatting logic
         article = word.get('article')
         if article and article != 'None' and article.strip():
             word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
         else:
             word_display = f"{word['lemma']} - {word['part_of_speech']}"
-        
+
         assert word_display == "das Buch - noun"
         assert "None" not in word_display
 
     def test_session_manager_word_display_without_article(self, temp_db_manager, sample_user_data):
         """Test SessionManager handles words without articles correctly"""
-        
+
         # Create user and add word without article
         user = temp_db_manager.create_user(**sample_user_data)
         user_id = user["id"]
-        
+
         word_data = {
             "lemma": "Eltern",
             "part_of_speech": "noun",
@@ -159,32 +158,32 @@ class TestArticleHandling:
             "translation": "parents",
             "example": "Meine Eltern sind nett."
         }
-        
+
         added_count = temp_db_manager.add_words_to_user(user_id, [word_data])
         assert added_count == 1
-        
+
         # Get the word back
         words = temp_db_manager.get_words_by_user(user_id)
         assert len(words) == 1
         word = words[0]
-        
+
         # Test the session manager formatting logic
         article = word.get('article')
         if article and article != 'None' and article.strip():
             word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
         else:
             word_display = f"{word['lemma']} - {word['part_of_speech']}"
-        
+
         assert word_display == "Eltern - noun"
         assert "None" not in word_display
 
     def test_session_manager_word_display_with_none_string(self, temp_db_manager, sample_user_data):
         """Test SessionManager handles words with 'None' string article correctly"""
-        
+
         # Create user and add word with 'None' string article
         user = temp_db_manager.create_user(**sample_user_data)
         user_id = user["id"]
-        
+
         # Manually insert a word with 'None' string article (edge case)
         with temp_db_manager.get_connection() as conn:
             cursor = conn.execute(
@@ -192,36 +191,36 @@ class TestArticleHandling:
                 ("BadWord", "noun", "None", "bad word", "This is bad.")
             )
             word_id = cursor.lastrowid
-            
+
             # Add to user via learning_progress table
             conn.execute(
                 "INSERT INTO learning_progress (user_id, word_id) VALUES (?, ?)",
                 (user_id, word_id)
             )
             conn.commit()
-        
+
         # Get the word back
         words = temp_db_manager.get_words_by_user(user_id)
         assert len(words) == 1
         word = words[0]
-        
+
         # Test the session manager formatting logic
         article = word.get('article')
         if article and article != 'None' and article.strip():
             word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
         else:
             word_display = f"{word['lemma']} - {word['part_of_speech']}"
-        
+
         assert word_display == "BadWord - noun"
         assert "None" not in word_display
 
     def test_various_article_scenarios(self, temp_db_manager, sample_user_data):
         """Test various article scenarios in one comprehensive test"""
-        
+
         # Create user
         user = temp_db_manager.create_user(**sample_user_data)
         user_id = user["id"]
-        
+
         # Test words with different article scenarios
         test_words = [
             {
@@ -273,7 +272,7 @@ class TestArticleHandling:
                 "expected_display": "laufen - verb"
             }
         ]
-        
+
         # Add all words
         word_data_for_db = [
             {k: v for k, v in word.items() if k != 'expected_display'}
@@ -281,11 +280,11 @@ class TestArticleHandling:
         ]
         added_count = temp_db_manager.add_words_to_user(user_id, word_data_for_db)
         assert added_count == len(test_words)
-        
+
         # Get words back and test display
         words = temp_db_manager.get_words_by_user(user_id)
         assert len(words) == len(test_words)
-        
+
         for word in words:
             # Find the expected display for this word
             expected_word = next(
@@ -293,17 +292,17 @@ class TestArticleHandling:
                 None
             )
             assert expected_word is not None
-            
+
             # Test session manager formatting
             article = word.get('article')
             if article and article != 'None':
                 word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
             else:
                 word_display = f"{word['lemma']} - {word['part_of_speech']}"
-            
+
             assert word_display == expected_word["expected_display"]
             assert "None" not in word_display
-            
+
             # Test utils formatting
             formatted_display = format_word_display(word)
             assert "None" not in formatted_display
@@ -317,13 +316,13 @@ class TestArticleHandling:
             "translation": "test",
             "example": "This is a test."
         }
-        
+
         result = format_word_display(word_data)
-        
+
         # Should treat whitespace-only as no article
         assert "🇩🇪 Test" in result
         assert "None" not in result
-        
+
     def test_missing_article_field(self):
         """Test handling when article field is missing entirely"""
         word_data = {
@@ -333,9 +332,9 @@ class TestArticleHandling:
             "translation": "test",
             "example": "This is a test."
         }
-        
+
         result = format_word_display(word_data)
-        
+
         # Should handle missing field gracefully
         assert "🇩🇪 Test" in result
         assert "None" not in result

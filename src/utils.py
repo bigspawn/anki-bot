@@ -2,21 +2,21 @@
 Utility functions for the German Learning Bot
 """
 
-import re
+import asyncio
 import json
 import logging
-from datetime import datetime, date, timedelta
-from typing import Any, Dict, List, Optional, Union
-from functools import wraps
-import asyncio
+import re
 import time
+from datetime import date, datetime
+from functools import wraps
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 
-def format_word_display(word_data: Dict[str, Any]) -> str:
+def format_word_display(word_data: dict[str, Any]) -> str:
     """Format word data for display in Telegram"""
-    word = word_data.get("word", "")
+    word_data.get("word", "")
     lemma = word_data.get("lemma", "")
     article = word_data.get("article")
     part_of_speech = word_data.get("part_of_speech", "")
@@ -44,7 +44,7 @@ def format_word_display(word_data: Dict[str, Any]) -> str:
     return result.strip()
 
 
-def format_study_card(word_data: Dict[str, Any], current_index: int = 0, total_words: int = 0) -> str:
+def format_study_card(word_data: dict[str, Any], current_index: int = 0, total_words: int = 0) -> str:
     """Format word as study flashcard"""
     lemma = word_data.get("lemma", "")
     article = word_data.get("article", "")
@@ -52,7 +52,7 @@ def format_study_card(word_data: Dict[str, Any], current_index: int = 0, total_w
 
     # Progress info
     progress_info = f"{current_index}/{total_words}. " if total_words > 0 else ""
-    
+
     # Question format based on part of speech
     if part_of_speech == "noun" and article:
         result = f"{progress_info}Какой артикль у {lemma}?"
@@ -62,7 +62,7 @@ def format_study_card(word_data: Dict[str, Any], current_index: int = 0, total_w
     return result
 
 
-def format_progress_stats(stats: Dict[str, Any]) -> str:
+def format_progress_stats(stats: dict[str, Any]) -> str:
     """Format user progress statistics"""
     total_words = stats.get("total_words", 0)
     due_words = stats.get("due_words", 0)
@@ -132,7 +132,7 @@ def clean_text(text: str) -> str:
     return text
 
 
-def extract_json_safely(json_str: str) -> Dict[str, Any]:
+def extract_json_safely(json_str: str) -> dict[str, Any]:
     """Safely extract JSON from string"""
     if not json_str:
         return {}
@@ -266,7 +266,7 @@ def rate_limit(calls_per_minute: int = 60):
     return decorator
 
 
-def parse_date_safely(date_str: str) -> Optional[date]:
+def parse_date_safely(date_str: str) -> date | None:
     """Safely parse date string"""
     if not date_str:
         return None
@@ -314,7 +314,7 @@ def truncate_text(text: str, max_length: int = 100, suffix: str = "...") -> str:
     return text[: max_length - len(suffix)] + suffix
 
 
-def validate_rating(rating: Union[int, str]) -> Optional[int]:
+def validate_rating(rating: int | str) -> int | None:
     """Validate and convert rating value"""
     try:
         rating_int = int(rating)
@@ -338,7 +338,7 @@ def get_rating_text(rating: int) -> str:
     return texts.get(rating, "")
 
 
-def chunk_list(lst: List[Any], chunk_size: int) -> List[List[Any]]:
+def chunk_list(lst: list[Any], chunk_size: int) -> list[list[Any]]:
     """Split list into chunks of specified size"""
     return [lst[i : i + chunk_size] for i in range(0, len(lst), chunk_size)]
 
@@ -395,15 +395,15 @@ def create_inline_keyboard_data(action: str, **kwargs) -> str:
     """Create callback data for inline keyboard with compact format"""
     # Use compact encoding to stay under 64 byte limit
     compact_data = {"a": action}
-    
+
     # Use compact keys and optimize values
     key_mappings = {
         "word_id": "w",
-        "session_id": "s", 
+        "session_id": "s",
         "word_index": "i",
         "rating": "r",
     }
-    
+
     for key, value in kwargs.items():
         compact_key = key_mappings.get(key, key)
         # Further optimize session_id by removing user_id prefix if present
@@ -416,9 +416,9 @@ def create_inline_keyboard_data(action: str, **kwargs) -> str:
                 compact_data[compact_key] = value
         else:
             compact_data[compact_key] = value
-    
+
     result = format_json_safely(compact_data)
-    
+
     # Additional safety check - if still too long, truncate session_id further
     if len(result) > 64 and "s" in compact_data:
         # Try with even shorter session ID
@@ -426,34 +426,34 @@ def create_inline_keyboard_data(action: str, **kwargs) -> str:
         if len(session_val) > 4:
             compact_data["s"] = session_val[-4:]  # Just last 4 digits
             result = format_json_safely(compact_data)
-    
+
     return result
 
 
-def parse_inline_keyboard_data(callback_data: str) -> Dict[str, Any]:
+def parse_inline_keyboard_data(callback_data: str) -> dict[str, Any]:
     """Parse callback data from inline keyboard with compact format support"""
     raw_data = extract_json_safely(callback_data)
-    
+
     # If it's already in the old format, return as is
     if "action" in raw_data:
         return raw_data
-    
+
     # Convert from compact format
     expanded_data = {}
-    
+
     # Reverse key mappings
     key_mappings = {
         "a": "action",
         "w": "word_id",
         "s": "session_id",
-        "i": "word_index", 
+        "i": "word_index",
         "r": "rating",
     }
-    
+
     for key, value in raw_data.items():
         expanded_key = key_mappings.get(key, key)
         expanded_data[expanded_key] = value
-    
+
     return expanded_data
 
 
@@ -474,7 +474,7 @@ class Timer:
         if self.start_time is not None:
             self.end_time = time.time()
 
-    def elapsed(self) -> Optional[float]:
+    def elapsed(self) -> float | None:
         """Get elapsed time in seconds"""
         if self.start_time is None:
             return None
@@ -482,7 +482,7 @@ class Timer:
         end = self.end_time or time.time()
         return end - self.start_time
 
-    def elapsed_ms(self) -> Optional[int]:
+    def elapsed_ms(self) -> int | None:
         """Get elapsed time in milliseconds"""
         elapsed = self.elapsed()
         return int(elapsed * 1000) if elapsed is not None else None

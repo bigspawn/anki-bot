@@ -2,12 +2,11 @@
 Database connection manager for the German Learning Bot
 """
 
-import sqlite3
 import logging
-from pathlib import Path
-from typing import Optional
+import sqlite3
 from contextlib import contextmanager
-from datetime import datetime, date
+from datetime import date, datetime
+from pathlib import Path
 
 from ...config import get_database_path
 
@@ -17,7 +16,7 @@ logger = logging.getLogger(__name__)
 class DatabaseConnection:
     """Manages SQLite database connections and settings"""
 
-    def __init__(self, db_path: Optional[str] = None):
+    def __init__(self, db_path: str | None = None):
         self.db_path = db_path or get_database_path()
         self._ensure_database_directory()
         self._init_connection_settings()
@@ -63,7 +62,7 @@ class DatabaseConnection:
                             return datetime.strptime(date_str, fmt).date()
                         except ValueError:
                             continue
-                    raise ValueError(f"Invalid date format: {date_str}")
+                    raise ValueError(f"Invalid date format: {date_str}") from None
 
             def convert_datetime(val):
                 try:
@@ -71,7 +70,11 @@ class DatabaseConnection:
                 except ValueError:
                     # Try alternative formats
                     datetime_str = val.decode()
-                    for fmt in ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d']:
+                    for fmt in [
+                        '%Y-%m-%d %H:%M:%S',
+                        '%Y-%m-%d %H:%M:%S.%f',
+                        '%Y-%m-%d',
+                    ]:
                         try:
                             return datetime.strptime(datetime_str, fmt)
                         except ValueError:
@@ -203,28 +206,28 @@ class DatabaseConnection:
             cursor = conn.execute("PRAGMA table_info(words)")
             table_info = cursor.fetchall()
             columns = {row[1]: {"type": row[2], "notnull": row[3], "default": row[4]} for row in table_info}
-            
+
             if "confidence" not in columns:
                 logger.info("Adding missing confidence column to words table")
                 conn.execute("ALTER TABLE words ADD COLUMN confidence REAL DEFAULT 1.0")
                 conn.commit()
                 logger.info("Successfully added confidence column to words table")
-            
+
             # Check if response_time_ms column exists in review_history table
             cursor = conn.execute("PRAGMA table_info(review_history)")
             review_table_info = cursor.fetchall()
             review_columns = {row[1]: {"type": row[2], "notnull": row[3], "default": row[4]} for row in review_table_info}
-            
+
             if "response_time_ms" not in review_columns:
                 logger.info("Adding missing response_time_ms column to review_history table")
                 conn.execute("ALTER TABLE review_history ADD COLUMN response_time_ms INTEGER DEFAULT 0")
                 conn.commit()
                 logger.info("Successfully added response_time_ms column to review_history table")
-            
+
             # Check if word column exists and is NOT NULL - make it optional
             if "word" in columns and columns["word"]["notnull"] == 1:
                 logger.info("Making word column optional by recreating table")
-                
+
                 # Create new table with correct schema
                 conn.execute("""
                     CREATE TABLE words_new (
@@ -240,11 +243,11 @@ class DatabaseConnection:
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
                 """)
-                
+
                 # Copy data from old table
                 # First check what columns exist
                 old_columns = list(columns.keys())
-                
+
                 # Build SELECT query based on existing columns
                 select_parts = [
                     "id", "lemma",
@@ -254,32 +257,32 @@ class DatabaseConnection:
                     "additional_forms",
                     "COALESCE(confidence, 1.0) as confidence"
                 ]
-                
+
                 if "created_at" in old_columns:
                     select_parts.append("created_at")
                 else:
                     select_parts.append("CURRENT_TIMESTAMP as created_at")
-                    
+
                 if "updated_at" in old_columns:
                     select_parts.append("updated_at")
                 else:
                     select_parts.append("CURRENT_TIMESTAMP as updated_at")
-                
+
                 select_query = f"""
                     INSERT INTO words_new (id, lemma, part_of_speech, article, translation, example, additional_forms, confidence, created_at, updated_at)
                     SELECT {', '.join(select_parts)}
                     FROM words
                 """
-                
+
                 conn.execute(select_query)
-                
+
                 # Drop old table and rename new one
                 conn.execute("DROP TABLE words")
                 conn.execute("ALTER TABLE words_new RENAME TO words")
-                
+
                 conn.commit()
                 logger.info("Successfully migrated words table to new schema")
-                
+
         except Exception as e:
             logger.error(f"Error running database migrations: {e}")
             # Don't raise the exception to avoid breaking initialization

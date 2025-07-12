@@ -2,18 +2,15 @@
 Integration tests for the German Learning Bot
 """
 
-import pytest
-import tempfile
 import os
-import asyncio
+import tempfile
 from unittest.mock import AsyncMock, MagicMock, patch
-from datetime import date
+
+import pytest
 
 from src.database import DatabaseManager
-from src.word_processor import MockWordProcessor, ProcessedWord
-from src.bot_handler import BotHandler
 from src.spaced_repetition import get_srs_system
-from src.text_parser import get_text_parser
+from src.word_processor import MockWordProcessor
 
 
 class TestDatabaseIntegration:
@@ -77,7 +74,7 @@ class TestDatabaseIntegration:
         # Add review record (already done by update_learning_progress above)
         # temp_db.add_review_record is alias for update_learning_progress
 
-        # Check stats  
+        # Check stats
         stats = temp_db.get_user_stats(user_id)
         assert stats["total_words"] == 1
         # After review, word might not be due anymore
@@ -130,7 +127,7 @@ class TestSpacedRepetitionIntegration:
 
         for rating in ratings:
             # Calculate next review
-            result = srs.calculate_review(
+            srs.calculate_review(
                 rating=rating,
                 repetitions=word.get("repetitions", 0),
                 interval_days=word.get("interval_days", 1),
@@ -257,19 +254,19 @@ class TestBotHandlerIntegration:
     ):
         """Test /start command with database integration"""
         from src.core.handlers.command_handlers import CommandHandlers
-        from src.text_parser import GermanTextParser
         from src.spaced_repetition import SpacedRepetitionSystem
-        
+        from src.text_parser import GermanTextParser
+
         with patch("src.bot_handler.get_db_manager", return_value=temp_db):
             with patch(
                 "src.bot_handler.get_word_processor", return_value=MockWordProcessor()
             ):
                 async def mock_safe_reply(update, message, **kwargs):
                     await update.message.reply_text(message, **kwargs)
-                
+
                 handlers = CommandHandlers(
-                    temp_db, 
-                    MockWordProcessor(), 
+                    temp_db,
+                    MockWordProcessor(),
                     GermanTextParser(),
                     SpacedRepetitionSystem(),
                     safe_reply_callback=mock_safe_reply,
@@ -296,9 +293,9 @@ class TestBotHandlerIntegration:
     ):
         """Test /add command with full integration"""
         from src.core.handlers.command_handlers import CommandHandlers
-        from src.text_parser import GermanTextParser
         from src.spaced_repetition import SpacedRepetitionSystem
-        
+        from src.text_parser import GermanTextParser
+
         # Setup context with German text
         mock_context.args = ["Das", "Haus", "ist", "schön."]
 
@@ -308,13 +305,13 @@ class TestBotHandlerIntegration:
             ):
                 async def mock_safe_reply(update, message, **kwargs):
                     await update.message.reply_text(message, **kwargs)
-                
+
                 async def mock_process_text(update, text):
                     await update.message.reply_text("Words processed")
-                
+
                 handlers = CommandHandlers(
-                    temp_db, 
-                    MockWordProcessor(), 
+                    temp_db,
+                    MockWordProcessor(),
                     GermanTextParser(),
                     SpacedRepetitionSystem(),
                     safe_reply_callback=mock_safe_reply,
@@ -329,8 +326,8 @@ class TestBotHandlerIntegration:
 
                 # Check that words were processed and added
                 user = temp_db.get_user_by_telegram_id(12345)
-                words = temp_db.get_words_by_user(user["id"])
-                
+                temp_db.get_words_by_user(user["id"])
+
                 # Should have called reply_text at least once for processing
                 assert mock_update.message.reply_text.call_count >= 1
 
@@ -344,16 +341,16 @@ class TestBotHandlerIntegration:
     ):
         """Test /stats command with database integration"""
         from src.core.handlers.command_handlers import CommandHandlers
-        from src.text_parser import GermanTextParser
         from src.spaced_repetition import SpacedRepetitionSystem
-        
+        from src.text_parser import GermanTextParser
+
         with patch("src.bot_handler.get_db_manager", return_value=temp_db):
             async def mock_safe_reply(update, message, **kwargs):
                 await update.message.reply_text(message, **kwargs)
-            
+
             handlers = CommandHandlers(
-                temp_db, 
-                MockWordProcessor(), 
+                temp_db,
+                MockWordProcessor(),
                 GermanTextParser(),
                 SpacedRepetitionSystem(),
                 safe_reply_callback=mock_safe_reply,
@@ -447,7 +444,7 @@ class TestEndToEndScenarios:
 
         for word in due_words[:3]:  # Review first 3 words
             # Simulate user rating (Good = 3)
-            result = srs.calculate_review(
+            srs.calculate_review(
                 rating=3,
                 repetitions=word.get("repetitions", 0),
                 interval_days=word.get("interval_days", 1),

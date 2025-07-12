@@ -3,9 +3,9 @@ Spaced Repetition System implementation using SuperMemo 2 algorithm
 """
 
 import logging
-from datetime import date, timedelta
-from typing import Tuple, Dict, Any
 from dataclasses import dataclass
+from datetime import date, timedelta
+from typing import Any
 
 from .config import get_settings
 
@@ -37,7 +37,7 @@ class SpacedRepetitionSystem:
         repetitions: int,
         interval_days: int,
         easiness_factor: float,
-        review_date: date = None,
+        review_date: date | None = None,
     ) -> ReviewResult:
         """
         Calculate next review based on SuperMemo 2 algorithm
@@ -138,9 +138,7 @@ class SpacedRepetitionSystem:
 
         if repetitions == 0:
             # First repetition
-            if rating == 2:  # Hard
-                return 1
-            elif rating == 3:  # Good
+            if rating == 2 or rating == 3:  # Hard
                 return 1
             else:  # Easy (4)
                 return 4
@@ -222,7 +220,7 @@ class SpacedRepetitionSystem:
 
         return min_days
 
-    def analyze_learning_progress(self, review_history: list) -> Dict[str, Any]:
+    def analyze_learning_progress(self, review_history: list) -> dict[str, Any]:
         """Analyze learning progress from review history"""
         if not review_history:
             return {
@@ -293,7 +291,7 @@ def calculate_next_review(
     repetitions: int = 0,
     interval_days: int = 1,
     easiness_factor: float = 2.5,
-    review_date: date = None,
+    review_date: date | None = None,
 ) -> ReviewResult:
     """Convenience function to calculate next review"""
     srs = get_srs_system()

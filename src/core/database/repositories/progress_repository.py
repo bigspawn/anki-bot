@@ -3,8 +3,8 @@ Progress repository for learning progress and review history operations
 """
 
 import logging
-from typing import List, Optional, Dict, Any
 from datetime import datetime
+from typing import Any
 
 from ..connection import DatabaseConnection
 from ..models import LearningProgress, ReviewHistory
@@ -19,12 +19,12 @@ class ProgressRepository:
         self.db_connection = db_connection
 
     def update_learning_progress(
-        self, 
-        user_id: int, 
-        word_id: int, 
-        rating: int, 
-        new_interval: int = None,
-        new_easiness: float = None,
+        self,
+        user_id: int,
+        word_id: int,
+        rating: int,
+        new_interval: int | None = None,
+        new_easiness: float | None = None,
         response_time_ms: int = 0
     ) -> bool:
         """Update learning progress after review"""
@@ -33,13 +33,13 @@ class ProgressRepository:
                 # Get current progress
                 cursor = conn.execute(
                     """
-                    SELECT repetitions, easiness_factor, interval_days 
-                    FROM learning_progress 
+                    SELECT repetitions, easiness_factor, interval_days
+                    FROM learning_progress
                     WHERE user_id = ? AND word_id = ?
                     """,
                     (user_id, word_id)
                 )
-                
+
                 current = cursor.fetchone()
                 if not current:
                     logger.info(f"No learning progress found for user {user_id}, word {word_id}. Creating initial record.")
@@ -56,27 +56,27 @@ class ProgressRepository:
                 else:
                     # Convert row to dict for consistent access
                     current = dict(current)
-                
+
                 # Calculate new values if not provided
                 if new_interval is None or new_easiness is None:
+
                     from ....spaced_repetition import get_srs_system
-                    from datetime import date
                     srs = get_srs_system()
                     result = srs.calculate_review(
                         rating, current["repetitions"], current["interval_days"], current["easiness_factor"]
                     )
                     new_interval = result.new_interval
                     new_easiness = result.new_easiness_factor
-                
+
                 # Update learning progress
                 next_review_date = datetime.now()
                 if new_interval > 0:
                     from datetime import timedelta
                     next_review_date = datetime.now() + timedelta(days=new_interval)
-                
+
                 cursor = conn.execute(
                     """
-                    UPDATE learning_progress 
+                    UPDATE learning_progress
                     SET repetitions = repetitions + 1,
                         easiness_factor = ?,
                         interval_days = ?,
@@ -95,7 +95,7 @@ class ProgressRepository:
                         word_id
                     )
                 )
-                
+
                 # Add to review history
                 cursor = conn.execute(
                     """
@@ -104,21 +104,21 @@ class ProgressRepository:
                     """,
                     (user_id, word_id, rating, response_time_ms, datetime.now())
                 )
-                
+
                 conn.commit()
                 return True
-                
+
         except Exception as e:
             logger.error(f"Error updating learning progress: {e}")
             return False
 
-    def get_learning_progress(self, user_id: int, word_id: int) -> Optional[LearningProgress]:
+    def get_learning_progress(self, user_id: int, word_id: int) -> LearningProgress | None:
         """Get learning progress for a specific word"""
         try:
             with self.db_connection.get_connection() as conn:
                 cursor = conn.execute(
                     """
-                    SELECT * FROM learning_progress 
+                    SELECT * FROM learning_progress
                     WHERE user_id = ? AND word_id = ?
                     """,
                     (user_id, word_id)
@@ -130,18 +130,18 @@ class ProgressRepository:
             return None
 
     def get_review_history(
-        self, 
-        user_id: int, 
-        word_id: Optional[int] = None,
+        self,
+        user_id: int,
+        word_id: int | None = None,
         limit: int = 100
-    ) -> List[ReviewHistory]:
+    ) -> list[ReviewHistory]:
         """Get review history for user or specific word"""
         try:
             with self.db_connection.get_connection() as conn:
                 if word_id:
                     cursor = conn.execute(
                         """
-                        SELECT * FROM review_history 
+                        SELECT * FROM review_history
                         WHERE user_id = ? AND word_id = ?
                         ORDER BY reviewed_at DESC
                         LIMIT ?
@@ -151,31 +151,31 @@ class ProgressRepository:
                 else:
                     cursor = conn.execute(
                         """
-                        SELECT * FROM review_history 
+                        SELECT * FROM review_history
                         WHERE user_id = ?
                         ORDER BY reviewed_at DESC
                         LIMIT ?
                         """,
                         (user_id, limit)
                     )
-                
+
                 return [dict(row) for row in cursor.fetchall()]
         except Exception as e:
             logger.error(f"Error getting review history: {e}")
             return []
 
-    def get_recent_reviews(self, user_id: int, days: int = 7) -> List[Dict[str, Any]]:
+    def get_recent_reviews(self, user_id: int, days: int = 7) -> list[dict[str, Any]]:
         """Get recent reviews with word information"""
         try:
             with self.db_connection.get_connection() as conn:
                 cursor = conn.execute(
-                    """
+                    f"""
                     SELECT rh.*, w.lemma, w.translation
                     FROM review_history rh
                     JOIN words w ON rh.word_id = w.id
-                    WHERE rh.user_id = ? AND rh.reviewed_at >= datetime('now', '-{} days')
+                    WHERE rh.user_id = ? AND rh.reviewed_at >= datetime('now', '-{days} days')
                     ORDER BY rh.reviewed_at DESC
-                    """.format(days),
+                    """,
                     (user_id,)
                 )
                 return [dict(row) for row in cursor.fetchall()]
@@ -183,23 +183,23 @@ class ProgressRepository:
             logger.error(f"Error getting recent reviews: {e}")
             return []
 
-    def get_performance_stats(self, user_id: int, days: int = 30) -> Dict[str, Any]:
+    def get_performance_stats(self, user_id: int, days: int = 30) -> dict[str, Any]:
         """Get performance statistics for user"""
         try:
             with self.db_connection.get_connection() as conn:
                 cursor = conn.execute(
-                    """
-                    SELECT 
+                    f"""
+                    SELECT
                         COUNT(*) as total_reviews,
                         AVG(rating) as avg_rating,
                         SUM(CASE WHEN rating >= 3 THEN 1 ELSE 0 END) as good_reviews,
                         AVG(response_time_ms) as avg_response_time
                     FROM review_history
-                    WHERE user_id = ? AND reviewed_at >= datetime('now', '-{} days')
-                    """.format(days),
+                    WHERE user_id = ? AND reviewed_at >= datetime('now', '-{days} days')
+                    """,
                     (user_id,)
                 )
-                
+
                 row = cursor.fetchone()
                 if not row:
                     return {
@@ -208,10 +208,10 @@ class ProgressRepository:
                         'accuracy': 0.0,
                         'avg_response_time': 0.0
                     }
-                
+
                 stats = dict(row)
                 stats['accuracy'] = (stats['good_reviews'] / stats['total_reviews'] * 100) if stats['total_reviews'] > 0 else 0.0
-                
+
                 return stats
         except Exception as e:
             logger.error(f"Error getting performance stats: {e}")
@@ -228,7 +228,7 @@ class ProgressRepository:
             with self.db_connection.get_connection() as conn:
                 cursor = conn.execute(
                     """
-                    UPDATE learning_progress 
+                    UPDATE learning_progress
                     SET repetitions = 0,
                         easiness_factor = 2.5,
                         interval_days = 1,
@@ -239,7 +239,7 @@ class ProgressRepository:
                     """,
                     (datetime.now(), datetime.now(), user_id, word_id)
                 )
-                
+
                 conn.commit()
                 return cursor.rowcount > 0
         except Exception as e:
@@ -258,7 +258,7 @@ class ProgressRepository:
                 if cursor.fetchone():
                     logger.debug(f"Learning progress already exists for user {user_id}, word {word_id}")
                     return True
-                
+
                 # Create new record
                 cursor = conn.execute(
                     """
@@ -267,7 +267,7 @@ class ProgressRepository:
                     """,
                     (user_id, word_id, datetime.now())
                 )
-                
+
                 conn.commit()
                 logger.info(f"Created learning progress for user {user_id}, word {word_id}")
                 return True
@@ -284,13 +284,13 @@ class ProgressRepository:
                     "DELETE FROM review_history WHERE user_id = ? AND word_id = ?",
                     (user_id, word_id)
                 )
-                
+
                 # Delete learning progress
                 cursor = conn.execute(
                     "DELETE FROM learning_progress WHERE user_id = ? AND word_id = ?",
                     (user_id, word_id)
                 )
-                
+
                 conn.commit()
                 return cursor.rowcount > 0
         except Exception as e:

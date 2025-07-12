@@ -2,11 +2,9 @@
 Configuration management for the German Learning Bot
 """
 
-import os
 from functools import lru_cache
-from typing import Optional, List, Union
 
-from pydantic import Field, field_validator, ConfigDict
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,7 +13,7 @@ class Settings(BaseSettings):
 
     # Telegram Bot Configuration
     telegram_bot_token: str = Field(..., env="TELEGRAM_BOT_TOKEN")
-    telegram_webhook_url: Optional[str] = Field(None, env="TELEGRAM_WEBHOOK_URL")
+    telegram_webhook_url: str | None = Field(None, env="TELEGRAM_WEBHOOK_URL")
     allowed_users: str = Field(default="", env="ALLOWED_USERS")
 
     # OpenAI Configuration
@@ -57,7 +55,7 @@ class Settings(BaseSettings):
     timezone: str = Field(default="UTC", env="TIMEZONE")
 
     @property
-    def allowed_users_list(self) -> List[int]:
+    def allowed_users_list(self) -> list[int]:
         """Convert allowed_users string to list of integers"""
         if not self.allowed_users.strip():
             return []
@@ -73,7 +71,7 @@ class Settings(BaseSettings):
     )
 
 
-@lru_cache()
+@lru_cache
 def get_settings() -> Settings:
     """Get cached settings instance"""
     return Settings()

@@ -2,8 +2,8 @@
 Database models for the German Learning Bot
 """
 
-from typing import TypedDict, Optional, Dict, Any
 from datetime import datetime
+from typing import TypedDict
 
 
 class User(TypedDict):
@@ -11,8 +11,8 @@ class User(TypedDict):
     id: int
     telegram_id: int
     first_name: str
-    last_name: Optional[str]
-    username: Optional[str]
+    last_name: str | None
+    username: str | None
     created_at: datetime
     updated_at: datetime
     is_active: bool
@@ -23,10 +23,10 @@ class Word(TypedDict):
     id: int
     lemma: str
     part_of_speech: str
-    article: Optional[str]
+    article: str | None
     translation: str
     example: str
-    additional_forms: Optional[str]
+    additional_forms: str | None
     confidence: float
     created_at: datetime
     updated_at: datetime
@@ -41,7 +41,7 @@ class LearningProgress(TypedDict):
     easiness_factor: float
     interval_days: int
     next_review_date: datetime
-    last_reviewed: Optional[datetime]
+    last_reviewed: datetime | None
     created_at: datetime
     updated_at: datetime
 

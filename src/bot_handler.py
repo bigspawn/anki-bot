@@ -3,31 +3,29 @@ Refactored Telegram bot handler using modular architecture
 """
 
 import logging
-import asyncio
 from functools import wraps
-from typing import Dict, Any, Optional, List
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update
+from telegram.error import TelegramError
 from telegram.ext import (
     Application,
-    CommandHandler,
-    MessageHandler,
     CallbackQueryHandler,
-    filters,
+    CommandHandler,
     ContextTypes,
+    MessageHandler,
+    filters,
 )
-from telegram.error import TelegramError
 
 from .config import get_settings
 from .core.database.database_manager import get_db_manager
 from .core.handlers.command_handlers import CommandHandlers
 from .core.handlers.message_handlers import MessageHandlers
-from .core.session.session_manager import SessionManager
 from .core.locks.user_lock_manager import UserLockManager
-from .word_processor import get_word_processor
-from .text_parser import get_text_parser
+from .core.session.session_manager import SessionManager
 from .spaced_repetition import get_srs_system
+from .text_parser import get_text_parser
 from .utils import Timer
+from .word_processor import get_word_processor
 
 logger = logging.getLogger(__name__)
 
@@ -42,9 +40,9 @@ class BotHandler:
         self.text_parser = get_text_parser()
         self.srs_system = get_srs_system()
         self.lock_manager = UserLockManager(lock_timeout_minutes=5)
-        
+
         self.application = None
-        
+
         # Initialize modular components
         self.session_manager = SessionManager(
             db_manager=self.db_manager,
@@ -52,7 +50,7 @@ class BotHandler:
             safe_reply_callback=self._safe_reply,
             safe_edit_callback=self._safe_edit,
         )
-        
+
         self.command_handlers = CommandHandlers(
             db_manager=self.db_manager,
             word_processor=self.word_processor,
@@ -62,7 +60,7 @@ class BotHandler:
             process_text_callback=self._process_text_for_user,
             start_study_session_callback=self.session_manager.start_study_session,
         )
-        
+
         self.message_handlers = MessageHandlers(
             safe_reply_callback=self._safe_reply,
             process_text_callback=self._process_text_for_user,
@@ -75,10 +73,12 @@ class BotHandler:
             return False
         return user_id in self.settings.allowed_users_list
 
-    async def _check_authorization(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
+    async def _check_authorization(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ) -> bool:
         """Check if user is authorized and send unauthorized message if not"""
         user_id = update.effective_user.id
-        
+
         if not self._is_user_authorized(user_id):
             await self._safe_reply(
                 update,
@@ -86,7 +86,7 @@ class BotHandler:
             )
             logger.warning(f"Unauthorized access attempt from user {user_id}")
             return False
-        
+
         return True
 
     def require_authorization(self, func):
@@ -101,13 +101,13 @@ class BotHandler:
     async def start(self):
         """Start the bot"""
         logger.info("Starting German Learning Bot...")
-        
+
         # Initialize database
         self.db_manager.init_database()
-        
+
         # Start lock manager
         await self.lock_manager.start()
-        
+
         try:
             # Create application
             self.application = (
@@ -119,10 +119,10 @@ class BotHandler:
                 .pool_timeout(30)
                 .build()
             )
-            
+
             # Add handlers
             self._add_handlers()
-            
+
             # Start polling
             logger.info("Bot started successfully!")
             await self.application.run_polling(
@@ -137,10 +137,10 @@ class BotHandler:
     def run(self):
         """Run the bot (synchronous entry point)"""
         logger.info("Starting German Learning Bot...")
-        
+
         # Initialize database
         self.db_manager.init_database()
-        
+
         # Create application
         self.application = (
             Application.builder()
@@ -151,10 +151,10 @@ class BotHandler:
             .pool_timeout(30)
             .build()
         )
-        
+
         # Add handlers
         self._add_handlers()
-        
+
         # Start polling
         logger.info("Bot started successfully!")
         self.application.run_polling(
@@ -168,22 +168,66 @@ class BotHandler:
         app = self.application
 
         # Command handlers with authorization
-        app.add_handler(CommandHandler("start", self.require_authorization(self.command_handlers.start_command)))
-        app.add_handler(CommandHandler("help", self.require_authorization(self.command_handlers.help_command)))
-        app.add_handler(CommandHandler("add", self.require_authorization(self.command_handlers.add_command)))
-        app.add_handler(CommandHandler("study", self.require_authorization(self.command_handlers.study_command)))
-        app.add_handler(CommandHandler("study_new", self.require_authorization(self.command_handlers.study_new_command)))
-        app.add_handler(CommandHandler("study_difficult", self.require_authorization(self.command_handlers.study_difficult_command)))
-        app.add_handler(CommandHandler("stats", self.require_authorization(self.command_handlers.stats_command)))
-        app.add_handler(CommandHandler("settings", self.require_authorization(self.command_handlers.settings_command)))
+        app.add_handler(
+            CommandHandler(
+                "start", self.require_authorization(self.command_handlers.start_command)
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "help", self.require_authorization(self.command_handlers.help_command)
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "add", self.require_authorization(self.command_handlers.add_command)
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study", self.require_authorization(self.command_handlers.study_command)
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_new",
+                self.require_authorization(self.command_handlers.study_new_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_difficult",
+                self.require_authorization(
+                    self.command_handlers.study_difficult_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "stats", self.require_authorization(self.command_handlers.stats_command)
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "settings",
+                self.require_authorization(self.command_handlers.settings_command),
+            )
+        )
 
         # Message handlers with authorization
         app.add_handler(
-            MessageHandler(filters.TEXT & ~filters.COMMAND, self.require_authorization(self.message_handlers.handle_message))
+            MessageHandler(
+                filters.TEXT & ~filters.COMMAND,
+                self.require_authorization(self.message_handlers.handle_message),
+            )
         )
 
         # Callback query handler with authorization
-        app.add_handler(CallbackQueryHandler(self.require_authorization(self.message_handlers.handle_callback_query)))
+        app.add_handler(
+            CallbackQueryHandler(
+                self.require_authorization(self.message_handlers.handle_callback_query)
+            )
+        )
 
         # Error handler
         app.add_error_handler(self.error_handler)
@@ -267,7 +311,7 @@ class BotHandler:
 
                 # Process with word processor
                 processed_words = await self.word_processor.process_text(" ".join(new_words), max_words=len(new_words))
-                
+
                 if processed_words:
                     # Convert to dict format for database
                     words_data = []
@@ -284,7 +328,7 @@ class BotHandler:
 
                     # Add to database
                     added_count = self.db_manager.add_words_to_user(db_user["id"], words_data)
-                    
+
                     # Log detailed results
                     processed_count = len(processed_words)
                     if added_count != processed_count:
@@ -292,9 +336,9 @@ class BotHandler:
                         logger.warning(f"Word addition mismatch: processed {processed_count} words, but only {added_count} were added to database. {skipped_count} words were skipped.")
                         for pw in processed_words:
                             logger.info(f"Processed word details: '{pw.lemma}' ({pw.part_of_speech}) - '{pw.translation}'")
-                    
+
                     timer.stop()
-                    
+
                     # Final success message
                     success_msg = f"""✅ <b>Обработка завершена!</b>
 

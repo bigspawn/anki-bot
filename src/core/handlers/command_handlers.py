@@ -3,16 +3,15 @@ Command handlers for the German Learning Bot
 """
 
 import logging
-from typing import Dict, Any, Optional
 
 from telegram import Update
 from telegram.ext import ContextTypes
 
 from ...database import DatabaseManager
-from ...word_processor import WordProcessor
-from ...text_parser import GermanTextParser
 from ...spaced_repetition import SpacedRepetitionSystem
+from ...text_parser import GermanTextParser
 from ...utils import format_progress_stats
+from ...word_processor import WordProcessor
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +114,6 @@ class CommandHandlers:
         if not update.effective_user:
             return
 
-        user = update.effective_user
 
         if not context.args:
             await self._safe_reply(

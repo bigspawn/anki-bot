@@ -3,8 +3,9 @@ Database operations for the German Learning Bot
 """
 
 # Direct import from the new modular structure
-from .core.database.database_manager import DatabaseManager, get_db_manager
 from .config import get_database_path
+from .core.database.database_manager import DatabaseManager, get_db_manager
+
 
 # Simple init function
 def init_db(db_path=None):
@@ -14,4 +15,4 @@ def init_db(db_path=None):
     return db_manager
 
 # Clean exports
-__all__ = ['DatabaseManager', 'get_db_manager', 'init_db', 'get_database_path']
+__all__ = ['DatabaseManager', 'get_database_path', 'get_db_manager', 'init_db']

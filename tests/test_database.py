@@ -2,11 +2,11 @@
 Unit tests for database operations
 """
 
-import pytest
-import tempfile
 import os
-from datetime import date, datetime
+import tempfile
 from unittest.mock import patch
+
+import pytest
 
 from src.database import DatabaseManager, get_db_manager, init_db
 
@@ -120,7 +120,7 @@ class TestDatabaseManager:
         """Test adding multiple words in batch"""
         user = temp_db.create_user(**sample_user_data)
         user_id = user["id"]
-        
+
         # Prepare batch data
         words_batch = [
             {
@@ -151,23 +151,23 @@ class TestDatabaseManager:
                 "additional_forms": '{"comparative": "schöner"}',
             },
         ]
-        
+
         # Add words in batch
         word_ids = temp_db.add_words_batch(user_id, words_batch)
-        
+
         # Should get 3 word IDs
         assert len(word_ids) == 3
         assert all(isinstance(word_id, int) and word_id > 0 for word_id in word_ids)
-        
+
         # Verify words exist
         assert temp_db.check_word_exists(user_id, "haus")
         assert temp_db.check_word_exists(user_id, "gehen")
         assert temp_db.check_word_exists(user_id, "schön")
-        
+
         # Test adding same batch again (should return empty list due to duplicates)
         word_ids2 = temp_db.add_words_batch(user_id, words_batch)
         assert len(word_ids2) == 0
-        
+
         # Test empty batch
         word_ids3 = temp_db.add_words_batch(user_id, [])
         assert word_ids3 == []
@@ -303,7 +303,7 @@ class TestDatabaseManager:
         stats = temp_db.get_user_stats(user_id)
         assert stats["total_words"] == 1
         # Due words might be 0 initially if words need to be explicitly marked as due
-        assert stats["due_words"] is None or stats["due_words"] >= 0 
+        assert stats["due_words"] is None or stats["due_words"] >= 0
         assert stats["new_words"] == 1
         if "avg_success_rate" in stats:
             assert stats["avg_success_rate"] == 0.0  # No reviews yet

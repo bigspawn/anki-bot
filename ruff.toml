@@ -1,8 +1,12 @@
+# Ruff configuration
+line-length = 88
+target-version = "py311"
+
 [lint]
 # Enable flake8-bugbear (`B`) rules, in addition to the defaults.
 select = [
     "E",    # pycodestyle errors
-    "W",    # pycodestyle warnings
+    "W",    # pycodestyle warnings  
     "F",    # Pyflakes
     "I",    # isort
     "B",    # flake8-bugbear
@@ -22,6 +26,7 @@ ignore = [
     "S608",  # SQL injection (we use SQLite with safe queries)
     "T201",  # print statements (used for debugging)
     "B008",  # Do not perform function calls in argument defaults
+    "RUF001", # Ambiguous characters (Russian/German text is intentional)
 ]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
@@ -52,13 +57,6 @@ exclude = [
     "node_modules",
     "venv",
 ]
-
-# Same as Black.
-line-length = 88
-indent-width = 4
-
-# Assume Python 3.11
-target-version = "py311"
 
 [lint.per-file-ignores]
 # Tests can use magic values, assertions, print statements

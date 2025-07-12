@@ -2,9 +2,8 @@
 German text parsing and word extraction
 """
 
-import re
 import logging
-from typing import List
+import re
 
 try:
     import spacy
@@ -38,7 +37,7 @@ class GermanTextParser:
 
     def extract_words(
         self, text: str, min_length: int = 2, max_length: int = 50
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Extract German words from text
 
@@ -104,7 +103,7 @@ class GermanTextParser:
 
         return True
 
-    def extract_sentences(self, text: str) -> List[str]:
+    def extract_sentences(self, text: str) -> list[str]:
         """Extract sentences from German text"""
         if not text or not text.strip():
             return []
@@ -123,7 +122,7 @@ class GermanTextParser:
 
     def get_word_context(
         self, text: str, target_word: str, context_size: int = 10
-    ) -> List[str]:
+    ) -> list[str]:
         """Get context sentences containing the target word"""
         sentences = self.extract_sentences(text)
         contexts = []
@@ -308,7 +307,7 @@ def get_text_parser() -> GermanTextParser:
 
 def extract_german_words(
     text: str, min_length: int = 2, max_length: int = 50
-) -> List[str]:
+) -> list[str]:
     """Convenience function to extract German words"""
     parser = get_text_parser()
     return parser.extract_words(text, min_length, max_length)

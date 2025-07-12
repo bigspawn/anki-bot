@@ -2,14 +2,15 @@
 Unit tests for spaced repetition system
 """
 
+from datetime import date
+
 import pytest
-from datetime import date, timedelta
 
 from src.spaced_repetition import (
-    SpacedRepetitionSystem,
     ReviewResult,
-    get_srs_system,
+    SpacedRepetitionSystem,
     calculate_next_review,
+    get_srs_system,
 )
 
 
