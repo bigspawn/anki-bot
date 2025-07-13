@@ -4,7 +4,7 @@ Command handlers for the German Learning Bot
 
 import logging
 
-from telegram import Update
+from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import ContextTypes
 
 from ...database import DatabaseManager
@@ -74,7 +74,7 @@ class CommandHandlers:
 
 Просто отправьте мне любой немецкий текст, и я автоматически извлеку слова для изучения!"""
 
-        await self._safe_reply(update, welcome_message, parse_mode="HTML")
+        await self._safe_reply(update, welcome_message, parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
 
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /help command"""
@@ -110,7 +110,7 @@ class CommandHandlers:
 
 ❓ Вопросы? Просто напишите /help"""
 
-        await self._safe_reply(update, help_message, parse_mode="HTML")
+        await self._safe_reply(update, help_message, parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
 
     async def add_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /add command"""
@@ -136,14 +136,16 @@ class CommandHandlers:
                 update,
                 "📝 Отправьте мне немецкий текст для анализа.\n\n"
                 "Например: Das Wetter ist heute sehr schön.\n\n"
-                "🕒 У вас есть 10 минут для отправки текста."
+                "🕒 У вас есть 10 минут для отправки текста.",
+                reply_markup=ReplyKeyboardRemove()
             )
         else:
             # Fallback if state manager not available
             await self._safe_reply(
                 update,
                 "📝 Пожалуйста, укажите немецкий текст для анализа.\n\n"
-                "Пример: /add Das Wetter ist heute sehr schön."
+                "Пример: /add Das Wetter ist heute sehr schön.",
+                reply_markup=ReplyKeyboardRemove()
             )
 
     async def study_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -158,7 +160,8 @@ class CommandHandlers:
         if not db_user:
             await self._safe_reply(
                 update,
-                "❌ Пользователь не найден. Используйте /start для регистрации."
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
@@ -169,7 +172,8 @@ class CommandHandlers:
             await self._safe_reply(
                 update,
                 "🎉 Отлично! У вас нет слов для повторения сейчас.\n\n"
-                "Используйте /study_new для изучения новых слов или /add для добавления новых."
+                "Используйте /study_new для изучения новых слов или /add для добавления новых.",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
@@ -189,7 +193,8 @@ class CommandHandlers:
         if not db_user:
             await self._safe_reply(
                 update,
-                "❌ Пользователь не найден. Используйте /start для регистрации."
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
@@ -199,7 +204,8 @@ class CommandHandlers:
             await self._safe_reply(
                 update,
                 "📚 У вас нет новых слов для изучения.\n\n"
-                "Используйте /add для добавления новых слов из текста."
+                "Используйте /add для добавления новых слов из текста.",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
@@ -218,7 +224,8 @@ class CommandHandlers:
         if not db_user:
             await self._safe_reply(
                 update,
-                "❌ Пользователь не найден. Используйте /start для регистрации."
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
@@ -228,7 +235,8 @@ class CommandHandlers:
             await self._safe_reply(
                 update,
                 "🎯 У вас нет сложных слов для повторения!\n\n"
-                "Используйте /study для обычного повторения."
+                "Используйте /study для обычного повторения.",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
@@ -245,14 +253,15 @@ class CommandHandlers:
         if not db_user:
             await self._safe_reply(
                 update,
-                "❌ Пользователь не найден. Используйте /start для регистрации."
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
         stats = self.db_manager.get_user_stats(db_user["telegram_id"])
         stats_message = format_progress_stats(stats)
 
-        await self._safe_reply(update, stats_message)
+        await self._safe_reply(update, stats_message, reply_markup=ReplyKeyboardRemove())
 
     async def settings_command(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
@@ -268,5 +277,6 @@ class CommandHandlers:
             "• Количество карточек в сессии\n"
             "• Время ежедневных напоминаний\n"
             "• Часовой пояс\n"
-            "• Сложность изучения"
+            "• Сложность изучения",
+            reply_markup=ReplyKeyboardRemove()
         )

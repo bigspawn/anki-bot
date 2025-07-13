@@ -5,7 +5,7 @@ Session management for the German Learning Bot
 import logging
 from datetime import datetime
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ReplyKeyboardRemove
 
 from ...database import DatabaseManager
 from ...spaced_repetition import SpacedRepetitionSystem
@@ -242,7 +242,7 @@ class SessionManager:
 
 🎯 Отличная работа! Продолжайте изучение для лучшего запоминания."""
 
-        await self._safe_reply(update, completion_text, parse_mode="HTML")
+        await self._safe_reply(update, completion_text, parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
 
         # Clean up session
         if session.telegram_id in self.user_sessions:

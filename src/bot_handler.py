@@ -6,7 +6,7 @@ import contextlib
 import logging
 from functools import wraps
 
-from telegram import Update
+from telegram import Update, ReplyKeyboardRemove
 from telegram.error import TelegramError
 from telegram.ext import (
     Application,
@@ -87,7 +87,8 @@ class BotHandler:
         if not self._is_user_authorized(user_id):
             await self._safe_reply(
                 update,
-                "❌ У вас нет доступа к этому боту. Обратитесь к администратору."
+                "❌ У вас нет доступа к этому боту. Обратитесь к администратору.",
+                reply_markup=ReplyKeyboardRemove()
             )
             logger.warning(f"Unauthorized access attempt from user {user_id}")
             return False
@@ -275,7 +276,8 @@ class BotHandler:
                 f"⏳ Обработка уже выполняется!\n\n"
                 f"🔒 Операция: {lock_info.operation}\n"
                 f"⏰ Начата: {lock_info.locked_at.strftime('%H:%M:%S')}\n\n"
-                f"Пожалуйста, дождитесь завершения текущей операции."
+                f"Пожалуйста, дождитесь завершения текущей операции.",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
@@ -284,7 +286,8 @@ class BotHandler:
             await self._safe_reply(
                 update,
                 "❌ Не удалось заблокировать пользователя для обработки. "
-                "Попробуйте позже."
+                "Попробуйте позже.",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
@@ -294,14 +297,16 @@ class BotHandler:
             if not db_user:
                 await self._safe_reply(
                     update,
-                    "❌ Пользователь не найден. Используйте /start для регистрации."
+                    "❌ Пользователь не найден. Используйте /start для регистрации.",
+                    reply_markup=ReplyKeyboardRemove()
                 )
                 return
 
             # Show processing message
             processing_msg = await self._safe_reply(
                 update,
-                "🔍 Извлекаю слова из текста...\n⏳ Проверяю новые слова..."
+                "🔍 Извлекаю слова из текста...\n⏳ Проверяю новые слова...",
+                reply_markup=ReplyKeyboardRemove()
             )
 
             timer = Timer()

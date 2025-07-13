@@ -4,7 +4,7 @@ Message handlers for the German Learning Bot
 
 import logging
 
-from telegram import Update
+from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import ContextTypes
 
 logger = logging.getLogger(__name__)
@@ -45,7 +45,8 @@ class MessageHandlers:
                 await self._safe_reply(
                     update,
                     "❌ Текст слишком короткий для анализа.\n\n"
-                    "Отправьте более длинный немецкий текст или используйте /add снова."
+                    "Отправьте более длинный немецкий текст или используйте /add снова.",
+                    reply_markup=ReplyKeyboardRemove()
                 )
                 return
             
@@ -61,7 +62,8 @@ class MessageHandlers:
                 "Или используйте команды:\n"
                 "/add - Добавить слова (пошагово)\n"
                 "/study - Начать изучение\n"
-                "/help - Справка"
+                "/help - Справка",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
