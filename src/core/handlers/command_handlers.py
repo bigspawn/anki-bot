@@ -28,6 +28,7 @@ class CommandHandlers:
         safe_reply_callback,
         process_text_callback,
         start_study_session_callback,
+        state_manager=None,
     ):
         self.db_manager = db_manager
         self.word_processor = word_processor
@@ -36,6 +37,7 @@ class CommandHandlers:
         self._safe_reply = safe_reply_callback
         self._process_text_for_user = process_text_callback
         self._start_study_session = start_study_session_callback
+        self.state_manager = state_manager
 
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /start command"""
@@ -61,12 +63,12 @@ class CommandHandlers:
 Я помогу вам изучать немецкие слова с помощью умной системы повторения.
 
 🔤 <b>Как начать:</b>
-1. Отправьте мне немецкий текст или используйте /add
+1. Используйте /add и отправьте немецкий текст
 2. Изучайте слова командой /study
 3. Повторяйте слова по расписанию
 
 📚 <b>Основные команды:</b>
-/add &lt;текст&gt; - Добавить слова из текста
+/add - Добавить слова из текста
 /study - Начать изучение
 /help - Подробная справка
 
@@ -81,7 +83,8 @@ class CommandHandlers:
         help_message = """📖 Справка по командам German Learning Bot
 
 🔤 <b>Добавление слов:</b>
-/add &lt;текст&gt; - Добавить слова из немецкого текста
+/add - Добавить слова из немецкого текста (пошагово)
+/add &lt;текст&gt; - Быстрое добавление слов
 Пример: /add Ich gehe heute in die Schule
 
 📚 <b>Изучение:</b>
@@ -114,17 +117,34 @@ class CommandHandlers:
         if not update.effective_user:
             return
 
+        # Import here to avoid circular imports
+        from ..state.user_state_manager import UserState
 
-        if not context.args:
+        # If arguments provided, process immediately (backward compatibility)
+        if context.args:
+            text = " ".join(context.args)
+            await self._process_text_for_user(update, text)
+            return
+
+        # If no arguments, set state to wait for next message
+        if self.state_manager:
+            self.state_manager.set_state(
+                update.effective_user.id, 
+                UserState.WAITING_FOR_TEXT_TO_ADD
+            )
+            await self._safe_reply(
+                update,
+                "📝 Отправьте мне немецкий текст для анализа.\n\n"
+                "Например: Das Wetter ist heute sehr schön.\n\n"
+                "🕒 У вас есть 10 минут для отправки текста."
+            )
+        else:
+            # Fallback if state manager not available
             await self._safe_reply(
                 update,
                 "📝 Пожалуйста, укажите немецкий текст для анализа.\n\n"
                 "Пример: /add Das Wetter ist heute sehr schön."
             )
-            return
-
-        text = " ".join(context.args)
-        await self._process_text_for_user(update, text)
 
     async def study_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /study command"""

@@ -18,10 +18,12 @@ class MessageHandlers:
         safe_reply_callback,
         process_text_callback,
         handle_study_callback,
+        state_manager=None,
     ):
         self._safe_reply = safe_reply_callback
         self._process_text_for_user = process_text_callback
         self._handle_study_callback = handle_study_callback
+        self.state_manager = state_manager
 
     async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle text messages (auto-add words)"""
@@ -30,12 +32,34 @@ class MessageHandlers:
 
         text = update.message.text
 
+        # Check if user is waiting for text to add
+        if self.state_manager and self.state_manager.is_waiting_for_text(update.effective_user.id):
+            # Import here to avoid circular imports
+            from ..state.user_state_manager import UserState
+            
+            # Clear the waiting state
+            self.state_manager.clear_state(update.effective_user.id)
+            
+            # Validate text length
+            if not text or len(text.strip()) < 3:
+                await self._safe_reply(
+                    update,
+                    "❌ Текст слишком короткий для анализа.\n\n"
+                    "Отправьте более длинный немецкий текст или используйте /add снова."
+                )
+                return
+            
+            # Process the text
+            await self._process_text_for_user(update, text)
+            return
+
+        # Normal message handling (auto-add mode)
         if not text or len(text.strip()) < 10:
             await self._safe_reply(
                 update,
                 "📝 Отправьте мне немецкий текст, и я извлеку из него слова для изучения!\n\n"
                 "Или используйте команды:\n"
-                "/add <текст> - Добавить слова\n"
+                "/add - Добавить слова (пошагово)\n"
                 "/study - Начать изучение\n"
                 "/help - Справка"
             )
