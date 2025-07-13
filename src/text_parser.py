@@ -132,6 +132,7 @@ class GermanTextParser:
             "make", "find", "think", "know", "want", "need", "use", "see", "look", "feel",
             "friend", "my", "are", "very", "near", "thames", "river", "buy", "things", "to",
             "verbs", "meanings", "hello", "casa", "bonita", "much", "peter", "berlin", "in",
+            "also", "where", "you", "until", "now", "lived", "have", "been", "since",
             # Spanish
             "hola", "casa", "mundo", "amor", "vida", "tiempo", "agua", "fuego", "tierra", "aire",
             "libro", "mesa", "silla", "perro", "gato", "bueno", "malo", "bonito", "grande",

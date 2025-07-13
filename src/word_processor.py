@@ -320,17 +320,13 @@ class WordProcessor:
 
         logger.info(f"Processing text with {len(text)} characters")
 
-        # Validate German text
-        # TODO: fix it is not working well!!!
-        if not self.text_parser.validate_german_text(text):
-            logger.warning("Text does not appear to be German")
-            return []
-
-        # Extract words from text
+        # Extract German words from text (this already filters non-German words)
         words = self.text_parser.extract_words(text)
         if not words:
-            logger.warning("No words extracted from text")
+            logger.warning("No German words found in text - text may be in another language or contain no valid words")
             return []
+        
+        logger.info(f"Found {len(words)} German words in text: {words}")
 
         # Limit number of words
         if len(words) > max_words:
