@@ -2,14 +2,15 @@
 Unit tests for spaced repetition system
 """
 
+from datetime import date
+
 import pytest
-from datetime import date, timedelta
 
 from src.spaced_repetition import (
-    SpacedRepetitionSystem,
     ReviewResult,
-    get_srs_system,
+    SpacedRepetitionSystem,
     calculate_next_review,
+    get_srs_system,
 )
 
 
@@ -343,9 +344,9 @@ class TestRealWorldScenarios:
         interval = 1
         easiness = 2.5
 
-        for rating in ratings:
-            result = srs.calculate_review(rating, repetitions, interval, easiness)
-            repetitions += 1
+        for i, rating in enumerate(ratings):
+            current_repetitions = repetitions + i
+            result = srs.calculate_review(rating, current_repetitions, interval, easiness)
             interval = result.new_interval
             easiness = result.new_easiness_factor
 
@@ -364,9 +365,9 @@ class TestRealWorldScenarios:
         easiness = 2.5
 
         # Simulate 10 "Good" ratings
-        for _ in range(10):
-            result = srs.calculate_review(3, repetitions, interval, easiness)
-            repetitions += 1
+        for i in range(10):
+            current_repetitions = repetitions + i
+            result = srs.calculate_review(3, current_repetitions, interval, easiness)
             interval = result.new_interval
             easiness = result.new_easiness_factor
 

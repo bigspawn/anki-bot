@@ -1,8 +1,12 @@
+# Ruff configuration
+line-length = 88
+target-version = "py311"
+
 [lint]
 # Enable flake8-bugbear (`B`) rules, in addition to the defaults.
 select = [
     "E",    # pycodestyle errors
-    "W",    # pycodestyle warnings
+    "W",    # pycodestyle warnings  
     "F",    # Pyflakes
     "I",    # isort
     "B",    # flake8-bugbear
@@ -17,11 +21,8 @@ select = [
 
 # Ignore specific rules
 ignore = [
-    "S101",  # Use of assert
-    "S301",  # pickle can be unsafe
-    "S608",  # SQL injection (we use SQLite with safe queries)
-    "T201",  # print statements (used for debugging)
-    "B008",  # Do not perform function calls in argument defaults
+    "RUF001", # Ambiguous characters (Russian/German text is intentional)
+    "E501",  # Line too long (handled by formatter, acceptable in complex business logic)
 ]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
@@ -53,16 +54,9 @@ exclude = [
     "venv",
 ]
 
-# Same as Black.
-line-length = 88
-indent-width = 4
-
-# Assume Python 3.11
-target-version = "py311"
-
 [lint.per-file-ignores]
-# Tests can use magic values, assertions, print statements
-"tests/**/*.py" = ["S101", "T201", "S105", "S106"]
+# Tests can use magic values, assertions, print statements, long lines, and temp files
+"tests/**/*.py" = ["S101", "T201", "S105", "S106", "E501", "SIM115", "S311", "SIM113", "SIM117", "SIM102", "SIM103", "RUF002", "RUF003"]
 
 [format]
 # Like Black, use double quotes for strings.

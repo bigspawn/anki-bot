@@ -3,18 +3,12 @@ Integration test for exercise completion workflow.
 Tests the complete flow from completing an exercise to getting new words in the next session.
 """
 
-import pytest
-import tempfile
 import os
-from unittest.mock import Mock, patch
-from datetime import datetime, timedelta
+import tempfile
+
+import pytest
 
 from src.core.database.database_manager import DatabaseManager
-from src.core.database.repositories.progress_repository import ProgressRepository
-from src.core.database.repositories.word_repository import WordRepository
-from src.core.database.repositories.user_repository import UserRepository
-from src.core.database.connection import DatabaseConnection
-from src.spaced_repetition import get_srs_system
 
 
 class TestExerciseCompletionWorkflow:
@@ -76,11 +70,11 @@ class TestExerciseCompletionWorkflow:
 
     def test_complete_exercise_workflow(self, temp_db_manager, sample_user_data, sample_words_data):
         """Test complete exercise workflow: add words, complete exercise, get new words"""
-        
+
         # 1. Create user
         user = temp_db_manager.create_user(**sample_user_data)
         assert user is not None
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # 2. Add words to user's learning progress
         added_count = temp_db_manager.add_words_to_user(user_id, sample_words_data)
@@ -89,7 +83,7 @@ class TestExerciseCompletionWorkflow:
         # 3. Verify all words are initially new (repetitions = 0)
         new_words = temp_db_manager.get_new_words(user_id)
         assert len(new_words) == 3, f"Expected 3 new words, got {len(new_words)}"
-        
+
         # Verify they are all due for review
         due_words = temp_db_manager.get_due_words(user_id)
         assert len(due_words) == 3, f"Expected 3 due words, got {len(due_words)}"
@@ -97,7 +91,7 @@ class TestExerciseCompletionWorkflow:
         # 4. Complete first exercise - review first word with rating 3 (Good)
         first_word = new_words[0]
         word_id = first_word["id"]
-        
+
         # Verify learning progress exists with initial values
         initial_progress = temp_db_manager.get_learning_progress(user_id, word_id)
         assert initial_progress is not None, "Learning progress should exist after adding words"
@@ -130,7 +124,7 @@ class TestExerciseCompletionWorkflow:
         # 9. Complete second exercise with rating 4 (Easy)
         second_word = remaining_new_words[0]
         second_word_id = second_word["id"]
-        
+
         success = temp_db_manager.update_learning_progress(user_id, second_word_id, rating=4)
         assert success, "Second learning progress update should succeed"
 
@@ -145,10 +139,10 @@ class TestExerciseCompletionWorkflow:
 
     def test_exercise_completion_with_different_ratings(self, temp_db_manager, sample_user_data, sample_words_data):
         """Test exercise completion with different ratings affects learning progress"""
-        
+
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         added_count = temp_db_manager.add_words_to_user(user_id, sample_words_data)
         assert added_count == 3
 
@@ -157,20 +151,20 @@ class TestExerciseCompletionWorkflow:
 
         # Test different ratings
         ratings_to_test = [1, 2, 3, 4]  # Again, Hard, Good, Easy
-        
+
         for i, rating in enumerate(ratings_to_test[:3]):  # Test first 3 words
             word = new_words[i]
             word_id = word["id"]
-            
+
             # Complete exercise with specific rating
             success = temp_db_manager.update_learning_progress(user_id, word_id, rating=rating)
             assert success, f"Learning progress update should succeed for rating {rating}"
-            
+
             # Verify learning progress
             progress = temp_db_manager.get_learning_progress(user_id, word_id)
             assert progress is not None, f"Learning progress should exist for rating {rating}"
             assert progress["repetitions"] == 1, f"Expected 1 repetition for rating {rating}"
-            
+
             # Verify review history
             review_history = temp_db_manager.get_review_history(user_id, word_id)
             assert len(review_history) == 1, f"Expected 1 review record for rating {rating}"
@@ -182,23 +176,23 @@ class TestExerciseCompletionWorkflow:
 
     def test_multiple_exercise_sessions(self, temp_db_manager, sample_user_data, sample_words_data):
         """Test multiple exercise sessions with the same word"""
-        
+
         # Create user and add one word
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         added_count = temp_db_manager.add_words_to_user(user_id, [sample_words_data[0]])
         assert added_count == 1
 
         new_words = temp_db_manager.get_new_words(user_id)
         assert len(new_words) == 1
-        
+
         word_id = new_words[0]["id"]
 
         # Complete multiple exercises for the same word
         for repetition in range(1, 4):  # Do 3 repetitions
             success = temp_db_manager.update_learning_progress(user_id, word_id, rating=3)
             assert success, f"Learning progress update should succeed for repetition {repetition}"
-            
+
             # Verify repetition count increases
             progress = temp_db_manager.get_learning_progress(user_id, word_id)
             assert progress["repetitions"] == repetition, f"Expected {repetition} repetitions, got {progress['repetitions']}"
@@ -209,10 +203,10 @@ class TestExerciseCompletionWorkflow:
 
     def test_exercise_completion_creates_missing_progress(self, temp_db_manager, sample_user_data):
         """Test that exercise completion creates learning progress when it's missing"""
-        
+
         # Create user and word manually without learning progress
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Create word directly without learning progress
         word_data = {
@@ -223,7 +217,7 @@ class TestExerciseCompletionWorkflow:
             "example": "This is a test.",
             "confidence": 0.9,
         }
-        
+
         word = temp_db_manager.word_repo.create_word(word_data)
         assert word is not None
         word_id = word["id"]
@@ -249,10 +243,10 @@ class TestExerciseCompletionWorkflow:
 
     def test_get_new_words_after_exercise_completion(self, temp_db_manager, sample_user_data, sample_words_data):
         """Test that get_new_words returns correct words after exercise completion"""
-        
+
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         added_count = temp_db_manager.add_words_to_user(user_id, sample_words_data)
         assert added_count == 3
 

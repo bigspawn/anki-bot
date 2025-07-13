@@ -3,10 +3,11 @@ Unit tests for German text parser
 """
 
 import pytest
+
 from src.text_parser import (
     GermanTextParser,
-    get_text_parser,
     extract_german_words,
+    get_text_parser,
     validate_german_text,
 )
 
@@ -179,7 +180,8 @@ class TestGermanTextParser:
         assert parser.validate_german_text(no_umlaut_text)
 
     def test_validate_german_text_single_words(self, parser):
-        """Test German text validation for single words - regression test for 'bedeutet' bug"""
+        """Test German text validation for single words - regression test for
+        'bedeutet' bug"""
         # German verbs without umlauts should validate (main bug case)
         german_verbs = [
             "bedeutet",
@@ -231,11 +233,9 @@ class TestGermanTextParser:
     def test_validate_german_text_mixed_language(self, parser):
         """Test German text validation with mixed languages"""
         # Predominantly German should validate
-        mostly_german = "Ich gehe to the Schule today."
         # This might validate depending on the ratio of German words
 
         # Predominantly English should not validate
-        mostly_english = "I go to the school heute."
         # This should not validate as it's mostly English
 
 
@@ -318,7 +318,8 @@ class TestEdgeCases:
         assert "uhr" in words
 
     def test_case_insensitive_processing(self):
-        """Test that processing is case-insensitive and words are normalized to lowercase"""
+        """Test that processing is case-insensitive and words are
+        normalized to lowercase"""
         parser = GermanTextParser()
 
         text = "DAS HAUS IST SCHÖN."

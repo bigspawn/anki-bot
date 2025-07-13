@@ -2,11 +2,10 @@
 Tests for learning progress functionality
 """
 
-import pytest
 from datetime import datetime, timedelta
-from unittest.mock import patch
 
-from src.core.database.database_manager import get_db_manager
+import pytest
+
 from src.config import Settings
 
 
@@ -26,7 +25,8 @@ class TestLearningProgress:
     @pytest.fixture
     def db_manager(self, settings):
         """Test database manager with in-memory database"""
-        db_mgr = get_db_manager(settings.database_url)
+        from src.core.database.database_manager import DatabaseManager
+        db_mgr = DatabaseManager(settings.database_url)
         db_mgr.init_database()
         return db_mgr
 
@@ -62,21 +62,21 @@ class TestLearningProgress:
                 "example": "Ich gehe nach Hause."
             }
         ]
-        
+
         # Add words to user
-        added_count = db_manager.word_repo.add_words_to_user(test_user["id"], sample_words)
+        added_count = db_manager.word_repo.add_words_to_user(test_user["telegram_id"], sample_words)
         assert added_count == 2, "Should add 2 words"
-        
+
         # Get the words with their IDs
-        user_words = db_manager.word_repo.get_words_by_user(test_user["id"])
+        user_words = db_manager.word_repo.get_words_by_user(test_user["telegram_id"])
         assert len(user_words) == 2, "User should have 2 words"
-        
+
         return user_words
 
     def test_initial_learning_progress_creation(self, db_manager, test_user, test_words):
         """Test that learning progress is created when words are added"""
-        user_id = test_user["id"]
-        
+        user_id = test_user["telegram_id"]
+
         # Check that learning progress exists for all words
         for word in test_words:
             progress = db_manager.progress_repo.get_learning_progress(user_id, word["id"])
@@ -87,22 +87,22 @@ class TestLearningProgress:
 
     def test_update_learning_progress_good_rating(self, db_manager, test_user, test_words):
         """Test updating learning progress with good rating"""
-        user_id = test_user["id"]
+        user_id = test_user["telegram_id"]
         word = test_words[0]  # Use first word
         word_id = word["id"]
-        
+
         # Update progress with good rating (3)
         success = db_manager.progress_repo.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word_id,
             rating=3,  # Good rating
             new_interval=2,
             new_easiness=2.5,
             response_time_ms=1500
         )
-        
+
         assert success, "Progress update should succeed"
-        
+
         # Check updated progress
         progress = db_manager.progress_repo.get_learning_progress(user_id, word_id)
         assert progress is not None, "Progress should exist after update"
@@ -112,32 +112,32 @@ class TestLearningProgress:
 
     def test_update_learning_progress_again_rating(self, db_manager, test_user, test_words):
         """Test updating learning progress with 'again' rating (resets progress)"""
-        user_id = test_user["id"]
+        user_id = test_user["telegram_id"]
         word = test_words[0]
         word_id = word["id"]
-        
+
         # First, update with good rating
         db_manager.progress_repo.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word_id,
             rating=3,
             new_interval=3,
             new_easiness=2.6,
             response_time_ms=1000
         )
-        
+
         # Then update with 'again' rating (1)
         success = db_manager.progress_repo.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word_id,
             rating=1,  # Again rating - should reset
             new_interval=1,
             new_easiness=2.3,
             response_time_ms=2000
         )
-        
+
         assert success, "Progress update should succeed"
-        
+
         # Check that progress was updated appropriately
         progress = db_manager.progress_repo.get_learning_progress(user_id, word_id)
         assert progress is not None, "Progress should exist after update"
@@ -146,45 +146,45 @@ class TestLearningProgress:
 
     def test_review_history_creation(self, db_manager, test_user, test_words):
         """Test that review history is created when progress is updated"""
-        user_id = test_user["id"]
+        user_id = test_user["telegram_id"]
         word = test_words[0]
         word_id = word["id"]
-        
+
         # Update progress
         success = db_manager.progress_repo.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word_id,
             rating=3,
             new_interval=2,
             new_easiness=2.5,
             response_time_ms=1200
         )
-        
+
         assert success, "Progress update should succeed"
-        
+
         # Check review history
         history = db_manager.progress_repo.get_review_history(user_id, word_id, limit=1)
         assert len(history) == 1, "Should have one review history entry"
-        
+
         review = history[0]
-        assert review["user_id"] == user_id, "Review should belong to correct user"
+        assert review["telegram_id"] == user_id, "Review should belong to correct user"
         assert review["word_id"] == word_id, "Review should belong to correct word"
         assert review["rating"] == 3, "Review should have correct rating"
         assert review["response_time_ms"] == 1200, "Review should have correct response time"
 
     def test_multiple_reviews_tracking(self, db_manager, test_user, test_words):
         """Test that multiple reviews are tracked correctly"""
-        user_id = test_user["id"]
+        user_id = test_user["telegram_id"]
         word = test_words[0]
         word_id = word["id"]
-        
+
         # Perform multiple reviews
         ratings = [3, 4, 2, 3]  # Good, Easy, Hard, Good
         response_times = [1000, 800, 2000, 1200]
-        
-        for i, (rating, response_time) in enumerate(zip(ratings, response_times)):
+
+        for i, (rating, response_time) in enumerate(zip(ratings, response_times, strict=False)):
             success = db_manager.progress_repo.update_learning_progress(
-                user_id=user_id,
+                telegram_id=user_id,
                 word_id=word_id,
                 rating=rating,
                 new_interval=i + 2,  # Increasing intervals
@@ -192,37 +192,37 @@ class TestLearningProgress:
                 response_time_ms=response_time
             )
             assert success, f"Review {i+1} should succeed"
-        
+
         # Check final progress
         progress = db_manager.progress_repo.get_learning_progress(user_id, word_id)
         assert progress["repetitions"] == 4, "Should have 4 repetitions"
-        
+
         # Check review history count
         history = db_manager.progress_repo.get_review_history(user_id, word_id)
         assert len(history) == 4, "Should have 4 review history entries"
-        
+
         # Check that all ratings are recorded
         recorded_ratings = [review["rating"] for review in history]
         assert sorted(recorded_ratings) == sorted(ratings), "All ratings should be recorded"
 
     def test_next_review_date_calculation(self, db_manager, test_user, test_words):
         """Test that next review date is calculated correctly"""
-        user_id = test_user["id"]
+        user_id = test_user["telegram_id"]
         word = test_words[0]
         word_id = word["id"]
-        
+
         # Update progress with 3-day interval
         success = db_manager.progress_repo.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word_id,
             rating=3,
             new_interval=3,
             new_easiness=2.5,
             response_time_ms=1000
         )
-        
+
         assert success, "Progress update should succeed"
-        
+
         # Check next review date
         progress = db_manager.progress_repo.get_learning_progress(user_id, word_id)
         next_review_date = progress["next_review_date"]
@@ -230,32 +230,32 @@ class TestLearningProgress:
             next_review = datetime.fromisoformat(next_review_date.replace('Z', '+00:00'))
         else:
             next_review = next_review_date
-        
+
         # Should be approximately 3 days from now (allowing some tolerance)
         expected_date = datetime.now() + timedelta(days=3)
         time_diff = abs((next_review - expected_date).total_seconds())
-        
+
         assert time_diff < 3600, "Next review date should be approximately 3 days from now"
 
     def test_performance_stats_calculation(self, db_manager, test_user, test_words):
         """Test that performance statistics are calculated correctly"""
-        user_id = test_user["id"]
-        
+        user_id = test_user["telegram_id"]
+
         # Add reviews for multiple words
         word1_id = test_words[0]["id"]
         word2_id = test_words[1]["id"]
-        
+
         # Word 1: Good performance (ratings 3, 4)
         db_manager.progress_repo.update_learning_progress(user_id, word1_id, 3, 2, 2.6, 1000)
         db_manager.progress_repo.update_learning_progress(user_id, word1_id, 4, 4, 2.7, 800)
-        
+
         # Word 2: Mixed performance (ratings 1, 3)
         db_manager.progress_repo.update_learning_progress(user_id, word2_id, 1, 1, 2.3, 2000)
         db_manager.progress_repo.update_learning_progress(user_id, word2_id, 3, 2, 2.4, 1200)
-        
+
         # Get performance stats
         stats = db_manager.progress_repo.get_performance_stats(user_id)
-        
+
         assert stats is not None, "Performance stats should be available"
         assert stats["total_reviews"] == 4, "Should have 4 total reviews"
         assert stats["avg_rating"] > 0, "Should have positive average rating"
@@ -267,10 +267,10 @@ class TestLearningProgress:
         import random
         user1_data = {"telegram_id": random.randint(100000, 999999), "first_name": "User1", "username": "user1"}
         user2_data = {"telegram_id": random.randint(100000, 999999), "first_name": "User2", "username": "user2"}
-        
+
         user1 = db_manager.user_repo.create_user(**user1_data)
         user2 = db_manager.user_repo.create_user(**user2_data)
-        
+
         # Add same words to both users
         sample_word = [{
             "lemma": "test_word",
@@ -279,53 +279,143 @@ class TestLearningProgress:
             "translation": "тест",
             "example": "Das ist ein Test."
         }]
-        
-        db_manager.word_repo.add_words_to_user(user1["id"], sample_word)
-        db_manager.word_repo.add_words_to_user(user2["id"], sample_word)
-        
+
+        db_manager.word_repo.add_words_to_user(user1["telegram_id"], sample_word)
+        db_manager.word_repo.add_words_to_user(user2["telegram_id"], sample_word)
+
         # Get word IDs for both users
-        user1_words = db_manager.word_repo.get_words_by_user(user1["id"])
-        user2_words = db_manager.word_repo.get_words_by_user(user2["id"])
-        
+        user1_words = db_manager.word_repo.get_words_by_user(user1["telegram_id"])
+        db_manager.word_repo.get_words_by_user(user2["telegram_id"])
+
         word_id = user1_words[0]["id"]  # Same word ID for both users
-        
+
         # Update progress for user1 only
         success = db_manager.progress_repo.update_learning_progress(
-            user_id=user1["id"],
+            telegram_id=user1["telegram_id"],
             word_id=word_id,
             rating=4,
             new_interval=5,
             new_easiness=2.8,
             response_time_ms=900
         )
-        
+
         assert success, "User1 progress update should succeed"
-        
+
         # Check that user1 progress was updated
-        user1_progress = db_manager.progress_repo.get_learning_progress(user1["id"], word_id)
+        user1_progress = db_manager.progress_repo.get_learning_progress(user1["telegram_id"], word_id)
         assert user1_progress["repetitions"] == 1, "User1 should have 1 repetition"
         assert user1_progress["interval_days"] == 5, "User1 should have 5-day interval"
-        
+
         # Check that user2 progress was not affected
-        user2_progress = db_manager.progress_repo.get_learning_progress(user2["id"], word_id)
+        user2_progress = db_manager.progress_repo.get_learning_progress(user2["telegram_id"], word_id)
         assert user2_progress["repetitions"] == 0, "User2 should still have 0 repetitions"
         assert user2_progress["interval_days"] == 1, "User2 should still have 1-day interval"
 
     def test_database_error_handling(self, db_manager, test_user):
         """Test error handling when database operations fail"""
-        user_id = test_user["id"]
+        user_id = test_user["telegram_id"]
         invalid_word_id = 99999  # Non-existent word ID
-        
+
         # Try to update progress for non-existent word
         success = db_manager.progress_repo.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=invalid_word_id,
             rating=3,
             new_interval=2,
             new_easiness=2.5,
             response_time_ms=1000
         )
-        
+
         # Should handle gracefully - either succeed (by creating record) or fail gracefully
         # The exact behavior depends on implementation, but it shouldn't crash
         assert isinstance(success, bool), "Should return boolean result"
+
+    def test_first_time_study_creates_and_updates_progress(self, db_manager):
+        """Test that first-time study creates learning progress correctly for existing users"""
+        # Create user with unique telegram_id
+        import random
+        user_data = {
+            "telegram_id": random.randint(100000, 999999),
+            "first_name": "Test",
+            "last_name": "User",
+            "username": "testuser_stats"
+        }
+        user = db_manager.user_repo.create_user(**user_data)
+        assert user is not None, "User should be created"
+
+        # Add word to user (this creates initial learning progress)
+        word_data = {
+            "lemma": "haus",
+            "part_of_speech": "noun",
+            "article": "das",
+            "translation": "дом",
+            "example": "Das Haus ist groß."
+        }
+        added_count = db_manager.word_repo.add_words_to_user(user["telegram_id"], [word_data])
+        assert added_count == 1, "Word should be added"
+
+        # Get the word
+        words = db_manager.word_repo.get_words_by_user(user["telegram_id"])
+        assert len(words) == 1, "User should have 1 word"
+        word = words[0]
+
+        # Verify initial learning progress exists (created automatically)
+        initial_progress = db_manager.progress_repo.get_learning_progress(user["telegram_id"], word["id"])
+        assert initial_progress is not None, "Learning progress should exist after adding word"
+        assert initial_progress["repetitions"] == 0, "Initial repetitions should be 0"
+        assert initial_progress["easiness_factor"] == 2.5, "Initial easiness factor should be 2.5"
+        assert initial_progress["interval_days"] == 1, "Initial interval should be 1 day"
+        assert initial_progress["last_reviewed"] is None, "Should not have been reviewed yet"
+
+        # No review history should exist yet
+        initial_history = db_manager.progress_repo.get_review_history(user["telegram_id"], word["id"])
+        assert len(initial_history) == 0, "Should have no review history initially"
+
+        # First study session - user rates word as "Again" (rating 1)
+        success = db_manager.progress_repo.update_learning_progress(
+            telegram_id=user["telegram_id"],
+            word_id=word["id"],
+            rating=1,
+            response_time_ms=1500
+        )
+        assert success, "Learning progress update should succeed"
+
+        # Verify progress was updated correctly after first study
+        updated_progress = db_manager.progress_repo.get_learning_progress(user["telegram_id"], word["id"])
+        assert updated_progress is not None, "Learning progress should still exist"
+        assert updated_progress["repetitions"] == 1, "Should have 1 repetition after first study"
+        assert updated_progress["easiness_factor"] == 2.3, "Easiness should decrease for rating 1"
+        assert updated_progress["interval_days"] == 0, "Interval should be 0 for rating 1 (immediate review)"
+        assert updated_progress["last_reviewed"] is not None, "Should have last_reviewed timestamp"
+
+        # Verify review history was created
+        updated_history = db_manager.progress_repo.get_review_history(user["telegram_id"], word["id"])
+        assert len(updated_history) == 1, "Should have one review in history"
+        assert updated_history[0]["rating"] == 1, "Rating should be 1"
+        assert updated_history[0]["response_time_ms"] == 1500, "Response time should be recorded"
+        assert updated_history[0]["telegram_id"] == user["telegram_id"], "Telegram ID should match"
+        assert updated_history[0]["word_id"] == word["id"], "Word ID should match"
+
+        # Second study session - user rates word as "Good" (rating 3)
+        success = db_manager.progress_repo.update_learning_progress(
+            telegram_id=user["telegram_id"],
+            word_id=word["id"],
+            rating=3,
+            response_time_ms=1200
+        )
+        assert success, "Second learning progress update should succeed"
+
+        # Verify progress after second study
+        final_progress = db_manager.progress_repo.get_learning_progress(user["telegram_id"], word["id"])
+        assert final_progress is not None, "Learning progress should still exist"
+        assert final_progress["repetitions"] == 2, "Should have 2 repetitions after second study"
+        assert final_progress["easiness_factor"] >= 2.3, "Easiness should increase for rating 3"
+        assert final_progress["interval_days"] > 0, "Interval should be positive for rating 3"
+
+        # Verify review history has both entries
+        final_history = db_manager.progress_repo.get_review_history(user["telegram_id"], word["id"])
+        assert len(final_history) == 2, "Should have two reviews in history"
+
+        # Check that reviews are ordered by most recent first
+        assert final_history[0]["rating"] == 3, "Most recent review should be rating 3"
+        assert final_history[1]["rating"] == 1, "Older review should be rating 1"

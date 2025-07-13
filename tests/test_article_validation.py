@@ -2,8 +2,12 @@
 Tests for article validation in word_processor.py
 """
 
-import pytest
-from src.word_processor import validate_article, get_correct_article_from_dict, guess_article_by_ending, is_likely_plural
+from src.word_processor import (
+    get_correct_article_from_dict,
+    guess_article_by_ending,
+    is_likely_plural,
+    validate_article,
+)
 
 
 class TestArticleValidation:
@@ -28,7 +32,7 @@ class TestArticleValidation:
         assert validate_article(None, "Haus", "noun") == "das"
         assert validate_article("", "Mann", "noun") == "der"
         assert validate_article("None", "Frau", "noun") == "die"
-        
+
         # For unknown words should try to guess
         assert validate_article(None, "Bildung", "noun") == "die"  # by ending -ung
         assert validate_article("", "Mädchen", "noun") == "das"  # by ending -chen
@@ -52,23 +56,23 @@ class TestArticleValidation:
         assert get_correct_article_from_dict("Mann") == "der"
         assert get_correct_article_from_dict("Vater") == "der"
         assert get_correct_article_from_dict("Teppich") == "der"
-        
+
         # Feminine gender
         assert get_correct_article_from_dict("Frau") == "die"
         assert get_correct_article_from_dict("Mutter") == "die"
         assert get_correct_article_from_dict("Schule") == "die"
-        
+
         # Neuter gender
         assert get_correct_article_from_dict("Kind") == "das"
         assert get_correct_article_from_dict("Haus") == "das"
         assert get_correct_article_from_dict("Auto") == "das"
-        
+
         # Plural nouns
         assert get_correct_article_from_dict("Eltern") is None
         assert get_correct_article_from_dict("Geschwister") is None
         assert get_correct_article_from_dict("Großeltern") is None
         assert get_correct_article_from_dict("Pommes") is None
-        
+
         # Unknown words
         assert get_correct_article_from_dict("UnknownWord") is None
 
@@ -79,7 +83,7 @@ class TestArticleValidation:
         assert guess_article_by_ending("Büchlein") == "das"  # -lein
         assert guess_article_by_ending("Zentrum") == "das"  # -um
         assert guess_article_by_ending("Argument") == "das"  # -ment
-        
+
         # die - endings
         assert guess_article_by_ending("Bildung") == "die"  # -ung
         assert guess_article_by_ending("Freiheit") == "die"  # -heit
@@ -88,7 +92,7 @@ class TestArticleValidation:
         assert guess_article_by_ending("Information") == "die"  # -tion
         assert guess_article_by_ending("Diskussion") == "die"  # -sion
         assert guess_article_by_ending("Universität") == "die"  # -tät
-        
+
         # der - endings
         assert guess_article_by_ending("Lehrer") == "der"  # -er
         assert guess_article_by_ending("Garten") == "der"  # -en
@@ -96,7 +100,7 @@ class TestArticleValidation:
         assert guess_article_by_ending("Teppich") == "der"  # -ich
         assert guess_article_by_ending("König") == "der"  # -ig
         assert guess_article_by_ending("Schmetterling") == "der"  # -ling
-        
+
         # Unknown endings
         assert guess_article_by_ending("Test") is None
         assert guess_article_by_ending("xyz") is None
@@ -117,14 +121,14 @@ class TestArticleValidation:
         assert is_likely_plural("Leute") is True
         assert is_likely_plural("kinder") is True
         assert is_likely_plural("Kinder") is True
-        
+
         # Not plural
         assert is_likely_plural("Mann") is False
         assert is_likely_plural("Frau") is False
         assert is_likely_plural("Kind") is False
         assert is_likely_plural("Haus") is False
         assert is_likely_plural("Auto") is False
-        
+
         # Edge cases
         assert is_likely_plural("") is False
         assert is_likely_plural("a") is False
@@ -135,23 +139,23 @@ class TestArticleValidation:
         """Test integration of all validation functions"""
         # Case 1: Correct article for known word
         assert validate_article("das", "Haus", "noun") == "das"
-        
+
         # Case 2: Incorrect article for known word - should correct
         assert validate_article("der", "Haus", "noun") == "das"
-        
+
         # Case 3: Missing article for known word - should add
         assert validate_article(None, "Haus", "noun") == "das"
-        
+
         # Case 4: Plural with article - should remove
         assert validate_article("die", "Eltern", "noun") is None
-        
+
         # Case 5: Unknown word with correct article
         assert validate_article("der", "TestWord", "noun") == "der"
-        
+
         # Case 6: Unknown word with incorrect article - attempt to guess
         result = validate_article("wrong", "Bildung", "noun")
         assert result == "die"  # should guess by ending -ung
-        
+
         # Case 7: Unknown word without article - attempt to guess
         result = validate_article(None, "Mädchen", "noun")
         assert result == "das"  # should guess by ending -chen
@@ -161,15 +165,15 @@ class TestArticleValidation:
         # Empty strings - should return None
         assert validate_article("", "", "noun") is None
         assert validate_article("der", "", "noun") is None
-        
+
         # Whitespace - should be corrected for known words
         assert validate_article("   ", "Haus", "noun") == "das"
         assert validate_article("der", "   ", "noun") is None
-        
+
         # Case - should be corrected for known words
         assert validate_article("DER", "Mann", "noun") == "der"  # should correct wrong case
         assert validate_article("der", "mann", "noun") == "der"  # check works with lowercase
-        
+
         # Unknown part of speech
         assert validate_article("der", "Test", "unknown") is None
         assert validate_article("der", "Test", "") is None
@@ -179,15 +183,15 @@ class TestArticleValidation:
         """Test that functions log corrections"""
         # This test checks that functions are called without errors
         # Real log checking requires mocking the logger
-        
+
         # Correcting incorrect article
         result = validate_article("wrong", "Haus", "noun")
         assert result == "das"
-        
+
         # Guessing article
         result = validate_article(None, "Bildung", "noun")
         assert result == "die"
-        
+
         # Removing article for plural
         result = validate_article("die", "Eltern", "noun")
         assert result is None

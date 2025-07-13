@@ -2,35 +2,34 @@
 Unit tests for utility functions
 """
 
-import pytest
-import json
 from datetime import date, timedelta
-from unittest.mock import patch, MagicMock
+
+import pytest
 
 from src.utils import (
-    format_word_display,
-    format_study_card,
-    format_progress_stats,
-    validate_german_text,
+    Timer,
+    calculate_success_rate,
+    chunk_list,
     clean_text,
-    extract_json_safely,
-    format_json_safely,
+    create_inline_keyboard_data,
     escape_markdown,
-    validate_rating,
+    extract_json_safely,
+    format_date_relative,
+    format_duration,
+    format_json_safely,
+    format_progress_stats,
+    format_study_card,
+    format_word_display,
+    get_difficulty_level,
     get_rating_emoji,
     get_rating_text,
-    chunk_list,
-    safe_int,
-    safe_float,
-    calculate_success_rate,
-    format_duration,
-    get_difficulty_level,
-    create_inline_keyboard_data,
-    parse_inline_keyboard_data,
-    Timer,
-    format_date_relative,
-    truncate_text,
     parse_date_safely,
+    parse_inline_keyboard_data,
+    safe_float,
+    safe_int,
+    truncate_text,
+    validate_german_text,
+    validate_rating,
 )
 
 
@@ -81,7 +80,7 @@ class TestTextFormatting:
         # Question side - should ask about article for nouns
         word_data["part_of_speech"] = "noun"  # Update key name
         question = format_study_card(word_data, current_index=1, total_words=10)
-        assert "1/10. Какой артикль у Buch?" == question
+        assert question == "1/10. Какой артикль у Buch?"
         assert "книга" not in question
 
         # Test verb question format
@@ -92,7 +91,7 @@ class TestTextFormatting:
             "example": "Ich spreche Deutsch.",
         }
         verb_question = format_study_card(verb_data, current_index=2, total_words=10)
-        assert "2/10. Как переводится sprechen?" == verb_question
+        assert verb_question == "2/10. Как переводится sprechen?"
 
     def test_format_progress_stats(self):
         """Test progress statistics formatting"""
@@ -100,7 +99,7 @@ class TestTextFormatting:
             "total_words": 150,
             "due_words": 25,
             "new_words": 10,
-            "avg_success_rate": 0.85,
+            "average_accuracy": 0.85,
         }
 
         result = format_progress_stats(stats)
@@ -309,10 +308,10 @@ class TestInlineKeyboard:
     def test_create_inline_keyboard_data(self):
         """Test inline keyboard data creation"""
         data = create_inline_keyboard_data("rate_word", word_id=123, rating=3)
-        
+
         # Test that data is compact and under 64 bytes
         assert len(data) <= 64, f"Data too long: {len(data)} bytes"
-        
+
         # Test that it can be parsed back correctly
         parsed = parse_inline_keyboard_data(data)
         assert parsed["action"] == "rate_word"

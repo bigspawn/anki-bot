@@ -3,16 +3,15 @@ Command handlers for the German Learning Bot
 """
 
 import logging
-from typing import Dict, Any, Optional
 
 from telegram import Update
 from telegram.ext import ContextTypes
 
 from ...database import DatabaseManager
-from ...word_processor import WordProcessor
-from ...text_parser import GermanTextParser
 from ...spaced_repetition import SpacedRepetitionSystem
+from ...text_parser import GermanTextParser
 from ...utils import format_progress_stats
+from ...word_processor import WordProcessor
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +114,6 @@ class CommandHandlers:
         if not update.effective_user:
             return
 
-        user = update.effective_user
 
         if not context.args:
             await self._safe_reply(
@@ -145,7 +143,7 @@ class CommandHandlers:
             return
 
         # Get due words
-        due_words = self.db_manager.get_due_words(db_user["id"], limit=10)
+        due_words = self.db_manager.get_due_words(db_user["telegram_id"], limit=10)
 
         if not due_words:
             await self._safe_reply(
@@ -175,7 +173,7 @@ class CommandHandlers:
             )
             return
 
-        new_words = self.db_manager.get_new_words(db_user["id"], limit=10)
+        new_words = self.db_manager.get_new_words(db_user["telegram_id"], limit=10)
 
         if not new_words:
             await self._safe_reply(
@@ -204,7 +202,7 @@ class CommandHandlers:
             )
             return
 
-        difficult_words = self.db_manager.get_difficult_words(db_user["id"], limit=10)
+        difficult_words = self.db_manager.get_difficult_words(db_user["telegram_id"], limit=10)
 
         if not difficult_words:
             await self._safe_reply(
@@ -231,7 +229,7 @@ class CommandHandlers:
             )
             return
 
-        stats = self.db_manager.get_user_stats(db_user["id"])
+        stats = self.db_manager.get_user_stats(db_user["telegram_id"])
         stats_message = format_progress_stats(stats)
 
         await self._safe_reply(update, stats_message)

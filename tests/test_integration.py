@@ -2,18 +2,15 @@
 Integration tests for the German Learning Bot
 """
 
-import pytest
-import tempfile
 import os
-import asyncio
+import tempfile
 from unittest.mock import AsyncMock, MagicMock, patch
-from datetime import date
+
+import pytest
 
 from src.database import DatabaseManager
-from src.word_processor import MockWordProcessor, ProcessedWord
-from src.bot_handler import BotHandler
 from src.spaced_repetition import get_srs_system
-from src.text_parser import get_text_parser
+from src.word_processor import MockWordProcessor
 
 
 class TestDatabaseIntegration:
@@ -39,7 +36,7 @@ class TestDatabaseIntegration:
         user = temp_db.create_user(
             telegram_id=12345, username="testuser", first_name="Test", last_name="User"
         )
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Add word
         word_data = {
@@ -68,7 +65,7 @@ class TestDatabaseIntegration:
 
         # Simulate review
         temp_db.update_learning_progress(
-            user_id=user_id,
+            telegram_id=user_id,
             word_id=word_id,
             rating=3,
             response_time_ms=1000
@@ -77,7 +74,7 @@ class TestDatabaseIntegration:
         # Add review record (already done by update_learning_progress above)
         # temp_db.add_review_record is alias for update_learning_progress
 
-        # Check stats  
+        # Check stats
         stats = temp_db.get_user_stats(user_id)
         assert stats["total_words"] == 1
         # After review, word might not be due anymore
@@ -108,7 +105,7 @@ class TestSpacedRepetitionIntegration:
 
         # Create user and word
         user = temp_db.create_user(telegram_id=12345, first_name="Test", username="testuser")
-        user_id = user["id"]
+        user_id = user["telegram_id"]
         word_data = {
             "word": "lernen",
             "lemma": "lernen",
@@ -130,7 +127,7 @@ class TestSpacedRepetitionIntegration:
 
         for rating in ratings:
             # Calculate next review
-            result = srs.calculate_review(
+            srs.calculate_review(
                 rating=rating,
                 repetitions=word.get("repetitions", 0),
                 interval_days=word.get("interval_days", 1),
@@ -139,7 +136,7 @@ class TestSpacedRepetitionIntegration:
 
             # Update database (add_review_record is alias for update_learning_progress)
             temp_db.update_learning_progress(
-                user_id=user_id,
+                telegram_id=user_id,
                 word_id=word_id,
                 rating=rating,
                 response_time_ms=1000
@@ -172,7 +169,7 @@ class TestTextProcessingIntegration:
 
             # Create user
             user = db_manager.create_user(telegram_id=12345, first_name="Test", username="testuser")
-            user_id = user["id"]
+            user_id = user["telegram_id"]
 
             # Process text with mock processor
             mock_processor = MockWordProcessor()
@@ -257,19 +254,19 @@ class TestBotHandlerIntegration:
     ):
         """Test /start command with database integration"""
         from src.core.handlers.command_handlers import CommandHandlers
-        from src.text_parser import GermanTextParser
         from src.spaced_repetition import SpacedRepetitionSystem
-        
+        from src.text_parser import GermanTextParser
+
         with patch("src.bot_handler.get_db_manager", return_value=temp_db):
             with patch(
                 "src.bot_handler.get_word_processor", return_value=MockWordProcessor()
             ):
                 async def mock_safe_reply(update, message, **kwargs):
                     await update.message.reply_text(message, **kwargs)
-                
+
                 handlers = CommandHandlers(
-                    temp_db, 
-                    MockWordProcessor(), 
+                    temp_db,
+                    MockWordProcessor(),
                     GermanTextParser(),
                     SpacedRepetitionSystem(),
                     safe_reply_callback=mock_safe_reply,
@@ -296,9 +293,9 @@ class TestBotHandlerIntegration:
     ):
         """Test /add command with full integration"""
         from src.core.handlers.command_handlers import CommandHandlers
-        from src.text_parser import GermanTextParser
         from src.spaced_repetition import SpacedRepetitionSystem
-        
+        from src.text_parser import GermanTextParser
+
         # Setup context with German text
         mock_context.args = ["Das", "Haus", "ist", "schön."]
 
@@ -308,13 +305,13 @@ class TestBotHandlerIntegration:
             ):
                 async def mock_safe_reply(update, message, **kwargs):
                     await update.message.reply_text(message, **kwargs)
-                
+
                 async def mock_process_text(update, text):
                     await update.message.reply_text("Words processed")
-                
+
                 handlers = CommandHandlers(
-                    temp_db, 
-                    MockWordProcessor(), 
+                    temp_db,
+                    MockWordProcessor(),
                     GermanTextParser(),
                     SpacedRepetitionSystem(),
                     safe_reply_callback=mock_safe_reply,
@@ -329,8 +326,8 @@ class TestBotHandlerIntegration:
 
                 # Check that words were processed and added
                 user = temp_db.get_user_by_telegram_id(12345)
-                words = temp_db.get_words_by_user(user["id"])
-                
+                temp_db.get_words_by_user(user["telegram_id"])
+
                 # Should have called reply_text at least once for processing
                 assert mock_update.message.reply_text.call_count >= 1
 
@@ -344,16 +341,16 @@ class TestBotHandlerIntegration:
     ):
         """Test /stats command with database integration"""
         from src.core.handlers.command_handlers import CommandHandlers
-        from src.text_parser import GermanTextParser
         from src.spaced_repetition import SpacedRepetitionSystem
-        
+        from src.text_parser import GermanTextParser
+
         with patch("src.bot_handler.get_db_manager", return_value=temp_db):
             async def mock_safe_reply(update, message, **kwargs):
                 await update.message.reply_text(message, **kwargs)
-            
+
             handlers = CommandHandlers(
-                temp_db, 
-                MockWordProcessor(), 
+                temp_db,
+                MockWordProcessor(),
                 GermanTextParser(),
                 SpacedRepetitionSystem(),
                 safe_reply_callback=mock_safe_reply,
@@ -363,7 +360,7 @@ class TestBotHandlerIntegration:
 
             # Create user and add some test data
             user = temp_db.create_user(telegram_id=12345, first_name="Test", username="testuser")
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Add a test word
         word_data = {
@@ -412,7 +409,7 @@ class TestEndToEndScenarios:
             first_name="Test",
             last_name="Learner",
         )
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # 2. Add words from text
         mock_processor = MockWordProcessor()
@@ -447,7 +444,7 @@ class TestEndToEndScenarios:
 
         for word in due_words[:3]:  # Review first 3 words
             # Simulate user rating (Good = 3)
-            result = srs.calculate_review(
+            srs.calculate_review(
                 rating=3,
                 repetitions=word.get("repetitions", 0),
                 interval_days=word.get("interval_days", 1),
@@ -456,7 +453,7 @@ class TestEndToEndScenarios:
 
             # Update progress
             temp_db.update_learning_progress(
-                user_id=user_id,
+                telegram_id=user_id,
                 word_id=word["id"],
                 rating=3,
                 response_time_ms=1000
@@ -505,7 +502,7 @@ class TestOptimizedWordProcessing:
         user = temp_db.create_user(
             telegram_id=12345, username="testuser", first_name="Test", last_name="User"
         )
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Pre-populate database with some existing words
         existing_words = [
@@ -552,7 +549,7 @@ class TestOptimizedWordProcessing:
     def test_empty_list_handling(self, temp_db):
         """Test handling of empty word lists"""
         user = temp_db.create_user(telegram_id=12345, first_name="Test", username="testuser")
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Test empty list scenarios
         word_existence = temp_db.check_multiple_words_exist(user_id, [])
@@ -564,7 +561,7 @@ class TestOptimizedWordProcessing:
     def test_large_word_list_performance(self, temp_db):
         """Test performance with large word lists"""
         user = temp_db.create_user(telegram_id=12345, first_name="Test", username="testuser")
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Add some words to database
         for i in range(10):
@@ -616,7 +613,7 @@ class TestDuplicateWordPrevention:
         user = temp_db.create_user(
             telegram_id=12345, username="testuser", first_name="Test", last_name="User"
         )
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # First, add "bedeuten" (base form) to database
         bedeuten_data = {
@@ -672,7 +669,7 @@ class TestDuplicateWordPrevention:
     def test_basic_verb_pattern_matching(self, temp_db):
         """Test basic German verb pattern matching - focus on -et/-en patterns"""
         user = temp_db.create_user(telegram_id=54321, first_name="Verb", username="verbuser")
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         # Add base verb forms that follow predictable patterns
         verbs = [
@@ -727,7 +724,7 @@ class TestErrorScenarios:
     def test_duplicate_word_handling(self, temp_db):
         """Test handling of duplicate words"""
         user = temp_db.create_user(telegram_id=12345, first_name="Test", username="testuser")
-        user_id = user["id"]
+        user_id = user["telegram_id"]
 
         word_data = {
             "word": "Haus",

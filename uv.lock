@@ -52,10 +52,16 @@ dev = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "bandit" },
+    { name = "coverage" },
+    { name = "mypy" },
+    { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
     { name = "pytest-mock" },
+    { name = "ruff" },
+    { name = "safety" },
 ]
 
 [package.metadata]
@@ -89,10 +95,16 @@ provides-extras = ["dev"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "bandit", specifier = ">=1.7.0" },
+    { name = "coverage", specifier = ">=7.0.0" },
+    { name = "mypy", specifier = ">=1.0.0" },
+    { name = "pre-commit", specifier = ">=3.0.0" },
     { name = "pytest", specifier = ">=8.4.1" },
     { name = "pytest-asyncio", specifier = ">=1.0.0" },
     { name = "pytest-cov", specifier = ">=6.2.1" },
     { name = "pytest-mock", specifier = ">=3.14.1" },
+    { name = "ruff", specifier = ">=0.8.0" },
+    { name = "safety", specifier = ">=3.0.0" },
 ]
 
 [[package]]

@@ -2,10 +2,10 @@
 Test randomization feature for study commands
 """
 
-import pytest
-import tempfile
 import os
-from typing import List, Dict, Any
+import tempfile
+
+import pytest
 
 from src.core.database.database_manager import DatabaseManager
 
@@ -53,11 +53,11 @@ class TestRandomizationFeature:
 
     def test_get_new_words_randomization(self, temp_db_manager, sample_user_data, large_word_set):
         """Test that get_new_words returns different orders when randomized"""
-        
+
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
-        
+        user_id = user["telegram_id"]
+
         added_count = temp_db_manager.add_words_to_user(user_id, large_word_set)
         assert added_count == 20, f"Expected 20 words to be added, got {added_count}"
 
@@ -74,11 +74,11 @@ class TestRandomizationFeature:
 
     def test_get_new_words_non_randomized_consistency(self, temp_db_manager, sample_user_data, large_word_set):
         """Test that non-randomized results are consistent"""
-        
+
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
-        
+        user_id = user["telegram_id"]
+
         added_count = temp_db_manager.add_words_to_user(user_id, large_word_set)
         assert added_count == 20
 
@@ -95,11 +95,11 @@ class TestRandomizationFeature:
 
     def test_get_due_words_randomization(self, temp_db_manager, sample_user_data, large_word_set):
         """Test that get_due_words returns different orders when randomized"""
-        
+
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
-        
+        user_id = user["telegram_id"]
+
         added_count = temp_db_manager.add_words_to_user(user_id, large_word_set)
         assert added_count == 20
 
@@ -120,11 +120,11 @@ class TestRandomizationFeature:
 
     def test_get_difficult_words_randomization(self, temp_db_manager, sample_user_data, large_word_set):
         """Test that get_difficult_words returns different orders when randomized"""
-        
+
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
-        
+        user_id = user["telegram_id"]
+
         added_count = temp_db_manager.add_words_to_user(user_id, large_word_set)
         assert added_count == 20
 
@@ -151,18 +151,18 @@ class TestRandomizationFeature:
 
     def test_backward_compatibility_default_randomization(self, temp_db_manager, sample_user_data, large_word_set):
         """Test that methods work with default randomization parameter"""
-        
+
         # Create user and add words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
-        
+        user_id = user["telegram_id"]
+
         added_count = temp_db_manager.add_words_to_user(user_id, large_word_set)
         assert added_count == 20
 
         # Test that methods work without explicit randomize parameter (should default to True)
         new_words = temp_db_manager.get_new_words(user_id, limit=5)
         due_words = temp_db_manager.get_due_words(user_id, limit=5)
-        
+
         # Should work without error
         assert len(new_words) == 5
         assert len(due_words) == 5
@@ -170,35 +170,35 @@ class TestRandomizationFeature:
         # Test with explicit parameters
         new_words_random = temp_db_manager.get_new_words(user_id, limit=5, randomize=True)
         new_words_ordered = temp_db_manager.get_new_words(user_id, limit=5, randomize=False)
-        
+
         assert len(new_words_random) == 5
         assert len(new_words_ordered) == 5
 
     def test_randomization_with_limited_words(self, temp_db_manager, sample_user_data):
         """Test randomization behavior with limited number of words"""
-        
+
         # Create user and add only 3 words
         user = temp_db_manager.create_user(**sample_user_data)
-        user_id = user["id"]
-        
+        user_id = user["telegram_id"]
+
         small_word_set = [
             {"lemma": "word1", "part_of_speech": "noun", "translation": "слово1", "example": "Example 1."},
             {"lemma": "word2", "part_of_speech": "noun", "translation": "слово2", "example": "Example 2."},
             {"lemma": "word3", "part_of_speech": "noun", "translation": "слово3", "example": "Example 3."},
         ]
-        
+
         added_count = temp_db_manager.add_words_to_user(user_id, small_word_set)
         assert added_count == 3
 
         # Test that we get all 3 words regardless of randomization
         new_words_random = temp_db_manager.get_new_words(user_id, limit=5, randomize=True)
         new_words_ordered = temp_db_manager.get_new_words(user_id, limit=5, randomize=False)
-        
+
         assert len(new_words_random) == 3
         assert len(new_words_ordered) == 3
 
         # Both should contain the same words (just potentially in different order)
         random_lemmas = {word["lemma"] for word in new_words_random}
         ordered_lemmas = {word["lemma"] for word in new_words_ordered}
-        
+
         assert random_lemmas == ordered_lemmas == {"word1", "word2", "word3"}

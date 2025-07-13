@@ -2,19 +2,18 @@
 Word processing with OpenAI API integration
 """
 
+import asyncio
 import json
 import logging
-import asyncio
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
+from typing import Any
 
-import httpx
 from openai import AsyncOpenAI
 
 from .config import get_settings
-from .utils import retry_on_exception, rate_limit, Timer, log_execution_time
-from .text_parser import get_text_parser
 from .database import get_db_manager
+from .text_parser import get_text_parser
+from .utils import log_execution_time, rate_limit, retry_on_exception
 
 logger = logging.getLogger(__name__)
 
@@ -26,63 +25,77 @@ class ProcessedWord:
     word: str
     lemma: str
     part_of_speech: str
-    article: Optional[str]
+    article: str | None
     translation: str
     example: str
-    additional_forms: Optional[str]
+    additional_forms: str | None
     confidence: float = 1.0
 
 
-def validate_article(article: Optional[str], lemma: str, part_of_speech: str) -> Optional[str]:
+def validate_article(
+    article: str | None, lemma: str, part_of_speech: str
+) -> str | None:
     """
     Валидация артикля для немецких существительных
-    
+
     Args:
         article: Article from OpenAI
         lemma: Word lemma
         part_of_speech: Part of speech
-        
+
     Returns:
         Valid article or None
     """
     # Only nouns should have articles
     if part_of_speech != "noun":
         return None
-    
+
     # First check for plural nouns
     if is_likely_plural(lemma):
         if article and article != 'None':
-            logger.warning(f"Removed article for plural noun '{lemma}': '{article}' -> None")
+            logger.warning(
+                f"Removed article for plural noun '{lemma}': '{article}' -> None"
+            )
         return None
-    
+
     # If lemma is empty, return None
     if not lemma or not lemma.strip():
         return None
-        
+
     # Check known dictionary regardless of input article
     corrected_article = get_correct_article_from_dict(lemma)
     if corrected_article is not None:
         if corrected_article != article:
-            logger.warning(f"Corrected article for '{lemma}': '{article}' -> '{corrected_article}'")
+            logger.warning(
+                f"Corrected article for '{lemma}': '{article}' -> "
+                f"'{corrected_article}'"
+            )
         return corrected_article
-    
+
     # If article is empty or incorrect, try to fix it
-    if not article or article == 'None' or article not in ["der", "die", "das"]:
+    if (
+        not article
+        or article == 'None'
+        or article not in ["der", "die", "das"]
+    ):
         # If not in dictionary, try to guess by ending
         guessed_article = guess_article_by_ending(lemma)
         if guessed_article and guessed_article != article:
-            logger.warning(f"Guessed article for '{lemma}': '{article}' -> '{guessed_article}' (by ending)")
+            logger.warning(
+                f"Guessed article for '{lemma}': '{article}' -> "
+                f"'{guessed_article}' (by ending)"
+            )
             return guessed_article
-        
+
         # If this is clearly a noun but article is wrong
         if article and article not in ["der", "die", "das"]:
             logger.error(f"Invalid article for '{lemma}': '{article}' - set to None")
             return None
-    
+
     return article
 
 
-def get_correct_article_from_dict(lemma: str) -> Optional[str]:
+def get_correct_article_from_dict(lemma: str) -> str | None:
     """Get correct article from dictionary of known words"""
     known_articles = {
         # Masculine (der)
@@ -95,7 +108,7 @@ def get_correct_article_from_dict(lemma: str) -> Optional[str]:
         "Regen": "der", "Schnee": "der", "Wind": "der", "Frühling": "der", "Sommer": "der",
         "Herbst": "der", "Winter": "der", "Beruf": "der", "Flur": "der", "Fußball": "der",
         "Zentimeter": "der", "Teppich": "der",
-        
+
         # Feminine (die)
         "Frau": "die", "Mutter": "die", "Schwester": "die", "Tochter": "die", "Freundin": "die",
         "Lehrerin": "die", "Schülerin": "die", "Katze": "die", "Schule": "die", "Straße": "die",
@@ -106,7 +119,7 @@ def get_correct_article_from_dict(lemma: str) -> Optional[str]:
         "Wohnung": "die", "Tür": "die", "Lampe": "die", "Uhr": "die", "Farbe": "die",
         "Sonne": "die", "Wolke": "die", "Blume": "die", "Natur": "die", "Buchhandlung": "die",
         "Firma": "die",
-        
+
         # Neuter (das)
         "Kind": "das", "Mädchen": "das", "Tier": "das", "Haus": "das", "Auto": "das",
         "Fahrrad": "das", "Buch": "das", "Bild": "das", "Foto": "das", "Zimmer": "das",
@@ -116,37 +129,37 @@ def get_correct_article_from_dict(lemma: str) -> Optional[str]:
         "Wetter": "das", "Land": "das", "Hotel": "das", "Restaurant": "das", "Kino": "das",
         "Museum": "das", "Geschäft": "das", "Problem": "das", "Gespräch": "das", "Spiel": "das",
         "Hobby": "das", "Leben": "das", "Abendessen": "das", "Profil": "das",
-        
+
         # Plural (no article)
         "Eltern": None, "Kinder": None, "Leute": None, "Geschwister": None, "Großeltern": None,
         "Pommes": None,
     }
-    
+
     return known_articles.get(lemma)
 
 
-def guess_article_by_ending(lemma: str) -> Optional[str]:
+def guess_article_by_ending(lemma: str) -> str | None:
     """Guess article by word ending"""
     lemma_lower = lemma.lower()
-    
+
     # Rules for determining articles by endings
     das_endings = ['chen', 'lein', 'um', 'ma', 'ment', 'tum', 'o']
     die_endings = ['e', 'ei', 'ie', 'in', 'heit', 'keit', 'schaft', 'tion', 'sion', 'tät', 'ung', 'ur']
     der_endings = ['er', 'en', 'el', 'ich', 'ig', 'ling', 'or', 'us']
-    
+
     # Check in order of specificity (most specific first)
     for ending in sorted(das_endings, key=len, reverse=True):
         if lemma_lower.endswith(ending):
             return "das"
-    
+
     for ending in sorted(die_endings, key=len, reverse=True):
         if lemma_lower.endswith(ending):
             return "die"
-    
+
     for ending in sorted(der_endings, key=len, reverse=True):
         if lemma_lower.endswith(ending):
             return "der"
-    
+
     return None
 
 
@@ -156,28 +169,33 @@ def is_likely_plural(lemma: str) -> bool:
         'eltern', 'geschwister', 'großeltern', 'leute', 'pommes',
         'kinder', 'menschen', 'personen', 'studenten', 'schüler'
     ]
-    
+
     lemma_lower = lemma.lower()
-    
+
     # Exact matches
     if lemma_lower in plural_indicators:
         return True
-    
+
     # Plural endings
     plural_endings = ['en', 'er', 'e', 's']
     for ending in plural_endings:
-        if lemma_lower.endswith(ending) and len(lemma) > 3:
-            # Additional check for typical plural words
-            if any(indicator in lemma_lower for indicator in ['kinder', 'menschen', 'leute']):
-                return True
-    
+        if (
+            lemma_lower.endswith(ending)
+            and len(lemma) > 3
+            and any(
+                indicator in lemma_lower
+                for indicator in ['kinder', 'menschen', 'leute']
+            )
+        ):
+            return True
+
     return False
 
 
 class WordProcessor:
     """Processes German words using OpenAI API"""
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: str | None = None):
         settings = get_settings()
         self.client = AsyncOpenAI(
             api_key=api_key or settings.openai_api_key, timeout=settings.api_timeout
@@ -195,8 +213,8 @@ class WordProcessor:
     @rate_limit(calls_per_minute=20)  # Conservative rate limiting
     @log_execution_time
     async def process_word(
-        self, word: str, context: Optional[str] = None
-    ) -> Optional[ProcessedWord]:
+        self, word: str, context: str | None = None
+    ) -> ProcessedWord | None:
         """
         Process a single German word using OpenAI
 
@@ -215,11 +233,11 @@ class WordProcessor:
 
         # Extract potential lemma for checking
         lemma = self._extract_lemma(word)
-        
+
         # Check if word already exists in shared table
         db_manager = get_db_manager()
         existing_word = db_manager.get_word_by_lemma(lemma)
-        
+
         if existing_word:
             logger.info(f"Using existing word from shared table: {lemma}")
             return ProcessedWord(
@@ -286,7 +304,7 @@ class WordProcessor:
             # Return None for API errors
             return None
 
-    async def process_text(self, text: str, max_words: int = 20) -> List[ProcessedWord]:
+    async def process_text(self, text: str, max_words: int = 20) -> list[ProcessedWord]:
         """
         Process German text and extract processed words
 
@@ -302,17 +320,13 @@ class WordProcessor:
 
         logger.info(f"Processing text with {len(text)} characters")
 
-        # Validate German text
-        # TODO: fix it is not working well!!!
-        if not self.text_parser.validate_german_text(text):
-            logger.warning("Text does not appear to be German")
-            return []
-
-        # Extract words from text
+        # Extract German words from text (this already filters non-German words)
         words = self.text_parser.extract_words(text)
         if not words:
-            logger.warning("No words extracted from text")
+            logger.warning("No German words found in text - text may be in another language or contain no valid words")
             return []
+
+        logger.info(f"Found {len(words)} German words in text: {words}")
 
         # Limit number of words
         if len(words) > max_words:
@@ -396,7 +410,7 @@ Example format:
 
 Be accurate and provide high-quality linguistic analysis for all words."""
 
-    def _create_word_analysis_prompt(self, word: str, context: str = None) -> str:
+    def _create_word_analysis_prompt(self, word: str, context: str | None = None) -> str:
         """Create prompt for word analysis"""
         prompt = f"Analyze the German word: '{word}'"
 
@@ -407,34 +421,34 @@ Be accurate and provide high-quality linguistic analysis for all words."""
 
         return prompt
 
-    def _create_batch_analysis_prompt(self, words: List[str], contexts: Dict[str, str] = None) -> str:
+    def _create_batch_analysis_prompt(self, words: list[str], contexts: dict[str, str] | None = None) -> str:
         """Create prompt for batch word analysis"""
         contexts = contexts or {}
-        
+
         prompt = f"Analyze the following {len(words)} German words:\n\n"
-        
+
         for i, word in enumerate(words, 1):
             prompt += f"{i}. '{word}'"
             if word in contexts:
                 prompt += f" (context: '{contexts[word]}')"
             prompt += "\n"
-        
+
         prompt += "\nProvide detailed linguistic analysis for each word in the specified JSON format."
-        
+
         return prompt
 
     def _parse_openai_response(
-        self, original_word: str, data: Dict[str, Any]
-    ) -> Optional[ProcessedWord]:
+        self, original_word: str, data: dict[str, Any]
+    ) -> ProcessedWord | None:
         """Parse OpenAI response into ProcessedWord"""
         try:
             translation = data.get("translation", "")
-            
+
             # Validate translation
             if not self._is_valid_translation(translation):
                 logger.warning(f"Invalid translation for word '{original_word}': '{translation}' - skipping word")
                 return None
-            
+
             return ProcessedWord(
                 word=original_word,
                 lemma=data.get("lemma", original_word),
@@ -454,19 +468,17 @@ Be accurate and provide high-quality linguistic analysis for all words."""
     def _extract_lemma(self, word: str) -> str:
         """Extract potential lemma from word for database lookup"""
         word_lower = word.lower()
-        
+
         # Simple heuristics for German word forms
         if word_lower.endswith("est"):
             return word_lower[:-3] + "en"
-        elif word_lower.endswith("et"):
-            return word_lower[:-2] + "en"
-        elif word_lower.endswith("st"):
+        elif word_lower.endswith("et") or word_lower.endswith("st"):
             return word_lower[:-2] + "en"
         elif word_lower.endswith("t") and len(word_lower) > 3:
             return word_lower[:-1] + "en"
         elif word_lower.endswith("e") and len(word_lower) > 2:
             return word_lower + "n"
-        
+
         # Return word as-is if no patterns match
         return word_lower
 
@@ -474,7 +486,7 @@ Be accurate and provide high-quality linguistic analysis for all words."""
         """Check if translation is valid and usable"""
         if not translation or translation.strip() == "":
             return False
-        
+
         invalid_patterns = [
             "[translation unavailable]",
             "translation unavailable",
@@ -485,22 +497,24 @@ Be accurate and provide high-quality linguistic analysis for all words."""
             "[failed]",
             "failed"
         ]
-        
+
         translation_lower = translation.lower().strip()
         return not any(pattern in translation_lower for pattern in invalid_patterns)
 
-    def _create_fallback_word(self, word: str) -> Optional[ProcessedWord]:
+    def _create_fallback_word(self, word: str) -> ProcessedWord | None:
         """Create fallback ProcessedWord when OpenAI fails - returns None to skip invalid words"""
         # Don't create fallback words with invalid translations
-        logger.warning(f"Skipping word '{word}' due to translation failure - no fallback created")
+        logger.warning(
+            f"Skipping word '{word}' due to translation failure - no fallback created"
+        )
         return None
 
     @retry_on_exception(max_retries=3, delay=1.0, backoff=2.0)
     @rate_limit(calls_per_minute=20)
     @log_execution_time
     async def process_words_batch(
-        self, words: List[str], contexts: Dict[str, str] = None
-    ) -> List[ProcessedWord]:
+        self, words: list[str], contexts: dict[str, str] | None = None
+    ) -> list[ProcessedWord]:
         """
         Process multiple words in a single OpenAI request
 
@@ -513,9 +527,11 @@ Be accurate and provide high-quality linguistic analysis for all words."""
         """
         if not words:
             return []
-        
+
         if len(words) > 30:  # Reduced max batch size to prevent JSON truncation
-            logger.warning(f"Batch size {len(words)} too large, processing first 30 words")
+            logger.warning(
+                f"Batch size {len(words)} too large, processing first 30 words"
+            )
             words = words[:30]
 
         if self.request_count >= self.max_requests_per_day:
@@ -533,7 +549,8 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                     {"role": "system", "content": self._get_batch_system_prompt()},
                     {"role": "user", "content": prompt},
                 ],
-                max_completion_tokens=self.max_tokens * min(4, len(words) // 5 + 1),  # Dynamic token scaling based on batch size
+                max_completion_tokens=self.max_tokens * min(4, len(words) // 5 + 1),
+                # Dynamic token scaling based on batch size
                 temperature=self.temperature,
                 response_format={"type": "json_object"},
             )
@@ -559,7 +576,10 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                 logger.error(f"Failed to parse OpenAI batch response as JSON: {e}")
                 logger.debug(f"Response content length: {len(content)} chars")
                 logger.debug(f"Response content preview: {content[:500]}...")
-                logger.warning(f"JSON parsing failed for batch of {len(words)} words - consider reducing batch size")
+                logger.warning(
+                    f"JSON parsing failed for batch of {len(words)} words - "
+                    "consider reducing batch size"
+                )
                 return []  # Return empty list for JSON parsing errors
 
         except Exception as e:
@@ -567,22 +587,25 @@ Be accurate and provide high-quality linguistic analysis for all words."""
             return []  # Return empty list instead of fallback words
 
     def _parse_batch_openai_response(
-        self, words: List[str], data: Dict[str, Any]
-    ) -> List[ProcessedWord]:
+        self, words: list[str], data: dict[str, Any]
+    ) -> list[ProcessedWord]:
         """Parse OpenAI batch response into ProcessedWord objects"""
         processed_words = []
-        
+
         for word in words:
             if word in data and isinstance(data[word], dict):
                 try:
                     word_data = data[word]
                     translation = word_data.get("translation", "")
-                    
+
                     # Validate translation
                     if not self._is_valid_translation(translation):
-                        logger.warning(f"Invalid translation for word '{word}': '{translation}' - skipping word")
+                        logger.warning(
+                            f"Invalid translation for word '{word}': '{translation}' - "
+                            "skipping word"
+                        )
                         continue
-                    
+
                     processed_word = ProcessedWord(
                         word=word,
                         lemma=word_data.get("lemma", word),
@@ -602,12 +625,12 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                 logger.warning(f"Word '{word}' not found in batch response - skipping")
                 # Skip word instead of using fallback
                 continue
-        
+
         return processed_words
 
     async def batch_process_words(
-        self, words: List[str], contexts: Dict[str, str] = None
-    ) -> List[ProcessedWord]:
+        self, words: list[str], contexts: dict[str, str] | None = None
+    ) -> list[ProcessedWord]:
         """
         Process multiple words efficiently using shared words table and batch processing
 
@@ -624,15 +647,15 @@ Be accurate and provide high-quality linguistic analysis for all words."""
         contexts = contexts or {}
         processed_words = []
         db_manager = get_db_manager()
-        
+
         # Separate words into existing and new
         existing_words = []
         new_words = []
-        
+
         for word in words:
             lemma = self._extract_lemma(word)
             existing_word = db_manager.get_word_by_lemma(lemma)
-            
+
             if existing_word:
                 processed_word = ProcessedWord(
                     word=word,
@@ -648,20 +671,25 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                 existing_words.append(word)
             else:
                 new_words.append(word)
-        
-        logger.info(f"Found {len(existing_words)} existing words, processing {len(new_words)} new words in batches")
+
+        logger.info(
+            f"Found {len(existing_words)} existing words, processing "
+            f"{len(new_words)} new words in batches"
+        )
 
         # Process new words in smaller batches to avoid JSON truncation
         batch_size = 20  # Reduced batch size for better reliability
-        
+
         for i in range(0, len(new_words), batch_size):
             batch = new_words[i : i + batch_size]
-            batch_contexts = {word: contexts.get(word) for word in batch if word in contexts}
-            
+            batch_contexts = {
+                word: contexts.get(word) for word in batch if word in contexts
+            }
+
             # Process entire batch in single OpenAI request
             batch_results = await self.process_words_batch(batch, batch_contexts)
             processed_words.extend(batch_results)
-            
+
             # Rate limiting delay between batches
             if i + batch_size < len(new_words):
                 await asyncio.sleep(0.5)
@@ -711,7 +739,7 @@ class MockWordProcessor:
         self.processed_words = []
 
     async def process_word(
-        self, word: str, context: Optional[str] = None
+        self, word: str, context: str | None = None
     ) -> ProcessedWord:
         """Mock word processing"""
         # Simple mock data
@@ -755,7 +783,7 @@ class MockWordProcessor:
         # Return None for unknown words instead of creating invalid fallback
         return None
 
-    async def process_text(self, text: str, max_words: int = 20) -> List[ProcessedWord]:
+    async def process_text(self, text: str, max_words: int = 20) -> list[ProcessedWord]:
         """Mock text processing"""
         text_parser = get_text_parser()
         words = text_parser.extract_words(text)[:max_words]
@@ -769,8 +797,8 @@ class MockWordProcessor:
         return results
 
     async def batch_process_words(
-        self, words: List[str], contexts: Dict[str, str] = None
-    ) -> List[ProcessedWord]:
+        self, words: list[str], contexts: dict[str, str] | None = None
+    ) -> list[ProcessedWord]:
         """Mock batch processing"""
         results = []
         for word in words:
@@ -797,22 +825,19 @@ def get_word_processor(use_mock: bool = False) -> WordProcessor:
     """Get global word processor instance"""
     global _word_processor
     if _word_processor is None:
-        if use_mock:
-            _word_processor = MockWordProcessor()
-        else:
-            _word_processor = WordProcessor()
+        _word_processor = MockWordProcessor() if use_mock else WordProcessor()
     return _word_processor
 
 
 async def process_german_words(
-    words: List[str], contexts: Dict[str, str] = None
-) -> List[ProcessedWord]:
+    words: list[str], contexts: dict[str, str] | None = None
+) -> list[ProcessedWord]:
     """Convenience function to process German words"""
     processor = get_word_processor()
     return await processor.batch_process_words(words, contexts)
 
 
-async def process_german_text(text: str, max_words: int = 20) -> List[ProcessedWord]:
+async def process_german_text(text: str, max_words: int = 20) -> list[ProcessedWord]:
     """Convenience function to process German text"""
     processor = get_word_processor()
     return await processor.process_text(text, max_words)
@@ -824,28 +849,28 @@ if __name__ == "__main__":
         processor = WordProcessor()
 
         # Test connection
-        print("Testing OpenAI connection...")
+        logger.info("Testing OpenAI connection...")
         connected = await processor.test_connection()
-        print(f"Connection successful: {connected}")
+        logger.info(f"Connection successful: {connected}")
 
         if connected:
             # Test single word
-            print("\nTesting single word processing...")
+            logger.info("Testing single word processing...")
             result = await processor.process_word("Haus")
             if result:
-                print(f"Word: {result.word}")
-                print(f"Lemma: {result.lemma}")
-                print(f"Translation: {result.translation}")
-                print(f"Example: {result.example}")
+                logger.info(f"Word: {result.word}")
+                logger.info(f"Lemma: {result.lemma}")
+                logger.info(f"Translation: {result.translation}")
+                logger.info(f"Example: {result.example}")
 
             # Test text processing
-            print("\nTesting text processing...")
+            logger.info("Testing text processing...")
             text = "Das schöne Haus steht am Berg."
             results = await processor.process_text(text, max_words=5)
-            print(f"Processed {len(results)} words from text")
+            logger.info(f"Processed {len(results)} words from text")
 
             for word in results:
-                print(f"- {word.lemma}: {word.translation}")
+                logger.info(f"- {word.lemma}: {word.translation}")
 
     # Run test
     asyncio.run(test_processor())

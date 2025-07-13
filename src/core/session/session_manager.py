@@ -3,21 +3,18 @@ Session management for the German Learning Bot
 """
 
 import logging
-from typing import Dict, Any, Optional, List
 from datetime import datetime
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ContextTypes
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 
 from ...database import DatabaseManager
 from ...spaced_repetition import SpacedRepetitionSystem
 from ...utils import (
-    format_study_card,
-    create_inline_keyboard_data,
-    parse_inline_keyboard_data,
-    get_rating_emoji,
-    get_rating_text,
     Timer,
+    create_inline_keyboard_data,
+    format_study_card,
+    get_rating_emoji,
+    parse_inline_keyboard_data,
 )
 
 logger = logging.getLogger(__name__)
@@ -25,10 +22,10 @@ logger = logging.getLogger(__name__)
 
 class StudySession:
     """Represents a single study session"""
-    
-    def __init__(self, session_id: str, user_id: int, words: List[Dict], session_type: str):
+
+    def __init__(self, session_id: str, telegram_id: int, words: list[dict], session_type: str):
         self.session_id = session_id
-        self.user_id = user_id
+        self.telegram_id = telegram_id
         self.words = words
         self.session_type = session_type
         self.current_word_index = 0
@@ -36,21 +33,21 @@ class StudySession:
         self.total_answers = 0
         self.timer = Timer()
         self.created_at = datetime.now()
-        
-    def get_current_word(self) -> Optional[Dict]:
+
+    def get_current_word(self) -> dict | None:
         """Get the current word being studied"""
         if self.current_word_index < len(self.words):
             return self.words[self.current_word_index]
         return None
-    
+
     def advance_to_next_word(self):
         """Move to the next word in the session"""
         self.current_word_index += 1
-        
+
     def is_finished(self) -> bool:
         """Check if the session is complete"""
         return self.current_word_index >= len(self.words)
-    
+
     def record_answer(self, correct: bool):
         """Record an answer for statistics"""
         self.total_answers += 1
@@ -72,26 +69,29 @@ class SessionManager:
         self.srs_system = srs_system
         self._safe_reply = safe_reply_callback
         self._safe_edit = safe_edit_callback
-        self.user_sessions: Dict[int, StudySession] = {}
+        self.user_sessions: dict[int, StudySession] = {}
 
     async def start_study_session(
-        self, 
-        update: Update, 
-        words: List[Dict], 
+        self,
+        update: Update,
+        words: list[dict],
         session_type: str
     ):
         """Start a new study session"""
-        user_id = update.effective_user.id
-        
+        telegram_id = update.effective_user.id
+
+        # Log session start
+        logger.info(f"Starting {session_type} study session for telegram_id {telegram_id} with {len(words)} words")
+
         # Create session with compact ID
         # Use only last 6 digits of timestamp for uniqueness while staying compact
         timestamp = int(datetime.now().timestamp())
         compact_timestamp = timestamp % 1000000  # Last 6 digits
-        session_id = f"{user_id}_{compact_timestamp}"
-        session = StudySession(session_id, user_id, words, session_type)
-        
+        session_id = f"{telegram_id}_{compact_timestamp}"
+        session = StudySession(session_id, telegram_id, words, session_type)
+
         # Store session
-        self.user_sessions[user_id] = session
+        self.user_sessions[telegram_id] = session
         session.timer.start()
 
         # Show first card
@@ -106,8 +106,8 @@ class SessionManager:
 
         # Format study card
         card_text = format_study_card(
-            word, 
-            session.current_word_index + 1, 
+            word,
+            session.current_word_index + 1,
             len(session.words)
         )
 
@@ -123,11 +123,11 @@ class SessionManager:
 
         await self._safe_reply(update, card_text, reply_markup=reply_markup)
 
-    async def handle_show_answer(self, query, data: Dict):
+    async def handle_show_answer(self, query, data: dict):
         """Handle showing the answer to a flashcard"""
-        user_id = query.from_user.id
-        session = self.user_sessions.get(user_id)
-        
+        telegram_id = query.from_user.id
+        session = self.user_sessions.get(telegram_id)
+
         if not session:
             await query.edit_message_text("❌ Сессия истекла. Начните новую с /study")
             return
@@ -142,7 +142,7 @@ class SessionManager:
             word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
         else:
             word_display = f"{word['lemma']} - {word['part_of_speech']}"
-        
+
         answer_text = f"""🔤 <b>{word['lemma']}</b>
 {word_display}
 
@@ -168,31 +168,33 @@ class SessionManager:
 
         await self._safe_edit(query, answer_text, reply_markup=reply_markup, parse_mode="HTML")
 
-    async def handle_word_rating(self, query, data: Dict):
+    async def handle_word_rating(self, query, data: dict):
         """Handle word rating"""
-        user_id = query.from_user.id
-        session = self.user_sessions.get(user_id)
-        
+        telegram_user_id = query.from_user.id
+        session = self.user_sessions.get(telegram_user_id)
+
         if not session:
             await query.edit_message_text("❌ Сессия истекла. Начните новую с /study")
             return
 
         word_id = data.get("word_id")
         rating = data.get("rating")
-        
+
         if not word_id or not rating:
             logger.error("Missing word_id or rating in callback data")
             return
 
-        # Update word progress
-        self.db_manager.update_learning_progress(user_id, word_id, rating)
+        # Update word progress - now using telegram_id directly
+        logger.info(f"Updating statistics: telegram_id {telegram_user_id}, word {word_id}, rating {rating}")
+        self.db_manager.update_learning_progress(telegram_user_id, word_id, rating)
+        logger.info(f"Statistics updated successfully for telegram_id {telegram_user_id}, word {word_id}")
 
         # Record answer statistics
         session.record_answer(rating >= 3)  # Consider 3+ as correct
 
         # Show next card or finish session
         session.advance_to_next_word()
-        
+
         if session.is_finished():
             await self._finish_session_from_query(query, session)
         else:
@@ -206,8 +208,8 @@ class SessionManager:
 
         # Format next card
         card_text = format_study_card(
-            word, 
-            session.current_word_index + 1, 
+            word,
+            session.current_word_index + 1,
             len(session.words)
         )
 
@@ -226,10 +228,10 @@ class SessionManager:
     async def _finish_session(self, update: Update, session: StudySession):
         """Finish the study session"""
         session.timer.stop()
-        
+
         # Calculate statistics
         accuracy = (session.correct_answers / session.total_answers * 100) if session.total_answers > 0 else 0
-        
+
         completion_text = f"""✅ <b>Сессия завершена!</b>
 
 📊 <b>Результаты:</b>
@@ -241,18 +243,18 @@ class SessionManager:
 🎯 Отличная работа! Продолжайте изучение для лучшего запоминания."""
 
         await self._safe_reply(update, completion_text, parse_mode="HTML")
-        
+
         # Clean up session
-        if session.user_id in self.user_sessions:
-            del self.user_sessions[session.user_id]
+        if session.telegram_id in self.user_sessions:
+            del self.user_sessions[session.telegram_id]
 
     async def _finish_session_from_query(self, query, session: StudySession):
         """Finish the study session from a callback query"""
         session.timer.stop()
-        
+
         # Calculate statistics
         accuracy = (session.correct_answers / session.total_answers * 100) if session.total_answers > 0 else 0
-        
+
         completion_text = f"""✅ <b>Сессия завершена!</b>
 
 📊 <b>Результаты:</b>
@@ -264,10 +266,10 @@ class SessionManager:
 🎯 Отличная работа! Продолжайте изучение для лучшего запоминания."""
 
         await self._safe_edit(query, completion_text, parse_mode="HTML")
-        
+
         # Clean up session
-        if session.user_id in self.user_sessions:
-            del self.user_sessions[session.user_id]
+        if session.telegram_id in self.user_sessions:
+            del self.user_sessions[session.telegram_id]
 
     async def handle_study_callback(self, query):
         """Handle study-related callback queries"""
@@ -285,42 +287,42 @@ class SessionManager:
         else:
             logger.warning(f"Unknown study callback action: {action}")
 
-    async def _handle_next_card(self, query, data: Dict):
+    async def _handle_next_card(self, query, data: dict):
         """Handle next card button"""
-        user_id = query.from_user.id
-        session = self.user_sessions.get(user_id)
-        
+        telegram_id = query.from_user.id
+        session = self.user_sessions.get(telegram_id)
+
         if not session:
             await query.edit_message_text("❌ Сессия истекла. Начните новую с /study")
             return
 
         await self._show_next_card(query, session)
 
-    async def _handle_finish_session(self, query, data: Dict):
+    async def _handle_finish_session(self, query, data: dict):
         """Handle finish session button"""
-        user_id = query.from_user.id
-        session = self.user_sessions.get(user_id)
-        
+        telegram_id = query.from_user.id
+        session = self.user_sessions.get(telegram_id)
+
         if not session:
             await query.edit_message_text("❌ Сессия истекла")
             return
 
         await self._finish_session_from_query(query, session)
 
-    def get_session(self, user_id: int) -> Optional[StudySession]:
+    def get_session(self, telegram_id: int) -> StudySession | None:
         """Get active session for user"""
-        return self.user_sessions.get(user_id)
+        return self.user_sessions.get(telegram_id)
 
     def cleanup_expired_sessions(self, max_age_hours: int = 24):
         """Clean up expired sessions"""
         current_time = datetime.now()
         expired_sessions = []
-        
-        for user_id, session in self.user_sessions.items():
+
+        for telegram_id, session in self.user_sessions.items():
             age = (current_time - session.created_at).total_seconds() / 3600
             if age > max_age_hours:
-                expired_sessions.append(user_id)
-        
-        for user_id in expired_sessions:
-            del self.user_sessions[user_id]
-            logger.info(f"Cleaned up expired session for user {user_id}")
+                expired_sessions.append(telegram_id)
+
+        for telegram_id in expired_sessions:
+            del self.user_sessions[telegram_id]
+            logger.info(f"Cleaned up expired session for telegram_id {telegram_id}")

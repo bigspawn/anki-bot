@@ -2,20 +2,20 @@
 Unit tests for word processor
 """
 
-import pytest
-import json
 import asyncio
+import json
 from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
+import pytest
+
 from src.word_processor import (
-    WordProcessor,
     MockWordProcessor,
     ProcessedWord,
+    WordProcessor,
     get_word_processor,
-    process_german_words,
     process_german_text,
+    process_german_words,
 )
-from src.database import get_db_manager
 
 
 class TestProcessedWord:
@@ -81,15 +81,15 @@ class TestWordProcessor:
             # Create a patcher for get_db_manager that we can control
             db_patcher = patch("src.word_processor.get_db_manager", return_value=mock_global_db_manager)
             db_patcher.start()
-            
+
             processor = WordProcessor(api_key="test_key")
             processor.client = mock_openai_client
-            
+
             # Store the patcher so we can stop it later if needed
             processor._db_patcher = db_patcher
-            
+
             yield processor
-            
+
             # Cleanup: stop the patcher
             db_patcher.stop()
 
@@ -312,13 +312,13 @@ class TestWordProcessor:
 
         words = ["Haus", "gehen"]
         contexts = {"Haus": "Das Haus ist groß."}
-        
+
         results = await word_processor.process_words_batch(words, contexts)
-        
+
         # Should return 2 processed words
         assert len(results) == 2
         assert all(isinstance(result, ProcessedWord) for result in results)
-        
+
         # Check first word
         haus_word = results[0]
         assert haus_word.word == "Haus"
@@ -326,7 +326,7 @@ class TestWordProcessor:
         assert haus_word.part_of_speech == "noun"
         assert haus_word.article == "das"
         assert haus_word.translation == "дом"
-        
+
         # Check second word
         gehen_word = results[1]
         assert gehen_word.word == "gehen"
@@ -334,7 +334,7 @@ class TestWordProcessor:
         assert gehen_word.part_of_speech == "verb"
         assert gehen_word.article is None
         assert gehen_word.translation == "идти"
-        
+
         # Verify API was called once (batch processing)
         mock_openai_client.chat.completions.create.assert_called_once()
 

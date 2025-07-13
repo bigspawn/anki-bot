@@ -3,7 +3,6 @@ Message handlers for the German Learning Bot
 """
 
 import logging
-from typing import Dict, Any, Optional
 
 from telegram import Update
 from telegram.ext import ContextTypes

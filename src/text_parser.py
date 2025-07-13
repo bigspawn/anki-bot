@@ -2,9 +2,8 @@
 German text parsing and word extraction
 """
 
-import re
 import logging
-from typing import List
+import re
 
 try:
     import spacy
@@ -38,7 +37,7 @@ class GermanTextParser:
 
     def extract_words(
         self, text: str, min_length: int = 2, max_length: int = 50
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Extract German words from text
 
@@ -102,9 +101,138 @@ class GermanTextParser:
         if letter_count < len(word) * 0.7:  # At least 70% letters
             return False
 
+        # Check if word appears to be German
+        if not self._is_likely_german_word(word):
+            logger.info(f"Skipping non-German word: '{word}'")
+            return False
+
         return True
 
-    def extract_sentences(self, text: str) -> List[str]:
+    def _is_likely_german_word(self, word: str) -> bool:
+        """Check if a word is likely to be German"""
+        word_lower = word.lower()
+
+        # Always accept words with German-specific characters
+        if any(char in word for char in "äöüßÄÖÜ"):
+            return True
+
+        # Common foreign words that should be skipped
+        foreign_words = {
+            # English
+            "dog", "cat", "hello", "world", "house", "man", "woman", "good", "bad", "nice",
+            "love", "time", "life", "water", "fire", "earth", "air", "book", "table", "chair",
+            "short", "work", "yes", "no", "big", "small", "new", "old", "young", "fast",
+            "the", "and", "but", "for", "from", "with", "without", "about", "after", "before",
+            "car", "tree", "sun", "moon", "star", "day", "night", "morning", "evening",
+            "red", "blue", "green", "yellow", "black", "white", "color", "colour",
+            "beautiful", "flowers", "weather", "today", "people", "place", "year", "way",
+            "right", "left", "up", "down", "here", "there", "now", "then", "always", "never",
+            "first", "last", "next", "few", "many", "much", "little", "long", "high", "low",
+            "open", "close", "start", "stop", "come", "go", "get", "put", "take", "give",
+            "make", "find", "think", "know", "want", "need", "use", "see", "look", "feel",
+            "friend", "my", "are", "very", "near", "thames", "river", "buy", "things", "to",
+            "verbs", "meanings", "casa", "bonita", "peter", "berlin", "in",
+            "also", "where", "you", "until", "lived", "have", "been", "since",
+            # Spanish
+            "hola", "mundo", "amor", "vida", "tiempo", "agua", "fuego", "tierra", "aire",
+            "libro", "mesa", "silla", "perro", "gato", "bueno", "malo", "bonito", "grande",
+            "pequeño", "nuevo", "viejo", "joven", "rápido", "lento", "alto", "bajo", "muy",
+            # French
+            "bonjour", "maison", "monde", "amour", "vie", "temps", "eau", "feu", "terre", "livre", "chaise", "chien", "chat", "bon", "mauvais", "beau", "grand",
+            "petit", "nouveau", "vieux", "jeune", "rapide", "lent", "haut", "bas",
+            # Italian
+            "ciao", "mondo", "amore", "vita", "tempo", "acqua", "fuoco", "terra", "aria",
+            "tavolo", "sedia", "cane", "gatto", "buono", "cattivo", "bello", "piccolo", "nuovo", "vecchio", "giovane", "veloce", "basso",
+            # Russian (in Latin script)
+            "dom", "mir", "lyubov", "zhizn", "vremya", "voda", "ogon", "zemlya", "vozdukh",
+            # Dutch
+            "huis", "wereld", "liefde", "leven", "tijd", "vuur", "aarde", "lucht",
+            "hond", "kat", "goed", "slecht", "mooi", "groot", "klein", "nieuw", "oud",
+        }
+
+        if word_lower in foreign_words:
+            return False
+
+        # Common German word patterns and endings
+        german_patterns = [
+            # German endings
+            r".*ung$",      # -ung (Bildung, Meinung)
+            r".*heit$",     # -heit (Freiheit, Schönheit)
+            r".*keit$",     # -keit (Möglichkeit, Schwierigkeit)
+            r".*schaft$",   # -schaft (Freundschaft, Wissenschaft)
+            r".*lich$",     # -lich (möglich, wirklich)
+            r".*ig$",       # -ig (wichtig, richtig)
+            r".*er$",       # -er (Lehrer, Arbeiter)
+            r".*en$",       # -en (gehen, machen)
+            r".*chen$",     # -chen (Mädchen, Hündchen)
+            r".*lein$",     # -lein (Fräulein, Büchlein)
+            # German prefixes
+            r"^ge.*",       # ge- (gemacht, gesagt)
+            r"^ver.*",      # ver- (verstehen, verloren)
+            r"^ent.*",      # ent- (entscheiden, entwickeln)
+            r"^be.*",       # be- (bekommen, beginnen)
+            r"^er.*",       # er- (erhalten, erzählen)
+            r"^un.*",       # un- (unmöglich, unglücklich)
+            r"^über.*",     # über- (übersetzen, überlegen)
+            r"^unter.*",    # unter- (unterrichten, unterscheiden)
+            r"^mit.*",      # mit- (mitmachen, mitkommen)
+            r"^vor.*",      # vor- (vorstellen, vorbereiten)
+        ]
+
+        # Check if word matches German patterns
+        for pattern in german_patterns:
+            if re.match(pattern, word_lower):
+                return True
+
+        # Common German words (basic vocabulary)
+        german_words = {
+            "ich", "du", "er", "sie", "es", "wir", "ihr", "der", "die", "das", "den", "dem",
+            "ein", "eine", "einen", "einem", "einer", "und", "oder", "aber", "denn", "sondern",
+            "auch", "noch", "schon", "nur", "sehr", "ganz", "hier", "da", "dort", "wo", "wie",
+            "was", "wer", "wenn", "dann", "also", "so", "zu", "auf", "in", "mit", "von", "bei",
+            "nach", "vor", "für", "durch", "über", "unter", "zwischen", "neben", "hinter",
+            "haben", "sein", "werden", "können", "müssen", "sollen", "wollen", "dürfen", "mögen",
+            "gehen", "kommen", "machen", "sagen", "sehen", "wissen", "denken", "finden", "geben",
+            "nehmen", "fahren", "laufen", "stehen", "sitzen", "liegen", "bleiben", "leben",
+            "haus", "auto", "baum", "blume", "buch", "brief", "geld", "hand", "kopf", "herz",
+            "kind", "mann", "frau", "mutter", "vater", "bruder", "schwester", "freund", "familie",
+            "stadt", "land", "welt", "himmel", "erde", "wasser", "feuer", "luft", "sonne", "mond",
+            "tag", "nacht", "morgen", "abend", "jahr", "monat", "woche", "stunde", "minute",
+            "gut", "schlecht", "groß", "klein", "neu", "alt", "jung", "schön", "hässlich",
+            "schnell", "langsam", "hoch", "tief", "lang", "kurz", "breit", "schmal",
+            "schwarz", "weiß", "rot", "blau", "grün", "gelb", "braun", "grau",
+        }
+
+        if word_lower in german_words:
+            return True
+
+        # If SpaCy is available, use it for more sophisticated analysis
+        if self.nlp is not None:
+            try:
+                doc = self.nlp(word)
+                for token in doc:
+                    # Check if SpaCy detects German linguistic features
+                    if token.lang_ == "de":
+                        return True
+                    # Check for German morphological features
+                    if hasattr(token, "morph") and token.morph:
+                        morph_str = str(token.morph)
+                        # German case system
+                        if any(case in morph_str for case in ["Case=Nom", "Case=Acc", "Case=Dat", "Case=Gen"]):
+                            return True
+                        # German gender system
+                        if any(gender in morph_str for gender in ["Gender=Masc", "Gender=Fem", "Gender=Neut"]):
+                            return True
+            except Exception as e:
+                # If SpaCy analysis fails, continue with other checks
+                logger.debug(f"SpaCy morphological analysis failed for word '{word}': {e}")
+                pass
+
+        # Default: if word contains only Latin characters and doesn't match foreign words,
+        # tentatively accept it (it might be a proper noun or less common German word)
+        return re.match(r"^[a-zA-ZäöüßÄÖÜ]+$", word) and len(word) >= 3
+
+    def extract_sentences(self, text: str) -> list[str]:
         """Extract sentences from German text"""
         if not text or not text.strip():
             return []
@@ -123,7 +251,7 @@ class GermanTextParser:
 
     def get_word_context(
         self, text: str, target_word: str, context_size: int = 10
-    ) -> List[str]:
+    ) -> list[str]:
         """Get context sentences containing the target word"""
         sentences = self.extract_sentences(text)
         contexts = []
@@ -260,12 +388,12 @@ class GermanTextParser:
                                 else:
                                     german_indicators += 1
                         # For verbs: require German verbal morphology
-                        elif token.pos_ == "VERB" and has_verb_features:
+                        elif (token.pos_ == "VERB" and has_verb_features) or (
+                            token.pos_ == "ADJ"
+                            and (has_case or "Degree=" in morph_str)
+                            and token.text.lower() not in foreign_words_blacklist
+                        ):
                             german_indicators += 1
-                        # For adjectives: require case or degree
-                        elif token.pos_ == "ADJ" and (has_case or "Degree=" in morph_str):
-                            if token.text.lower() not in foreign_words_blacklist:
-                                german_indicators += 1
 
             # Decision logic based on SpaCy analysis
             if total_tokens == 0:
@@ -308,7 +436,7 @@ def get_text_parser() -> GermanTextParser:
 
 def extract_german_words(
     text: str, min_length: int = 2, max_length: int = 50
-) -> List[str]:
+) -> list[str]:
     """Convenience function to extract German words"""
     parser = get_text_parser()
     return parser.extract_words(text, min_length, max_length)
