@@ -1,0 +1,64 @@
+ssh_key: ~/.ssh/id_rsa
+ssh_shell: /bin/bash
+local_shell: /bin/bash
+
+targets:
+  prod:
+    hosts:
+      - { host: "your-server.com", name: "prod-server" }
+
+tasks:
+  - name: deploy-anki-bot
+    on_error: "echo 'Deployment failed: {SPOT_ERROR}' | tee -a /var/log/anki-bot-deploy.log"
+    commands:
+      - name: create deployment directory
+        script: |
+          mkdir -p /root/projects/anki-bot/{data,logs,backups}
+          cd /root/projects/anki-bot
+
+      - name: copy production environment file
+        copy:
+          {
+            "src": ".env.prod",
+            "dst": "/root/projects/anki-bot/.env",
+            "mkdir": true,
+          }
+
+      - name: copy docker compose configuration
+        copy:
+          {
+            "src": "docker-compose.prod.yml",
+            "dst": "/root/projects/anki-bot/docker-compose.prod.yml",
+            "mkdir": true,
+          }
+
+      - name: stop existing container
+        script: |
+          cd /root/projects/anki-bot
+          docker-compose -f docker-compose.prod.yml down || true
+          docker container prune -f || true
+
+      - name: pull image and start
+        script: |
+          cd /root/projects/anki-bot
+          echo "Pulling image with tag: $IMAGE_TAG"
+          docker pull ghcr.io/bigspawn/anki-bot:$IMAGE_TAG
+          docker-compose -f docker-compose.prod.yml up -d
+        env: { DOCKER_BUILDKIT: "1" }
+
+      - name: wait for container health check
+        wait:
+          {
+            cmd: "docker-compose -f /root/projects/anki-bot/docker-compose.prod.yml ps --filter 'status=running' | grep german-bot",
+            timeout: "30s",
+            interval: "2s",
+          }
+
+      - name: show deployment status
+        script: |
+          cd /root/projects/anki-bot
+          echo "=== Container Status ==="
+          docker-compose -f docker-compose.prod.yml ps
+          echo "=== Container Logs (last 10 lines) ==="
+          docker-compose -f docker-compose.prod.yml logs --tail=10 german-bot
+          echo "=== Deployment completed at $(date) ==="

@@ -1,26 +1,36 @@
+version: "3.8"
+
 services:
   german-bot:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-    image: ghcr.io/bigspawn/anki-bot:${IMAGE_TAG:-latest}
     container_name: german-bot
     restart: unless-stopped
+    image: ghcr.io/bigspawn/anki-bot:${IMAGE_TAG:-latest}
+
     environment:
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ALLOWED_USERS=${ALLOWED_USERS:-}
       - DATABASE_URL=sqlite:///data/bot.db
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
-      - DEBUG=${DEBUG:-false}
+      - DEBUG=false
       - POLLING_INTERVAL=${POLLING_INTERVAL:-1.0}
+      - PYTHONUNBUFFERED=1
+
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
+
     env_file:
       - .env
-    networks:
-      - bot-network
 
-networks:
-  bot-network:
-    driver: bridge
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import sqlite3; sqlite3.connect('/app/data/bot.db').execute('SELECT 1')",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3

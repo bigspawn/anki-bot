@@ -1,6 +1,6 @@
 # German Learning Bot Makefile
 
-.PHONY: help install run test test-cov lint format clean init-db docker-build docker-run docker-stop all export-words import-words
+.PHONY: help install run test test-cov lint format clean init-db docker-build docker-run docker-stop all export-words import-words deploy
 
 # Default target
 help:
@@ -18,6 +18,7 @@ help:
 	@echo "  docker-stop - Stop Docker container"
 	@echo "  export-words - Export words data to JSON"
 	@echo "  import-words - Import words data from JSON"
+	@echo "  deploy      - Deploy to server (HOST=ip USER=user TAG=version)"
 	@echo "  all         - Install, test, lint, format"
 
 # Install dependencies
@@ -113,3 +114,20 @@ import-words:
 	DB_PATH=$${DB_PATH:-data/bot_new.db}; \
 	echo "Importing from $$JSON_PATH to $$DB_PATH"; \
 	python scripts/import_words.py "$$JSON_PATH" "$$DB_PATH"
+
+# Deploy to production server
+# Usage: make deploy HOST=host USER=root [TAG=v1.0.0]
+deploy:
+	@if [ -z "$$HOST" ]; then \
+		echo "Error: HOST parameter is required"; \
+		echo "Usage: make deploy HOST=host USER=root [TAG=v1.0.0]"; \
+		exit 1; \
+	fi; \
+	if [ -z "$$USER" ]; then \
+		echo "Error: USER parameter is required"; \
+		echo "Usage: make deploy HOST=host USER=root [TAG=v1.0.0]"; \
+		exit 1; \
+	fi; \
+	TAG=$${TAG:-latest}; \
+	echo "Deploying $$TAG to $$HOST as user $$USER..."; \
+	spot -t $$HOST -u $$USER -e IMAGE_TAG:$$TAG

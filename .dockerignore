@@ -1,0 +1,91 @@
+# Version control
+.git
+.gitignore
+
+# Documentation (keep README.md for Docker builds)
+CLAUDE.md
+DEPLOY.md
+docs/
+PLANNED_FEATURES.md
+
+# Development and testing
+tests/
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.tox/
+.nox/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Development environments
+.env
+.env.prod
+.env.test
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+.pdm.toml
+__pypackages__/
+
+# Data and logs (runtime directories)
+data/
+logs/
+backups/
+*.db
+*.sqlite
+*.sqlite3
+sqlite:/
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Development tools
+.claude/
+spot.yml
+.spot.yml
+Makefile
+
+# Docker development files
+docker-compose.yml
+docker-compose.test.yml
+docker-compose.prod.yml
+
+# Scripts (not needed in production)
+scripts/
+
+# Development configuration (keep pyproject.toml and uv.lock for Docker builds)
+mypy.ini
+ruff.toml
