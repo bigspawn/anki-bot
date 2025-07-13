@@ -353,7 +353,14 @@ class BotHandler:
 
                     timer.stop()
 
-                    # Final success message
+                    # Get details for existing words if any
+                    existing_words_details = []
+                    if existing_words:
+                        existing_words_details = self.db_manager.get_existing_words_details(
+                            db_user["telegram_id"], existing_words
+                        )
+
+                    # Build success message
                     success_msg = f"""✅ <b>Обработка завершена!</b>
 
 📊 <b>Результаты:</b>
@@ -361,9 +368,16 @@ class BotHandler:
 • Новых добавлено: <b>{added_count}</b>
 • Уже изучаются: <b>{len(existing_words)}</b>
 
-⏱️ <b>Время обработки:</b> {timer.get_elapsed_time():.1f}с
+⏱️ <b>Время обработки:</b> {timer.get_elapsed_time():.1f}с"""
 
-🎯 Начните изучение с команды /study"""
+                    # Add existing words list if any
+                    if existing_words_details:
+                        success_msg += "\n\n📚 <b>Уже изучаемые слова:</b>\n"
+                        for word in existing_words_details:
+                            article_part = f"{word['article']} " if word['article'] else ""
+                            success_msg += f"• {article_part}<i>{word['lemma']}</i> — {word['translation']}\n"
+
+                    success_msg += "\n🎯 Начните изучение с команды /study"
 
                     await processing_msg.edit_text(success_msg, parse_mode="HTML")
                 else:
@@ -372,12 +386,25 @@ class BotHandler:
                         "Попробуйте позже или обратитесь к администратору."
                     )
             else:
-                await processing_msg.edit_text(
-                    f"📚 Найдено слов: <b>{len(extracted_words)}</b>\n"
-                    f"↩️ Все слова уже изучаются!\n\n"
-                    f"🎯 Используйте /study для повторения слов.",
-                    parse_mode="HTML"
+                # Get details for all existing words
+                existing_words_details = self.db_manager.get_existing_words_details(
+                    db_user["telegram_id"], existing_words
                 )
+                
+                # Build message showing all existing words
+                msg = f"📚 Найдено слов: <b>{len(extracted_words)}</b>\n"
+                msg += f"↩️ Все слова уже изучаются!\n\n"
+                
+                if existing_words_details:
+                    msg += "📚 <b>Изучаемые слова:</b>\n"
+                    for word in existing_words_details:
+                        article_part = f"{word['article']} " if word['article'] else ""
+                        msg += f"• {article_part}<i>{word['lemma']}</i> — {word['translation']}\n"
+                    msg += "\n"
+                
+                msg += "🎯 Используйте /study для повторения слов."
+                
+                await processing_msg.edit_text(msg, parse_mode="HTML")
 
         except Exception as e:
             logger.error(f"Error processing text: {e}")

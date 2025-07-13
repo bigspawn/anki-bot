@@ -171,6 +171,12 @@ class DatabaseManager:
         existence_map = self.check_multiple_words_exist(telegram_id, lemmas)
         return [lemma for lemma, exists in existence_map.items() if exists]
 
+    def get_existing_words_details(
+        self, telegram_id: int, lemmas: list[str]
+    ) -> list[dict[str, Any]]:
+        """Get word details for existing words by lemmas"""
+        return self.word_repo.get_existing_words_details(telegram_id, lemmas)
+
     def add_review_record(
         self,
         telegram_id: int,

@@ -316,3 +316,30 @@ class WordRepository:
 
         translation_lower = translation.lower().strip()
         return not any(pattern in translation_lower for pattern in invalid_patterns)
+
+    def get_existing_words_details(self, telegram_id: int, lemmas: list[str]) -> list[dict[str, Any]]:
+        """Get word details for existing words by lemmas"""
+        if not lemmas:
+            return []
+        
+        try:
+            with self.db_connection.get_connection() as conn:
+                # Create placeholders for the IN clause
+                placeholders = ",".join("?" for _ in lemmas)
+                
+                cursor = conn.execute(
+                    f"""
+                    SELECT w.lemma, w.part_of_speech, w.article, w.translation, w.example, w.additional_forms
+                    FROM words w
+                    JOIN learning_progress lp ON w.id = lp.word_id
+                    WHERE lp.telegram_id = ? AND w.lemma IN ({placeholders})
+                    ORDER BY w.lemma
+                    """,
+                    [telegram_id] + lemmas
+                )
+                
+                return [dict(row) for row in cursor.fetchall()]
+                
+        except Exception as e:
+            logger.error(f"Error getting existing words details: {e}")
+            return []
