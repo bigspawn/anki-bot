@@ -17,7 +17,7 @@ class TestMixedLanguageProcessing:
     @pytest.fixture
     def word_processor(self):
         """Get word processor instance with mocked OpenAI"""
-        with patch('src.word_processor.AsyncOpenAI') as mock_openai:
+        with patch("src.word_processor.AsyncOpenAI") as mock_openai:
             # Mock the OpenAI client
             mock_client = AsyncMock()
             mock_openai.return_value = mock_client
@@ -46,10 +46,14 @@ class TestMixedLanguageProcessing:
         expected_filtered = ["also"]  # English word should be filtered
 
         for word in expected_german:
-            assert word in [w.lower() for w in words], f"German word '{word}' should be extracted"
+            assert word in [w.lower() for w in words], (
+                f"German word '{word}' should be extracted"
+            )
 
         for word in expected_filtered:
-            assert word not in [w.lower() for w in words], f"English word '{word}' should be filtered"
+            assert word not in [w.lower() for w in words], (
+                f"English word '{word}' should be filtered"
+            )
 
     @pytest.mark.asyncio
     async def test_word_processor_handles_mixed_language(self, word_processor):
@@ -64,7 +68,9 @@ class TestMixedLanguageProcessing:
             MagicMock(word="haben", translation="иметь", lemma="haben"),
         ]
 
-        with patch.object(word_processor, 'process_words_batch', return_value=mock_result):
+        with patch.object(
+            word_processor, "process_words_batch", return_value=mock_result
+        ):
             # The problematic text from user's example
             test_text = "Also, wo Sie bis jetzt gewohnt haben"
 
@@ -79,16 +85,19 @@ class TestMixedLanguageProcessing:
             expected_words = ["wo", "sie", "bis", "jetzt", "gewohnt", "haben"]
 
             for expected in expected_words:
-                assert expected in processed_words, f"Expected word '{expected}' not found in processed results"
+                assert expected in processed_words, (
+                    f"Expected word '{expected}' not found in processed results"
+                )
 
     @pytest.mark.asyncio
     async def test_word_processor_logs_correctly(self, word_processor, caplog):
         """Test that word processor logs correct information for mixed language"""
         import logging
+
         caplog.set_level(logging.INFO)
 
         # Mock the process_words_batch method
-        with patch.object(word_processor, 'process_words_batch', return_value=[]):
+        with patch.object(word_processor, "process_words_batch", return_value=[]):
             test_text = "Also, wo Sie bis jetzt gewohnt haben"
 
             await word_processor.process_text(test_text)
@@ -100,7 +109,7 @@ class TestMixedLanguageProcessing:
     @pytest.mark.asyncio
     async def test_word_processor_handles_no_german_words(self, word_processor):
         """Test behavior when text contains no German words"""
-        with patch.object(word_processor, 'process_words_batch', return_value=[]):
+        with patch.object(word_processor, "process_words_batch", return_value=[]):
             # Text with no German words
             test_text = "Hello world, how are you today?"
 

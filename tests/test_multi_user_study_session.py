@@ -43,10 +43,12 @@ class TestMultiUserStudySession:
             db_manager=temp_db_manager,
             srs_system=srs,
             safe_reply_callback=mock_reply,
-            safe_edit_callback=mock_edit
+            safe_edit_callback=mock_edit,
         )
 
-    def test_multiple_users_concurrent_sessions(self, mock_session_manager, temp_db_manager):
+    def test_multiple_users_concurrent_sessions(
+        self, mock_session_manager, temp_db_manager
+    ):
         """Test multiple users having concurrent study sessions"""
 
         # Create multiple users
@@ -63,9 +65,24 @@ class TestMultiUserStudySession:
 
         # Add words for each user
         words_data = [
-            {"lemma": "haus", "part_of_speech": "noun", "translation": "house", "example": "Das Haus ist groß."},
-            {"lemma": "auto", "part_of_speech": "noun", "translation": "car", "example": "Das Auto ist schnell."},
-            {"lemma": "buch", "part_of_speech": "noun", "translation": "book", "example": "Das Buch ist gut."},
+            {
+                "lemma": "haus",
+                "part_of_speech": "noun",
+                "translation": "house",
+                "example": "Das Haus ist groß.",
+            },
+            {
+                "lemma": "auto",
+                "part_of_speech": "noun",
+                "translation": "car",
+                "example": "Das Auto ist schnell.",
+            },
+            {
+                "lemma": "buch",
+                "part_of_speech": "noun",
+                "translation": "book",
+                "example": "Das Buch ist gut.",
+            },
         ]
 
         for user in users:
@@ -91,20 +108,20 @@ class TestMultiUserStudySession:
             for word in words:
                 # Test show_answer callback
                 show_data = create_inline_keyboard_data(
-                    action="show_answer",
-                    word_id=word["id"],
-                    word_index=0
+                    action="show_answer", word_id=word["id"], word_index=0
                 )
-                assert len(show_data) <= 64, f"Show data too long for user {user_id}: {len(show_data)} bytes"
+                assert len(show_data) <= 64, (
+                    f"Show data too long for user {user_id}: {len(show_data)} bytes"
+                )
 
                 # Test rate_word callbacks
                 for rating in [1, 2, 3, 4]:
                     rate_data = create_inline_keyboard_data(
-                        action="rate_word",
-                        word_id=word["id"],
-                        rating=rating
+                        action="rate_word", word_id=word["id"], rating=rating
                     )
-                    assert len(rate_data) <= 64, f"Rate data too long for user {user_id}: {len(rate_data)} bytes"
+                    assert len(rate_data) <= 64, (
+                        f"Rate data too long for user {user_id}: {len(rate_data)} bytes"
+                    )
 
     def test_session_id_uniqueness_across_users(self, mock_session_manager):
         """Test that session IDs are unique across different users"""
@@ -122,18 +139,21 @@ class TestMultiUserStudySession:
 
             # Test callback data generation
             data = create_inline_keyboard_data(
-                action="show_answer",
-                word_id=1,
-                session_id=session_id,
-                word_index=0
+                action="show_answer", word_id=1, session_id=session_id, word_index=0
             )
-            assert len(data) <= 64, f"Data too long for user {user_id}: {len(data)} bytes"
+            assert len(data) <= 64, (
+                f"Data too long for user {user_id}: {len(data)} bytes"
+            )
 
         # Session IDs should be unique (at least user_id part)
         user_parts = [sid.split("_")[0] for sid in session_ids]
-        assert len(set(user_parts)) == len(user_ids), "Session IDs should have unique user parts"
+        assert len(set(user_parts)) == len(user_ids), (
+            "Session IDs should have unique user parts"
+        )
 
-    def test_button_data_invalid_scenario_reproduction(self, mock_session_manager, temp_db_manager):
+    def test_button_data_invalid_scenario_reproduction(
+        self, mock_session_manager, temp_db_manager
+    ):
         """Test the exact scenario that caused Button_data_invalid error"""
 
         # This reproduces the scenario from the error log:
@@ -154,7 +174,7 @@ class TestMultiUserStudySession:
             "lemma": "test",
             "part_of_speech": "noun",
             "translation": "тест",
-            "example": "This is a test."
+            "example": "This is a test.",
         }
         added_count = temp_db_manager.add_words_to_user(user_id, [word_data])
         assert added_count == 1
@@ -170,22 +190,22 @@ class TestMultiUserStudySession:
 
         # Create the problematic callback data
         show_answer_data = create_inline_keyboard_data(
-            action="show_answer",
-            word_id=word["id"],
-            word_index=0
+            action="show_answer", word_id=word["id"], word_index=0
         )
 
         # This should not be too long
-        assert len(show_answer_data) <= 64, f"Show answer data too long: {len(show_answer_data)} bytes"
+        assert len(show_answer_data) <= 64, (
+            f"Show answer data too long: {len(show_answer_data)} bytes"
+        )
 
         # Test rating buttons
         for rating in [1, 2, 3, 4]:
             rate_data = create_inline_keyboard_data(
-                action="rate_word",
-                word_id=word["id"],
-                rating=rating
+                action="rate_word", word_id=word["id"], rating=rating
             )
-            assert len(rate_data) <= 64, f"Rate data too long for rating {rating}: {len(rate_data)} bytes"
+            assert len(rate_data) <= 64, (
+                f"Rate data too long for rating {rating}: {len(rate_data)} bytes"
+            )
 
         # Verify data is parseable
         parsed = parse_inline_keyboard_data(show_answer_data)
@@ -210,7 +230,12 @@ class TestMultiUserStudySession:
 
             # Add words to create potentially large word IDs
             words_data = [
-                {"lemma": f"word{i}", "part_of_speech": "noun", "translation": f"слово{i}", "example": f"Example {i}."}
+                {
+                    "lemma": f"word{i}",
+                    "part_of_speech": "noun",
+                    "translation": f"слово{i}",
+                    "example": f"Example {i}.",
+                }
                 for i in range(1, 21)  # 20 words
             ]
 
@@ -223,11 +248,11 @@ class TestMultiUserStudySession:
             for word in words:
                 # Test with potentially large word IDs
                 data = create_inline_keyboard_data(
-                    action="rate_word",
-                    word_id=word["id"],
-                    rating=4
+                    action="rate_word", word_id=word["id"], rating=4
                 )
-                assert len(data) <= 64, f"Data too long for user {telegram_id}, word {word['id']}: {len(data)} bytes"
+                assert len(data) <= 64, (
+                    f"Data too long for user {telegram_id}, word {word['id']}: {len(data)} bytes"
+                )
 
     def test_session_manager_callback_data_generation(self, mock_session_manager):
         """Test that SessionManager generates valid callback data"""
@@ -237,25 +262,23 @@ class TestMultiUserStudySession:
             "id": 12345,
             "lemma": "beispiel",
             "translation": "example",
-            "example": "Das ist ein Beispiel."
+            "example": "Das ist ein Beispiel.",
         }
 
         # Test show_answer callback data generation
         show_data = create_inline_keyboard_data(
-            action="show_answer",
-            word_id=word["id"],
-            word_index=0
+            action="show_answer", word_id=word["id"], word_index=0
         )
         assert len(show_data) <= 64, f"Show data too long: {len(show_data)} bytes"
 
         # Test rate_word callback data generation
         for rating in [1, 2, 3, 4]:
             rate_data = create_inline_keyboard_data(
-                action="rate_word",
-                word_id=word["id"],
-                rating=rating
+                action="rate_word", word_id=word["id"], rating=rating
             )
-            assert len(rate_data) <= 64, f"Rate data too long for rating {rating}: {len(rate_data)} bytes"
+            assert len(rate_data) <= 64, (
+                f"Rate data too long for rating {rating}: {len(rate_data)} bytes"
+            )
 
             # Verify parseability
             parsed = parse_inline_keyboard_data(rate_data)
@@ -271,29 +294,32 @@ class TestMultiUserStudySession:
 
         for user_id in user_ids:
             # Create session
-            words = [{"id": i, "lemma": f"word{i}", "translation": f"слово{i}", "example": f"Example {i}."}
-                    for i in range(1, 4)]
+            words = [
+                {
+                    "id": i,
+                    "lemma": f"word{i}",
+                    "translation": f"слово{i}",
+                    "example": f"Example {i}.",
+                }
+                for i in range(1, 4)
+            ]
             session = StudySession(f"session_{user_id}", user_id, words, "test")
             mock_session_manager.user_sessions[user_id] = session
 
             # Generate callback data
             for word in words:
                 data = create_inline_keyboard_data(
-                    action="show_answer",
-                    word_id=word["id"],
-                    word_index=0
+                    action="show_answer", word_id=word["id"], word_index=0
                 )
-                assert len(data) <= 64, f"Data too long before cleanup: {len(data)} bytes"
+                assert len(data) <= 64, (
+                    f"Data too long before cleanup: {len(data)} bytes"
+                )
 
         # Clean up sessions
         mock_session_manager.user_sessions.clear()
 
         # Callback data should still be valid
-        data = create_inline_keyboard_data(
-            action="rate_word",
-            word_id=999,
-            rating=3
-        )
+        data = create_inline_keyboard_data(action="rate_word", word_id=999, rating=3)
         assert len(data) <= 64, f"Data too long after cleanup: {len(data)} bytes"
 
     def test_concurrent_session_creation(self, mock_session_manager):
@@ -311,12 +337,11 @@ class TestMultiUserStudySession:
 
             # Test callback data generation
             data = create_inline_keyboard_data(
-                action="show_answer",
-                word_id=1,
-                session_id=session_id,
-                word_index=0
+                action="show_answer", word_id=1, session_id=session_id, word_index=0
             )
-            assert len(data) <= 64, f"Data too long for concurrent user {user_id}: {len(data)} bytes"
+            assert len(data) <= 64, (
+                f"Data too long for concurrent user {user_id}: {len(data)} bytes"
+            )
 
             # Verify parseability
             parsed = parse_inline_keyboard_data(data)

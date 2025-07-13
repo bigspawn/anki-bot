@@ -24,7 +24,7 @@ def format_word_display(word_data: dict[str, Any]) -> str:
     example = word_data.get("example", "")
 
     # Format with article for nouns - handle None values properly
-    if article and article != 'None' and article.strip():
+    if article and article != "None" and article.strip():
         display_word = f"{article} {lemma}"
     else:
         display_word = lemma
@@ -44,7 +44,9 @@ def format_word_display(word_data: dict[str, Any]) -> str:
     return result.strip()
 
 
-def format_study_card(word_data: dict[str, Any], current_index: int = 0, total_words: int = 0) -> str:
+def format_study_card(
+    word_data: dict[str, Any], current_index: int = 0, total_words: int = 0
+) -> str:
     """Format word as study flashcard"""
     lemma = word_data.get("lemma", "")
     article = word_data.get("article", "")

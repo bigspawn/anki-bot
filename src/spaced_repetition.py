@@ -327,7 +327,7 @@ if __name__ == "__main__":
     for repetitions, rating in enumerate([3, 3, 2, 3, 4]):
         result = srs.calculate_review(rating, repetitions, interval, easiness)
         logger.info(
-            f"Review {repetitions+1}: rating={rating} -> interval={result.new_interval}, "
+            f"Review {repetitions + 1}: rating={rating} -> interval={result.new_interval}, "
             f"ef={result.new_easiness_factor:.2f}, next={result.next_review_date}"
         )
 

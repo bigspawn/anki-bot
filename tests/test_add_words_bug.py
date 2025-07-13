@@ -38,28 +38,31 @@ class TestAddWordsBug:
         """Mock word processor that returns processed words"""
         from src.word_processor import ProcessedWord
 
-        with patch('src.bot_handler.get_word_processor') as mock_get_processor:
+        with patch("src.bot_handler.get_word_processor") as mock_get_processor:
             mock_processor = AsyncMock()
-            mock_processor.process_text = AsyncMock(return_value=[
-                ProcessedWord(
-                    word="test",
-                    lemma="test",
-                    part_of_speech="noun",
-                    article=None,
-                    translation="тест",
-                    example="This is a test.",
-                    additional_forms=None,
-                    confidence=0.9
-                )
-            ])
+            mock_processor.process_text = AsyncMock(
+                return_value=[
+                    ProcessedWord(
+                        word="test",
+                        lemma="test",
+                        part_of_speech="noun",
+                        article=None,
+                        translation="тест",
+                        example="This is a test.",
+                        additional_forms=None,
+                        confidence=0.9,
+                    )
+                ]
+            )
             mock_get_processor.return_value = mock_processor
             yield mock_processor
 
     @pytest.fixture
     def mock_text_parser(self):
         """Mock text parser"""
-        with patch('src.bot_handler.get_text_parser') as mock_get_parser:
+        with patch("src.bot_handler.get_text_parser") as mock_get_parser:
             from unittest.mock import MagicMock
+
             mock_parser = MagicMock()
             mock_parser.extract_words.return_value = ["test"]
             mock_get_parser.return_value = mock_parser
@@ -70,9 +73,7 @@ class TestAddWordsBug:
 
         # Create user in database (new schema with telegram_id as PK)
         user = temp_db_manager.create_user(
-            telegram_id=739529,
-            first_name="Igor",
-            username="bigspawn"
+            telegram_id=739529, first_name="Igor", username="bigspawn"
         )
 
         # Verify user was created with telegram_id as primary key
@@ -96,20 +97,21 @@ class TestAddWordsBug:
 
         # Create user
         temp_db_manager.create_user(
-            telegram_id=739529,
-            first_name="Igor",
-            username="bigspawn"
+            telegram_id=739529, first_name="Igor", username="bigspawn"
         )
 
         # Create bot handler
         bot_handler = BotHandler()
 
         # Mock the database manager, word processor, and text parser
-        with patch.object(bot_handler, 'db_manager', temp_db_manager), \
-             patch.object(bot_handler, 'word_processor', mock_word_processor), \
-             patch.object(bot_handler, 'text_parser', mock_text_parser):
+        with (
+            patch.object(bot_handler, "db_manager", temp_db_manager),
+            patch.object(bot_handler, "word_processor", mock_word_processor),
+            patch.object(bot_handler, "text_parser", mock_text_parser),
+        ):
             # Mock update object
             from unittest.mock import MagicMock
+
             mock_update = MagicMock()
             mock_update.effective_user.id = 739529
             mock_update.effective_user.first_name = "Igor"
@@ -139,19 +141,20 @@ class TestAddWordsBug:
 
         # Pre-create user (simulates existing user in production)
         temp_db_manager.create_user(
-            telegram_id=739529,
-            first_name="Igor",
-            username="bigspawn"
+            telegram_id=739529, first_name="Igor", username="bigspawn"
         )
 
         # Create bot handler
         bot_handler = BotHandler()
 
-        with patch.object(bot_handler, 'db_manager', temp_db_manager), \
-             patch.object(bot_handler, 'word_processor', mock_word_processor), \
-             patch.object(bot_handler, 'text_parser', mock_text_parser):
+        with (
+            patch.object(bot_handler, "db_manager", temp_db_manager),
+            patch.object(bot_handler, "word_processor", mock_word_processor),
+            patch.object(bot_handler, "text_parser", mock_text_parser),
+        ):
             # Mock update object
             from unittest.mock import MagicMock
+
             mock_update = MagicMock()
             mock_update.effective_user.id = 739529
             mock_update.effective_user.first_name = "Igor"
@@ -166,18 +169,21 @@ class TestAddWordsBug:
 
             # Configure mock to return different word
             from src.word_processor import ProcessedWord
-            mock_word_processor.process_text = AsyncMock(return_value=[
-                ProcessedWord(
-                    word='beispiel',
-                    lemma='beispiel',
-                    part_of_speech='noun',
-                    article='das',
-                    translation='пример',
-                    example='Das ist ein Beispiel.',
-                    additional_forms=None,
-                    confidence=0.9
-                )
-            ])
+
+            mock_word_processor.process_text = AsyncMock(
+                return_value=[
+                    ProcessedWord(
+                        word="beispiel",
+                        lemma="beispiel",
+                        part_of_speech="noun",
+                        article="das",
+                        translation="пример",
+                        example="Das ist ein Beispiel.",
+                        additional_forms=None,
+                        confidence=0.9,
+                    )
+                ]
+            )
 
             # This should work for existing user
             await bot_handler._process_text_for_user(mock_update, "beispiel")
@@ -196,9 +202,7 @@ class TestAddWordsBug:
 
         # Create user
         user = temp_db_manager.create_user(
-            telegram_id=123456,
-            first_name="Test",
-            username="testuser"
+            telegram_id=123456, first_name="Test", username="testuser"
         )
 
         # Verify user structure after migration

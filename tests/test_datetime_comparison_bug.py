@@ -37,9 +37,7 @@ class TestDatetimeComparisonBug:
 
         # Create user
         user = temp_db_manager.create_user(
-            telegram_id=12345,
-            first_name="Test",
-            username="testuser"
+            telegram_id=12345, first_name="Test", username="testuser"
         )
         user_id = user["telegram_id"]
 
@@ -48,7 +46,7 @@ class TestDatetimeComparisonBug:
             "lemma": "test",
             "part_of_speech": "noun",
             "translation": "тест",
-            "example": "This is a test."
+            "example": "This is a test.",
         }
         word = temp_db_manager.add_word(user_id, word_data)
         word_id = word["id"]
@@ -64,7 +62,7 @@ class TestDatetimeComparisonBug:
                 """UPDATE learning_progress
                    SET next_review_date = ?, repetitions = 1, interval_days = 0
                    WHERE telegram_id = ? AND word_id = ?""",
-                (iso_timestamp, user_id, word_id)
+                (iso_timestamp, user_id, word_id),
             )
             conn.commit()
 
@@ -74,7 +72,7 @@ class TestDatetimeComparisonBug:
             cursor_string = conn.execute(
                 """SELECT COUNT(*) as count FROM learning_progress
                    WHERE telegram_id = ? AND next_review_date <= datetime('now', 'localtime') AND repetitions > 0""",
-                (user_id,)
+                (user_id,),
             )
             count_string = cursor_string.fetchone()["count"]
 
@@ -82,14 +80,16 @@ class TestDatetimeComparisonBug:
             cursor_datetime = conn.execute(
                 """SELECT COUNT(*) as count FROM learning_progress
                    WHERE telegram_id = ? AND datetime(next_review_date) <= datetime('now', 'localtime') AND repetitions > 0""",
-                (user_id,)
+                (user_id,),
             )
             count_datetime = cursor_datetime.fetchone()["count"]
 
         # The bug: string comparison gives 0, datetime comparison gives 1
-        if 'T' in iso_timestamp:
+        if "T" in iso_timestamp:
             # When timestamp has 'T' separator, string comparison fails
-            assert count_string == 0, "String comparison should fail due to 'T' vs space"
+            assert count_string == 0, (
+                "String comparison should fail due to 'T' vs space"
+            )
             assert count_datetime == 1, "Datetime comparison should work correctly"
 
         # Test via repository methods (should work after fix)
@@ -97,16 +97,16 @@ class TestDatetimeComparisonBug:
         assert len(due_words) == 1, "get_due_words should find the due word after fix"
 
         stats = temp_db_manager.get_user_stats(user_id)
-        assert stats["due_words"] == 1, "get_user_stats should count the due word after fix"
+        assert stats["due_words"] == 1, (
+            "get_user_stats should count the due word after fix"
+        )
 
     def test_production_scenario_reproduction(self, temp_db_manager):
         """Reproduce the exact production scenario from user 739529"""
 
         # Create user matching production
         user = temp_db_manager.create_user(
-            telegram_id=739529,
-            first_name="Igor",
-            username="bigspawn"
+            telegram_id=739529, first_name="Igor", username="bigspawn"
         )
         user_id = user["telegram_id"]
 
@@ -114,16 +114,22 @@ class TestDatetimeComparisonBug:
         morning_times = [
             "2025-07-12T01:11:38.405129",
             "2025-07-12T01:11:51.234567",
-            "2025-07-12T01:11:55.876543"
+            "2025-07-12T01:11:55.876543",
         ]
 
         words_data = [
             {"lemma": "wenn", "part_of_speech": "conjunction", "translation": "если"},
-            {"lemma": "mitnehmen", "part_of_speech": "verb", "translation": "взять с собой"},
-            {"lemma": "wechseln", "part_of_speech": "verb", "translation": "менять"}
+            {
+                "lemma": "mitnehmen",
+                "part_of_speech": "verb",
+                "translation": "взять с собой",
+            },
+            {"lemma": "wechseln", "part_of_speech": "verb", "translation": "менять"},
         ]
 
-        for _i, (word_data, review_time) in enumerate(zip(words_data, morning_times, strict=False)):
+        for _i, (word_data, review_time) in enumerate(
+            zip(words_data, morning_times, strict=False)
+        ):
             # Add word
             word = temp_db_manager.add_word(user_id, word_data)
             word_id = word["id"]
@@ -135,7 +141,7 @@ class TestDatetimeComparisonBug:
                        SET next_review_date = ?, repetitions = 1, interval_days = 0,
                            last_reviewed = ?, easiness_factor = 2.36
                        WHERE telegram_id = ? AND word_id = ?""",
-                    (review_time, review_time, user_id, word_id)
+                    (review_time, review_time, user_id, word_id),
                 )
                 conn.commit()
 
@@ -144,8 +150,12 @@ class TestDatetimeComparisonBug:
         due_words = temp_db_manager.get_due_words(user_id)
 
         # After fix: should show 3 due words (all reviewed hours ago with interval=0)
-        assert stats["due_words"] == 3, f"Should have 3 due words, got {stats['due_words']}"
-        assert len(due_words) == 3, f"get_due_words should return 3 words, got {len(due_words)}"
+        assert stats["due_words"] == 3, (
+            f"Should have 3 due words, got {stats['due_words']}"
+        )
+        assert len(due_words) == 3, (
+            f"get_due_words should return 3 words, got {len(due_words)}"
+        )
 
         # Verify word details
         due_lemmas = [w["lemma"] for w in due_words]
@@ -156,7 +166,9 @@ class TestDatetimeComparisonBug:
     def test_various_timestamp_formats(self, temp_db_manager):
         """Test different timestamp formats that could cause string comparison issues"""
 
-        user = temp_db_manager.create_user(telegram_id=54321, first_name="Format", username="test")
+        user = temp_db_manager.create_user(
+            telegram_id=54321, first_name="Format", username="test"
+        )
         user_id = user["telegram_id"]
 
         # Different timestamp formats that could cause issues
@@ -164,28 +176,28 @@ class TestDatetimeComparisonBug:
             ("2025-07-12T10:30:00", "ISO with T separator"),
             ("2025-07-12 10:30:00", "SQL standard format"),
             ("2025-07-12T10:30:00.123456", "ISO with microseconds"),
-            ("2025-07-12 10:30:00.123", "SQL with milliseconds")
+            ("2025-07-12 10:30:00.123", "SQL with milliseconds"),
         ]
 
         past_base = datetime.now() - timedelta(hours=2)
 
         for i, (timestamp_format, _description) in enumerate(test_cases):
             # Create a timestamp in the past
-            test_time = past_base - timedelta(minutes=i*10)
+            test_time = past_base - timedelta(minutes=i * 10)
 
-            if 'T' in timestamp_format:
-                formatted_time = test_time.isoformat()[:len(timestamp_format)]
+            if "T" in timestamp_format:
+                formatted_time = test_time.isoformat()[: len(timestamp_format)]
             else:
-                formatted_time = test_time.strftime('%Y-%m-%d %H:%M:%S')
-                if '.123' in timestamp_format:
-                    formatted_time += '.123'
+                formatted_time = test_time.strftime("%Y-%m-%d %H:%M:%S")
+                if ".123" in timestamp_format:
+                    formatted_time += ".123"
 
             # Add word
             word_data = {
                 "lemma": f"word{i}",
                 "part_of_speech": "noun",
                 "translation": f"слово{i}",
-                "example": f"Example {i}."
+                "example": f"Example {i}.",
             }
             word = temp_db_manager.add_word(user_id, word_data)
             word_id = word["id"]
@@ -196,7 +208,7 @@ class TestDatetimeComparisonBug:
                     """UPDATE learning_progress
                        SET next_review_date = ?, repetitions = 1, interval_days = 0
                        WHERE telegram_id = ? AND word_id = ?""",
-                    (formatted_time, user_id, word_id)
+                    (formatted_time, user_id, word_id),
                 )
                 conn.commit()
 
@@ -204,17 +216,27 @@ class TestDatetimeComparisonBug:
         stats = temp_db_manager.get_user_stats(user_id)
         due_words = temp_db_manager.get_due_words(user_id)
 
-        assert stats["due_words"] == 4, f"Should have 4 due words with different formats, got {stats['due_words']}"
-        assert len(due_words) == 4, f"get_due_words should return 4 words, got {len(due_words)}"
+        assert stats["due_words"] == 4, (
+            f"Should have 4 due words with different formats, got {stats['due_words']}"
+        )
+        assert len(due_words) == 4, (
+            f"get_due_words should return 4 words, got {len(due_words)}"
+        )
 
     def test_edge_case_exactly_now(self, temp_db_manager):
         """Test edge case where review time is exactly now"""
 
-        user = temp_db_manager.create_user(telegram_id=99999, first_name="Edge", username="case")
+        user = temp_db_manager.create_user(
+            telegram_id=99999, first_name="Edge", username="case"
+        )
         user_id = user["telegram_id"]
 
         # Add word
-        word_data = {"lemma": "exactly", "part_of_speech": "adverb", "translation": "точно"}
+        word_data = {
+            "lemma": "exactly",
+            "part_of_speech": "adverb",
+            "translation": "точно",
+        }
         word = temp_db_manager.add_word(user_id, word_data)
         word_id = word["id"]
 
@@ -226,7 +248,7 @@ class TestDatetimeComparisonBug:
                 """UPDATE learning_progress
                    SET next_review_date = ?, repetitions = 1, interval_days = 0
                    WHERE telegram_id = ? AND word_id = ?""",
-                (now_iso, user_id, word_id)
+                (now_iso, user_id, word_id),
             )
             conn.commit()
 
@@ -236,16 +258,24 @@ class TestDatetimeComparisonBug:
 
         # Allow for small timing differences
         assert stats["due_words"] in [0, 1], "Word should be due or very close to due"
-        assert len(due_words) in [0, 1], "get_due_words should handle edge case gracefully"
+        assert len(due_words) in [0, 1], (
+            "get_due_words should handle edge case gracefully"
+        )
 
     def test_future_dates_not_due(self, temp_db_manager):
         """Test that future dates are correctly not counted as due"""
 
-        user = temp_db_manager.create_user(telegram_id=77777, first_name="Future", username="test")
+        user = temp_db_manager.create_user(
+            telegram_id=77777, first_name="Future", username="test"
+        )
         user_id = user["telegram_id"]
 
         # Add word
-        word_data = {"lemma": "future", "part_of_speech": "noun", "translation": "будущее"}
+        word_data = {
+            "lemma": "future",
+            "part_of_speech": "noun",
+            "translation": "будущее",
+        }
         word = temp_db_manager.add_word(user_id, word_data)
         word_id = word["id"]
 
@@ -258,7 +288,7 @@ class TestDatetimeComparisonBug:
                 """UPDATE learning_progress
                    SET next_review_date = ?, repetitions = 1, interval_days = 1
                    WHERE telegram_id = ? AND word_id = ?""",
-                (future_iso, user_id, word_id)
+                (future_iso, user_id, word_id),
             )
             conn.commit()
 

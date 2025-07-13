@@ -14,5 +14,6 @@ def init_db(db_path=None):
     db_manager.init_database()
     return db_manager
 
+
 # Clean exports
-__all__ = ['DatabaseManager', 'get_database_path', 'get_db_manager', 'init_db']
+__all__ = ["DatabaseManager", "get_database_path", "get_db_manager", "init_db"]

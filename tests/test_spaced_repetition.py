@@ -165,12 +165,18 @@ class TestSpacedRepetitionSystem:
         """Test invalid rating raises error"""
         with pytest.raises(ValueError):
             srs.calculate_review(
-                rating=0, repetitions=1, interval_days=1, easiness_factor=2.5  # Invalid
+                rating=0,
+                repetitions=1,
+                interval_days=1,
+                easiness_factor=2.5,  # Invalid
             )
 
         with pytest.raises(ValueError):
             srs.calculate_review(
-                rating=5, repetitions=1, interval_days=1, easiness_factor=2.5  # Invalid
+                rating=5,
+                repetitions=1,
+                interval_days=1,
+                easiness_factor=2.5,  # Invalid
             )
 
     def test_get_initial_review_schedule(self, srs):
@@ -346,7 +352,9 @@ class TestRealWorldScenarios:
 
         for i, rating in enumerate(ratings):
             current_repetitions = repetitions + i
-            result = srs.calculate_review(rating, current_repetitions, interval, easiness)
+            result = srs.calculate_review(
+                rating, current_repetitions, interval, easiness
+            )
             interval = result.new_interval
             easiness = result.new_easiness_factor
 

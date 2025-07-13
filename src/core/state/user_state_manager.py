@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 class UserState(Enum):
     """Available user states"""
+
     IDLE = "idle"
     WAITING_FOR_TEXT_TO_ADD = "waiting_for_text_to_add"
 
@@ -20,7 +21,12 @@ class UserState(Enum):
 class UserStateInfo:
     """Information about user state"""
 
-    def __init__(self, state: UserState, timestamp: datetime | None = None, data: dict | None = None):
+    def __init__(
+        self,
+        state: UserState,
+        timestamp: datetime | None = None,
+        data: dict | None = None,
+    ):
         self.state = state
         self.timestamp = timestamp or datetime.now()
         self.data = data or {}
@@ -84,7 +90,9 @@ class UserStateManager:
         if telegram_id in self.user_states:
             old_state = self.user_states[telegram_id].state
             del self.user_states[telegram_id]
-            logger.debug(f"Cleared state for user {telegram_id} (was: {old_state.value})")
+            logger.debug(
+                f"Cleared state for user {telegram_id} (was: {old_state.value})"
+            )
 
     def is_waiting_for_text(self, telegram_id: int) -> bool:
         """Check if user is waiting for text to add"""

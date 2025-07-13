@@ -48,8 +48,7 @@ class UserRepository:
         try:
             with self.db_connection.get_connection() as conn:
                 cursor = conn.execute(
-                    "SELECT * FROM users WHERE telegram_id = ?",
-                    (telegram_id,)
+                    "SELECT * FROM users WHERE telegram_id = ?", (telegram_id,)
                 )
                 row = cursor.fetchone()
                 return dict(row) if row else None
@@ -91,7 +90,7 @@ class UserRepository:
 
                 cursor = conn.execute(
                     f"UPDATE users SET {', '.join(updates)} WHERE telegram_id = ?",  # noqa: S608
-                    params
+                    params,
                 )
                 conn.commit()
 
@@ -106,7 +105,7 @@ class UserRepository:
             with self.db_connection.get_connection() as conn:
                 cursor = conn.execute(
                     "UPDATE users SET is_active = 0, updated_at = ? WHERE telegram_id = ?",
-                    (datetime.now(), telegram_id)
+                    (datetime.now(), telegram_id),
                 )
                 conn.commit()
                 return cursor.rowcount > 0
@@ -130,7 +129,7 @@ class UserRepository:
                     FROM learning_progress lp
                     WHERE lp.telegram_id = ?
                     """,
-                    (telegram_id,)
+                    (telegram_id,),
                 )
 
                 row = cursor.fetchone()
@@ -146,11 +145,15 @@ class UserRepository:
                     FROM review_history
                     WHERE telegram_id = ? AND reviewed_at >= datetime('now', '-30 days')
                     """,
-                    (telegram_id,)
+                    (telegram_id,),
                 )
 
                 accuracy_row = cursor.fetchone()
-                stats['average_accuracy'] = accuracy_row['avg_accuracy'] if accuracy_row['avg_accuracy'] else 0.0
+                stats["average_accuracy"] = (
+                    accuracy_row["avg_accuracy"]
+                    if accuracy_row["avg_accuracy"]
+                    else 0.0
+                )
 
                 # Get today's activity
                 cursor = conn.execute(
@@ -160,15 +163,15 @@ class UserRepository:
                     FROM review_history
                     WHERE telegram_id = ? AND date(reviewed_at) = date('now')
                     """,
-                    (telegram_id,)
+                    (telegram_id,),
                 )
 
                 today_row = cursor.fetchone()
-                stats['reviews_today'] = today_row['reviews_today'] if today_row else 0
+                stats["reviews_today"] = today_row["reviews_today"] if today_row else 0
 
                 # Calculate study streak (simplified)
-                stats['study_streak'] = 0  # Would need more complex logic
-                stats['words_today'] = 0   # Would need to track word additions
+                stats["study_streak"] = 0  # Would need more complex logic
+                stats["words_today"] = 0  # Would need to track word additions
 
                 return stats
 

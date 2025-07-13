@@ -22,15 +22,15 @@ class TestStatsFieldMapping:
 
         # This is the exact data structure that get_user_stats returns
         stats_from_get_user_stats = {
-            'total_words': 716,
-            'new_words': 623,
-            'due_words': 0,
-            'learned_words': 1,
-            'difficult_words': 0,
-            'average_accuracy': 0.343434343434343,  # This is what get_user_stats returns
-            'reviews_today': 0,
-            'study_streak': 0,
-            'words_today': 0
+            "total_words": 716,
+            "new_words": 623,
+            "due_words": 0,
+            "learned_words": 1,
+            "difficult_words": 0,
+            "average_accuracy": 0.343434343434343,  # This is what get_user_stats returns
+            "reviews_today": 0,
+            "study_streak": 0,
+            "words_today": 0,
         }
 
         # Test that format_progress_stats can handle this structure
@@ -46,10 +46,10 @@ class TestStatsFieldMapping:
     def test_zero_accuracy_case(self):
         """Test case where user has 0% accuracy"""
         stats = {
-            'total_words': 100,
-            'new_words': 50,
-            'due_words': 10,
-            'average_accuracy': 0.0  # No successful reviews
+            "total_words": 100,
+            "new_words": 50,
+            "due_words": 10,
+            "average_accuracy": 0.0,  # No successful reviews
         }
 
         result = format_progress_stats(stats)
@@ -58,10 +58,10 @@ class TestStatsFieldMapping:
     def test_high_accuracy_case(self):
         """Test case where user has high accuracy"""
         stats = {
-            'total_words': 200,
-            'new_words': 20,
-            'due_words': 15,
-            'average_accuracy': 0.95  # 95% success rate
+            "total_words": 200,
+            "new_words": 20,
+            "due_words": 15,
+            "average_accuracy": 0.95,  # 95% success rate
         }
 
         result = format_progress_stats(stats)
@@ -73,27 +73,29 @@ class TestStatsFieldMapping:
             (0.343434343434343, "34.3%"),  # The exact production case
             (0.666666666666666, "66.7%"),  # Should round correctly
             (0.123456789012345, "12.3%"),  # More decimal places
-            (0.999, "99.9%"),              # High precision
-            (0.001, "0.1%"),               # Low precision
+            (0.999, "99.9%"),  # High precision
+            (0.001, "0.1%"),  # Low precision
         ]
 
         for accuracy, expected_percentage in test_cases:
             stats = {
-                'total_words': 100,
-                'new_words': 10,
-                'due_words': 5,
-                'average_accuracy': accuracy
+                "total_words": 100,
+                "new_words": 10,
+                "due_words": 5,
+                "average_accuracy": accuracy,
             }
 
             result = format_progress_stats(stats)
-            assert expected_percentage in result, f"Expected {expected_percentage} for accuracy {accuracy}, got: {result}"
+            assert expected_percentage in result, (
+                f"Expected {expected_percentage} for accuracy {accuracy}, got: {result}"
+            )
 
     def test_missing_average_accuracy_field(self):
         """Test fallback when average_accuracy field is missing"""
         stats_without_accuracy = {
-            'total_words': 50,
-            'new_words': 25,
-            'due_words': 5,
+            "total_words": 50,
+            "new_words": 25,
+            "due_words": 5,
             # missing 'average_accuracy' field
         }
 
@@ -101,8 +103,10 @@ class TestStatsFieldMapping:
         # Should default to 0.0%
         assert "0.0%" in result
 
-    @patch('src.core.database.repositories.user_repository.DatabaseConnection')
-    def test_integration_get_user_stats_returns_correct_fields(self, mock_db_connection):
+    @patch("src.core.database.repositories.user_repository.DatabaseConnection")
+    def test_integration_get_user_stats_returns_correct_fields(
+        self, mock_db_connection
+    ):
         """Integration test: ensure get_user_stats returns fields that format_progress_stats expects"""
 
         # Mock database responses to simulate the production scenario
@@ -112,30 +116,26 @@ class TestStatsFieldMapping:
         # Mock the main stats query response (total_words, new_words, etc.)
         mock_cursor_main = MagicMock()
         mock_cursor_main.fetchone.return_value = {
-            'total_words': 716,
-            'new_words': 623,
-            'due_words': 0,
-            'learned_words': 1,
-            'difficult_words': 0
+            "total_words": 716,
+            "new_words": 623,
+            "due_words": 0,
+            "learned_words": 1,
+            "difficult_words": 0,
         }
 
         # Mock the accuracy query response
         mock_cursor_accuracy = MagicMock()
-        mock_cursor_accuracy.fetchone.return_value = {
-            'avg_accuracy': 0.343434343434343
-        }
+        mock_cursor_accuracy.fetchone.return_value = {"avg_accuracy": 0.343434343434343}
 
         # Mock the today's activity query response
         mock_cursor_today = MagicMock()
-        mock_cursor_today.fetchone.return_value = {
-            'reviews_today': 0
-        }
+        mock_cursor_today.fetchone.return_value = {"reviews_today": 0}
 
         # Set up the execute call returns in order
         mock_conn.execute.side_effect = [
-            mock_cursor_main,      # Main stats query
+            mock_cursor_main,  # Main stats query
             mock_cursor_accuracy,  # Accuracy query
-            mock_cursor_today      # Today's activity query
+            mock_cursor_today,  # Today's activity query
         ]
 
         # Test the actual repository
@@ -144,9 +144,9 @@ class TestStatsFieldMapping:
 
         # Verify the repository returns the expected field structure
         assert stats is not None
-        assert 'total_words' in stats
-        assert 'average_accuracy' in stats  # This is the critical field
-        assert stats['average_accuracy'] == 0.343434343434343
+        assert "total_words" in stats
+        assert "average_accuracy" in stats  # This is the critical field
+        assert stats["average_accuracy"] == 0.343434343434343
 
         # Test that these stats work with format_progress_stats
         formatted = format_progress_stats(stats)
@@ -157,15 +157,15 @@ class TestStatsFieldMapping:
 
         # These are the exact values from production database for user 739529
         production_stats = {
-            'total_words': 716,
-            'new_words': 623,
-            'due_words': 0,
-            'learned_words': 1,
-            'difficult_words': 0,
-            'average_accuracy': 0.343434343434343,  # 34 good reviews out of 99 total
-            'reviews_today': 0,
-            'study_streak': 0,
-            'words_today': 0
+            "total_words": 716,
+            "new_words": 623,
+            "due_words": 0,
+            "learned_words": 1,
+            "difficult_words": 0,
+            "average_accuracy": 0.343434343434343,  # 34 good reviews out of 99 total
+            "reviews_today": 0,
+            "study_streak": 0,
+            "words_today": 0,
         }
 
         # Format the stats
@@ -193,10 +193,10 @@ class TestStatsFieldMapping:
 
         # Test with old field name (should not work after our fix, which is correct)
         legacy_stats = {
-            'total_words': 100,
-            'new_words': 50,
-            'due_words': 10,
-            'avg_success_rate': 0.85  # Old field name
+            "total_words": 100,
+            "new_words": 50,
+            "due_words": 10,
+            "avg_success_rate": 0.85,  # Old field name
         }
 
         result = format_progress_stats(legacy_stats)
@@ -224,10 +224,10 @@ class TestStatsFieldMapping:
 
         # Test the formatting
         stats = {
-            'total_words': 716,
-            'new_words': 623,
-            'due_words': 0,
-            'average_accuracy': expected_accuracy
+            "total_words": 716,
+            "new_words": 623,
+            "due_words": 0,
+            "average_accuracy": expected_accuracy,
         }
 
         result = format_progress_stats(stats)

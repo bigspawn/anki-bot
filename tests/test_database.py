@@ -243,9 +243,7 @@ class TestDatabaseManager:
         rating = 3
         response_time_ms = 1500
 
-        temp_db.update_learning_progress(
-            user_id, word_id, rating, response_time_ms
-        )
+        temp_db.update_learning_progress(user_id, word_id, rating, response_time_ms)
 
         # Check if updated
         words = temp_db.get_words_by_user(user_id)
@@ -263,10 +261,7 @@ class TestDatabaseManager:
 
         # Add review record
         temp_db.add_review_record(
-            telegram_id=user_id,
-            word_id=word_id,
-            rating=3,
-            response_time_ms=1500
+            telegram_id=user_id, word_id=word_id, rating=3, response_time_ms=1500
         )
 
         # Verify record was added
@@ -311,7 +306,9 @@ class TestDatabaseManager:
     def test_database_error_handling(self, temp_db):
         """Test database error handling"""
         # Test with invalid data - should return None for invalid telegram_id
-        result = temp_db.create_user(None, "Test")  # Invalid telegram_id but valid first_name
+        result = temp_db.create_user(
+            None, "Test"
+        )  # Invalid telegram_id but valid first_name
         assert result is None  # Should return None for failed user creation
 
     def test_connection_management(self, temp_db):
@@ -434,15 +431,15 @@ class TestDatabaseManager:
         result = temp_db.check_multiple_words_exist(user_id, inflected_forms)
 
         # All inflected forms should be detected as existing
-        assert (
-            result["bedeutet"] is True
-        ), "bedeutet should be detected as existing (base: bedeuten)"
-        assert (
-            result["bedeutest"] is True
-        ), "bedeutest should be detected as existing (base: bedeuten)"
-        assert (
-            result["bedeute"] is True
-        ), "bedeute should be detected as existing (base: bedeuten)"
+        assert result["bedeutet"] is True, (
+            "bedeutet should be detected as existing (base: bedeuten)"
+        )
+        assert result["bedeutest"] is True, (
+            "bedeutest should be detected as existing (base: bedeuten)"
+        )
+        assert result["bedeute"] is True, (
+            "bedeute should be detected as existing (base: bedeuten)"
+        )
 
         # Test that non-related words are not detected
         unrelated_words = ["haus", "auto"]

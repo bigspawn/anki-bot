@@ -171,8 +171,12 @@ class TestArticleValidation:
         assert validate_article("der", "   ", "noun") is None
 
         # Case - should be corrected for known words
-        assert validate_article("DER", "Mann", "noun") == "der"  # should correct wrong case
-        assert validate_article("der", "mann", "noun") == "der"  # check works with lowercase
+        assert (
+            validate_article("DER", "Mann", "noun") == "der"
+        )  # should correct wrong case
+        assert (
+            validate_article("der", "mann", "noun") == "der"
+        )  # check works with lowercase
 
         # Unknown part of speech
         assert validate_article("der", "Test", "unknown") is None

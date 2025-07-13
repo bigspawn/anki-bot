@@ -24,12 +24,16 @@ class TestForeignWordFiltering:
         # Should keep German words
         german_words = ["das", "ist"]
         for word in german_words:
-            assert word in [w.lower() for w in words], f"German word '{word}' should be kept"
+            assert word in [w.lower() for w in words], (
+                f"German word '{word}' should be kept"
+            )
 
         # Should filter English words
         english_words = ["beautiful", "house", "good", "weather"]
         for word in english_words:
-            assert word not in [w.lower() for w in words], f"English word '{word}' should be filtered"
+            assert word not in [w.lower() for w in words], (
+                f"English word '{word}' should be filtered"
+            )
 
     def test_spanish_words_are_filtered(self, parser):
         """Test that Spanish words are filtered out"""
@@ -44,7 +48,9 @@ class TestForeignWordFiltering:
         # Should filter Spanish words
         spanish_words = ["muy", "bonito", "grande"]
         for word in spanish_words:
-            assert word not in [w.lower() for w in words], f"Spanish word '{word}' should be filtered"
+            assert word not in [w.lower() for w in words], (
+                f"Spanish word '{word}' should be filtered"
+            )
 
     def test_french_words_are_filtered(self, parser):
         """Test that French words are filtered out"""
@@ -58,7 +64,9 @@ class TestForeignWordFiltering:
         # Should filter French words
         french_words = ["maison", "très", "beau"]
         for word in french_words:
-            assert word not in [w.lower() for w in words], f"French word '{word}' should be filtered"
+            assert word not in [w.lower() for w in words], (
+                f"French word '{word}' should be filtered"
+            )
 
     def test_german_words_with_umlauts_are_kept(self, parser):
         """Test that German words with umlauts are always kept"""
@@ -68,7 +76,9 @@ class TestForeignWordFiltering:
         # Words with umlauts should always be kept
         umlaut_words = ["schöne", "mädchen"]
         for word in umlaut_words:
-            assert word in [w.lower() for w in words], f"German word with umlaut '{word}' should be kept"
+            assert word in [w.lower() for w in words], (
+                f"German word with umlaut '{word}' should be kept"
+            )
 
     def test_german_pattern_words_are_kept(self, parser):
         """Test that words matching German patterns are kept"""
@@ -78,7 +88,9 @@ class TestForeignWordFiltering:
         # Words with German endings should be kept
         german_pattern_words = ["bildung", "möglichkeit", "wichtig"]
         for word in german_pattern_words:
-            assert word in [w.lower() for w in words], f"German pattern word '{word}' should be kept"
+            assert word in [w.lower() for w in words], (
+                f"German pattern word '{word}' should be kept"
+            )
 
     def test_common_german_words_are_kept(self, parser):
         """Test that common German vocabulary is kept"""
@@ -88,12 +100,16 @@ class TestForeignWordFiltering:
         # Common German words should be kept
         german_words = ["ich", "gehe", "nach", "hause"]
         for word in german_words:
-            assert word in [w.lower() for w in words], f"Common German word '{word}' should be kept"
+            assert word in [w.lower() for w in words], (
+                f"Common German word '{word}' should be kept"
+            )
 
         # English words should be filtered
         english_words = ["with", "friend", "today"]
         for word in english_words:
-            assert word not in [w.lower() for w in words], f"English word '{word}' should be filtered"
+            assert word not in [w.lower() for w in words], (
+                f"English word '{word}' should be filtered"
+            )
 
     def test_mixed_language_text_filtering(self, parser):
         """Test filtering in complex mixed language text"""
@@ -103,12 +119,16 @@ class TestForeignWordFiltering:
         # German words that should be kept
         expected_german = ["ich", "liebe", "welt", "sehr"]
         for word in expected_german:
-            assert word in [w.lower() for w in words], f"German word '{word}' should be kept"
+            assert word in [w.lower() for w in words], (
+                f"German word '{word}' should be kept"
+            )
 
         # Foreign words that should be filtered
         foreign_words = ["hello", "beautiful", "casa", "bonita", "much"]
         for word in foreign_words:
-            assert word not in [w.lower() for w in words], f"Foreign word '{word}' should be filtered"
+            assert word not in [w.lower() for w in words], (
+                f"Foreign word '{word}' should be filtered"
+            )
 
     def test_proper_nouns_handling(self, parser):
         """Test that potential proper nouns are handled correctly"""
@@ -144,12 +164,16 @@ class TestForeignWordFiltering:
         # Words with German prefixes should be kept
         german_morphology = ["vergessen", "entstehen"]
         for word in german_morphology:
-            assert word in [w.lower() for w in words], f"Word with German morphology '{word}' should be kept"
+            assert word in [w.lower() for w in words], (
+                f"Word with German morphology '{word}' should be kept"
+            )
 
         # English words should be filtered
         english_words = ["verbs", "beautiful", "meanings"]
         for word in english_words:
-            assert word not in [w.lower() for w in words], f"English word '{word}' should be filtered"
+            assert word not in [w.lower() for w in words], (
+                f"English word '{word}' should be filtered"
+            )
 
     def test_case_insensitive_filtering(self, parser):
         """Test that filtering works regardless of case"""

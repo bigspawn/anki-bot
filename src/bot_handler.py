@@ -63,6 +63,7 @@ class BotHandler:
             process_text_callback=self._process_text_for_user,
             start_study_session_callback=self.session_manager.start_study_session,
             state_manager=self.state_manager,
+            session_manager=self.session_manager,
         )
 
         self.message_handlers = MessageHandlers(
@@ -70,6 +71,7 @@ class BotHandler:
             process_text_callback=self._process_text_for_user,
             handle_study_callback=self.session_manager.handle_study_callback,
             state_manager=self.state_manager,
+            session_manager=self.session_manager,
         )
 
     def _is_user_authorized(self, user_id: int) -> bool:
@@ -88,7 +90,7 @@ class BotHandler:
             await self._safe_reply(
                 update,
                 "❌ У вас нет доступа к этому боту. Обратитесь к администратору.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
             logger.warning(f"Unauthorized access attempt from user {user_id}")
             return False
@@ -97,11 +99,13 @@ class BotHandler:
 
     def require_authorization(self, func):
         """Decorator to require authorization for handler functions"""
+
         @wraps(func)
         async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if not await self._check_authorization(update, context):
                 return
             return await func(update, context)
+
         return wrapper
 
     async def start(self):
@@ -277,7 +281,7 @@ class BotHandler:
                 f"🔒 Операция: {lock_info.operation}\n"
                 f"⏰ Начата: {lock_info.locked_at.strftime('%H:%M:%S')}\n\n"
                 f"Пожалуйста, дождитесь завершения текущей операции.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
             return
 
@@ -287,7 +291,7 @@ class BotHandler:
                 update,
                 "❌ Не удалось заблокировать пользователя для обработки. "
                 "Попробуйте позже.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
             return
 
@@ -298,7 +302,7 @@ class BotHandler:
                 await self._safe_reply(
                     update,
                     "❌ Пользователь не найден. Используйте /start для регистрации.",
-                    reply_markup=ReplyKeyboardRemove()
+                    reply_markup=ReplyKeyboardRemove(),
                 )
                 return
 
@@ -306,7 +310,7 @@ class BotHandler:
             processing_msg = await self._safe_reply(
                 update,
                 "🔍 Извлекаю слова из текста...\n⏳ Проверяю новые слова...",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
 
             timer = Timer()
@@ -355,15 +359,17 @@ class BotHandler:
                     # Convert to dict format for database
                     words_data = []
                     for pw in processed_words:
-                        words_data.append({
-                            "lemma": pw.lemma,
-                            "part_of_speech": pw.part_of_speech,
-                            "article": pw.article,
-                            "translation": pw.translation,
-                            "example": pw.example,
-                            "additional_forms": pw.additional_forms,
-                            "confidence": pw.confidence,
-                        })
+                        words_data.append(
+                            {
+                                "lemma": pw.lemma,
+                                "part_of_speech": pw.part_of_speech,
+                                "article": pw.article,
+                                "translation": pw.translation,
+                                "example": pw.example,
+                                "additional_forms": pw.additional_forms,
+                                "confidence": pw.confidence,
+                            }
+                        )
 
                     # Add to database
                     added_count = self.db_manager.add_words_to_user(
@@ -391,8 +397,10 @@ class BotHandler:
                     # Get details for existing words if any
                     existing_words_details = []
                     if existing_words:
-                        existing_words_details = self.db_manager.get_existing_words_details(
-                            db_user["telegram_id"], existing_words
+                        existing_words_details = (
+                            self.db_manager.get_existing_words_details(
+                                db_user["telegram_id"], existing_words
+                            )
                         )
 
                     # Build success message
@@ -409,7 +417,9 @@ class BotHandler:
                     if existing_words_details:
                         success_msg += "\n\n📚 <b>Уже изучаемые слова:</b>\n"
                         for word in existing_words_details:
-                            article_part = f"{word['article']} " if word['article'] else ""
+                            article_part = (
+                                f"{word['article']} " if word["article"] else ""
+                            )
                             success_msg += f"• {article_part}<i>{word['lemma']}</i> — {word['translation']}\n"
 
                     success_msg += "\n🎯 Начните изучение с команды /study"
@@ -433,7 +443,7 @@ class BotHandler:
                 if existing_words_details:
                     msg += "📚 <b>Изучаемые слова:</b>\n"
                     for word in existing_words_details:
-                        article_part = f"{word['article']} " if word['article'] else ""
+                        article_part = f"{word['article']} " if word["article"] else ""
                         msg += f"• {article_part}<i>{word['lemma']}</i> — {word['translation']}\n"
                     msg += "\n"
 
@@ -455,7 +465,7 @@ class BotHandler:
     async def _safe_reply(self, update_or_query, text: str, **kwargs):
         """Safely send a reply message"""
         try:
-            if hasattr(update_or_query, 'message'):
+            if hasattr(update_or_query, "message"):
                 # It's an Update object
                 return await update_or_query.message.reply_text(text, **kwargs)
             else:

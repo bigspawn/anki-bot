@@ -119,35 +119,241 @@ class GermanTextParser:
         # Common foreign words that should be skipped
         foreign_words = {
             # English
-            "dog", "cat", "hello", "world", "house", "man", "woman", "good", "bad", "nice",
-            "love", "time", "life", "water", "fire", "earth", "air", "book", "table", "chair",
-            "short", "work", "yes", "no", "big", "small", "new", "old", "young", "fast",
-            "the", "and", "but", "for", "from", "with", "without", "about", "after", "before",
-            "car", "tree", "sun", "moon", "star", "day", "night", "morning", "evening",
-            "red", "blue", "green", "yellow", "black", "white", "color", "colour",
-            "beautiful", "flowers", "weather", "today", "people", "place", "year", "way",
-            "right", "left", "up", "down", "here", "there", "now", "then", "always", "never",
-            "first", "last", "next", "few", "many", "much", "little", "long", "high", "low",
-            "open", "close", "start", "stop", "come", "go", "get", "put", "take", "give",
-            "make", "find", "think", "know", "want", "need", "use", "see", "look", "feel",
-            "friend", "my", "are", "very", "near", "thames", "river", "buy", "things", "to",
-            "verbs", "meanings", "casa", "bonita", "peter", "berlin", "in",
-            "also", "where", "you", "until", "lived", "have", "been", "since",
+            "dog",
+            "cat",
+            "hello",
+            "world",
+            "house",
+            "man",
+            "woman",
+            "good",
+            "bad",
+            "nice",
+            "love",
+            "time",
+            "life",
+            "water",
+            "fire",
+            "earth",
+            "air",
+            "book",
+            "table",
+            "chair",
+            "short",
+            "work",
+            "yes",
+            "no",
+            "big",
+            "small",
+            "new",
+            "old",
+            "young",
+            "fast",
+            "the",
+            "and",
+            "but",
+            "for",
+            "from",
+            "with",
+            "without",
+            "about",
+            "after",
+            "before",
+            "car",
+            "tree",
+            "sun",
+            "moon",
+            "star",
+            "day",
+            "night",
+            "morning",
+            "evening",
+            "red",
+            "blue",
+            "green",
+            "yellow",
+            "black",
+            "white",
+            "color",
+            "colour",
+            "beautiful",
+            "flowers",
+            "weather",
+            "today",
+            "people",
+            "place",
+            "year",
+            "way",
+            "right",
+            "left",
+            "up",
+            "down",
+            "here",
+            "there",
+            "now",
+            "then",
+            "always",
+            "never",
+            "first",
+            "last",
+            "next",
+            "few",
+            "many",
+            "much",
+            "little",
+            "long",
+            "high",
+            "low",
+            "open",
+            "close",
+            "start",
+            "stop",
+            "come",
+            "go",
+            "get",
+            "put",
+            "take",
+            "give",
+            "make",
+            "find",
+            "think",
+            "know",
+            "want",
+            "need",
+            "use",
+            "see",
+            "look",
+            "feel",
+            "friend",
+            "my",
+            "are",
+            "very",
+            "near",
+            "thames",
+            "river",
+            "buy",
+            "things",
+            "to",
+            "verbs",
+            "meanings",
+            "casa",
+            "bonita",
+            "peter",
+            "berlin",
+            "in",
+            "also",
+            "where",
+            "you",
+            "until",
+            "lived",
+            "have",
+            "been",
+            "since",
             # Spanish
-            "hola", "mundo", "amor", "vida", "tiempo", "agua", "fuego", "tierra", "aire",
-            "libro", "mesa", "silla", "perro", "gato", "bueno", "malo", "bonito", "grande",
-            "pequeño", "nuevo", "viejo", "joven", "rápido", "lento", "alto", "bajo", "muy",
+            "hola",
+            "mundo",
+            "amor",
+            "vida",
+            "tiempo",
+            "agua",
+            "fuego",
+            "tierra",
+            "aire",
+            "libro",
+            "mesa",
+            "silla",
+            "perro",
+            "gato",
+            "bueno",
+            "malo",
+            "bonito",
+            "grande",
+            "pequeño",
+            "nuevo",
+            "viejo",
+            "joven",
+            "rápido",
+            "lento",
+            "alto",
+            "bajo",
+            "muy",
             # French
-            "bonjour", "maison", "monde", "amour", "vie", "temps", "eau", "feu", "terre", "livre", "chaise", "chien", "chat", "bon", "mauvais", "beau", "grand",
-            "petit", "nouveau", "vieux", "jeune", "rapide", "lent", "haut", "bas",
+            "bonjour",
+            "maison",
+            "monde",
+            "amour",
+            "vie",
+            "temps",
+            "eau",
+            "feu",
+            "terre",
+            "livre",
+            "chaise",
+            "chien",
+            "chat",
+            "bon",
+            "mauvais",
+            "beau",
+            "grand",
+            "petit",
+            "nouveau",
+            "vieux",
+            "jeune",
+            "rapide",
+            "lent",
+            "haut",
+            "bas",
             # Italian
-            "ciao", "mondo", "amore", "vita", "tempo", "acqua", "fuoco", "terra", "aria",
-            "tavolo", "sedia", "cane", "gatto", "buono", "cattivo", "bello", "piccolo", "nuovo", "vecchio", "giovane", "veloce", "basso",
+            "ciao",
+            "mondo",
+            "amore",
+            "vita",
+            "tempo",
+            "acqua",
+            "fuoco",
+            "terra",
+            "aria",
+            "tavolo",
+            "sedia",
+            "cane",
+            "gatto",
+            "buono",
+            "cattivo",
+            "bello",
+            "piccolo",
+            "nuovo",
+            "vecchio",
+            "giovane",
+            "veloce",
+            "basso",
             # Russian (in Latin script)
-            "dom", "mir", "lyubov", "zhizn", "vremya", "voda", "ogon", "zemlya", "vozdukh",
+            "dom",
+            "mir",
+            "lyubov",
+            "zhizn",
+            "vremya",
+            "voda",
+            "ogon",
+            "zemlya",
+            "vozdukh",
             # Dutch
-            "huis", "wereld", "liefde", "leven", "tijd", "vuur", "aarde", "lucht",
-            "hond", "kat", "goed", "slecht", "mooi", "groot", "klein", "nieuw", "oud",
+            "huis",
+            "wereld",
+            "liefde",
+            "leven",
+            "tijd",
+            "vuur",
+            "aarde",
+            "lucht",
+            "hond",
+            "kat",
+            "goed",
+            "slecht",
+            "mooi",
+            "groot",
+            "klein",
+            "nieuw",
+            "oud",
         }
 
         if word_lower in foreign_words:
@@ -156,27 +362,27 @@ class GermanTextParser:
         # Common German word patterns and endings
         german_patterns = [
             # German endings
-            r".*ung$",      # -ung (Bildung, Meinung)
-            r".*heit$",     # -heit (Freiheit, Schönheit)
-            r".*keit$",     # -keit (Möglichkeit, Schwierigkeit)
-            r".*schaft$",   # -schaft (Freundschaft, Wissenschaft)
-            r".*lich$",     # -lich (möglich, wirklich)
-            r".*ig$",       # -ig (wichtig, richtig)
-            r".*er$",       # -er (Lehrer, Arbeiter)
-            r".*en$",       # -en (gehen, machen)
-            r".*chen$",     # -chen (Mädchen, Hündchen)
-            r".*lein$",     # -lein (Fräulein, Büchlein)
+            r".*ung$",  # -ung (Bildung, Meinung)
+            r".*heit$",  # -heit (Freiheit, Schönheit)
+            r".*keit$",  # -keit (Möglichkeit, Schwierigkeit)
+            r".*schaft$",  # -schaft (Freundschaft, Wissenschaft)
+            r".*lich$",  # -lich (möglich, wirklich)
+            r".*ig$",  # -ig (wichtig, richtig)
+            r".*er$",  # -er (Lehrer, Arbeiter)
+            r".*en$",  # -en (gehen, machen)
+            r".*chen$",  # -chen (Mädchen, Hündchen)
+            r".*lein$",  # -lein (Fräulein, Büchlein)
             # German prefixes
-            r"^ge.*",       # ge- (gemacht, gesagt)
-            r"^ver.*",      # ver- (verstehen, verloren)
-            r"^ent.*",      # ent- (entscheiden, entwickeln)
-            r"^be.*",       # be- (bekommen, beginnen)
-            r"^er.*",       # er- (erhalten, erzählen)
-            r"^un.*",       # un- (unmöglich, unglücklich)
-            r"^über.*",     # über- (übersetzen, überlegen)
-            r"^unter.*",    # unter- (unterrichten, unterscheiden)
-            r"^mit.*",      # mit- (mitmachen, mitkommen)
-            r"^vor.*",      # vor- (vorstellen, vorbereiten)
+            r"^ge.*",  # ge- (gemacht, gesagt)
+            r"^ver.*",  # ver- (verstehen, verloren)
+            r"^ent.*",  # ent- (entscheiden, entwickeln)
+            r"^be.*",  # be- (bekommen, beginnen)
+            r"^er.*",  # er- (erhalten, erzählen)
+            r"^un.*",  # un- (unmöglich, unglücklich)
+            r"^über.*",  # über- (übersetzen, überlegen)
+            r"^unter.*",  # unter- (unterrichten, unterscheiden)
+            r"^mit.*",  # mit- (mitmachen, mitkommen)
+            r"^vor.*",  # vor- (vorstellen, vorbereiten)
         ]
 
         # Check if word matches German patterns
@@ -186,21 +392,149 @@ class GermanTextParser:
 
         # Common German words (basic vocabulary)
         german_words = {
-            "ich", "du", "er", "sie", "es", "wir", "ihr", "der", "die", "das", "den", "dem",
-            "ein", "eine", "einen", "einem", "einer", "und", "oder", "aber", "denn", "sondern",
-            "auch", "noch", "schon", "nur", "sehr", "ganz", "hier", "da", "dort", "wo", "wie",
-            "was", "wer", "wenn", "dann", "also", "so", "zu", "auf", "in", "mit", "von", "bei",
-            "nach", "vor", "für", "durch", "über", "unter", "zwischen", "neben", "hinter",
-            "haben", "sein", "werden", "können", "müssen", "sollen", "wollen", "dürfen", "mögen",
-            "gehen", "kommen", "machen", "sagen", "sehen", "wissen", "denken", "finden", "geben",
-            "nehmen", "fahren", "laufen", "stehen", "sitzen", "liegen", "bleiben", "leben",
-            "haus", "auto", "baum", "blume", "buch", "brief", "geld", "hand", "kopf", "herz",
-            "kind", "mann", "frau", "mutter", "vater", "bruder", "schwester", "freund", "familie",
-            "stadt", "land", "welt", "himmel", "erde", "wasser", "feuer", "luft", "sonne", "mond",
-            "tag", "nacht", "morgen", "abend", "jahr", "monat", "woche", "stunde", "minute",
-            "gut", "schlecht", "groß", "klein", "neu", "alt", "jung", "schön", "hässlich",
-            "schnell", "langsam", "hoch", "tief", "lang", "kurz", "breit", "schmal",
-            "schwarz", "weiß", "rot", "blau", "grün", "gelb", "braun", "grau",
+            "ich",
+            "du",
+            "er",
+            "sie",
+            "es",
+            "wir",
+            "ihr",
+            "der",
+            "die",
+            "das",
+            "den",
+            "dem",
+            "ein",
+            "eine",
+            "einen",
+            "einem",
+            "einer",
+            "und",
+            "oder",
+            "aber",
+            "denn",
+            "sondern",
+            "auch",
+            "noch",
+            "schon",
+            "nur",
+            "sehr",
+            "ganz",
+            "hier",
+            "da",
+            "dort",
+            "wo",
+            "wie",
+            "was",
+            "wer",
+            "wenn",
+            "dann",
+            "also",
+            "so",
+            "zu",
+            "auf",
+            "in",
+            "mit",
+            "von",
+            "bei",
+            "nach",
+            "vor",
+            "für",
+            "durch",
+            "über",
+            "unter",
+            "zwischen",
+            "neben",
+            "hinter",
+            "haben",
+            "sein",
+            "werden",
+            "können",
+            "müssen",
+            "sollen",
+            "wollen",
+            "dürfen",
+            "mögen",
+            "gehen",
+            "kommen",
+            "machen",
+            "sagen",
+            "sehen",
+            "wissen",
+            "denken",
+            "finden",
+            "geben",
+            "nehmen",
+            "fahren",
+            "laufen",
+            "stehen",
+            "sitzen",
+            "liegen",
+            "bleiben",
+            "leben",
+            "haus",
+            "auto",
+            "baum",
+            "blume",
+            "buch",
+            "brief",
+            "geld",
+            "hand",
+            "kopf",
+            "herz",
+            "kind",
+            "mann",
+            "frau",
+            "mutter",
+            "vater",
+            "bruder",
+            "schwester",
+            "freund",
+            "familie",
+            "stadt",
+            "land",
+            "welt",
+            "himmel",
+            "erde",
+            "wasser",
+            "feuer",
+            "luft",
+            "sonne",
+            "mond",
+            "tag",
+            "nacht",
+            "morgen",
+            "abend",
+            "jahr",
+            "monat",
+            "woche",
+            "stunde",
+            "minute",
+            "gut",
+            "schlecht",
+            "groß",
+            "klein",
+            "neu",
+            "alt",
+            "jung",
+            "schön",
+            "hässlich",
+            "schnell",
+            "langsam",
+            "hoch",
+            "tief",
+            "lang",
+            "kurz",
+            "breit",
+            "schmal",
+            "schwarz",
+            "weiß",
+            "rot",
+            "blau",
+            "grün",
+            "gelb",
+            "braun",
+            "grau",
         }
 
         if word_lower in german_words:
@@ -218,14 +552,22 @@ class GermanTextParser:
                     if hasattr(token, "morph") and token.morph:
                         morph_str = str(token.morph)
                         # German case system
-                        if any(case in morph_str for case in ["Case=Nom", "Case=Acc", "Case=Dat", "Case=Gen"]):
+                        if any(
+                            case in morph_str
+                            for case in ["Case=Nom", "Case=Acc", "Case=Dat", "Case=Gen"]
+                        ):
                             return True
                         # German gender system
-                        if any(gender in morph_str for gender in ["Gender=Masc", "Gender=Fem", "Gender=Neut"]):
+                        if any(
+                            gender in morph_str
+                            for gender in ["Gender=Masc", "Gender=Fem", "Gender=Neut"]
+                        ):
                             return True
             except Exception as e:
                 # If SpaCy analysis fails, continue with other checks
-                logger.debug(f"SpaCy morphological analysis failed for word '{word}': {e}")
+                logger.debug(
+                    f"SpaCy morphological analysis failed for word '{word}': {e}"
+                )
                 pass
 
         # Default: if word contains only Latin characters and doesn't match foreign words,
@@ -333,15 +675,42 @@ class GermanTextParser:
                     # But exclude common foreign words that might be misclassified as pronouns
                     foreign_words_blacklist = [
                         # English
-                        "dog", "man", "he", "she", "it", "they", "cat", "house", "world", "short",
+                        "dog",
+                        "man",
+                        "he",
+                        "she",
+                        "it",
+                        "they",
+                        "cat",
+                        "house",
+                        "world",
+                        "short",
                         # Spanish
-                        "hola", "casa", "mundo", "amor", "vida", "tiempo",
+                        "hola",
+                        "casa",
+                        "mundo",
+                        "amor",
+                        "vida",
+                        "tiempo",
                         # French
-                        "bonjour", "maison", "monde", "amour", "vie", "temps",
+                        "bonjour",
+                        "maison",
+                        "monde",
+                        "amour",
+                        "vie",
+                        "temps",
                         # Italian
-                        "ciao", "casa", "mondo", "amore", "vita", "tempo"
+                        "ciao",
+                        "casa",
+                        "mondo",
+                        "amore",
+                        "vita",
+                        "tempo",
                     ]
-                    if token.pos_ == "PRON" and token.text.lower() in foreign_words_blacklist:
+                    if (
+                        token.pos_ == "PRON"
+                        and token.text.lower() in foreign_words_blacklist
+                    ):
                         # Skip these likely false positives
                         pass
                     else:
@@ -357,27 +726,109 @@ class GermanTextParser:
                         has_case = "Case=" in morph_str
                         has_gender = "Gender=" in morph_str
                         has_number = "Number=" in morph_str
-                        has_verb_features = any(feat in morph_str for feat in ["Mood=", "Tense=", "VerbForm="])
+                        has_verb_features = any(
+                            feat in morph_str
+                            for feat in ["Mood=", "Tense=", "VerbForm="]
+                        )
 
                         # Comprehensive foreign words blacklist
                         foreign_words_blacklist = [
                             # English
-                            "dog", "cat", "hello", "world", "house", "man", "woman", "good", "bad", "nice",
-                            "love", "time", "life", "water", "fire", "earth", "air", "book", "table", "chair",
-                            "short", "work", "yes", "no", "big", "small", "new", "old", "young", "fast",
+                            "dog",
+                            "cat",
+                            "hello",
+                            "world",
+                            "house",
+                            "man",
+                            "woman",
+                            "good",
+                            "bad",
+                            "nice",
+                            "love",
+                            "time",
+                            "life",
+                            "water",
+                            "fire",
+                            "earth",
+                            "air",
+                            "book",
+                            "table",
+                            "chair",
+                            "short",
+                            "work",
+                            "yes",
+                            "no",
+                            "big",
+                            "small",
+                            "new",
+                            "old",
+                            "young",
+                            "fast",
                             # Spanish
-                            "hola", "casa", "mundo", "amor", "vida", "tiempo", "agua", "fuego", "tierra", "aire",
-                            "libro", "mesa", "silla", "perro", "gato", "bueno", "malo", "bonito",
+                            "hola",
+                            "casa",
+                            "mundo",
+                            "amor",
+                            "vida",
+                            "tiempo",
+                            "agua",
+                            "fuego",
+                            "tierra",
+                            "aire",
+                            "libro",
+                            "mesa",
+                            "silla",
+                            "perro",
+                            "gato",
+                            "bueno",
+                            "malo",
+                            "bonito",
                             # French
-                            "bonjour", "maison", "monde", "amour", "vie", "temps", "eau", "feu", "terre", "air",
-                            "livre", "table", "chaise", "chien", "chat", "bon", "mauvais", "beau",
+                            "bonjour",
+                            "maison",
+                            "monde",
+                            "amour",
+                            "vie",
+                            "temps",
+                            "eau",
+                            "feu",
+                            "terre",
+                            "air",
+                            "livre",
+                            "table",
+                            "chaise",
+                            "chien",
+                            "chat",
+                            "bon",
+                            "mauvais",
+                            "beau",
                             # Italian
-                            "ciao", "casa", "mondo", "amore", "vita", "tempo", "acqua", "fuoco", "terra", "aria",
-                            "libro", "tavolo", "sedia", "cane", "gatto", "buono", "cattivo", "bello"
+                            "ciao",
+                            "casa",
+                            "mondo",
+                            "amore",
+                            "vita",
+                            "tempo",
+                            "acqua",
+                            "fuoco",
+                            "terra",
+                            "aria",
+                            "libro",
+                            "tavolo",
+                            "sedia",
+                            "cane",
+                            "gatto",
+                            "buono",
+                            "cattivo",
+                            "bello",
                         ]
 
                         # For nouns: require German case system + gender/number
-                        if token.pos_ == "NOUN" and has_case and (has_gender or has_number):
+                        if (
+                            token.pos_ == "NOUN"
+                            and has_case
+                            and (has_gender or has_number)
+                        ):
                             # Additional check: avoid common foreign words
                             if token.text.lower() not in foreign_words_blacklist:
                                 # Extra validation: for single words without umlauts, be more conservative
