@@ -4,7 +4,7 @@ Command handlers for the German Learning Bot
 
 import logging
 
-from telegram import Update, ReplyKeyboardRemove
+from telegram import ReplyKeyboardRemove, Update
 from telegram.ext import ContextTypes
 
 from ...database import DatabaseManager
@@ -129,7 +129,7 @@ class CommandHandlers:
         # If no arguments, set state to wait for next message
         if self.state_manager:
             self.state_manager.set_state(
-                update.effective_user.id, 
+                update.effective_user.id,
                 UserState.WAITING_FOR_TEXT_TO_ADD
             )
             await self._safe_reply(

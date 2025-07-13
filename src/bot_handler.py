@@ -6,7 +6,7 @@ import contextlib
 import logging
 from functools import wraps
 
-from telegram import Update, ReplyKeyboardRemove
+from telegram import ReplyKeyboardRemove, Update
 from telegram.error import TelegramError
 from telegram.ext import (
     Application,

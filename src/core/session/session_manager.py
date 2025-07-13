@@ -5,7 +5,12 @@ Session management for the German Learning Bot
 import logging
 from datetime import datetime
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ReplyKeyboardRemove
+from telegram import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    ReplyKeyboardRemove,
+    Update,
+)
 
 from ...database import DatabaseManager
 from ...spaced_repetition import SpacedRepetitionSystem

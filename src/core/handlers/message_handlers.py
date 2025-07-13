@@ -4,7 +4,7 @@ Message handlers for the German Learning Bot
 
 import logging
 
-from telegram import Update, ReplyKeyboardRemove
+from telegram import ReplyKeyboardRemove, Update
 from telegram.ext import ContextTypes
 
 logger = logging.getLogger(__name__)
@@ -35,11 +35,10 @@ class MessageHandlers:
         # Check if user is waiting for text to add
         if self.state_manager and self.state_manager.is_waiting_for_text(update.effective_user.id):
             # Import here to avoid circular imports
-            from ..state.user_state_manager import UserState
-            
+
             # Clear the waiting state
             self.state_manager.clear_state(update.effective_user.id)
-            
+
             # Validate text length
             if not text or len(text.strip()) < 3:
                 await self._safe_reply(
@@ -49,7 +48,7 @@ class MessageHandlers:
                     reply_markup=ReplyKeyboardRemove()
                 )
                 return
-            
+
             # Process the text
             await self._process_text_for_user(update, text)
             return
