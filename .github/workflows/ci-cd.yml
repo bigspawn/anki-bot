@@ -124,21 +124,17 @@ jobs:
         PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
         CURRENT_TAG=${GITHUB_REF#refs/tags/}
         
-        # Generate changelog
+        # Generate changelog content
         if [ -n "$PREV_TAG" ]; then
-          echo "## Changes in $CURRENT_TAG" > CHANGELOG.md
-          echo "" >> CHANGELOG.md
-          git log --pretty=format:"- %s (%h)" $PREV_TAG..HEAD >> CHANGELOG.md
+          CHANGELOG_CONTENT="## Changes in $CURRENT_TAG"$'\n\n'"$(git log --pretty=format:"- %s (%h)" $PREV_TAG..HEAD)"
         else
-          echo "## Initial Release $CURRENT_TAG" > CHANGELOG.md
-          echo "" >> CHANGELOG.md
-          echo "- Initial release of German Learning Telegram Bot" >> CHANGELOG.md
+          CHANGELOG_CONTENT="## Initial Release $CURRENT_TAG"$'\n\n'"- Initial release of German Learning Telegram Bot"
         fi
         
-        # Set output for later steps
-        echo 'changelog<<EOF' >> $GITHUB_OUTPUT
-        cat CHANGELOG.md >> $GITHUB_OUTPUT
-        echo 'EOF' >> $GITHUB_OUTPUT
+        # Set output using environment files
+        echo "changelog<<EOF" >> $GITHUB_OUTPUT
+        echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
         
     - name: Create Release
       uses: softprops/action-gh-release@v2
