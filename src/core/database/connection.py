@@ -57,7 +57,7 @@ class DatabaseConnection:
                 except ValueError:
                     # Try alternative formats
                     date_str = val.decode()
-                    for fmt in ['%Y-%m-%d', '%Y-%m-%d %H:%M:%S']:
+                    for fmt in ["%Y-%m-%d", "%Y-%m-%d %H:%M:%S"]:
                         try:
                             return datetime.strptime(date_str, fmt).date()
                         except ValueError:
@@ -71,15 +71,17 @@ class DatabaseConnection:
                     # Try alternative formats
                     datetime_str = val.decode()
                     for fmt in [
-                        '%Y-%m-%d %H:%M:%S',
-                        '%Y-%m-%d %H:%M:%S.%f',
-                        '%Y-%m-%d',
+                        "%Y-%m-%d %H:%M:%S",
+                        "%Y-%m-%d %H:%M:%S.%f",
+                        "%Y-%m-%d",
                     ]:
                         try:
                             return datetime.strptime(datetime_str, fmt)
                         except ValueError:
                             continue
-                    raise ValueError(f"Invalid datetime format: {datetime_str}") from None
+                    raise ValueError(
+                        f"Invalid datetime format: {datetime_str}"
+                    ) from None
 
             sqlite3.register_adapter(date, adapt_date)
             sqlite3.register_adapter(datetime, adapt_datetime)
@@ -204,17 +206,23 @@ class DatabaseConnection:
         progress_columns = [row[1] for row in cursor.fetchall()]
 
         # Determine the correct user ID column name
-        user_id_column = "telegram_id" if "telegram_id" in progress_columns else "user_id"
+        user_id_column = (
+            "telegram_id" if "telegram_id" in progress_columns else "user_id"
+        )
 
         # Check which column name is used in review_history table
         cursor = conn.execute("PRAGMA table_info(review_history)")
         review_columns = [row[1] for row in cursor.fetchall()]
-        review_user_id_column = "telegram_id" if "telegram_id" in review_columns else "user_id"
+        review_user_id_column = (
+            "telegram_id" if "telegram_id" in review_columns else "user_id"
+        )
 
         # Check which column name is used in user_settings table
         cursor = conn.execute("PRAGMA table_info(user_settings)")
         settings_columns = [row[1] for row in cursor.fetchall()]
-        settings_user_id_column = "telegram_id" if "telegram_id" in settings_columns else "user_id"
+        settings_user_id_column = (
+            "telegram_id" if "telegram_id" in settings_columns else "user_id"
+        )
 
         indexes = [
             "CREATE INDEX IF NOT EXISTS idx_words_lemma ON words(lemma)",
@@ -311,12 +319,14 @@ class DatabaseConnection:
 
                 # Build SELECT query based on existing columns
                 select_parts = [
-                    "id", "lemma",
+                    "id",
+                    "lemma",
                     "COALESCE(part_of_speech, 'unknown') as part_of_speech",
-                    "article", "translation",
+                    "article",
+                    "translation",
                     "COALESCE(example, '') as example",
                     "additional_forms",
-                    "COALESCE(confidence, 1.0) as confidence"
+                    "COALESCE(confidence, 1.0) as confidence",
                 ]
 
                 if "created_at" in old_columns:
@@ -334,7 +344,7 @@ class DatabaseConnection:
                         id, lemma, part_of_speech, article, translation,
                         example, additional_forms, confidence, created_at, updated_at
                     )
-                    SELECT {', '.join(select_parts)}
+                    SELECT {", ".join(select_parts)}
                     FROM words
                 """  # noqa: S608  # Safe: select_parts contains only column names
 

@@ -26,11 +26,7 @@ class TestInlineKeyboardData:
         """Test inline keyboard data with parameters"""
 
         # Test with word_id and rating
-        data = create_inline_keyboard_data(
-            action="rate_word",
-            word_id=123,
-            rating=3
-        )
+        data = create_inline_keyboard_data(action="rate_word", word_id=123, rating=3)
         assert len(data) <= 64, f"Data too long: {len(data)} bytes"
 
         parsed = parse_inline_keyboard_data(data)
@@ -44,10 +40,7 @@ class TestInlineKeyboardData:
         # Test with long session ID that might cause issues
         long_session_id = "12345_1720725491049"
         data = create_inline_keyboard_data(
-            action="show_answer",
-            word_id=999,
-            session_id=long_session_id,
-            word_index=5
+            action="show_answer", word_id=999, session_id=long_session_id, word_index=5
         )
         assert len(data) <= 64, f"Data too long: {len(data)} bytes"
 
@@ -59,11 +52,7 @@ class TestInlineKeyboardData:
     def test_create_inline_keyboard_data_compact_format(self):
         """Test that compact format is used"""
 
-        data = create_inline_keyboard_data(
-            action="rate_word",
-            word_id=1,
-            rating=4
-        )
+        data = create_inline_keyboard_data(action="rate_word", word_id=1, rating=4)
 
         # Should use compact keys
         assert '"a":"rate_word"' in data or '"a":"rate_word"' in data
@@ -100,8 +89,17 @@ class TestInlineKeyboardData:
         test_cases = [
             {"action": "show_answer", "word_id": 999999, "word_index": 99},
             {"action": "rate_word", "word_id": 123456, "rating": 4},
-            {"action": "show_answer", "word_id": 1, "session_id": "123456_1720725491049"},
-            {"action": "rate_word", "word_id": 999999, "rating": 1, "session_id": "999999_1720725491049"},
+            {
+                "action": "show_answer",
+                "word_id": 1,
+                "session_id": "123456_1720725491049",
+            },
+            {
+                "action": "rate_word",
+                "word_id": 999999,
+                "rating": 1,
+                "session_id": "999999_1720725491049",
+            },
         ]
 
         for case in test_cases:
@@ -119,9 +117,7 @@ class TestInlineKeyboardData:
         # Test with realistic session ID
         session_id = "739529_725491"  # user_id_timestamp
         data = create_inline_keyboard_data(
-            action="show_answer",
-            word_id=42,
-            session_id=session_id
+            action="show_answer", word_id=42, session_id=session_id
         )
 
         assert len(data) <= 64, f"Data too long: {len(data)} bytes"
@@ -146,21 +142,19 @@ class TestInlineKeyboardData:
 
             # Test show_answer callback
             data = create_inline_keyboard_data(
-                action="show_answer",
-                word_id=1,
-                session_id=session_id,
-                word_index=0
+                action="show_answer", word_id=1, session_id=session_id, word_index=0
             )
-            assert len(data) <= 64, f"Data too long for user {user_id}: {len(data)} bytes"
+            assert len(data) <= 64, (
+                f"Data too long for user {user_id}: {len(data)} bytes"
+            )
 
             # Test rate_word callback
             data = create_inline_keyboard_data(
-                action="rate_word",
-                word_id=1,
-                rating=3,
-                session_id=session_id
+                action="rate_word", word_id=1, rating=3, session_id=session_id
             )
-            assert len(data) <= 64, f"Rate data too long for user {user_id}: {len(data)} bytes"
+            assert len(data) <= 64, (
+                f"Rate data too long for user {user_id}: {len(data)} bytes"
+            )
 
     def test_real_world_scenario(self):
         """Test with real-world data that might cause Button_data_invalid"""
@@ -173,10 +167,7 @@ class TestInlineKeyboardData:
 
         # Test the problematic case
         data = create_inline_keyboard_data(
-            action="show_answer",
-            word_id=1,
-            session_id=session_id,
-            word_index=0
+            action="show_answer", word_id=1, session_id=session_id, word_index=0
         )
 
         # Should be under 64 bytes
@@ -190,10 +181,7 @@ class TestInlineKeyboardData:
         # Test rating buttons
         for rating in [1, 2, 3, 4]:
             data = create_inline_keyboard_data(
-                action="rate_word",
-                word_id=1,
-                rating=rating,
-                session_id=session_id
+                action="rate_word", word_id=1, rating=rating, session_id=session_id
             )
             assert len(data) <= 64, f"Rating {rating} data too long: {len(data)} bytes"
 
@@ -202,9 +190,7 @@ class TestInlineKeyboardData:
 
         large_word_id = 999999999
         data = create_inline_keyboard_data(
-            action="rate_word",
-            word_id=large_word_id,
-            rating=4
+            action="rate_word", word_id=large_word_id, rating=4
         )
 
         assert len(data) <= 64, f"Data too long with large word ID: {len(data)} bytes"
@@ -235,13 +221,23 @@ class TestInlineKeyboardData:
             db_manager=mock_db,
             srs_system=mock_srs,
             safe_reply_callback=mock_reply,
-            safe_edit_callback=mock_edit
+            safe_edit_callback=mock_edit,
         )
 
         # Create a mock session
         words = [
-            {"id": 1, "lemma": "test", "translation": "тест", "example": "This is a test."},
-            {"id": 2, "lemma": "word", "translation": "слово", "example": "This is a word."}
+            {
+                "id": 1,
+                "lemma": "test",
+                "translation": "тест",
+                "example": "This is a test.",
+            },
+            {
+                "id": 2,
+                "lemma": "word",
+                "translation": "слово",
+                "example": "This is a word.",
+            },
         ]
 
         session = StudySession("test_123", 123, words, "test")
@@ -255,15 +251,13 @@ class TestInlineKeyboardData:
         data = create_inline_keyboard_data(
             action="show_answer",
             word_id=word["id"],
-            word_index=session.current_word_index
+            word_index=session.current_word_index,
         )
         assert len(data) <= 64, f"Show answer data too long: {len(data)} bytes"
 
         # Test rate_word callback data
         for rating in [1, 2, 3, 4]:
             data = create_inline_keyboard_data(
-                action="rate_word",
-                word_id=word["id"],
-                rating=rating
+                action="rate_word", word_id=word["id"], rating=rating
             )
             assert len(data) <= 64, f"Rate word data too long: {len(data)} bytes"

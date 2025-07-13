@@ -45,7 +45,7 @@ class TestArticleHandling:
             "part_of_speech": "noun",
             "article": "das",
             "translation": "house",
-            "example": "Das Haus ist groß."
+            "example": "Das Haus ist groß.",
         }
 
         result = format_word_display(word_data)
@@ -65,7 +65,7 @@ class TestArticleHandling:
             "part_of_speech": "noun",
             "article": None,
             "translation": "parents",
-            "example": "Meine Eltern sind nett."
+            "example": "Meine Eltern sind nett.",
         }
 
         result = format_word_display(word_data)
@@ -84,7 +84,7 @@ class TestArticleHandling:
             "part_of_speech": "noun",
             "article": "None",  # String "None" instead of None
             "translation": "test",
-            "example": "This is a test."
+            "example": "This is a test.",
         }
 
         result = format_word_display(word_data)
@@ -101,7 +101,7 @@ class TestArticleHandling:
             "part_of_speech": "noun",
             "article": "",
             "translation": "test",
-            "example": "This is a test."
+            "example": "This is a test.",
         }
 
         result = format_word_display(word_data)
@@ -111,7 +111,9 @@ class TestArticleHandling:
         assert "None" not in result
         assert "🏷️ noun" in result
 
-    def test_session_manager_word_display_with_article(self, temp_db_manager, sample_user_data):
+    def test_session_manager_word_display_with_article(
+        self, temp_db_manager, sample_user_data
+    ):
         """Test SessionManager handles words with articles correctly"""
 
         # Create user and add word with article
@@ -123,7 +125,7 @@ class TestArticleHandling:
             "part_of_speech": "noun",
             "article": "das",
             "translation": "book",
-            "example": "Das Buch ist interessant."
+            "example": "Das Buch ist interessant.",
         }
 
         added_count = temp_db_manager.add_words_to_user(user_id, [word_data])
@@ -135,8 +137,8 @@ class TestArticleHandling:
         word = words[0]
 
         # Test the session manager formatting logic
-        article = word.get('article')
-        if article and article != 'None' and article.strip():
+        article = word.get("article")
+        if article and article != "None" and article.strip():
             word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
         else:
             word_display = f"{word['lemma']} - {word['part_of_speech']}"
@@ -144,7 +146,9 @@ class TestArticleHandling:
         assert word_display == "das Buch - noun"
         assert "None" not in word_display
 
-    def test_session_manager_word_display_without_article(self, temp_db_manager, sample_user_data):
+    def test_session_manager_word_display_without_article(
+        self, temp_db_manager, sample_user_data
+    ):
         """Test SessionManager handles words without articles correctly"""
 
         # Create user and add word without article
@@ -156,7 +160,7 @@ class TestArticleHandling:
             "part_of_speech": "noun",
             "article": None,
             "translation": "parents",
-            "example": "Meine Eltern sind nett."
+            "example": "Meine Eltern sind nett.",
         }
 
         added_count = temp_db_manager.add_words_to_user(user_id, [word_data])
@@ -168,8 +172,8 @@ class TestArticleHandling:
         word = words[0]
 
         # Test the session manager formatting logic
-        article = word.get('article')
-        if article and article != 'None' and article.strip():
+        article = word.get("article")
+        if article and article != "None" and article.strip():
             word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
         else:
             word_display = f"{word['lemma']} - {word['part_of_speech']}"
@@ -177,7 +181,9 @@ class TestArticleHandling:
         assert word_display == "Eltern - noun"
         assert "None" not in word_display
 
-    def test_session_manager_word_display_with_none_string(self, temp_db_manager, sample_user_data):
+    def test_session_manager_word_display_with_none_string(
+        self, temp_db_manager, sample_user_data
+    ):
         """Test SessionManager handles words with 'None' string article correctly"""
 
         # Create user and add word with 'None' string article
@@ -188,14 +194,14 @@ class TestArticleHandling:
         with temp_db_manager.get_connection() as conn:
             cursor = conn.execute(
                 "INSERT INTO words (lemma, part_of_speech, article, translation, example) VALUES (?, ?, ?, ?, ?)",
-                ("BadWord", "noun", "None", "bad word", "This is bad.")
+                ("BadWord", "noun", "None", "bad word", "This is bad."),
             )
             word_id = cursor.lastrowid
 
             # Add to user via learning_progress table
             conn.execute(
                 "INSERT INTO learning_progress (telegram_id, word_id) VALUES (?, ?)",
-                (user_id, word_id)
+                (user_id, word_id),
             )
             conn.commit()
 
@@ -205,8 +211,8 @@ class TestArticleHandling:
         word = words[0]
 
         # Test the session manager formatting logic
-        article = word.get('article')
-        if article and article != 'None' and article.strip():
+        article = word.get("article")
+        if article and article != "None" and article.strip():
             word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
         else:
             word_display = f"{word['lemma']} - {word['part_of_speech']}"
@@ -229,7 +235,7 @@ class TestArticleHandling:
                 "article": "das",
                 "translation": "house",
                 "example": "Das Haus ist groß.",
-                "expected_display": "das Haus - noun"
+                "expected_display": "das Haus - noun",
             },
             {
                 "lemma": "Frau",
@@ -237,7 +243,7 @@ class TestArticleHandling:
                 "article": "die",
                 "translation": "woman",
                 "example": "Die Frau ist nett.",
-                "expected_display": "die Frau - noun"
+                "expected_display": "die Frau - noun",
             },
             {
                 "lemma": "Mann",
@@ -245,7 +251,7 @@ class TestArticleHandling:
                 "article": "der",
                 "translation": "man",
                 "example": "Der Mann ist groß.",
-                "expected_display": "der Mann - noun"
+                "expected_display": "der Mann - noun",
             },
             {
                 "lemma": "Eltern",
@@ -253,7 +259,7 @@ class TestArticleHandling:
                 "article": None,
                 "translation": "parents",
                 "example": "Meine Eltern sind nett.",
-                "expected_display": "Eltern - noun"
+                "expected_display": "Eltern - noun",
             },
             {
                 "lemma": "Kinder",
@@ -261,7 +267,7 @@ class TestArticleHandling:
                 "article": None,
                 "translation": "children",
                 "example": "Die Kinder spielen.",
-                "expected_display": "Kinder - noun"
+                "expected_display": "Kinder - noun",
             },
             {
                 "lemma": "laufen",
@@ -269,13 +275,13 @@ class TestArticleHandling:
                 "article": None,
                 "translation": "to run",
                 "example": "Ich laufe schnell.",
-                "expected_display": "laufen - verb"
-            }
+                "expected_display": "laufen - verb",
+            },
         ]
 
         # Add all words
         word_data_for_db = [
-            {k: v for k, v in word.items() if k != 'expected_display'}
+            {k: v for k, v in word.items() if k != "expected_display"}
             for word in test_words
         ]
         added_count = temp_db_manager.add_words_to_user(user_id, word_data_for_db)
@@ -288,14 +294,13 @@ class TestArticleHandling:
         for word in words:
             # Find the expected display for this word
             expected_word = next(
-                (tw for tw in test_words if tw["lemma"] == word["lemma"]),
-                None
+                (tw for tw in test_words if tw["lemma"] == word["lemma"]), None
             )
             assert expected_word is not None
 
             # Test session manager formatting
-            article = word.get('article')
-            if article and article != 'None':
+            article = word.get("article")
+            if article and article != "None":
                 word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
             else:
                 word_display = f"{word['lemma']} - {word['part_of_speech']}"
@@ -314,7 +319,7 @@ class TestArticleHandling:
             "part_of_speech": "noun",
             "article": "   ",  # Whitespace only
             "translation": "test",
-            "example": "This is a test."
+            "example": "This is a test.",
         }
 
         result = format_word_display(word_data)
@@ -330,7 +335,7 @@ class TestArticleHandling:
             "part_of_speech": "noun",
             # "article" field is missing entirely
             "translation": "test",
-            "example": "This is a test."
+            "example": "This is a test.",
         }
 
         result = format_word_display(word_data)

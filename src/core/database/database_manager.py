@@ -54,6 +54,7 @@ class DatabaseManager:
     def get_word_by_id(self, word_id: int) -> Word | None:
         """Get word by ID"""
         return self.word_repo.get_word_by_id(word_id)
+
     def check_word_exists(self, telegram_id: int, lemma: str) -> bool:
         """Check if word exists in user's learning progress"""
         return self.word_repo.check_word_exists(telegram_id, lemma)
@@ -72,9 +73,8 @@ class DatabaseManager:
                 # Try potential lemma forms
                 potential_lemmas = self._get_potential_lemmas(lemma)
                 for potential in potential_lemmas:
-                    if (
-                        potential != lemma
-                        and self.word_repo.check_word_exists(telegram_id, potential)
+                    if potential != lemma and self.word_repo.check_word_exists(
+                        telegram_id, potential
                     ):
                         exists = True
                         break
@@ -105,11 +105,15 @@ class DatabaseManager:
         """Get difficult words (low easiness factor)"""
         return self.word_repo.get_difficult_words(telegram_id, limit, randomize)
 
-    def add_words_to_user(self, telegram_id: int, words_data: list[dict[str, Any]]) -> int:
+    def add_words_to_user(
+        self, telegram_id: int, words_data: list[dict[str, Any]]
+    ) -> int:
         """Add multiple words to user's learning progress"""
         return self.word_repo.add_words_to_user(telegram_id, words_data)
 
-    def add_word_to_user(self, telegram_id: int, word_data: dict[str, Any]) -> Word | None:
+    def add_word_to_user(
+        self, telegram_id: int, word_data: dict[str, Any]
+    ) -> Word | None:
         """Add a single word to user's learning progress"""
         added_count = self.word_repo.add_words_to_user(telegram_id, [word_data])
         if added_count > 0:
@@ -121,11 +125,7 @@ class DatabaseManager:
 
     # Progress methods
     def update_learning_progress(
-        self,
-        telegram_id: int,
-        word_id: int,
-        rating: int,
-        response_time_ms: int = 0
+        self, telegram_id: int, word_id: int, rating: int, response_time_ms: int = 0
     ) -> bool:
         """Update learning progress after review"""
         return self.progress_repo.update_learning_progress(
@@ -139,10 +139,7 @@ class DatabaseManager:
         return self.progress_repo.get_learning_progress(telegram_id, word_id)
 
     def get_review_history(
-        self,
-        telegram_id: int,
-        word_id: int | None = None,
-        limit: int = 100
+        self, telegram_id: int, word_id: int | None = None, limit: int = 100
     ) -> list[dict[str, Any]]:
         """Get review history for user or specific word"""
         return self.progress_repo.get_review_history(telegram_id, word_id, limit)
@@ -185,7 +182,9 @@ class DatabaseManager:
         response_time_ms: int = 0,
     ) -> bool:
         """Add a review record - alias for update_learning_progress"""
-        return self.update_learning_progress(telegram_id, word_id, rating, response_time_ms)
+        return self.update_learning_progress(
+            telegram_id, word_id, rating, response_time_ms
+        )
 
     def get_connection(self):
         """Get database connection for direct SQL access in tests"""
@@ -197,24 +196,23 @@ class DatabaseManager:
         potential_lemmas = [word]
 
         # Remove common German endings and try to construct base form
-        if word.endswith('en'):
+        if word.endswith("en"):
             potential_lemmas.append(word[:-2])
-        elif word.endswith('est'):
+        elif word.endswith("est"):
             # For words ending in 'est' (like bedeutest), remove 'est' and add 'en'
-            potential_lemmas.append(word[:-3] + 'en')
-        elif word.endswith('et'):
+            potential_lemmas.append(word[:-3] + "en")
+        elif word.endswith("et"):
             # For words ending in 'et' (like bedeutet), remove 'et' and add 'en'
-            potential_lemmas.append(word[:-2] + 'en')
-        elif word.endswith('st'):
-            potential_lemmas.append(word[:-2] + 'en')
-        elif word.endswith('t'):
+            potential_lemmas.append(word[:-2] + "en")
+        elif word.endswith("st"):
+            potential_lemmas.append(word[:-2] + "en")
+        elif word.endswith("t"):
             # For words ending in 't', try removing 't' and adding 'en'
-            potential_lemmas.append(word[:-1] + 'en')
-        elif word.endswith('e'):
-            potential_lemmas.append(word[:-1] + 'en')
+            potential_lemmas.append(word[:-1] + "en")
+        elif word.endswith("e"):
+            potential_lemmas.append(word[:-1] + "en")
 
         return list(set(potential_lemmas))
-
 
 
 # Global instance

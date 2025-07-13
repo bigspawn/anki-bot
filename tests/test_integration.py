@@ -65,10 +65,7 @@ class TestDatabaseIntegration:
 
         # Simulate review
         temp_db.update_learning_progress(
-            telegram_id=user_id,
-            word_id=word_id,
-            rating=3,
-            response_time_ms=1000
+            telegram_id=user_id, word_id=word_id, rating=3, response_time_ms=1000
         )
 
         # Add review record (already done by update_learning_progress above)
@@ -104,7 +101,9 @@ class TestSpacedRepetitionIntegration:
         srs = get_srs_system()
 
         # Create user and word
-        user = temp_db.create_user(telegram_id=12345, first_name="Test", username="testuser")
+        user = temp_db.create_user(
+            telegram_id=12345, first_name="Test", username="testuser"
+        )
         user_id = user["telegram_id"]
         word_data = {
             "word": "lernen",
@@ -139,7 +138,7 @@ class TestSpacedRepetitionIntegration:
                 telegram_id=user_id,
                 word_id=word_id,
                 rating=rating,
-                response_time_ms=1000
+                response_time_ms=1000,
             )
 
             # Get updated word data
@@ -168,7 +167,9 @@ class TestTextProcessingIntegration:
             db_manager.init_database()
 
             # Create user
-            user = db_manager.create_user(telegram_id=12345, first_name="Test", username="testuser")
+            user = db_manager.create_user(
+                telegram_id=12345, first_name="Test", username="testuser"
+            )
             user_id = user["telegram_id"]
 
             # Process text with mock processor
@@ -261,6 +262,7 @@ class TestBotHandlerIntegration:
             with patch(
                 "src.bot_handler.get_word_processor", return_value=MockWordProcessor()
             ):
+
                 async def mock_safe_reply(update, message, **kwargs):
                     await update.message.reply_text(message, **kwargs)
 
@@ -271,7 +273,7 @@ class TestBotHandlerIntegration:
                     SpacedRepetitionSystem(),
                     safe_reply_callback=mock_safe_reply,
                     process_text_callback=lambda *args, **kwargs: None,
-                    start_study_session_callback=lambda *args, **kwargs: None
+                    start_study_session_callback=lambda *args, **kwargs: None,
                 )
 
                 await handlers.start_command(mock_update, mock_context)
@@ -303,6 +305,7 @@ class TestBotHandlerIntegration:
             with patch(
                 "src.bot_handler.get_word_processor", return_value=MockWordProcessor()
             ):
+
                 async def mock_safe_reply(update, message, **kwargs):
                     await update.message.reply_text(message, **kwargs)
 
@@ -316,11 +319,13 @@ class TestBotHandlerIntegration:
                     SpacedRepetitionSystem(),
                     safe_reply_callback=mock_safe_reply,
                     process_text_callback=mock_process_text,
-                    start_study_session_callback=lambda *args, **kwargs: None
+                    start_study_session_callback=lambda *args, **kwargs: None,
                 )
 
                 # Create user first
-                temp_db.create_user(telegram_id=12345, first_name="Test", username="testuser")
+                temp_db.create_user(
+                    telegram_id=12345, first_name="Test", username="testuser"
+                )
 
                 await handlers.add_command(mock_update, mock_context)
 
@@ -345,6 +350,7 @@ class TestBotHandlerIntegration:
         from src.text_parser import GermanTextParser
 
         with patch("src.bot_handler.get_db_manager", return_value=temp_db):
+
             async def mock_safe_reply(update, message, **kwargs):
                 await update.message.reply_text(message, **kwargs)
 
@@ -355,11 +361,13 @@ class TestBotHandlerIntegration:
                 SpacedRepetitionSystem(),
                 safe_reply_callback=mock_safe_reply,
                 process_text_callback=lambda *args, **kwargs: None,
-                start_study_session_callback=lambda *args, **kwargs: None
+                start_study_session_callback=lambda *args, **kwargs: None,
             )
 
             # Create user and add some test data
-            user = temp_db.create_user(telegram_id=12345, first_name="Test", username="testuser")
+            user = temp_db.create_user(
+                telegram_id=12345, first_name="Test", username="testuser"
+            )
         user_id = user["telegram_id"]
 
         # Add a test word
@@ -453,10 +461,7 @@ class TestEndToEndScenarios:
 
             # Update progress
             temp_db.update_learning_progress(
-                telegram_id=user_id,
-                word_id=word["id"],
-                rating=3,
-                response_time_ms=1000
+                telegram_id=user_id, word_id=word["id"], rating=3, response_time_ms=1000
             )
 
             # Record review (already done by update_learning_progress above)
@@ -469,7 +474,9 @@ class TestEndToEndScenarios:
         # 6. Check learning progress
         updated_words = temp_db.get_words_by_user(user_id)
         reviewed_words = [w for w in updated_words if w["repetitions"] > 0]
-        assert len(reviewed_words) >= 1  # We reviewed at least 1 word (only valid translations are added)
+        assert (
+            len(reviewed_words) >= 1
+        )  # We reviewed at least 1 word (only valid translations are added)
 
         # All reviewed words should have progressed (repetitions > 0)
         for word in reviewed_words:
@@ -548,7 +555,9 @@ class TestOptimizedWordProcessing:
 
     def test_empty_list_handling(self, temp_db):
         """Test handling of empty word lists"""
-        user = temp_db.create_user(telegram_id=12345, first_name="Test", username="testuser")
+        user = temp_db.create_user(
+            telegram_id=12345, first_name="Test", username="testuser"
+        )
         user_id = user["telegram_id"]
 
         # Test empty list scenarios
@@ -560,7 +569,9 @@ class TestOptimizedWordProcessing:
 
     def test_large_word_list_performance(self, temp_db):
         """Test performance with large word lists"""
-        user = temp_db.create_user(telegram_id=12345, first_name="Test", username="testuser")
+        user = temp_db.create_user(
+            telegram_id=12345, first_name="Test", username="testuser"
+        )
         user_id = user["telegram_id"]
 
         # Add some words to database
@@ -637,15 +648,15 @@ class TestDuplicateWordPrevention:
         existence_check = temp_db.check_multiple_words_exist(user_id, inflected_forms)
 
         # All inflected forms should be detected as already existing
-        assert (
-            existence_check["bedeutet"] is True
-        ), "bedeutet should be detected as existing"
-        assert (
-            existence_check["bedeutest"] is True
-        ), "bedeutest should be detected as existing"
-        assert (
-            existence_check["bedeute"] is True
-        ), "bedeute should be detected as existing"
+        assert existence_check["bedeutet"] is True, (
+            "bedeutet should be detected as existing"
+        )
+        assert existence_check["bedeutest"] is True, (
+            "bedeutest should be detected as existing"
+        )
+        assert existence_check["bedeute"] is True, (
+            "bedeute should be detected as existing"
+        )
 
         # Simulate what happens when user tries to add "bedeutet" again
         # This should be caught by the existence check and not processed
@@ -668,7 +679,9 @@ class TestDuplicateWordPrevention:
 
     def test_basic_verb_pattern_matching(self, temp_db):
         """Test basic German verb pattern matching - focus on -et/-en patterns"""
-        user = temp_db.create_user(telegram_id=54321, first_name="Verb", username="verbuser")
+        user = temp_db.create_user(
+            telegram_id=54321, first_name="Verb", username="verbuser"
+        )
         user_id = user["telegram_id"]
 
         # Add base verb forms that follow predictable patterns
@@ -699,9 +712,9 @@ class TestDuplicateWordPrevention:
 
         for inflected, base in test_cases:
             result = temp_db.check_multiple_words_exist(user_id, [inflected])
-            assert (
-                result[inflected] is True
-            ), f"{inflected} should be detected as existing (base: {base})"
+            assert result[inflected] is True, (
+                f"{inflected} should be detected as existing (base: {base})"
+            )
 
 
 class TestErrorScenarios:
@@ -723,7 +736,9 @@ class TestErrorScenarios:
 
     def test_duplicate_word_handling(self, temp_db):
         """Test handling of duplicate words"""
-        user = temp_db.create_user(telegram_id=12345, first_name="Test", username="testuser")
+        user = temp_db.create_user(
+            telegram_id=12345, first_name="Test", username="testuser"
+        )
         user_id = user["telegram_id"]
 
         word_data = {

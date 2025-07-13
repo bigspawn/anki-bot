@@ -8,6 +8,7 @@ from typing import TypedDict
 
 class User(TypedDict):
     """User model"""
+
     telegram_id: int
     first_name: str
     last_name: str | None
@@ -19,6 +20,7 @@ class User(TypedDict):
 
 class Word(TypedDict):
     """Word model"""
+
     id: int
     lemma: str
     part_of_speech: str
@@ -33,6 +35,7 @@ class Word(TypedDict):
 
 class LearningProgress(TypedDict):
     """Learning progress model"""
+
     id: int
     telegram_id: int
     word_id: int
@@ -47,6 +50,7 @@ class LearningProgress(TypedDict):
 
 class ReviewHistory(TypedDict):
     """Review history model"""
+
     id: int
     telegram_id: int
     word_id: int
@@ -57,6 +61,7 @@ class ReviewHistory(TypedDict):
 
 class UserStats(TypedDict):
     """User statistics model"""
+
     total_words: int
     new_words: int
     due_words: int

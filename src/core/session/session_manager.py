@@ -28,7 +28,9 @@ logger = logging.getLogger(__name__)
 class StudySession:
     """Represents a single study session"""
 
-    def __init__(self, session_id: str, telegram_id: int, words: list[dict], session_type: str):
+    def __init__(
+        self, session_id: str, telegram_id: int, words: list[dict], session_type: str
+    ):
         self.session_id = session_id
         self.telegram_id = telegram_id
         self.words = words
@@ -77,16 +79,49 @@ class SessionManager:
         self.user_sessions: dict[int, StudySession] = {}
 
     async def start_study_session(
-        self,
-        update: Update,
-        words: list[dict],
-        session_type: str
+        self, update: Update, words: list[dict], session_type: str
     ):
         """Start a new study session"""
         telegram_id = update.effective_user.id
 
+        # Check for existing session and handle interruption
+        existing_session = self.user_sessions.get(telegram_id)
+        if existing_session:
+            # Calculate partial statistics for the interrupted session
+            elapsed_time = existing_session.timer.get_elapsed_time()
+            accuracy = (
+                (
+                    existing_session.correct_answers
+                    / existing_session.total_answers
+                    * 100
+                )
+                if existing_session.total_answers > 0
+                else 0
+            )
+
+            # Notify user about interrupted session
+            interrupt_message = f"""⚠️ <b>Предыдущая сессия прервана</b>
+
+📊 <b>Частичные результаты:</b>
+• Слов изучено: <b>{existing_session.current_word_index}/{len(existing_session.words)}</b>
+• Правильных ответов: <b>{existing_session.correct_answers}/{existing_session.total_answers}</b>
+• Точность: <b>{accuracy:.1f}%</b>
+• Время: <b>{elapsed_time:.1f}с</b>
+
+🔄 Начинаем новую сессию изучения..."""
+
+            await self._safe_reply(update, interrupt_message, parse_mode="HTML")
+
+            # Clean up the interrupted session
+            existing_session.timer.stop()
+            logger.info(
+                f"Interrupted existing {existing_session.session_type} session for telegram_id {telegram_id}"
+            )
+
         # Log session start
-        logger.info(f"Starting {session_type} study session for telegram_id {telegram_id} with {len(words)} words")
+        logger.info(
+            f"Starting {session_type} study session for telegram_id {telegram_id} with {len(words)} words"
+        )
 
         # Create session with compact ID
         # Use only last 6 digits of timestamp for uniqueness while staying compact
@@ -95,7 +130,7 @@ class SessionManager:
         session_id = f"{telegram_id}_{compact_timestamp}"
         session = StudySession(session_id, telegram_id, words, session_type)
 
-        # Store session
+        # Store session (replacing any existing one)
         self.user_sessions[telegram_id] = session
         session.timer.start()
 
@@ -111,9 +146,7 @@ class SessionManager:
 
         # Format study card
         card_text = format_study_card(
-            word,
-            session.current_word_index + 1,
-            len(session.words)
+            word, session.current_word_index + 1, len(session.words)
         )
 
         # Create inline keyboard
@@ -123,7 +156,9 @@ class SessionManager:
             word_index=session.current_word_index,
         )
 
-        keyboard = [[InlineKeyboardButton("🔍 Показать ответ", callback_data=keyboard_data)]]
+        keyboard = [
+            [InlineKeyboardButton("🔍 Показать ответ", callback_data=keyboard_data)]
+        ]
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         await self._safe_reply(update, card_text, reply_markup=reply_markup)
@@ -142,18 +177,18 @@ class SessionManager:
             return
 
         # Show answer with rating buttons
-        article = word.get('article')
-        if article and article != 'None' and article.strip():
+        article = word.get("article")
+        if article and article != "None" and article.strip():
             word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
         else:
             word_display = f"{word['lemma']} - {word['part_of_speech']}"
 
-        answer_text = f"""🔤 <b>{word['lemma']}</b>
+        answer_text = f"""🔤 <b>{word["lemma"]}</b>
 {word_display}
 
-🇷🇺 {word['translation']}
+🇷🇺 {word["translation"]}
 
-📝 <i>{word['example']}</i>
+📝 <i>{word["example"]}</i>
 
 Как хорошо вы знаете это слово?"""
 
@@ -166,12 +201,16 @@ class SessionManager:
                 word_id=word["id"],
                 rating=rating,
             )
-            rating_buttons.append(InlineKeyboardButton(emoji, callback_data=callback_data))
+            rating_buttons.append(
+                InlineKeyboardButton(emoji, callback_data=callback_data)
+            )
 
         keyboard = [rating_buttons]
         reply_markup = InlineKeyboardMarkup(keyboard)
 
-        await self._safe_edit(query, answer_text, reply_markup=reply_markup, parse_mode="HTML")
+        await self._safe_edit(
+            query, answer_text, reply_markup=reply_markup, parse_mode="HTML"
+        )
 
     async def handle_word_rating(self, query, data: dict):
         """Handle word rating"""
@@ -190,9 +229,13 @@ class SessionManager:
             return
 
         # Update word progress - now using telegram_id directly
-        logger.info(f"Updating statistics: telegram_id {telegram_user_id}, word {word_id}, rating {rating}")
+        logger.info(
+            f"Updating statistics: telegram_id {telegram_user_id}, word {word_id}, rating {rating}"
+        )
         self.db_manager.update_learning_progress(telegram_user_id, word_id, rating)
-        logger.info(f"Statistics updated successfully for telegram_id {telegram_user_id}, word {word_id}")
+        logger.info(
+            f"Statistics updated successfully for telegram_id {telegram_user_id}, word {word_id}"
+        )
 
         # Record answer statistics
         session.record_answer(rating >= 3)  # Consider 3+ as correct
@@ -213,9 +256,7 @@ class SessionManager:
 
         # Format next card
         card_text = format_study_card(
-            word,
-            session.current_word_index + 1,
-            len(session.words)
+            word, session.current_word_index + 1, len(session.words)
         )
 
         # Create show answer button
@@ -225,7 +266,9 @@ class SessionManager:
             word_index=session.current_word_index,
         )
 
-        keyboard = [[InlineKeyboardButton("🔍 Показать ответ", callback_data=keyboard_data)]]
+        keyboard = [
+            [InlineKeyboardButton("🔍 Показать ответ", callback_data=keyboard_data)]
+        ]
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         await self._safe_edit(query, card_text, reply_markup=reply_markup)
@@ -235,7 +278,11 @@ class SessionManager:
         session.timer.stop()
 
         # Calculate statistics
-        accuracy = (session.correct_answers / session.total_answers * 100) if session.total_answers > 0 else 0
+        accuracy = (
+            (session.correct_answers / session.total_answers * 100)
+            if session.total_answers > 0
+            else 0
+        )
 
         completion_text = f"""✅ <b>Сессия завершена!</b>
 
@@ -247,7 +294,12 @@ class SessionManager:
 
 🎯 Отличная работа! Продолжайте изучение для лучшего запоминания."""
 
-        await self._safe_reply(update, completion_text, parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
+        await self._safe_reply(
+            update,
+            completion_text,
+            parse_mode="HTML",
+            reply_markup=ReplyKeyboardRemove(),
+        )
 
         # Clean up session
         if session.telegram_id in self.user_sessions:
@@ -258,7 +310,11 @@ class SessionManager:
         session.timer.stop()
 
         # Calculate statistics
-        accuracy = (session.correct_answers / session.total_answers * 100) if session.total_answers > 0 else 0
+        accuracy = (
+            (session.correct_answers / session.total_answers * 100)
+            if session.total_answers > 0
+            else 0
+        )
 
         completion_text = f"""✅ <b>Сессия завершена!</b>
 

@@ -51,7 +51,9 @@ class TestRandomizationFeature:
             for i in range(1, 21)  # 20 words
         ]
 
-    def test_get_new_words_randomization(self, temp_db_manager, sample_user_data, large_word_set):
+    def test_get_new_words_randomization(
+        self, temp_db_manager, sample_user_data, large_word_set
+    ):
         """Test that get_new_words returns different orders when randomized"""
 
         # Create user and add words
@@ -70,9 +72,13 @@ class TestRandomizationFeature:
 
         # Should get different orders (with high probability)
         unique_orders = set(results)
-        assert len(unique_orders) >= 3, f"Expected at least 3 unique orders, got {len(unique_orders)}"
+        assert len(unique_orders) >= 3, (
+            f"Expected at least 3 unique orders, got {len(unique_orders)}"
+        )
 
-    def test_get_new_words_non_randomized_consistency(self, temp_db_manager, sample_user_data, large_word_set):
+    def test_get_new_words_non_randomized_consistency(
+        self, temp_db_manager, sample_user_data, large_word_set
+    ):
         """Test that non-randomized results are consistent"""
 
         # Create user and add words
@@ -91,9 +97,13 @@ class TestRandomizationFeature:
 
         # All results should be identical
         unique_orders = set(results)
-        assert len(unique_orders) == 1, f"Expected 1 unique order, got {len(unique_orders)}"
+        assert len(unique_orders) == 1, (
+            f"Expected 1 unique order, got {len(unique_orders)}"
+        )
 
-    def test_get_due_words_randomization(self, temp_db_manager, sample_user_data, large_word_set):
+    def test_get_due_words_randomization(
+        self, temp_db_manager, sample_user_data, large_word_set
+    ):
         """Test that get_due_words returns different orders when randomized"""
 
         # Create user and add words
@@ -116,9 +126,13 @@ class TestRandomizationFeature:
 
         # Should get different orders (with high probability)
         unique_orders = set(results)
-        assert len(unique_orders) >= 3, f"Expected at least 3 unique orders, got {len(unique_orders)}"
+        assert len(unique_orders) >= 3, (
+            f"Expected at least 3 unique orders, got {len(unique_orders)}"
+        )
 
-    def test_get_difficult_words_randomization(self, temp_db_manager, sample_user_data, large_word_set):
+    def test_get_difficult_words_randomization(
+        self, temp_db_manager, sample_user_data, large_word_set
+    ):
         """Test that get_difficult_words returns different orders when randomized"""
 
         # Create user and add words
@@ -138,7 +152,9 @@ class TestRandomizationFeature:
         # Test randomization
         results = []
         for _ in range(5):
-            difficult_words = temp_db_manager.get_difficult_words(user_id, limit=5, randomize=True)
+            difficult_words = temp_db_manager.get_difficult_words(
+                user_id, limit=5, randomize=True
+            )
             word_lemmas = [word["lemma"] for word in difficult_words]
             results.append(tuple(word_lemmas))
 
@@ -147,9 +163,13 @@ class TestRandomizationFeature:
 
         # Should get different orders (with high probability)
         unique_orders = set(results)
-        assert len(unique_orders) >= 2, f"Expected at least 2 unique orders, got {len(unique_orders)}"
+        assert len(unique_orders) >= 2, (
+            f"Expected at least 2 unique orders, got {len(unique_orders)}"
+        )
 
-    def test_backward_compatibility_default_randomization(self, temp_db_manager, sample_user_data, large_word_set):
+    def test_backward_compatibility_default_randomization(
+        self, temp_db_manager, sample_user_data, large_word_set
+    ):
         """Test that methods work with default randomization parameter"""
 
         # Create user and add words
@@ -168,8 +188,12 @@ class TestRandomizationFeature:
         assert len(due_words) == 5
 
         # Test with explicit parameters
-        new_words_random = temp_db_manager.get_new_words(user_id, limit=5, randomize=True)
-        new_words_ordered = temp_db_manager.get_new_words(user_id, limit=5, randomize=False)
+        new_words_random = temp_db_manager.get_new_words(
+            user_id, limit=5, randomize=True
+        )
+        new_words_ordered = temp_db_manager.get_new_words(
+            user_id, limit=5, randomize=False
+        )
 
         assert len(new_words_random) == 5
         assert len(new_words_ordered) == 5
@@ -182,17 +206,36 @@ class TestRandomizationFeature:
         user_id = user["telegram_id"]
 
         small_word_set = [
-            {"lemma": "word1", "part_of_speech": "noun", "translation": "слово1", "example": "Example 1."},
-            {"lemma": "word2", "part_of_speech": "noun", "translation": "слово2", "example": "Example 2."},
-            {"lemma": "word3", "part_of_speech": "noun", "translation": "слово3", "example": "Example 3."},
+            {
+                "lemma": "word1",
+                "part_of_speech": "noun",
+                "translation": "слово1",
+                "example": "Example 1.",
+            },
+            {
+                "lemma": "word2",
+                "part_of_speech": "noun",
+                "translation": "слово2",
+                "example": "Example 2.",
+            },
+            {
+                "lemma": "word3",
+                "part_of_speech": "noun",
+                "translation": "слово3",
+                "example": "Example 3.",
+            },
         ]
 
         added_count = temp_db_manager.add_words_to_user(user_id, small_word_set)
         assert added_count == 3
 
         # Test that we get all 3 words regardless of randomization
-        new_words_random = temp_db_manager.get_new_words(user_id, limit=5, randomize=True)
-        new_words_ordered = temp_db_manager.get_new_words(user_id, limit=5, randomize=False)
+        new_words_random = temp_db_manager.get_new_words(
+            user_id, limit=5, randomize=True
+        )
+        new_words_ordered = temp_db_manager.get_new_words(
+            user_id, limit=5, randomize=False
+        )
 
         assert len(new_words_random) == 3
         assert len(new_words_ordered) == 3

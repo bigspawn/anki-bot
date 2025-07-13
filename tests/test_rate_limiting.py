@@ -205,9 +205,9 @@ class TestUserLockManager:
         lock_info = lock_manager.get_lock_info(user_id)
 
         # Check all required fields
-        assert hasattr(lock_info, 'locked_at')
-        assert hasattr(lock_info, 'operation')
-        assert hasattr(lock_info, 'lock_id')
+        assert hasattr(lock_info, "locked_at")
+        assert hasattr(lock_info, "operation")
+        assert hasattr(lock_info, "lock_id")
 
         assert lock_info.operation == operation
         assert isinstance(lock_info.locked_at, datetime)
@@ -231,13 +231,15 @@ class TestRateLimitingIntegration:
     @pytest.fixture
     def mock_bot_handler(self):
         """Create a mock bot handler with lock manager"""
-        with patch('src.bot_handler.get_settings'), \
-             patch('src.bot_handler.get_db_manager'), \
-             patch('src.bot_handler.get_word_processor'), \
-             patch('src.bot_handler.get_text_parser'), \
-             patch('src.bot_handler.get_srs_system'):
-
+        with (
+            patch("src.bot_handler.get_settings"),
+            patch("src.bot_handler.get_db_manager"),
+            patch("src.bot_handler.get_word_processor"),
+            patch("src.bot_handler.get_text_parser"),
+            patch("src.bot_handler.get_srs_system"),
+        ):
             from src.bot_handler import BotHandler
+
             handler = BotHandler()
             return handler
 
@@ -249,7 +251,10 @@ class TestRateLimitingIntegration:
 
         # Mock successful processing
         mock_bot_handler.text_parser.extract_words.return_value = ["word1", "word2"]
-        mock_bot_handler.db_manager.check_multiple_words_exist.return_value = {"word1": False, "word2": False}
+        mock_bot_handler.db_manager.check_multiple_words_exist.return_value = {
+            "word1": False,
+            "word2": False,
+        }
         mock_bot_handler.word_processor.process_text.return_value = []
 
         # Start lock manager
@@ -257,20 +262,26 @@ class TestRateLimitingIntegration:
 
         try:
             # First call should succeed in acquiring lock
-            task1 = asyncio.create_task(mock_bot_handler._process_text_for_user(mock_update, "test text"))
+            task1 = asyncio.create_task(
+                mock_bot_handler._process_text_for_user(mock_update, "test text")
+            )
 
             # Give first task time to acquire lock
             await asyncio.sleep(0.01)
 
             # Second call should be blocked
-            task2 = asyncio.create_task(mock_bot_handler._process_text_for_user(mock_update, "test text 2"))
+            task2 = asyncio.create_task(
+                mock_bot_handler._process_text_for_user(mock_update, "test text 2")
+            )
 
             # Wait for both tasks
             await asyncio.gather(task1, task2, return_exceptions=True)
 
             # Verify that the second call was blocked (should have sent blocked message)
             # This would be verified by checking the mock calls to _safe_reply
-            assert mock_bot_handler.lock_manager.get_active_locks_count() == 0  # All locks should be released
+            assert (
+                mock_bot_handler.lock_manager.get_active_locks_count() == 0
+            )  # All locks should be released
 
         finally:
             await mock_bot_handler.lock_manager.stop()
@@ -291,7 +302,9 @@ class TestRateLimitingIntegration:
             await mock_bot_handler._process_text_for_user(mock_update, "test text")
 
             # Lock should be released despite exception
-            assert not mock_bot_handler.lock_manager.is_locked(mock_update.effective_user.id)
+            assert not mock_bot_handler.lock_manager.is_locked(
+                mock_update.effective_user.id
+            )
 
         finally:
             await mock_bot_handler.lock_manager.stop()
@@ -311,15 +324,21 @@ class TestRateLimitingIntegration:
         # Mock database responses
         mock_bot_handler.db_manager.get_user_by_telegram_id.return_value = {"id": 1}
         mock_bot_handler.text_parser.extract_words.return_value = ["word1"]
-        mock_bot_handler.db_manager.check_multiple_words_exist.return_value = {"word1": False}
+        mock_bot_handler.db_manager.check_multiple_words_exist.return_value = {
+            "word1": False
+        }
         mock_bot_handler.word_processor.process_text.return_value = []
 
         await mock_bot_handler.lock_manager.start()
 
         try:
             # Both users should be able to process simultaneously
-            task1 = asyncio.create_task(mock_bot_handler._process_text_for_user(update1, "text1"))
-            task2 = asyncio.create_task(mock_bot_handler._process_text_for_user(update2, "text2"))
+            task1 = asyncio.create_task(
+                mock_bot_handler._process_text_for_user(update1, "text1")
+            )
+            task2 = asyncio.create_task(
+                mock_bot_handler._process_text_for_user(update2, "text2")
+            )
 
             # Wait for both tasks
             await asyncio.gather(task1, task2)

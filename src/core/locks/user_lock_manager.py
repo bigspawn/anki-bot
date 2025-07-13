@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class LockInfo:
     """Information about a user lock"""
+
     locked_at: datetime
     operation: str
     lock_id: str
@@ -85,13 +86,15 @@ class UserLockManager:
         self._cleanup_expired_locks()
 
         if user_id in self._locks:
-            logger.warning(f"User {user_id} already locked for operation: {self._locks[user_id].operation}")
+            logger.warning(
+                f"User {user_id} already locked for operation: {self._locks[user_id].operation}"
+            )
             return False
 
         lock_info = LockInfo(
             locked_at=datetime.now(),
             operation=operation,
-            lock_id=f"{user_id}_{operation}_{datetime.now().timestamp()}"
+            lock_id=f"{user_id}_{operation}_{datetime.now().timestamp()}",
         )
 
         self._locks[user_id] = lock_info
@@ -113,7 +116,9 @@ class UserLockManager:
             return False
 
         lock_info = self._locks.pop(user_id)
-        logger.info(f"Released lock for user {user_id}, operation: {lock_info.operation}")
+        logger.info(
+            f"Released lock for user {user_id}, operation: {lock_info.operation}"
+        )
         return True
 
     def force_release_lock(self, user_id: int) -> bool:
@@ -130,7 +135,9 @@ class UserLockManager:
             return False
 
         lock_info = self._locks.pop(user_id)
-        logger.warning(f"Force released lock for user {user_id}, operation: {lock_info.operation}")
+        logger.warning(
+            f"Force released lock for user {user_id}, operation: {lock_info.operation}"
+        )
         return True
 
     def get_active_locks_count(self) -> int:
@@ -154,7 +161,9 @@ class UserLockManager:
 
         for user_id in expired_users:
             lock_info = self._locks.pop(user_id)
-            logger.warning(f"Expired lock removed for user {user_id}, operation: {lock_info.operation}")
+            logger.warning(
+                f"Expired lock removed for user {user_id}, operation: {lock_info.operation}"
+            )
 
     async def _periodic_cleanup(self):
         """Periodic cleanup task that runs every minute"""

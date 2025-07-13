@@ -68,9 +68,9 @@ class TestDateHandling:
         with db_connection.get_connection() as conn:
             # Test different date formats
             test_cases = [
-                ('2025-07-10 20:00:30', datetime(2025, 7, 10, 20, 0, 30)),
-                ('2025-07-10 20:00:30.123', datetime(2025, 7, 10, 20, 0, 30, 123000)),
-                ('2025-07-10', datetime(2025, 7, 10)),
+                ("2025-07-10 20:00:30", datetime(2025, 7, 10, 20, 0, 30)),
+                ("2025-07-10 20:00:30.123", datetime(2025, 7, 10, 20, 0, 30, 123000)),
+                ("2025-07-10", datetime(2025, 7, 10)),
             ]
 
             for date_str, expected_datetime in test_cases:
@@ -79,8 +79,7 @@ class TestDateHandling:
                     "CREATE TEMP TABLE test_dates (id INTEGER PRIMARY KEY, test_date TIMESTAMP)"
                 )
                 conn.execute(
-                    "INSERT INTO test_dates (test_date) VALUES (?)",
-                    (date_str,)
+                    "INSERT INTO test_dates (test_date) VALUES (?)", (date_str,)
                 )
 
                 # Retrieve and check conversion
@@ -88,13 +87,19 @@ class TestDateHandling:
                 result = cursor.fetchone()
 
                 # The result should be a datetime object
-                assert isinstance(result[0], datetime), f"Expected datetime, got {type(result[0])}"
-                assert result[0] == expected_datetime, f"Expected {expected_datetime}, got {result[0]}"
+                assert isinstance(result[0], datetime), (
+                    f"Expected datetime, got {type(result[0])}"
+                )
+                assert result[0] == expected_datetime, (
+                    f"Expected {expected_datetime}, got {result[0]}"
+                )
 
                 # Clean up
                 conn.execute("DROP TABLE test_dates")
 
-    def test_get_due_words_with_date_formats(self, temp_db_manager, sample_user_data, sample_words_data):
+    def test_get_due_words_with_date_formats(
+        self, temp_db_manager, sample_user_data, sample_words_data
+    ):
         """Test that get_due_words works with various date formats stored in database"""
 
         # Create user and add words
@@ -110,18 +115,20 @@ class TestDateHandling:
 
         # Test that the date fields are properly converted
         for word in due_words:
-            assert 'next_review_date' in word
-            assert word['next_review_date'] is not None
+            assert "next_review_date" in word
+            assert word["next_review_date"] is not None
             # The date should be a datetime object or string that can be processed
-            if isinstance(word['next_review_date'], str):
+            if isinstance(word["next_review_date"], str):
                 # Should be able to parse it
                 try:
-                    datetime.fromisoformat(word['next_review_date'])
+                    datetime.fromisoformat(word["next_review_date"])
                 except ValueError:
                     # Try alternative formats
-                    datetime.strptime(word['next_review_date'], '%Y-%m-%d %H:%M:%S')
+                    datetime.strptime(word["next_review_date"], "%Y-%m-%d %H:%M:%S")
 
-    def test_get_due_words_with_past_dates(self, temp_db_manager, sample_user_data, sample_words_data):
+    def test_get_due_words_with_past_dates(
+        self, temp_db_manager, sample_user_data, sample_words_data
+    ):
         """Test that get_due_words correctly handles past dates"""
 
         # Create user and add words
@@ -140,19 +147,23 @@ class TestDateHandling:
             past_date = datetime.now() - timedelta(days=1)
             conn.execute(
                 "UPDATE learning_progress SET next_review_date = ? WHERE telegram_id = ? AND word_id = ?",
-                (past_date.isoformat(), user_id, first_word_id)
+                (past_date.isoformat(), user_id, first_word_id),
             )
             conn.commit()
 
         # Get due words - should include the word with past date
         due_words = temp_db_manager.get_due_words(user_id, limit=10)
-        assert len(due_words) >= 1, f"Expected at least 1 due word, got {len(due_words)}"
+        assert len(due_words) >= 1, (
+            f"Expected at least 1 due word, got {len(due_words)}"
+        )
 
         # Find the word we updated
         updated_word = next((w for w in due_words if w["id"] == first_word_id), None)
         assert updated_word is not None, "Updated word should be in due words"
 
-    def test_get_due_words_with_future_dates(self, temp_db_manager, sample_user_data, sample_words_data):
+    def test_get_due_words_with_future_dates(
+        self, temp_db_manager, sample_user_data, sample_words_data
+    ):
         """Test that get_due_words correctly excludes future dates"""
 
         # Create user and add words
@@ -170,7 +181,7 @@ class TestDateHandling:
             for word in words:
                 conn.execute(
                     "UPDATE learning_progress SET next_review_date = ? WHERE telegram_id = ? AND word_id = ?",
-                    (future_date.isoformat(), user_id, word["id"])
+                    (future_date.isoformat(), user_id, word["id"]),
                 )
             conn.commit()
 
@@ -178,7 +189,9 @@ class TestDateHandling:
         due_words = temp_db_manager.get_due_words(user_id, limit=10)
         assert len(due_words) == 0, f"Expected 0 due words, got {len(due_words)}"
 
-    def test_date_handling_edge_cases(self, temp_db_manager, sample_user_data, sample_words_data):
+    def test_date_handling_edge_cases(
+        self, temp_db_manager, sample_user_data, sample_words_data
+    ):
         """Test edge cases in date handling"""
 
         # Create user and add words
@@ -190,18 +203,24 @@ class TestDateHandling:
 
         # Initially, all words should be due
         initial_due_words = temp_db_manager.get_due_words(user_id, limit=10)
-        assert len(initial_due_words) == 2, f"Expected 2 initial due words, got {len(initial_due_words)}"
+        assert len(initial_due_words) == 2, (
+            f"Expected 2 initial due words, got {len(initial_due_words)}"
+        )
 
         # Test that the method doesn't crash with date format issues
         # This is the main test - that get_due_words doesn't raise date format errors
         try:
             due_words = temp_db_manager.get_due_words(user_id, limit=10)
             assert isinstance(due_words, list), "get_due_words should return a list"
-            assert len(due_words) >= 0, "get_due_words should return non-negative length"
+            assert len(due_words) >= 0, (
+                "get_due_words should return non-negative length"
+            )
         except Exception as e:
             pytest.fail(f"get_due_words should not raise date format errors: {e}")
 
-    def test_learning_progress_update_with_dates(self, temp_db_manager, sample_user_data, sample_words_data):
+    def test_learning_progress_update_with_dates(
+        self, temp_db_manager, sample_user_data, sample_words_data
+    ):
         """Test that learning progress updates handle dates correctly"""
 
         # Create user and add words
@@ -230,7 +249,7 @@ class TestDateHandling:
             try:
                 datetime.fromisoformat(progress["next_review_date"])
             except ValueError:
-                datetime.strptime(progress["next_review_date"], '%Y-%m-%d %H:%M:%S')
+                datetime.strptime(progress["next_review_date"], "%Y-%m-%d %H:%M:%S")
 
     def test_date_error_handling(self):
         """Test error handling for invalid date formats"""
@@ -249,7 +268,7 @@ class TestDateHandling:
                 )
                 conn.execute(
                     "INSERT INTO test_invalid_dates (test_date) VALUES (?)",
-                    ("invalid-date-format",)
+                    ("invalid-date-format",),
                 )
 
                 # This should raise an error when trying to fetch

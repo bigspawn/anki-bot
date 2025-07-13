@@ -18,9 +18,7 @@ class TestUserAuthorization:
     def test_is_user_authorized_empty_list(self):
         """Test authorization when no users are configured - should disallow all"""
         settings = Settings(
-            telegram_bot_token="test_token",
-            openai_api_key="test_key",
-            allowed_users=""
+            telegram_bot_token="test_token", openai_api_key="test_key", allowed_users=""
         )
         handler = BotHandler(settings)
 
@@ -33,7 +31,7 @@ class TestUserAuthorization:
         settings = Settings(
             telegram_bot_token="test_token",
             openai_api_key="test_key",
-            allowed_users="321,123"
+            allowed_users="321,123",
         )
         handler = BotHandler(settings)
 
@@ -51,7 +49,7 @@ class TestUserAuthorization:
         settings = Settings(
             telegram_bot_token="test_token",
             openai_api_key="test_key",
-            allowed_users="321"
+            allowed_users="321",
         )
         handler = BotHandler(settings)
 
@@ -77,7 +75,7 @@ class TestUserAuthorization:
         settings = Settings(
             telegram_bot_token="test_token",
             openai_api_key="test_key",
-            allowed_users="321"
+            allowed_users="321",
         )
         handler = BotHandler(settings)
 
@@ -105,7 +103,7 @@ class TestUserAuthorization:
         settings = Settings(
             telegram_bot_token="test_token",
             openai_api_key="test_key",
-            allowed_users="321"
+            allowed_users="321",
         )
         handler = BotHandler(settings)
 
@@ -134,7 +132,7 @@ class TestUserAuthorization:
         settings = Settings(
             telegram_bot_token="test_token",
             openai_api_key="test_key",
-            allowed_users="321"
+            allowed_users="321",
         )
         handler = BotHandler(settings)
 
@@ -165,7 +163,7 @@ class TestUserAuthorization:
         settings = Settings(
             telegram_bot_token="test_token",
             openai_api_key="test_key",
-            allowed_users="321,123,456"
+            allowed_users="321,123,456",
         )
 
         expected_users = [321, 123, 456]
@@ -174,9 +172,7 @@ class TestUserAuthorization:
     def test_config_parse_allowed_users_empty_string(self):
         """Test parsing allowed users from empty string - should disallow all"""
         settings = Settings(
-            telegram_bot_token="test_token",
-            openai_api_key="test_key",
-            allowed_users=""
+            telegram_bot_token="test_token", openai_api_key="test_key", allowed_users=""
         )
 
         assert settings.allowed_users_list == []
@@ -190,7 +186,7 @@ class TestUserAuthorization:
         settings = Settings(
             telegram_bot_token="test_token",
             openai_api_key="test_key",
-            allowed_users="321, 123 , 456"
+            allowed_users="321, 123 , 456",
         )
 
         expected_users = [321, 123, 456]

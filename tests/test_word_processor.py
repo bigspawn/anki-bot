@@ -79,7 +79,9 @@ class TestWordProcessor:
         """Create WordProcessor with mocked client and isolated database"""
         with patch("src.word_processor.AsyncOpenAI", return_value=mock_openai_client):
             # Create a patcher for get_db_manager that we can control
-            db_patcher = patch("src.word_processor.get_db_manager", return_value=mock_global_db_manager)
+            db_patcher = patch(
+                "src.word_processor.get_db_manager", return_value=mock_global_db_manager
+            )
             db_patcher.start()
 
             processor = WordProcessor(api_key="test_key")
@@ -197,15 +199,17 @@ class TestWordProcessor:
         """Test text processing"""
         # Mock the batch_process_words method to return test data
         word_processor.batch_process_words = AsyncMock(
-            return_value=[ProcessedWord(
-                word="test",
-                lemma="Test",
-                part_of_speech="noun",
-                article="das",
-                translation="тест",
-                example="Das ist ein Test.",
-                additional_forms=None,
-            )]
+            return_value=[
+                ProcessedWord(
+                    word="test",
+                    lemma="Test",
+                    part_of_speech="noun",
+                    article="das",
+                    translation="тест",
+                    example="Das ist ein Test.",
+                    additional_forms=None,
+                )
+            ]
         )
 
         text = "Das ist ein Test."
@@ -242,35 +246,37 @@ class TestWordProcessor:
         # Mock OpenAI batch response with valid translations
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
-        mock_response.choices[0].message.content = json.dumps({
-            "haus": {
-                "lemma": "Haus",
-                "part_of_speech": "noun",
-                "article": "das",
-                "translation": "дом",
-                "example": "Das Haus ist groß.",
-                "additional_forms": None,
-                "confidence": 0.9
-            },
-            "auto": {
-                "lemma": "Auto",
-                "part_of_speech": "noun",
-                "article": "das",
-                "translation": "машина",
-                "example": "Das Auto ist schnell.",
-                "additional_forms": None,
-                "confidence": 0.9
-            },
-            "buch": {
-                "lemma": "Buch",
-                "part_of_speech": "noun",
-                "article": "das",
-                "translation": "книга",
-                "example": "Das Buch ist interessant.",
-                "additional_forms": None,
-                "confidence": 0.9
+        mock_response.choices[0].message.content = json.dumps(
+            {
+                "haus": {
+                    "lemma": "Haus",
+                    "part_of_speech": "noun",
+                    "article": "das",
+                    "translation": "дом",
+                    "example": "Das Haus ist groß.",
+                    "additional_forms": None,
+                    "confidence": 0.9,
+                },
+                "auto": {
+                    "lemma": "Auto",
+                    "part_of_speech": "noun",
+                    "article": "das",
+                    "translation": "машина",
+                    "example": "Das Auto ist schnell.",
+                    "additional_forms": None,
+                    "confidence": 0.9,
+                },
+                "buch": {
+                    "lemma": "Buch",
+                    "part_of_speech": "noun",
+                    "article": "das",
+                    "translation": "книга",
+                    "example": "Das Buch ist interessant.",
+                    "additional_forms": None,
+                    "confidence": 0.9,
+                },
             }
-        })
+        )
         mock_openai_client.chat.completions.create.return_value = mock_response
 
         words = ["haus", "auto", "buch"]
@@ -288,26 +294,28 @@ class TestWordProcessor:
         # Mock OpenAI batch response
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
-        mock_response.choices[0].message.content = json.dumps({
-            "Haus": {
-                "lemma": "Haus",
-                "part_of_speech": "noun",
-                "article": "das",
-                "translation": "дом",
-                "example": "Das Haus ist schön.",
-                "additional_forms": '{"plural": "Häuser"}',
-                "confidence": 0.95,
-            },
-            "gehen": {
-                "lemma": "gehen",
-                "part_of_speech": "verb",
-                "article": None,
-                "translation": "идти",
-                "example": "Ich gehe zur Schule.",
-                "additional_forms": '{"past": "ging"}',
-                "confidence": 0.90,
+        mock_response.choices[0].message.content = json.dumps(
+            {
+                "Haus": {
+                    "lemma": "Haus",
+                    "part_of_speech": "noun",
+                    "article": "das",
+                    "translation": "дом",
+                    "example": "Das Haus ist schön.",
+                    "additional_forms": '{"plural": "Häuser"}',
+                    "confidence": 0.95,
+                },
+                "gehen": {
+                    "lemma": "gehen",
+                    "part_of_speech": "verb",
+                    "article": None,
+                    "translation": "идти",
+                    "example": "Ich gehe zur Schule.",
+                    "additional_forms": '{"past": "ging"}',
+                    "confidence": 0.90,
+                },
             }
-        })
+        )
         mock_openai_client.chat.completions.create.return_value = mock_response
 
         words = ["Haus", "gehen"]

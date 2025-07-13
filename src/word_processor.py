@@ -52,7 +52,7 @@ def validate_article(
 
     # First check for plural nouns
     if is_likely_plural(lemma):
-        if article and article != 'None':
+        if article and article != "None":
             logger.warning(
                 f"Removed article for plural noun '{lemma}': '{article}' -> None"
             )
@@ -67,17 +67,12 @@ def validate_article(
     if corrected_article is not None:
         if corrected_article != article:
             logger.warning(
-                f"Corrected article for '{lemma}': '{article}' -> "
-                f"'{corrected_article}'"
+                f"Corrected article for '{lemma}': '{article}' -> '{corrected_article}'"
             )
         return corrected_article
 
     # If article is empty or incorrect, try to fix it
-    if (
-        not article
-        or article == 'None'
-        or article not in ["der", "die", "das"]
-    ):
+    if not article or article == "None" or article not in ["der", "die", "das"]:
         # If not in dictionary, try to guess by ending
         guessed_article = guess_article_by_ending(lemma)
         if guessed_article and guessed_article != article:
@@ -99,39 +94,136 @@ def get_correct_article_from_dict(lemma: str) -> str | None:
     """Get correct article from dictionary of known words"""
     known_articles = {
         # Masculine (der)
-        "Mann": "der", "Vater": "der", "Bruder": "der", "Sohn": "der", "Freund": "der",
-        "Lehrer": "der", "Schüler": "der", "Hund": "der", "Tisch": "der", "Stuhl": "der",
-        "Baum": "der", "Tag": "der", "Abend": "der", "Morgen": "der", "Computer": "der",
-        "Fernseher": "der", "Kühlschrank": "der", "Apfel": "der", "Käse": "der", "Fisch": "der",
-        "Kaffee": "der", "Tee": "der", "Zucker": "der", "Reis": "der", "Salat": "der",
-        "Kuchen": "der", "Film": "der", "Park": "der", "Garten": "der", "Himmel": "der",
-        "Regen": "der", "Schnee": "der", "Wind": "der", "Frühling": "der", "Sommer": "der",
-        "Herbst": "der", "Winter": "der", "Beruf": "der", "Flur": "der", "Fußball": "der",
-        "Zentimeter": "der", "Teppich": "der",
-
+        "Mann": "der",
+        "Vater": "der",
+        "Bruder": "der",
+        "Sohn": "der",
+        "Freund": "der",
+        "Lehrer": "der",
+        "Schüler": "der",
+        "Hund": "der",
+        "Tisch": "der",
+        "Stuhl": "der",
+        "Baum": "der",
+        "Tag": "der",
+        "Abend": "der",
+        "Morgen": "der",
+        "Computer": "der",
+        "Fernseher": "der",
+        "Kühlschrank": "der",
+        "Apfel": "der",
+        "Käse": "der",
+        "Fisch": "der",
+        "Kaffee": "der",
+        "Tee": "der",
+        "Zucker": "der",
+        "Reis": "der",
+        "Salat": "der",
+        "Kuchen": "der",
+        "Film": "der",
+        "Park": "der",
+        "Garten": "der",
+        "Himmel": "der",
+        "Regen": "der",
+        "Schnee": "der",
+        "Wind": "der",
+        "Frühling": "der",
+        "Sommer": "der",
+        "Herbst": "der",
+        "Winter": "der",
+        "Beruf": "der",
+        "Flur": "der",
+        "Fußball": "der",
+        "Zentimeter": "der",
+        "Teppich": "der",
         # Feminine (die)
-        "Frau": "die", "Mutter": "die", "Schwester": "die", "Tochter": "die", "Freundin": "die",
-        "Lehrerin": "die", "Schülerin": "die", "Katze": "die", "Schule": "die", "Straße": "die",
-        "Stadt": "die", "Familie": "die", "Arbeit": "die", "Zeit": "die", "Woche": "die",
-        "Musik": "die", "Sprache": "die", "Frage": "die", "Antwort": "die", "Geschichte": "die",
-        "Banane": "die", "Orange": "die", "Birne": "die", "Tomate": "die", "Kartoffel": "die",
-        "Milch": "die", "Butter": "die", "Schokolade": "die", "Pizza": "die", "Küche": "die",
-        "Wohnung": "die", "Tür": "die", "Lampe": "die", "Uhr": "die", "Farbe": "die",
-        "Sonne": "die", "Wolke": "die", "Blume": "die", "Natur": "die", "Buchhandlung": "die",
+        "Frau": "die",
+        "Mutter": "die",
+        "Schwester": "die",
+        "Tochter": "die",
+        "Freundin": "die",
+        "Lehrerin": "die",
+        "Schülerin": "die",
+        "Katze": "die",
+        "Schule": "die",
+        "Straße": "die",
+        "Stadt": "die",
+        "Familie": "die",
+        "Arbeit": "die",
+        "Zeit": "die",
+        "Woche": "die",
+        "Musik": "die",
+        "Sprache": "die",
+        "Frage": "die",
+        "Antwort": "die",
+        "Geschichte": "die",
+        "Banane": "die",
+        "Orange": "die",
+        "Birne": "die",
+        "Tomate": "die",
+        "Kartoffel": "die",
+        "Milch": "die",
+        "Butter": "die",
+        "Schokolade": "die",
+        "Pizza": "die",
+        "Küche": "die",
+        "Wohnung": "die",
+        "Tür": "die",
+        "Lampe": "die",
+        "Uhr": "die",
+        "Farbe": "die",
+        "Sonne": "die",
+        "Wolke": "die",
+        "Blume": "die",
+        "Natur": "die",
+        "Buchhandlung": "die",
         "Firma": "die",
-
         # Neuter (das)
-        "Kind": "das", "Mädchen": "das", "Tier": "das", "Haus": "das", "Auto": "das",
-        "Fahrrad": "das", "Buch": "das", "Bild": "das", "Foto": "das", "Zimmer": "das",
-        "Bett": "das", "Radio": "das", "Telefon": "das", "Handy": "das", "Internet": "das",
-        "Wasser": "das", "Bier": "das", "Brot": "das", "Ei": "das", "Fleisch": "das",
-        "Gemüse": "das", "Obst": "das", "Eis": "das", "Geld": "das", "Jahr": "das",
-        "Wetter": "das", "Land": "das", "Hotel": "das", "Restaurant": "das", "Kino": "das",
-        "Museum": "das", "Geschäft": "das", "Problem": "das", "Gespräch": "das", "Spiel": "das",
-        "Hobby": "das", "Leben": "das", "Abendessen": "das", "Profil": "das",
-
+        "Kind": "das",
+        "Mädchen": "das",
+        "Tier": "das",
+        "Haus": "das",
+        "Auto": "das",
+        "Fahrrad": "das",
+        "Buch": "das",
+        "Bild": "das",
+        "Foto": "das",
+        "Zimmer": "das",
+        "Bett": "das",
+        "Radio": "das",
+        "Telefon": "das",
+        "Handy": "das",
+        "Internet": "das",
+        "Wasser": "das",
+        "Bier": "das",
+        "Brot": "das",
+        "Ei": "das",
+        "Fleisch": "das",
+        "Gemüse": "das",
+        "Obst": "das",
+        "Eis": "das",
+        "Geld": "das",
+        "Jahr": "das",
+        "Wetter": "das",
+        "Land": "das",
+        "Hotel": "das",
+        "Restaurant": "das",
+        "Kino": "das",
+        "Museum": "das",
+        "Geschäft": "das",
+        "Problem": "das",
+        "Gespräch": "das",
+        "Spiel": "das",
+        "Hobby": "das",
+        "Leben": "das",
+        "Abendessen": "das",
+        "Profil": "das",
         # Plural (no article)
-        "Eltern": None, "Kinder": None, "Leute": None, "Geschwister": None, "Großeltern": None,
+        "Eltern": None,
+        "Kinder": None,
+        "Leute": None,
+        "Geschwister": None,
+        "Großeltern": None,
         "Pommes": None,
     }
 
@@ -143,9 +235,22 @@ def guess_article_by_ending(lemma: str) -> str | None:
     lemma_lower = lemma.lower()
 
     # Rules for determining articles by endings
-    das_endings = ['chen', 'lein', 'um', 'ma', 'ment', 'tum', 'o']
-    die_endings = ['e', 'ei', 'ie', 'in', 'heit', 'keit', 'schaft', 'tion', 'sion', 'tät', 'ung', 'ur']
-    der_endings = ['er', 'en', 'el', 'ich', 'ig', 'ling', 'or', 'us']
+    das_endings = ["chen", "lein", "um", "ma", "ment", "tum", "o"]
+    die_endings = [
+        "e",
+        "ei",
+        "ie",
+        "in",
+        "heit",
+        "keit",
+        "schaft",
+        "tion",
+        "sion",
+        "tät",
+        "ung",
+        "ur",
+    ]
+    der_endings = ["er", "en", "el", "ich", "ig", "ling", "or", "us"]
 
     # Check in order of specificity (most specific first)
     for ending in sorted(das_endings, key=len, reverse=True):
@@ -166,8 +271,16 @@ def guess_article_by_ending(lemma: str) -> str | None:
 def is_likely_plural(lemma: str) -> bool:
     """Check if word is likely plural"""
     plural_indicators = [
-        'eltern', 'geschwister', 'großeltern', 'leute', 'pommes',
-        'kinder', 'menschen', 'personen', 'studenten', 'schüler'
+        "eltern",
+        "geschwister",
+        "großeltern",
+        "leute",
+        "pommes",
+        "kinder",
+        "menschen",
+        "personen",
+        "studenten",
+        "schüler",
     ]
 
     lemma_lower = lemma.lower()
@@ -177,14 +290,14 @@ def is_likely_plural(lemma: str) -> bool:
         return True
 
     # Plural endings
-    plural_endings = ['en', 'er', 'e', 's']
+    plural_endings = ["en", "er", "e", "s"]
     for ending in plural_endings:
         if (
             lemma_lower.endswith(ending)
             and len(lemma) > 3
             and any(
                 indicator in lemma_lower
-                for indicator in ['kinder', 'menschen', 'leute']
+                for indicator in ["kinder", "menschen", "leute"]
             )
         ):
             return True
@@ -323,7 +436,9 @@ class WordProcessor:
         # Extract German words from text (this already filters non-German words)
         words = self.text_parser.extract_words(text)
         if not words:
-            logger.warning("No German words found in text - text may be in another language or contain no valid words")
+            logger.warning(
+                "No German words found in text - text may be in another language or contain no valid words"
+            )
             return []
 
         logger.info(f"Found {len(words)} German words in text: {words}")
@@ -410,7 +525,9 @@ Example format:
 
 Be accurate and provide high-quality linguistic analysis for all words."""
 
-    def _create_word_analysis_prompt(self, word: str, context: str | None = None) -> str:
+    def _create_word_analysis_prompt(
+        self, word: str, context: str | None = None
+    ) -> str:
         """Create prompt for word analysis"""
         prompt = f"Analyze the German word: '{word}'"
 
@@ -421,7 +538,9 @@ Be accurate and provide high-quality linguistic analysis for all words."""
 
         return prompt
 
-    def _create_batch_analysis_prompt(self, words: list[str], contexts: dict[str, str] | None = None) -> str:
+    def _create_batch_analysis_prompt(
+        self, words: list[str], contexts: dict[str, str] | None = None
+    ) -> str:
         """Create prompt for batch word analysis"""
         contexts = contexts or {}
 
@@ -446,14 +565,20 @@ Be accurate and provide high-quality linguistic analysis for all words."""
 
             # Validate translation
             if not self._is_valid_translation(translation):
-                logger.warning(f"Invalid translation for word '{original_word}': '{translation}' - skipping word")
+                logger.warning(
+                    f"Invalid translation for word '{original_word}': '{translation}' - skipping word"
+                )
                 return None
 
             return ProcessedWord(
                 word=original_word,
                 lemma=data.get("lemma", original_word),
                 part_of_speech=data.get("part_of_speech", "unknown"),
-                article=validate_article(data.get("article"), data.get("lemma", original_word), data.get("part_of_speech", "unknown")),
+                article=validate_article(
+                    data.get("article"),
+                    data.get("lemma", original_word),
+                    data.get("part_of_speech", "unknown"),
+                ),
                 translation=translation,
                 example=data.get("example", ""),
                 additional_forms=data.get("additional_forms"),
@@ -495,7 +620,7 @@ Be accurate and provide high-quality linguistic analysis for all words."""
             "[error]",
             "error",
             "[failed]",
-            "failed"
+            "failed",
         ]
 
         translation_lower = translation.lower().strip()
@@ -610,7 +735,11 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                         word=word,
                         lemma=word_data.get("lemma", word),
                         part_of_speech=word_data.get("part_of_speech", "unknown"),
-                        article=validate_article(word_data.get("article"), word_data.get("lemma", word), word_data.get("part_of_speech", "unknown")),
+                        article=validate_article(
+                            word_data.get("article"),
+                            word_data.get("lemma", word),
+                            word_data.get("part_of_speech", "unknown"),
+                        ),
                         translation=translation,
                         example=word_data.get("example", ""),
                         additional_forms=word_data.get("additional_forms"),
@@ -618,7 +747,9 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                     )
                     processed_words.append(processed_word)
                 except (TypeError, ValueError) as e:
-                    logger.error(f"Error parsing word '{word}' from batch response: {e}")
+                    logger.error(
+                        f"Error parsing word '{word}' from batch response: {e}"
+                    )
                     # Skip word instead of using fallback
                     continue
             else:

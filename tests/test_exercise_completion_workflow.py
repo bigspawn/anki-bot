@@ -68,7 +68,9 @@ class TestExerciseCompletionWorkflow:
             },
         ]
 
-    def test_complete_exercise_workflow(self, temp_db_manager, sample_user_data, sample_words_data):
+    def test_complete_exercise_workflow(
+        self, temp_db_manager, sample_user_data, sample_words_data
+    ):
         """Test complete exercise workflow: add words, complete exercise, get new words"""
 
         # 1. Create user
@@ -94,7 +96,9 @@ class TestExerciseCompletionWorkflow:
 
         # Verify learning progress exists with initial values
         initial_progress = temp_db_manager.get_learning_progress(user_id, word_id)
-        assert initial_progress is not None, "Learning progress should exist after adding words"
+        assert initial_progress is not None, (
+            "Learning progress should exist after adding words"
+        )
         assert initial_progress["repetitions"] == 0, "Initial repetitions should be 0"
 
         # Update learning progress (simulate completing exercise)
@@ -103,41 +107,65 @@ class TestExerciseCompletionWorkflow:
 
         # 5. Verify learning progress was created and updated
         progress = temp_db_manager.get_learning_progress(user_id, word_id)
-        assert progress is not None, "Learning progress should exist after exercise completion"
-        assert progress["repetitions"] == 1, f"Expected 1 repetition, got {progress['repetitions']}"
-        assert progress["easiness_factor"] == 2.5, f"Expected easiness factor 2.5, got {progress['easiness_factor']}"
-        assert progress["interval_days"] > 0, f"Expected positive interval, got {progress['interval_days']}"
+        assert progress is not None, (
+            "Learning progress should exist after exercise completion"
+        )
+        assert progress["repetitions"] == 1, (
+            f"Expected 1 repetition, got {progress['repetitions']}"
+        )
+        assert progress["easiness_factor"] == 2.5, (
+            f"Expected easiness factor 2.5, got {progress['easiness_factor']}"
+        )
+        assert progress["interval_days"] > 0, (
+            f"Expected positive interval, got {progress['interval_days']}"
+        )
 
         # 6. Verify review history was created
         review_history = temp_db_manager.get_review_history(user_id, word_id)
-        assert len(review_history) == 1, f"Expected 1 review record, got {len(review_history)}"
-        assert review_history[0]["rating"] == 3, f"Expected rating 3, got {review_history[0]['rating']}"
+        assert len(review_history) == 1, (
+            f"Expected 1 review record, got {len(review_history)}"
+        )
+        assert review_history[0]["rating"] == 3, (
+            f"Expected rating 3, got {review_history[0]['rating']}"
+        )
 
         # 7. Get new words for next session - should have 2 new words remaining
         remaining_new_words = temp_db_manager.get_new_words(user_id)
-        assert len(remaining_new_words) == 2, f"Expected 2 remaining new words, got {len(remaining_new_words)}"
+        assert len(remaining_new_words) == 2, (
+            f"Expected 2 remaining new words, got {len(remaining_new_words)}"
+        )
 
         # 8. Verify the completed word is no longer in new words
         new_word_ids = {word["id"] for word in remaining_new_words}
-        assert word_id not in new_word_ids, "Completed word should not be in new words list"
+        assert word_id not in new_word_ids, (
+            "Completed word should not be in new words list"
+        )
 
         # 9. Complete second exercise with rating 4 (Easy)
         second_word = remaining_new_words[0]
         second_word_id = second_word["id"]
 
-        success = temp_db_manager.update_learning_progress(user_id, second_word_id, rating=4)
+        success = temp_db_manager.update_learning_progress(
+            user_id, second_word_id, rating=4
+        )
         assert success, "Second learning progress update should succeed"
 
         # 10. Verify we now have only 1 new word remaining
         final_new_words = temp_db_manager.get_new_words(user_id)
-        assert len(final_new_words) == 1, f"Expected 1 remaining new word, got {len(final_new_words)}"
+        assert len(final_new_words) == 1, (
+            f"Expected 1 remaining new word, got {len(final_new_words)}"
+        )
 
         # 11. Verify both completed words have proper learning progress
         all_words_with_progress = temp_db_manager.get_words_by_user(user_id)
         reviewed_words = [w for w in all_words_with_progress if w["repetitions"] > 0]
-        assert len(reviewed_words) == 2, f"Expected 2 reviewed words, got {len(reviewed_words)}"
+        assert len(reviewed_words) == 2, (
+            f"Expected 2 reviewed words, got {len(reviewed_words)}"
+        )
 
-    def test_exercise_completion_with_different_ratings(self, temp_db_manager, sample_user_data, sample_words_data):
+    def test_exercise_completion_with_different_ratings(
+        self, temp_db_manager, sample_user_data, sample_words_data
+    ):
         """Test exercise completion with different ratings affects learning progress"""
 
         # Create user and add words
@@ -157,24 +185,38 @@ class TestExerciseCompletionWorkflow:
             word_id = word["id"]
 
             # Complete exercise with specific rating
-            success = temp_db_manager.update_learning_progress(user_id, word_id, rating=rating)
-            assert success, f"Learning progress update should succeed for rating {rating}"
+            success = temp_db_manager.update_learning_progress(
+                user_id, word_id, rating=rating
+            )
+            assert success, (
+                f"Learning progress update should succeed for rating {rating}"
+            )
 
             # Verify learning progress
             progress = temp_db_manager.get_learning_progress(user_id, word_id)
-            assert progress is not None, f"Learning progress should exist for rating {rating}"
-            assert progress["repetitions"] == 1, f"Expected 1 repetition for rating {rating}"
+            assert progress is not None, (
+                f"Learning progress should exist for rating {rating}"
+            )
+            assert progress["repetitions"] == 1, (
+                f"Expected 1 repetition for rating {rating}"
+            )
 
             # Verify review history
             review_history = temp_db_manager.get_review_history(user_id, word_id)
-            assert len(review_history) == 1, f"Expected 1 review record for rating {rating}"
-            assert review_history[0]["rating"] == rating, f"Expected rating {rating} in history"
+            assert len(review_history) == 1, (
+                f"Expected 1 review record for rating {rating}"
+            )
+            assert review_history[0]["rating"] == rating, (
+                f"Expected rating {rating} in history"
+            )
 
         # Verify final state
         final_new_words = temp_db_manager.get_new_words(user_id)
         assert len(final_new_words) == 0, "Should have no new words remaining"
 
-    def test_multiple_exercise_sessions(self, temp_db_manager, sample_user_data, sample_words_data):
+    def test_multiple_exercise_sessions(
+        self, temp_db_manager, sample_user_data, sample_words_data
+    ):
         """Test multiple exercise sessions with the same word"""
 
         # Create user and add one word
@@ -190,18 +232,28 @@ class TestExerciseCompletionWorkflow:
 
         # Complete multiple exercises for the same word
         for repetition in range(1, 4):  # Do 3 repetitions
-            success = temp_db_manager.update_learning_progress(user_id, word_id, rating=3)
-            assert success, f"Learning progress update should succeed for repetition {repetition}"
+            success = temp_db_manager.update_learning_progress(
+                user_id, word_id, rating=3
+            )
+            assert success, (
+                f"Learning progress update should succeed for repetition {repetition}"
+            )
 
             # Verify repetition count increases
             progress = temp_db_manager.get_learning_progress(user_id, word_id)
-            assert progress["repetitions"] == repetition, f"Expected {repetition} repetitions, got {progress['repetitions']}"
+            assert progress["repetitions"] == repetition, (
+                f"Expected {repetition} repetitions, got {progress['repetitions']}"
+            )
 
         # Verify review history has all records
         review_history = temp_db_manager.get_review_history(user_id, word_id)
-        assert len(review_history) == 3, f"Expected 3 review records, got {len(review_history)}"
+        assert len(review_history) == 3, (
+            f"Expected 3 review records, got {len(review_history)}"
+        )
 
-    def test_exercise_completion_creates_missing_progress(self, temp_db_manager, sample_user_data):
+    def test_exercise_completion_creates_missing_progress(
+        self, temp_db_manager, sample_user_data
+    ):
         """Test that exercise completion creates learning progress when it's missing"""
 
         # Create user and word manually without learning progress
@@ -228,20 +280,32 @@ class TestExerciseCompletionWorkflow:
 
         # Complete exercise - this should create learning progress
         success = temp_db_manager.update_learning_progress(user_id, word_id, rating=3)
-        assert success, "Learning progress update should succeed and create missing progress"
+        assert success, (
+            "Learning progress update should succeed and create missing progress"
+        )
 
         # Verify learning progress was created
         progress = temp_db_manager.get_learning_progress(user_id, word_id)
         assert progress is not None, "Learning progress should be created"
-        assert progress["repetitions"] == 1, f"Expected 1 repetition, got {progress['repetitions']}"
-        assert progress["easiness_factor"] == 2.5, f"Expected easiness factor 2.5, got {progress['easiness_factor']}"
+        assert progress["repetitions"] == 1, (
+            f"Expected 1 repetition, got {progress['repetitions']}"
+        )
+        assert progress["easiness_factor"] == 2.5, (
+            f"Expected easiness factor 2.5, got {progress['easiness_factor']}"
+        )
 
         # Verify review history was created
         review_history = temp_db_manager.get_review_history(user_id, word_id)
-        assert len(review_history) == 1, f"Expected 1 review record, got {len(review_history)}"
-        assert review_history[0]["rating"] == 3, f"Expected rating 3, got {review_history[0]['rating']}"
+        assert len(review_history) == 1, (
+            f"Expected 1 review record, got {len(review_history)}"
+        )
+        assert review_history[0]["rating"] == 3, (
+            f"Expected rating 3, got {review_history[0]['rating']}"
+        )
 
-    def test_get_new_words_after_exercise_completion(self, temp_db_manager, sample_user_data, sample_words_data):
+    def test_get_new_words_after_exercise_completion(
+        self, temp_db_manager, sample_user_data, sample_words_data
+    ):
         """Test that get_new_words returns correct words after exercise completion"""
 
         # Create user and add words
@@ -256,7 +320,9 @@ class TestExerciseCompletionWorkflow:
 
         # Complete exercise for one word
         first_word_id = new_words[0]["id"]
-        success = temp_db_manager.update_learning_progress(user_id, first_word_id, rating=3)
+        success = temp_db_manager.update_learning_progress(
+            user_id, first_word_id, rating=3
+        )
         assert success, "Learning progress update should succeed"
 
         # Get new words again - should have 2 remaining
@@ -265,11 +331,15 @@ class TestExerciseCompletionWorkflow:
 
         # Verify the completed word is not in the new words list
         remaining_word_ids = {word["id"] for word in remaining_new_words}
-        assert first_word_id not in remaining_word_ids, "Completed word should not be in new words"
+        assert first_word_id not in remaining_word_ids, (
+            "Completed word should not be in new words"
+        )
 
         # Complete another exercise
         second_word_id = remaining_new_words[0]["id"]
-        success = temp_db_manager.update_learning_progress(user_id, second_word_id, rating=4)
+        success = temp_db_manager.update_learning_progress(
+            user_id, second_word_id, rating=4
+        )
         assert success, "Second learning progress update should succeed"
 
         # Get new words again - should have 1 remaining
@@ -278,7 +348,9 @@ class TestExerciseCompletionWorkflow:
 
         # Complete final exercise
         final_word_id = final_new_words[0]["id"]
-        success = temp_db_manager.update_learning_progress(user_id, final_word_id, rating=2)
+        success = temp_db_manager.update_learning_progress(
+            user_id, final_word_id, rating=2
+        )
         assert success, "Final learning progress update should succeed"
 
         # Get new words again - should have 0 remaining
@@ -289,4 +361,6 @@ class TestExerciseCompletionWorkflow:
         all_words = temp_db_manager.get_words_by_user(user_id)
         assert len(all_words) == 3, "Should have 3 total words"
         for word in all_words:
-            assert word["repetitions"] > 0, f"Word {word['lemma']} should have been reviewed"
+            assert word["repetitions"] > 0, (
+                f"Word {word['lemma']} should have been reviewed"
+            )

@@ -165,9 +165,9 @@ class TestGermanTextParser:
         ]
 
         for text in non_german_texts:
-            assert not parser.validate_german_text(
-                text
-            ), f"Incorrectly validated: {text}"
+            assert not parser.validate_german_text(text), (
+                f"Incorrectly validated: {text}"
+            )
 
     def test_validate_german_text_with_umlauts(self, parser):
         """Test German text validation with umlauts"""
@@ -193,42 +193,42 @@ class TestGermanTextParser:
             "haben",
         ]
         for verb in german_verbs:
-            assert parser.validate_german_text(
-                verb
-            ), f"German verb '{verb}' should validate as German"
+            assert parser.validate_german_text(verb), (
+                f"German verb '{verb}' should validate as German"
+            )
 
         # German words with umlauts should validate
         german_umlaut_words = ["schön", "größer", "hören", "können", "müssen"]
         for word in german_umlaut_words:
-            assert parser.validate_german_text(
-                word
-            ), f"German word with umlauts '{word}' should validate as German"
+            assert parser.validate_german_text(word), (
+                f"German word with umlauts '{word}' should validate as German"
+            )
 
         # English words that are clearly distinct from German should not validate
         english_words = ["hello", "world"]
         for word in english_words:
-            assert not parser.validate_german_text(
-                word
-            ), f"English word '{word}' should not validate as German"
+            assert not parser.validate_german_text(word), (
+                f"English word '{word}' should not validate as German"
+            )
 
         # Other foreign words should not validate
         foreign_words = ["bonjour", "hola", "ciao"]
         for word in foreign_words:
-            assert not parser.validate_german_text(
-                word
-            ), f"Foreign word '{word}' should not validate as German"
+            assert not parser.validate_german_text(word), (
+                f"Foreign word '{word}' should not validate as German"
+            )
 
     def test_validate_german_text_bedeutet_regression(self, parser):
         """Regression test for the specific 'bedeutet' bug"""
         # The word 'bedeutet' was the original failing case
-        assert parser.validate_german_text(
-            "bedeutet"
-        ), "The word 'bedeutet' should validate as German"
+        assert parser.validate_german_text("bedeutet"), (
+            "The word 'bedeutet' should validate as German"
+        )
 
         # Test it in context as well
-        assert parser.validate_german_text(
-            "Das bedeutet viel"
-        ), "Text containing 'bedeutet' should validate as German"
+        assert parser.validate_german_text("Das bedeutet viel"), (
+            "Text containing 'bedeutet' should validate as German"
+        )
 
     def test_validate_german_text_mixed_language(self, parser):
         """Test German text validation with mixed languages"""

@@ -36,9 +36,7 @@ class TestAddWordsFixVerification:
 
         # Create user with new schema
         user = temp_db_manager.create_user(
-            telegram_id=739529,
-            first_name="Igor",
-            username="bigspawn"
+            telegram_id=739529, first_name="Igor", username="bigspawn"
         )
 
         # NEW SCHEMA (after migration):
@@ -62,9 +60,7 @@ class TestAddWordsFixVerification:
         """Test that check_multiple_words_exist works with telegram_id"""
 
         user = temp_db_manager.create_user(
-            telegram_id=12345,
-            first_name="Test",
-            username="testuser"
+            telegram_id=12345, first_name="Test", username="testuser"
         )
 
         # This call would have failed with KeyError: 'id' before fix
@@ -83,25 +79,23 @@ class TestAddWordsFixVerification:
         """Test that add_words_to_user works with telegram_id"""
 
         user = temp_db_manager.create_user(
-            telegram_id=54321,
-            first_name="AddTest",
-            username="adduser"
+            telegram_id=54321, first_name="AddTest", username="adduser"
         )
 
         # Prepare test words
-        words_data = [{
-            "lemma": "fixtest",
-            "part_of_speech": "noun",
-            "translation": "тест исправления",
-            "example": "This is a fix test.",
-            "confidence": 0.9
-        }]
+        words_data = [
+            {
+                "lemma": "fixtest",
+                "part_of_speech": "noun",
+                "translation": "тест исправления",
+                "example": "This is a fix test.",
+                "confidence": 0.9,
+            }
+        ]
 
         # This call would have failed with KeyError: 'id' before fix
         # Now it should work with telegram_id
-        added_count = temp_db_manager.add_words_to_user(
-            user["telegram_id"], words_data
-        )
+        added_count = temp_db_manager.add_words_to_user(user["telegram_id"], words_data)
 
         # Verify word was added successfully
         assert added_count == 1
@@ -117,9 +111,7 @@ class TestAddWordsFixVerification:
 
         # Simulate production user
         user = temp_db_manager.create_user(
-            telegram_id=739529,
-            first_name="Igor",
-            username="bigspawn"
+            telegram_id=739529, first_name="Igor", username="bigspawn"
         )
 
         # Simulate text extraction
@@ -137,18 +129,18 @@ class TestAddWordsFixVerification:
         words_data = []
         for word in extracted_words:
             if not word_existence[word]:  # If word doesn't exist
-                words_data.append({
-                    "lemma": word,
-                    "part_of_speech": "noun",
-                    "translation": f"translation_{word}",
-                    "example": f"Example with {word}.",
-                    "confidence": 0.8
-                })
+                words_data.append(
+                    {
+                        "lemma": word,
+                        "part_of_speech": "noun",
+                        "translation": f"translation_{word}",
+                        "example": f"Example with {word}.",
+                        "confidence": 0.8,
+                    }
+                )
 
         # Step 3: Add words to user (this was failing with KeyError: 'id')
-        added_count = temp_db_manager.add_words_to_user(
-            user["telegram_id"], words_data
-        )
+        added_count = temp_db_manager.add_words_to_user(user["telegram_id"], words_data)
 
         # Verify all words were added
         assert added_count == 3
@@ -172,7 +164,7 @@ class TestAddWordsFixVerification:
         user = temp_db_manager.create_user(
             telegram_id=739529,  # Exact user from logs
             first_name="Igor",
-            username="bigspawn"
+            username="bigspawn",
         )
 
         # Simulate the text processing that failed
@@ -188,13 +180,15 @@ class TestAddWordsFixVerification:
 
             # Add word if new
             if not word_existence["test"]:
-                words_data = [{
-                    "lemma": "test",
-                    "part_of_speech": "noun",
-                    "translation": "тест",
-                    "example": "This is a test.",
-                    "confidence": 0.9
-                }]
+                words_data = [
+                    {
+                        "lemma": "test",
+                        "part_of_speech": "noun",
+                        "translation": "тест",
+                        "example": "This is a test.",
+                        "confidence": 0.9,
+                    }
+                ]
 
                 added_count = temp_db_manager.add_words_to_user(
                     user["telegram_id"], words_data

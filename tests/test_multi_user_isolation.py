@@ -2,7 +2,6 @@
 Tests for multi-user word isolation functionality
 """
 
-
 import pytest
 
 from src.config import Settings
@@ -35,7 +34,7 @@ class TestMultiUserWordIsolation:
             telegram_bot_token="test_token",
             openai_api_key="test_key",
             allowed_users="321,123",
-            database_url="sqlite:///:memory:"
+            database_url="sqlite:///:memory:",
         )
 
     @pytest.fixture
@@ -50,20 +49,22 @@ class TestMultiUserWordIsolation:
     def user_a_data(self):
         """Test data for user A"""
         import random
+
         return {
             "telegram_id": random.randint(100000, 999999),
             "first_name": "Alice",
-            "username": "alice"
+            "username": "alice",
         }
 
     @pytest.fixture
     def user_b_data(self):
         """Test data for user B"""
         import random
+
         return {
             "telegram_id": random.randint(100000, 999999),
             "first_name": "Bob",
-            "username": "bob"
+            "username": "bob",
         }
 
     @pytest.fixture
@@ -75,18 +76,20 @@ class TestMultiUserWordIsolation:
                 "part_of_speech": "noun",
                 "article": "das",
                 "translation": "дом",
-                "example": "Das Haus ist groß."
+                "example": "Das Haus ist groß.",
             },
             {
                 "lemma": "gehen",
                 "part_of_speech": "verb",
                 "article": None,
                 "translation": "идти",
-                "example": "Ich gehe nach Hause."
-            }
+                "example": "Ich gehe nach Hause.",
+            },
         ]
 
-    def test_users_can_add_same_words_independently(self, db_manager, user_a_data, user_b_data, sample_words):
+    def test_users_can_add_same_words_independently(
+        self, db_manager, user_a_data, user_b_data, sample_words
+    ):
         """Test that users can add the same words and they appear in their individual lists"""
         # Create users
         user_a_id = self._create_user_and_get_id(db_manager, user_a_data)
@@ -112,7 +115,9 @@ class TestMultiUserWordIsolation:
         assert user_a_lemmas == {"haus", "gehen"}
         assert user_b_lemmas == {"haus", "gehen"}
 
-    def test_words_exist_check_is_user_specific(self, db_manager, user_a_data, user_b_data, sample_words):
+    def test_words_exist_check_is_user_specific(
+        self, db_manager, user_a_data, user_b_data, sample_words
+    ):
         """Test that word existence check is user-specific"""
         # Create users
         user_a_id = self._create_user_and_get_id(db_manager, user_a_data)
@@ -128,7 +133,9 @@ class TestMultiUserWordIsolation:
         assert user_a_has_haus is True, "User A should have 'haus'"
         assert user_b_has_haus is False, "User B should NOT have 'haus'"
 
-    def test_study_session_isolation(self, db_manager, user_a_data, user_b_data, sample_words):
+    def test_study_session_isolation(
+        self, db_manager, user_a_data, user_b_data, sample_words
+    ):
         """Test that study sessions only show user's own words"""
         # Create users
         user_a_id = self._create_user_and_get_id(db_manager, user_a_data)
@@ -138,7 +145,9 @@ class TestMultiUserWordIsolation:
         db_manager.word_repo.add_words_to_user(user_a_id, sample_words)
 
         # User B adds only one word
-        db_manager.word_repo.add_words_to_user(user_b_id, [sample_words[0]])  # Only "haus"
+        db_manager.word_repo.add_words_to_user(
+            user_b_id, [sample_words[0]]
+        )  # Only "haus"
 
         # Get words for study
         user_a_due_words = db_manager.word_repo.get_due_words(user_a_id, limit=10)
@@ -151,7 +160,9 @@ class TestMultiUserWordIsolation:
         user_b_lemmas = {word["lemma"] for word in user_b_due_words}
         assert user_b_lemmas == {"haus"}, "User B should only see 'haus'"
 
-    def test_new_words_isolation(self, db_manager, user_a_data, user_b_data, sample_words):
+    def test_new_words_isolation(
+        self, db_manager, user_a_data, user_b_data, sample_words
+    ):
         """Test that new words are isolated per user"""
         # Create users
         user_a_id = self._create_user_and_get_id(db_manager, user_a_data)
@@ -161,7 +172,9 @@ class TestMultiUserWordIsolation:
         db_manager.word_repo.add_words_to_user(user_a_id, sample_words)
 
         # User B adds only one word
-        db_manager.word_repo.add_words_to_user(user_b_id, [sample_words[1]])  # Only "gehen"
+        db_manager.word_repo.add_words_to_user(
+            user_b_id, [sample_words[1]]
+        )  # Only "gehen"
 
         # Get new words for each user
         user_a_new_words = db_manager.word_repo.get_new_words(user_a_id, limit=10)
@@ -173,7 +186,9 @@ class TestMultiUserWordIsolation:
         user_b_lemmas = {word["lemma"] for word in user_b_new_words}
         assert user_b_lemmas == {"gehen"}, "User B should only see 'gehen'"
 
-    def test_word_statistics_isolation(self, db_manager, user_a_data, user_b_data, sample_words):
+    def test_word_statistics_isolation(
+        self, db_manager, user_a_data, user_b_data, sample_words
+    ):
         """Test that word statistics are user-specific"""
         # Create users
         user_a_id = self._create_user_and_get_id(db_manager, user_a_data)
@@ -183,7 +198,9 @@ class TestMultiUserWordIsolation:
         db_manager.word_repo.add_words_to_user(user_a_id, sample_words)
 
         # User B adds only one word
-        db_manager.word_repo.add_words_to_user(user_b_id, [sample_words[0]])  # Only "haus"
+        db_manager.word_repo.add_words_to_user(
+            user_b_id, [sample_words[0]]
+        )  # Only "haus"
 
         # Get statistics for each user
         user_a_stats = db_manager.user_repo.get_user_stats(user_a_id)
@@ -195,7 +212,9 @@ class TestMultiUserWordIsolation:
         assert user_a_stats["new_words"] == 2, "User A should have 2 new words"
         assert user_b_stats["new_words"] == 1, "User B should have 1 new word"
 
-    def test_shared_dictionary_but_isolated_progress(self, db_manager, user_a_data, user_b_data, sample_words):
+    def test_shared_dictionary_but_isolated_progress(
+        self, db_manager, user_a_data, user_b_data, sample_words
+    ):
         """Test that words table is shared but progress is isolated"""
         # Clean any existing test data
         self._clean_test_data(db_manager)
@@ -209,7 +228,9 @@ class TestMultiUserWordIsolation:
 
         # Check that word exists in global dictionary
         with db_manager.db_connection.get_connection() as conn:
-            cursor = conn.execute("SELECT COUNT(*) FROM words WHERE lemma = ?", ("haus",))
+            cursor = conn.execute(
+                "SELECT COUNT(*) FROM words WHERE lemma = ?", ("haus",)
+            )
             word_count = cursor.fetchone()[0]
             assert word_count == 1, "Word should exist in global dictionary"
 
@@ -218,17 +239,26 @@ class TestMultiUserWordIsolation:
 
         # Word count should still be 1 (shared)
         with db_manager.db_connection.get_connection() as conn:
-            cursor = conn.execute("SELECT COUNT(*) FROM words WHERE lemma = ?", ("haus",))
+            cursor = conn.execute(
+                "SELECT COUNT(*) FROM words WHERE lemma = ?", ("haus",)
+            )
             word_count = cursor.fetchone()[0]
             assert word_count == 1, "Word should still be shared in global dictionary"
 
         # But learning progress should be separate
         with db_manager.db_connection.get_connection() as conn:
-            cursor = conn.execute("SELECT COUNT(*) FROM learning_progress WHERE word_id = (SELECT id FROM words WHERE lemma = ?)", ("haus",))
+            cursor = conn.execute(
+                "SELECT COUNT(*) FROM learning_progress WHERE word_id = (SELECT id FROM words WHERE lemma = ?)",
+                ("haus",),
+            )
             progress_count = cursor.fetchone()[0]
-            assert progress_count == 2, "Should have 2 separate learning progress entries"
+            assert progress_count == 2, (
+                "Should have 2 separate learning progress entries"
+            )
 
-    def test_user_cannot_access_other_users_words_directly(self, db_manager, user_a_data, user_b_data, sample_words):
+    def test_user_cannot_access_other_users_words_directly(
+        self, db_manager, user_a_data, user_b_data, sample_words
+    ):
         """Test that users cannot directly access words they haven't added"""
         # Create users
         user_a_id = self._create_user_and_get_id(db_manager, user_a_data)
@@ -248,4 +278,6 @@ class TestMultiUserWordIsolation:
 
         # User B should not have this word in their learning progress
         user_b_has_word = db_manager.word_repo.check_word_exists(user_b_id, "haus")
-        assert user_b_has_word is False, "User B should not have access to User A's word"
+        assert user_b_has_word is False, (
+            "User B should not have access to User A's word"
+        )

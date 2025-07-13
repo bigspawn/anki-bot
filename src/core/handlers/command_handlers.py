@@ -29,6 +29,7 @@ class CommandHandlers:
         process_text_callback,
         start_study_session_callback,
         state_manager=None,
+        session_manager=None,
     ):
         self.db_manager = db_manager
         self.word_processor = word_processor
@@ -38,6 +39,7 @@ class CommandHandlers:
         self._process_text_for_user = process_text_callback
         self._start_study_session = start_study_session_callback
         self.state_manager = state_manager
+        self.session_manager = session_manager
 
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /start command"""
@@ -74,7 +76,12 @@ class CommandHandlers:
 
 Просто отправьте мне любой немецкий текст, и я автоматически извлеку слова для изучения!"""
 
-        await self._safe_reply(update, welcome_message, parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
+        await self._safe_reply(
+            update,
+            welcome_message,
+            parse_mode="HTML",
+            reply_markup=ReplyKeyboardRemove(),
+        )
 
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /help command"""
@@ -110,12 +117,50 @@ class CommandHandlers:
 
 ❓ Вопросы? Просто напишите /help"""
 
-        await self._safe_reply(update, help_message, parse_mode="HTML", reply_markup=ReplyKeyboardRemove())
+        await self._safe_reply(
+            update, help_message, parse_mode="HTML", reply_markup=ReplyKeyboardRemove()
+        )
 
     async def add_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /add command"""
         if not update.effective_user:
             return
+
+        telegram_id = update.effective_user.id
+
+        # Check for existing study session and interrupt it
+        if self.session_manager:
+            existing_session = self.session_manager.get_session(telegram_id)
+            if existing_session:
+                # Calculate partial statistics for the interrupted session
+                elapsed_time = existing_session.timer.get_elapsed_time()
+                accuracy = (
+                    (
+                        existing_session.correct_answers
+                        / existing_session.total_answers
+                        * 100
+                    )
+                    if existing_session.total_answers > 0
+                    else 0
+                )
+
+                # Notify user about interrupted session
+                interrupt_message = f"""⚠️ <b>Сессия изучения прервана</b>
+
+📊 <b>Частичные результаты:</b>
+• Слов изучено: <b>{existing_session.current_word_index}/{len(existing_session.words)}</b>
+• Правильных ответов: <b>{existing_session.correct_answers}/{existing_session.total_answers}</b>
+• Точность: <b>{accuracy:.1f}%</b>
+• Время: <b>{elapsed_time:.1f}с</b>
+
+📝 Переходим к добавлению новых слов..."""
+
+                await self._safe_reply(update, interrupt_message, parse_mode="HTML")
+
+                # Clean up the interrupted session
+                existing_session.timer.stop()
+                if telegram_id in self.session_manager.user_sessions:
+                    del self.session_manager.user_sessions[telegram_id]
 
         # Import here to avoid circular imports
         from ..state.user_state_manager import UserState
@@ -128,16 +173,13 @@ class CommandHandlers:
 
         # If no arguments, set state to wait for next message
         if self.state_manager:
-            self.state_manager.set_state(
-                update.effective_user.id,
-                UserState.WAITING_FOR_TEXT_TO_ADD
-            )
+            self.state_manager.set_state(telegram_id, UserState.WAITING_FOR_TEXT_TO_ADD)
             await self._safe_reply(
                 update,
                 "📝 Отправьте мне немецкий текст для анализа.\n\n"
                 "Например: Das Wetter ist heute sehr schön.\n\n"
                 "🕒 У вас есть 10 минут для отправки текста.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
         else:
             # Fallback if state manager not available
@@ -145,7 +187,7 @@ class CommandHandlers:
                 update,
                 "📝 Пожалуйста, укажите немецкий текст для анализа.\n\n"
                 "Пример: /add Das Wetter ist heute sehr schön.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
 
     async def study_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -161,7 +203,7 @@ class CommandHandlers:
             await self._safe_reply(
                 update,
                 "❌ Пользователь не найден. Используйте /start для регистрации.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
             return
 
@@ -173,7 +215,7 @@ class CommandHandlers:
                 update,
                 "🎉 Отлично! У вас нет слов для повторения сейчас.\n\n"
                 "Используйте /study_new для изучения новых слов или /add для добавления новых.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
             return
 
@@ -194,7 +236,7 @@ class CommandHandlers:
             await self._safe_reply(
                 update,
                 "❌ Пользователь не найден. Используйте /start для регистрации.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
             return
 
@@ -205,7 +247,7 @@ class CommandHandlers:
                 update,
                 "📚 У вас нет новых слов для изучения.\n\n"
                 "Используйте /add для добавления новых слов из текста.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
             return
 
@@ -225,18 +267,20 @@ class CommandHandlers:
             await self._safe_reply(
                 update,
                 "❌ Пользователь не найден. Используйте /start для регистрации.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
             return
 
-        difficult_words = self.db_manager.get_difficult_words(db_user["telegram_id"], limit=10)
+        difficult_words = self.db_manager.get_difficult_words(
+            db_user["telegram_id"], limit=10
+        )
 
         if not difficult_words:
             await self._safe_reply(
                 update,
                 "🎯 У вас нет сложных слов для повторения!\n\n"
                 "Используйте /study для обычного повторения.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
             return
 
@@ -254,14 +298,16 @@ class CommandHandlers:
             await self._safe_reply(
                 update,
                 "❌ Пользователь не найден. Используйте /start для регистрации.",
-                reply_markup=ReplyKeyboardRemove()
+                reply_markup=ReplyKeyboardRemove(),
             )
             return
 
         stats = self.db_manager.get_user_stats(db_user["telegram_id"])
         stats_message = format_progress_stats(stats)
 
-        await self._safe_reply(update, stats_message, reply_markup=ReplyKeyboardRemove())
+        await self._safe_reply(
+            update, stats_message, reply_markup=ReplyKeyboardRemove()
+        )
 
     async def settings_command(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
@@ -278,5 +324,5 @@ class CommandHandlers:
             "• Время ежедневных напоминаний\n"
             "• Часовой пояс\n"
             "• Сложность изучения",
-            reply_markup=ReplyKeyboardRemove()
+            reply_markup=ReplyKeyboardRemove(),
         )
