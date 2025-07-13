@@ -136,11 +136,9 @@ jobs:
         fi
         
         # Set output for later steps
-        {
-          echo 'changelog<<EOF'
-          cat CHANGELOG.md
-          echo 'EOF'
-        } >> $GITHUB_OUTPUT
+        echo 'changelog<<EOF' >> $GITHUB_OUTPUT
+        cat CHANGELOG.md >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
         
     - name: Create Release
       uses: softprops/action-gh-release@v2
