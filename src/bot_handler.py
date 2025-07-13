@@ -6,7 +6,7 @@ import contextlib
 import logging
 from functools import wraps
 
-from telegram import Update
+from telegram import ReplyKeyboardRemove, Update
 from telegram.error import TelegramError
 from telegram.ext import (
     Application,
@@ -23,6 +23,7 @@ from .core.handlers.command_handlers import CommandHandlers
 from .core.handlers.message_handlers import MessageHandlers
 from .core.locks.user_lock_manager import UserLockManager
 from .core.session.session_manager import SessionManager
+from .core.state.user_state_manager import UserStateManager
 from .spaced_repetition import get_srs_system
 from .text_parser import get_text_parser
 from .utils import Timer
@@ -41,6 +42,7 @@ class BotHandler:
         self.text_parser = get_text_parser()
         self.srs_system = get_srs_system()
         self.lock_manager = UserLockManager(lock_timeout_minutes=5)
+        self.state_manager = UserStateManager(state_timeout_minutes=10)
 
         self.application = None
 
@@ -60,12 +62,14 @@ class BotHandler:
             safe_reply_callback=self._safe_reply,
             process_text_callback=self._process_text_for_user,
             start_study_session_callback=self.session_manager.start_study_session,
+            state_manager=self.state_manager,
         )
 
         self.message_handlers = MessageHandlers(
             safe_reply_callback=self._safe_reply,
             process_text_callback=self._process_text_for_user,
             handle_study_callback=self.session_manager.handle_study_callback,
+            state_manager=self.state_manager,
         )
 
     def _is_user_authorized(self, user_id: int) -> bool:
@@ -83,7 +87,8 @@ class BotHandler:
         if not self._is_user_authorized(user_id):
             await self._safe_reply(
                 update,
-                "❌ У вас нет доступа к этому боту. Обратитесь к администратору."
+                "❌ У вас нет доступа к этому боту. Обратитесь к администратору.",
+                reply_markup=ReplyKeyboardRemove()
             )
             logger.warning(f"Unauthorized access attempt from user {user_id}")
             return False
@@ -106,8 +111,9 @@ class BotHandler:
         # Initialize database
         self.db_manager.init_database()
 
-        # Start lock manager
+        # Start lock manager and state manager
         await self.lock_manager.start()
+        await self.state_manager.start()
 
         try:
             # Create application
@@ -118,6 +124,7 @@ class BotHandler:
                 .write_timeout(30)
                 .connect_timeout(30)
                 .pool_timeout(30)
+                .post_init(self.setup_bot_menu)
                 .build()
             )
 
@@ -132,8 +139,9 @@ class BotHandler:
                 bootstrap_retries=3,
             )
         finally:
-            # Stop lock manager on shutdown
+            # Stop managers on shutdown
             await self.lock_manager.stop()
+            await self.state_manager.stop()
 
     def run(self):
         """Run the bot (synchronous entry point)"""
@@ -150,6 +158,7 @@ class BotHandler:
             .write_timeout(30)
             .connect_timeout(30)
             .pool_timeout(30)
+            .post_init(self.setup_bot_menu)
             .build()
         )
 
@@ -233,6 +242,28 @@ class BotHandler:
         # Error handler
         app.add_error_handler(self.error_handler)
 
+    async def setup_bot_menu(self, application):
+        """Setup bot menu with commands for better UX"""
+        from telegram import BotCommand
+
+        # Define bot commands with descriptions
+        commands = [
+            BotCommand("add", "📚 Добавить слова из текста"),
+            BotCommand("study", "🎯 Начать изучение слов"),
+            BotCommand("study_new", "🆕 Изучать только новые слова"),
+            BotCommand("study_difficult", "🔥 Повторить сложные слова"),
+            BotCommand("stats", "📊 Показать статистику"),
+            BotCommand("help", "❓ Справка по командам"),
+            BotCommand("settings", "⚙️ Настройки бота"),
+        ]
+
+        try:
+            # Set commands for the bot menu
+            await application.bot.set_my_commands(commands)
+            logger.info("Bot menu commands set successfully")
+        except Exception as e:
+            logger.error(f"Failed to set bot menu commands: {e}")
+
     async def _process_text_for_user(self, update: Update, text: str):
         """Process German text and add words for user"""
         user = update.effective_user
@@ -245,7 +276,8 @@ class BotHandler:
                 f"⏳ Обработка уже выполняется!\n\n"
                 f"🔒 Операция: {lock_info.operation}\n"
                 f"⏰ Начата: {lock_info.locked_at.strftime('%H:%M:%S')}\n\n"
-                f"Пожалуйста, дождитесь завершения текущей операции."
+                f"Пожалуйста, дождитесь завершения текущей операции.",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
@@ -254,7 +286,8 @@ class BotHandler:
             await self._safe_reply(
                 update,
                 "❌ Не удалось заблокировать пользователя для обработки. "
-                "Попробуйте позже."
+                "Попробуйте позже.",
+                reply_markup=ReplyKeyboardRemove()
             )
             return
 
@@ -264,14 +297,16 @@ class BotHandler:
             if not db_user:
                 await self._safe_reply(
                     update,
-                    "❌ Пользователь не найден. Используйте /start для регистрации."
+                    "❌ Пользователь не найден. Используйте /start для регистрации.",
+                    reply_markup=ReplyKeyboardRemove()
                 )
                 return
 
             # Show processing message
             processing_msg = await self._safe_reply(
                 update,
-                "🔍 Извлекаю слова из текста...\n⏳ Проверяю новые слова..."
+                "🔍 Извлекаю слова из текста...\n⏳ Проверяю новые слова...",
+                reply_markup=ReplyKeyboardRemove()
             )
 
             timer = Timer()
