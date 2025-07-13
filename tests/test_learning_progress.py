@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 import pytest
 
 from src.config import Settings
-from src.core.database.database_manager import get_db_manager
 
 
 class TestLearningProgress:

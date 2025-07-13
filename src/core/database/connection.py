@@ -115,14 +115,14 @@ class DatabaseConnection:
         if ":memory:" in str(self.db_path) or "test" in str(self.db_path):
             drop_tables = [
                 "DROP TABLE IF EXISTS review_history",
-                "DROP TABLE IF EXISTS learning_progress", 
+                "DROP TABLE IF EXISTS learning_progress",
                 "DROP TABLE IF EXISTS user_settings",
                 "DROP TABLE IF EXISTS words",
                 "DROP TABLE IF EXISTS users",
             ]
             for drop_sql in drop_tables:
                 conn.execute(drop_sql)
-                
+
         tables = [
             """
             CREATE TABLE IF NOT EXISTS users (
@@ -202,20 +202,20 @@ class DatabaseConnection:
         # Check which column name is used in learning_progress table
         cursor = conn.execute("PRAGMA table_info(learning_progress)")
         progress_columns = [row[1] for row in cursor.fetchall()]
-        
+
         # Determine the correct user ID column name
         user_id_column = "telegram_id" if "telegram_id" in progress_columns else "user_id"
-        
+
         # Check which column name is used in review_history table
         cursor = conn.execute("PRAGMA table_info(review_history)")
         review_columns = [row[1] for row in cursor.fetchall()]
         review_user_id_column = "telegram_id" if "telegram_id" in review_columns else "user_id"
-        
+
         # Check which column name is used in user_settings table
         cursor = conn.execute("PRAGMA table_info(user_settings)")
         settings_columns = [row[1] for row in cursor.fetchall()]
         settings_user_id_column = "telegram_id" if "telegram_id" in settings_columns else "user_id"
-        
+
         indexes = [
             "CREATE INDEX IF NOT EXISTS idx_words_lemma ON words(lemma)",
             (

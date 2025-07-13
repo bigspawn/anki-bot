@@ -390,20 +390,20 @@ class BotHandler:
                 existing_words_details = self.db_manager.get_existing_words_details(
                     db_user["telegram_id"], existing_words
                 )
-                
+
                 # Build message showing all existing words
                 msg = f"📚 Найдено слов: <b>{len(extracted_words)}</b>\n"
-                msg += f"↩️ Все слова уже изучаются!\n\n"
-                
+                msg += "↩️ Все слова уже изучаются!\n\n"
+
                 if existing_words_details:
                     msg += "📚 <b>Изучаемые слова:</b>\n"
                     for word in existing_words_details:
                         article_part = f"{word['article']} " if word['article'] else ""
                         msg += f"• {article_part}<i>{word['lemma']}</i> — {word['translation']}\n"
                     msg += "\n"
-                
+
                 msg += "🎯 Используйте /study для повторения слов."
-                
+
                 await processing_msg.edit_text(msg, parse_mode="HTML")
 
         except Exception as e:

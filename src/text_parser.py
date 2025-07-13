@@ -107,15 +107,15 @@ class GermanTextParser:
             return False
 
         return True
-    
+
     def _is_likely_german_word(self, word: str) -> bool:
         """Check if a word is likely to be German"""
         word_lower = word.lower()
-        
+
         # Always accept words with German-specific characters
         if any(char in word for char in "äöüßÄÖÜ"):
             return True
-        
+
         # Common foreign words that should be skipped
         foreign_words = {
             # English
@@ -131,35 +131,33 @@ class GermanTextParser:
             "open", "close", "start", "stop", "come", "go", "get", "put", "take", "give",
             "make", "find", "think", "know", "want", "need", "use", "see", "look", "feel",
             "friend", "my", "are", "very", "near", "thames", "river", "buy", "things", "to",
-            "verbs", "meanings", "hello", "casa", "bonita", "much", "peter", "berlin", "in",
-            "also", "where", "you", "until", "now", "lived", "have", "been", "since",
+            "verbs", "meanings", "casa", "bonita", "peter", "berlin", "in",
+            "also", "where", "you", "until", "lived", "have", "been", "since",
             # Spanish
-            "hola", "casa", "mundo", "amor", "vida", "tiempo", "agua", "fuego", "tierra", "aire",
+            "hola", "mundo", "amor", "vida", "tiempo", "agua", "fuego", "tierra", "aire",
             "libro", "mesa", "silla", "perro", "gato", "bueno", "malo", "bonito", "grande",
             "pequeño", "nuevo", "viejo", "joven", "rápido", "lento", "alto", "bajo", "muy",
             # French
-            "bonjour", "maison", "monde", "amour", "vie", "temps", "eau", "feu", "terre", "air",
-            "livre", "table", "chaise", "chien", "chat", "bon", "mauvais", "beau", "grand",
+            "bonjour", "maison", "monde", "amour", "vie", "temps", "eau", "feu", "terre", "livre", "chaise", "chien", "chat", "bon", "mauvais", "beau", "grand",
             "petit", "nouveau", "vieux", "jeune", "rapide", "lent", "haut", "bas",
             # Italian
-            "ciao", "casa", "mondo", "amore", "vita", "tempo", "acqua", "fuoco", "terra", "aria",
-            "libro", "tavolo", "sedia", "cane", "gatto", "buono", "cattivo", "bello", "grande",
-            "piccolo", "nuovo", "vecchio", "giovane", "veloce", "lento", "alto", "basso",
+            "ciao", "mondo", "amore", "vita", "tempo", "acqua", "fuoco", "terra", "aria",
+            "tavolo", "sedia", "cane", "gatto", "buono", "cattivo", "bello", "piccolo", "nuovo", "vecchio", "giovane", "veloce", "basso",
             # Russian (in Latin script)
             "dom", "mir", "lyubov", "zhizn", "vremya", "voda", "ogon", "zemlya", "vozdukh",
             # Dutch
-            "huis", "wereld", "liefde", "leven", "tijd", "water", "vuur", "aarde", "lucht",
+            "huis", "wereld", "liefde", "leven", "tijd", "vuur", "aarde", "lucht",
             "hond", "kat", "goed", "slecht", "mooi", "groot", "klein", "nieuw", "oud",
         }
-        
+
         if word_lower in foreign_words:
             return False
-        
+
         # Common German word patterns and endings
         german_patterns = [
             # German endings
             r".*ung$",      # -ung (Bildung, Meinung)
-            r".*heit$",     # -heit (Freiheit, Schönheit)  
+            r".*heit$",     # -heit (Freiheit, Schönheit)
             r".*keit$",     # -keit (Möglichkeit, Schwierigkeit)
             r".*schaft$",   # -schaft (Freundschaft, Wissenschaft)
             r".*lich$",     # -lich (möglich, wirklich)
@@ -180,15 +178,15 @@ class GermanTextParser:
             r"^mit.*",      # mit- (mitmachen, mitkommen)
             r"^vor.*",      # vor- (vorstellen, vorbereiten)
         ]
-        
+
         # Check if word matches German patterns
         for pattern in german_patterns:
             if re.match(pattern, word_lower):
                 return True
-        
+
         # Common German words (basic vocabulary)
         german_words = {
-            "ich", "du", "er", "sie", "es", "wir", "ihr", "sie", "der", "die", "das", "den", "dem",
+            "ich", "du", "er", "sie", "es", "wir", "ihr", "der", "die", "das", "den", "dem",
             "ein", "eine", "einen", "einem", "einer", "und", "oder", "aber", "denn", "sondern",
             "auch", "noch", "schon", "nur", "sehr", "ganz", "hier", "da", "dort", "wo", "wie",
             "was", "wer", "wenn", "dann", "also", "so", "zu", "auf", "in", "mit", "von", "bei",
@@ -204,10 +202,10 @@ class GermanTextParser:
             "schnell", "langsam", "hoch", "tief", "lang", "kurz", "breit", "schmal",
             "schwarz", "weiß", "rot", "blau", "grün", "gelb", "braun", "grau",
         }
-        
+
         if word_lower in german_words:
             return True
-        
+
         # If SpaCy is available, use it for more sophisticated analysis
         if self.nlp is not None:
             try:
@@ -225,16 +223,14 @@ class GermanTextParser:
                         # German gender system
                         if any(gender in morph_str for gender in ["Gender=Masc", "Gender=Fem", "Gender=Neut"]):
                             return True
-            except Exception:
+            except Exception as e:
                 # If SpaCy analysis fails, continue with other checks
+                logger.debug(f"SpaCy morphological analysis failed for word '{word}': {e}")
                 pass
-        
+
         # Default: if word contains only Latin characters and doesn't match foreign words,
         # tentatively accept it (it might be a proper noun or less common German word)
-        if re.match(r"^[a-zA-ZäöüßÄÖÜ]+$", word) and len(word) >= 3:
-            return True
-            
-        return False
+        return re.match(r"^[a-zA-ZäöüßÄÖÜ]+$", word) and len(word) >= 3
 
     def extract_sentences(self, text: str) -> list[str]:
         """Extract sentences from German text"""

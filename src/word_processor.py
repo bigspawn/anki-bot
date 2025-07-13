@@ -325,7 +325,7 @@ class WordProcessor:
         if not words:
             logger.warning("No German words found in text - text may be in another language or contain no valid words")
             return []
-        
+
         logger.info(f"Found {len(words)} German words in text: {words}")
 
         # Limit number of words
