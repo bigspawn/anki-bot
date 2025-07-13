@@ -2,8 +2,7 @@
 .git
 .gitignore
 
-# Documentation
-README.md
+# Documentation (keep README.md for Docker builds)
 CLAUDE.md
 DEPLOY.md
 docs/
@@ -87,10 +86,6 @@ docker-compose.prod.yml
 # Scripts (not needed in production)
 scripts/
 
-# UV lock file (dependencies resolved during build)
-uv.lock
-
-# Development configuration
+# Development configuration (keep pyproject.toml and uv.lock for Docker builds)
 mypy.ini
 ruff.toml
-pyproject.toml
