@@ -40,7 +40,7 @@ class TestAddWordsBug:
         
         with patch('src.bot_handler.get_word_processor') as mock_get_processor:
             mock_processor = AsyncMock()
-            mock_processor.process_text.return_value = [
+            mock_processor.process_text = AsyncMock(return_value=[
                 ProcessedWord(
                     word="test",
                     lemma="test", 
@@ -51,7 +51,7 @@ class TestAddWordsBug:
                     additional_forms=None,
                     confidence=0.9
                 )
-            ]
+            ])
             mock_get_processor.return_value = mock_processor
             yield mock_processor
 
@@ -59,7 +59,8 @@ class TestAddWordsBug:
     def mock_text_parser(self):
         """Mock text parser"""
         with patch('src.bot_handler.get_text_parser') as mock_get_parser:
-            mock_parser = AsyncMock()
+            from unittest.mock import MagicMock
+            mock_parser = MagicMock()
             mock_parser.extract_words.return_value = ["test"]
             mock_get_parser.return_value = mock_parser
             yield mock_parser
@@ -103,8 +104,10 @@ class TestAddWordsBug:
         # Create bot handler
         bot_handler = BotHandler()
         
-        # Mock the database manager
-        with patch.object(bot_handler, 'db_manager', temp_db_manager):
+        # Mock the database manager, word processor, and text parser
+        with patch.object(bot_handler, 'db_manager', temp_db_manager), \
+             patch.object(bot_handler, 'word_processor', mock_word_processor), \
+             patch.object(bot_handler, 'text_parser', mock_text_parser):
             # Mock update object
             from unittest.mock import MagicMock
             mock_update = MagicMock()
@@ -144,7 +147,9 @@ class TestAddWordsBug:
         # Create bot handler
         bot_handler = BotHandler()
         
-        with patch.object(bot_handler, 'db_manager', temp_db_manager):
+        with patch.object(bot_handler, 'db_manager', temp_db_manager), \
+             patch.object(bot_handler, 'word_processor', mock_word_processor), \
+             patch.object(bot_handler, 'text_parser', mock_text_parser):
             # Mock update object
             from unittest.mock import MagicMock
             mock_update = MagicMock()
@@ -156,19 +161,23 @@ class TestAddWordsBug:
             # Mock reply method
             bot_handler._safe_reply = AsyncMock()
             
+            # Configure text parser to return word
+            mock_text_parser.extract_words.return_value = ["beispiel"]
+            
             # Configure mock to return different word
-            mock_word_processor.process_text.return_value = [
-                type('ProcessedWord', (), {
-                    'word': 'beispiel',
-                    'lemma': 'beispiel',
-                    'part_of_speech': 'noun',
-                    'article': 'das',
-                    'translation': 'пример',
-                    'example': 'Das ist ein Beispiel.',
-                    'additional_forms': None,
-                    'confidence': 0.9
-                })()
-            ]
+            from src.word_processor import ProcessedWord
+            mock_word_processor.process_text = AsyncMock(return_value=[
+                ProcessedWord(
+                    word='beispiel',
+                    lemma='beispiel',
+                    part_of_speech='noun',
+                    article='das',
+                    translation='пример',
+                    example='Das ist ein Beispiel.',
+                    additional_forms=None,
+                    confidence=0.9
+                )
+            ])
             
             # This should work for existing user
             await bot_handler._process_text_for_user(mock_update, "beispiel")
