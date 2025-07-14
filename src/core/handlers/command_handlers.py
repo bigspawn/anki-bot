@@ -98,6 +98,7 @@ class CommandHandlers:
 /study - Изучение слов, готовых к повторению
 /study_new - Только новые слова (ещё не изучались)
 /study_difficult - Сложные слова (низкий рейтинг успешности)
+/study_verbs - Только глаголы
 
 📊 <b>Статистика:</b>
 /stats - Подробная статистика изучения
@@ -285,6 +286,39 @@ class CommandHandlers:
             return
 
         await self._start_study_session(update, difficult_words, "difficult")
+
+    async def study_verbs_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_verbs command"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        verb_words = self.db_manager.get_verb_words(
+            db_user["telegram_id"], limit=10
+        )
+
+        if not verb_words:
+            await self._safe_reply(
+                update,
+                "🔤 У вас нет глаголов для изучения.\n\n"
+                "Используйте /add для добавления новых слов из текста.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, verb_words, "verbs")
 
     async def stats_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /stats command"""

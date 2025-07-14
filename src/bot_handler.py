@@ -218,6 +218,14 @@ class BotHandler:
         )
         app.add_handler(
             CommandHandler(
+                "study_verbs",
+                self.require_authorization(
+                    self.command_handlers.study_verbs_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
                 "stats", self.require_authorization(self.command_handlers.stats_command)
             )
         )
@@ -256,6 +264,7 @@ class BotHandler:
             BotCommand("study", "🎯 Начать изучение слов"),
             BotCommand("study_new", "🆕 Изучать только новые слова"),
             BotCommand("study_difficult", "🔥 Повторить сложные слова"),
+            BotCommand("study_verbs", "🔤 Изучать только глаголы"),
             BotCommand("stats", "📊 Показать статистику"),
             BotCommand("help", "❓ Справка по командам"),
             BotCommand("settings", "⚙️ Настройки бота"),
