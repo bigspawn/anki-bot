@@ -320,7 +320,8 @@ class BotHandler:
             extracted_words = self.text_parser.extract_words(text, max_length=50)
 
             if not extracted_words:
-                await processing_msg.edit_text(
+                await self._safe_edit_message(
+                    processing_msg,
                     "❌ Не удалось извлечь слова из текста.\n\n"
                     "Убедитесь, что текст содержит немецкие слова."
                 )
@@ -341,7 +342,8 @@ class BotHandler:
 
             # Process new words
             if new_words:
-                await processing_msg.edit_text(
+                await self._safe_edit_message(
+                    processing_msg,
                     f"📝 Найдено слов: <b>{len(extracted_words)}</b>\n"
                     f"🆕 Новых слов: <b>{len(new_words)}</b>\n"
                     f"↩️ Уже изучаются: <b>{len(existing_words)}</b>\n\n"
@@ -424,9 +426,10 @@ class BotHandler:
 
                     success_msg += "\n🎯 Начните изучение с команды /study"
 
-                    await processing_msg.edit_text(success_msg, parse_mode="HTML")
+                    await self._safe_edit_message(processing_msg, success_msg, parse_mode="HTML")
                 else:
-                    await processing_msg.edit_text(
+                    await self._safe_edit_message(
+                        processing_msg,
                         "⚠️ Не удалось обработать слова с помощью OpenAI.\n"
                         "Попробуйте позже или обратитесь к администратору."
                     )
@@ -449,12 +452,13 @@ class BotHandler:
 
                 msg += "🎯 Используйте /study для повторения слов."
 
-                await processing_msg.edit_text(msg, parse_mode="HTML")
+                await self._safe_edit_message(processing_msg, msg, parse_mode="HTML")
 
         except Exception as e:
             logger.error(f"Error processing text: {e}")
             with contextlib.suppress(Exception):
-                await processing_msg.edit_text(
+                await self._safe_edit_message(
+                    processing_msg,
                     "❌ Произошла ошибка при обработке текста.\n"
                     "Попробуйте позже или обратитесь к администратору."
                 )
@@ -482,6 +486,19 @@ class BotHandler:
         except TelegramError as e:
             logger.error(f"Error editing message: {e}")
             return None
+
+    async def _safe_edit_message(self, message, text: str, **kwargs):
+        """Safely edit a message with fallback to new message"""
+        try:
+            return await message.edit_text(text, **kwargs)
+        except TelegramError as e:
+            logger.error(f"Error editing message: {e}")
+            # If editing fails, send a new message instead
+            try:
+                return await message.reply_text(text, **kwargs)
+            except TelegramError as e2:
+                logger.error(f"Error sending fallback message: {e2}")
+                return None
 
     async def error_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle errors"""
