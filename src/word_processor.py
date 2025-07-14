@@ -809,7 +809,7 @@ Be accurate and provide high-quality linguistic analysis for all words."""
         )
 
         # Process new words in smaller batches to avoid JSON truncation
-        batch_size = 20  # Reduced batch size for better reliability
+        batch_size = 10  # Reduced batch size for better reliability
 
         for i in range(0, len(new_words), batch_size):
             batch = new_words[i : i + batch_size]
