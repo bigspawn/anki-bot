@@ -1,7 +1,7 @@
 """
 Tests for the message editing bug fix
 """
-from unittest.mock import AsyncMock, Mock
+from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 from telegram.error import TelegramError
@@ -116,3 +116,20 @@ class TestMessageEditingBugFix:
             reply_markup=None
         )
         assert result is not None
+
+    @pytest.mark.asyncio
+    async def test_safe_edit_message_logging_level(self, bot_handler):
+        """Test that edit failures are logged at debug level, not error"""
+        # Create a mock message
+        mock_message = Mock()
+        mock_message.edit_text = AsyncMock(side_effect=TelegramError("Message can't be edited"))
+        mock_message.reply_text = AsyncMock(return_value=Mock())
+
+        # Test with logger patching
+        with patch('src.bot_handler.logger') as mock_logger:
+            result = await bot_handler._safe_edit_message(mock_message, "Test message")
+
+            # Verify debug level is used for edit failure, not error
+            mock_logger.debug.assert_called_once_with("Message edit failed, using fallback: Message can't be edited")
+            mock_logger.error.assert_not_called()
+            assert result is not None

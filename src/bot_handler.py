@@ -492,7 +492,7 @@ class BotHandler:
         try:
             return await message.edit_text(text, **kwargs)
         except TelegramError as e:
-            logger.error(f"Error editing message: {e}")
+            logger.debug(f"Message edit failed, using fallback: {e}")
             # If editing fails, send a new message instead
             try:
                 return await message.reply_text(text, **kwargs)
