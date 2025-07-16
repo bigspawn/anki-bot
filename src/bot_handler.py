@@ -4,9 +4,10 @@ Refactored Telegram bot handler using modular architecture
 
 import contextlib
 import logging
+import time
 from functools import wraps
 
-from telegram import ReplyKeyboardRemove, Update
+from telegram import Update
 from telegram.error import TelegramError
 from telegram.ext import (
     Application,
@@ -90,7 +91,6 @@ class BotHandler:
             await self._safe_reply(
                 update,
                 "❌ У вас нет доступа к этому боту. Обратитесь к администратору.",
-                reply_markup=ReplyKeyboardRemove(),
             )
             logger.warning(f"Unauthorized access attempt from user {user_id}")
             return False
@@ -218,6 +218,12 @@ class BotHandler:
         )
         app.add_handler(
             CommandHandler(
+                "study_verbs",
+                self.require_authorization(self.command_handlers.study_verbs_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
                 "stats", self.require_authorization(self.command_handlers.stats_command)
             )
         )
@@ -256,6 +262,7 @@ class BotHandler:
             BotCommand("study", "🎯 Начать изучение слов"),
             BotCommand("study_new", "🆕 Изучать только новые слова"),
             BotCommand("study_difficult", "🔥 Повторить сложные слова"),
+            BotCommand("study_verbs", "🔤 Изучать только глаголы"),
             BotCommand("stats", "📊 Показать статистику"),
             BotCommand("help", "❓ Справка по командам"),
             BotCommand("settings", "⚙️ Настройки бота"),
@@ -281,7 +288,6 @@ class BotHandler:
                 f"🔒 Операция: {lock_info.operation}\n"
                 f"⏰ Начата: {lock_info.locked_at.strftime('%H:%M:%S')}\n\n"
                 f"Пожалуйста, дождитесь завершения текущей операции.",
-                reply_markup=ReplyKeyboardRemove(),
             )
             return
 
@@ -291,7 +297,6 @@ class BotHandler:
                 update,
                 "❌ Не удалось заблокировать пользователя для обработки. "
                 "Попробуйте позже.",
-                reply_markup=ReplyKeyboardRemove(),
             )
             return
 
@@ -302,7 +307,6 @@ class BotHandler:
                 await self._safe_reply(
                     update,
                     "❌ Пользователь не найден. Используйте /start для регистрации.",
-                    reply_markup=ReplyKeyboardRemove(),
                 )
                 return
 
@@ -310,8 +314,16 @@ class BotHandler:
             processing_msg = await self._safe_reply(
                 update,
                 "🔍 Извлекаю слова из текста...\n⏳ Проверяю новые слова...",
-                reply_markup=ReplyKeyboardRemove(),
+                parse_mode="HTML",
             )
+
+            # Log details about the created message
+            if processing_msg:
+                logger.info(
+                    f"Created processing message - ID: {processing_msg.message_id}, Text: {processing_msg.text}"
+                )
+            else:
+                logger.error("Failed to create processing message!")
 
             timer = Timer()
             timer.start()
@@ -320,10 +332,14 @@ class BotHandler:
             extracted_words = self.text_parser.extract_words(text, max_length=50)
 
             if not extracted_words:
-                await self._safe_edit_message(
-                    processing_msg,
-                    "❌ Не удалось извлечь слова из текста.\n\n"
-                    "Убедитесь, что текст содержит немецкие слова."
+                processing_msg = (
+                    await self._safe_edit_message(
+                        processing_msg,
+                        "❌ Не удалось извлечь слова из текста.\n\n"
+                        "Убедитесь, что текст содержит немецкие слова.",
+                        parse_mode="HTML",
+                    )
+                    or processing_msg
                 )
                 return
 
@@ -342,14 +358,17 @@ class BotHandler:
 
             # Process new words
             if new_words:
-                await self._safe_edit_message(
-                    processing_msg,
-                    f"📝 Найдено слов: <b>{len(extracted_words)}</b>\n"
-                    f"🆕 Новых слов: <b>{len(new_words)}</b>\n"
-                    f"↩️ Уже изучаются: <b>{len(existing_words)}</b>\n\n"
-                    f"🤖 Обрабатываю новые слова с OpenAI...\n"
-                    f"⏳ Это может занять несколько секунд.",
-                    parse_mode="HTML",
+                processing_msg = (
+                    await self._safe_edit_message(
+                        processing_msg,
+                        f"📝 Найдено слов: <b>{len(extracted_words)}</b>\n"
+                        f"🆕 Новых слов: <b>{len(new_words)}</b>\n"
+                        f"↩️ Уже изучаются: <b>{len(existing_words)}</b>\n\n"
+                        f"🤖 Обрабатываю новые слова с OpenAI...\n"
+                        f"⏳ Это может занять несколько секунд.",
+                        parse_mode="HTML",
+                    )
+                    or processing_msg
                 )
 
                 # Process with word processor
@@ -426,12 +445,23 @@ class BotHandler:
 
                     success_msg += "\n🎯 Начните изучение с команды /study"
 
-                    await self._safe_edit_message(processing_msg, success_msg, parse_mode="HTML")
+                    processing_msg = (
+                        await self._safe_edit_message(
+                            processing_msg,
+                            success_msg,
+                            parse_mode="HTML",
+                        )
+                        or processing_msg
+                    )
                 else:
-                    await self._safe_edit_message(
-                        processing_msg,
-                        "⚠️ Не удалось обработать слова с помощью OpenAI.\n"
-                        "Попробуйте позже или обратитесь к администратору."
+                    processing_msg = (
+                        await self._safe_edit_message(
+                            processing_msg,
+                            "⚠️ Не удалось обработать слова с помощью OpenAI.\n"
+                            "Попробуйте позже или обратитесь к администратору.",
+                            parse_mode="HTML",
+                        )
+                        or processing_msg
                     )
             else:
                 # Get details for all existing words
@@ -452,15 +482,24 @@ class BotHandler:
 
                 msg += "🎯 Используйте /study для повторения слов."
 
-                await self._safe_edit_message(processing_msg, msg, parse_mode="HTML")
+                processing_msg = (
+                    await self._safe_edit_message(
+                        processing_msg, msg, parse_mode="HTML"
+                    )
+                    or processing_msg
+                )
 
         except Exception as e:
             logger.error(f"Error processing text: {e}")
             with contextlib.suppress(Exception):
-                await self._safe_edit_message(
-                    processing_msg,
-                    "❌ Произошла ошибка при обработке текста.\n"
-                    "Попробуйте позже или обратитесь к администратору."
+                processing_msg = (
+                    await self._safe_edit_message(
+                        processing_msg,
+                        "❌ Произошла ошибка при обработке текста.\n"
+                        "Попробуйте позже или обратитесь к администратору.",
+                        parse_mode="HTML",
+                    )
+                    or processing_msg
                 )
         finally:
             # Always release the lock
@@ -469,14 +508,33 @@ class BotHandler:
     async def _safe_reply(self, update_or_query, text: str, **kwargs):
         """Safely send a reply message"""
         try:
+            logger.debug(f"_safe_reply called with text: {text[:50]}...")
+            logger.debug(f"_safe_reply kwargs: {kwargs}")
+
             if hasattr(update_or_query, "message"):
                 # It's an Update object
-                return await update_or_query.message.reply_text(text, **kwargs)
+                logger.debug("Sending reply via Update.message.reply_text")
+                message = await update_or_query.message.reply_text(text, **kwargs)
             else:
                 # It's a Message object
-                return await update_or_query.reply_text(text, **kwargs)
+                logger.debug("Sending reply via Message.reply_text")
+                message = await update_or_query.reply_text(text, **kwargs)
+
+            # Log the full message response
+            if message:
+                logger.debug(
+                    f"Telegram API response: message_id={message.message_id}, "
+                    f"date={message.date}, chat_id={message.chat_id}, "
+                    f"text_length={len(message.text) if message.text else 0}"
+                )
+            else:
+                logger.warning("Telegram API returned None message")
+
+            return message
         except TelegramError as e:
             logger.error(f"Error sending reply: {e}")
+            logger.error(f"Failed text: {text[:100]}...")
+            logger.error(f"Failed kwargs: {kwargs}")
             return None
 
     async def _safe_edit(self, query, text: str, **kwargs):
@@ -488,16 +546,91 @@ class BotHandler:
             return None
 
     async def _safe_edit_message(self, message, text: str, **kwargs):
-        """Safely edit a message with fallback to new message"""
+        """Safely edit a message with timing-aware approach"""
+        # Check if message is None (initial message creation failed)
+        if message is None:
+            logger.debug("Cannot edit message: message is None")
+            return None
+
+        # Check if the content is actually different from current message
+        if hasattr(message, "text") and message.text == text:
+            logger.debug("Message content is identical, skipping edit")
+            return message
+
+        # Get message ID for logging
+        message_id = getattr(message, "message_id", None)
+        logger.debug(f"Preparing to edit message {message_id}")
+
         try:
-            return await message.edit_text(text, **kwargs)
+            logger.debug(f"Attempting to edit message {message_id}")
+            logger.debug(f"Edit request - text length: {len(text)}, kwargs: {kwargs}")
+            result = await message.edit_text(text, **kwargs)
+            logger.debug(f"Successfully edited message {message_id}")
+            return result
         except TelegramError as e:
-            logger.debug(f"Message edit failed, using fallback: {e}")
-            # If editing fails, send a new message instead
+            logger.error(f"Message edit failed: {e}")
+            logger.error(f"Message ID: {message_id}")
+
+            # Diagnose potential causes
+            current_time = time.time()
+            message_date = getattr(message, "date", None)
+            if message_date and hasattr(message_date, "timestamp"):
+                try:
+                    age_seconds = current_time - message_date.timestamp()
+                    age_hours = age_seconds / 3600
+                    logger.error(
+                        f"Message age: {age_hours:.2f} hours ({age_seconds:.1f} seconds)"
+                    )
+                    if age_hours > 48:
+                        logger.error(
+                            "DIAGNOSIS: Message is older than 48 hours (Telegram limit)"
+                        )
+                except (TypeError, AttributeError):
+                    logger.error("Could not calculate message age")
+
+            # Check message content
+            current_text = getattr(message, "text", "")
             try:
-                return await message.reply_text(text, **kwargs)
+                logger.error(f"Current text length: {len(current_text)}")
+                logger.error(f"New text length: {len(text)}")
+                logger.error(f"Text identical: {current_text == text}")
+            except TypeError:
+                logger.error("Could not compare text (Mock object)")
+                logger.error(f"Current text type: {type(current_text)}")
+                logger.error(f"New text: {text}")
+
+            # Check for HTML parsing issues
+            if kwargs.get("parse_mode") == "HTML":
+                logger.error("Using HTML parse mode - potential parsing issue")
+                # Try without HTML and with plain text
+                try:
+                    logger.info("Retrying edit without HTML parse mode")
+                    # Remove HTML tags and try plain text
+                    import re
+
+                    plain_text = re.sub(r"<[^>]+>", "", text)
+                    kwargs_no_html = {
+                        k: v for k, v in kwargs.items() if k != "parse_mode"
+                    }
+                    result = await message.edit_text(plain_text, **kwargs_no_html)
+                    logger.warning(
+                        "Edit succeeded without HTML - HTML parsing was the issue"
+                    )
+                    return result
+                except TelegramError as e3:
+                    logger.error(f"Edit without HTML also failed: {e3}")
+
+            logger.error(f"Current text: {current_text}")
+            logger.error(f"New text: {text}")
+            logger.error(f"Kwargs: {kwargs}")
+
+            # Fallback to sending new message
+            try:
+                logger.info("Falling back to sending new message")
+                new_message = await message.reply_text(text, **kwargs)
+                return new_message
             except TelegramError as e2:
-                logger.error(f"Error sending fallback message: {e2}")
+                logger.error(f"Fallback message also failed: {e2}")
                 return None
 
     async def error_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):

@@ -105,6 +105,12 @@ class DatabaseManager:
         """Get difficult words (low easiness factor)"""
         return self.word_repo.get_difficult_words(telegram_id, limit, randomize)
 
+    def get_verb_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get verb words for study"""
+        return self.word_repo.get_verb_words(telegram_id, limit, randomize)
+
     def add_words_to_user(
         self, telegram_id: int, words_data: list[dict[str, Any]]
     ) -> int:

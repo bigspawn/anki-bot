@@ -455,6 +455,185 @@ class TestDatabaseManager:
         assert "gehen" in temp_db._get_potential_lemmas("gehe")
         assert "sprechen" in temp_db._get_potential_lemmas("sprechen")
 
+    def test_get_verb_words(self, temp_db):
+        """Test getting verb words specifically"""
+        # Create a test user
+        user_id = 123456789
+        temp_db.create_user(user_id, "testuser")
+
+        # Add mixed word types
+        words_data = [
+            {
+                "lemma": "gehen",
+                "part_of_speech": "verb",
+                "article": None,
+                "translation": "идти",
+                "example": "Ich gehe nach Hause",
+                "additional_forms": "",
+                "confidence": 0.95,
+            },
+            {
+                "lemma": "Haus",
+                "part_of_speech": "noun",
+                "article": "das",
+                "translation": "дом",
+                "example": "Das Haus ist groß",
+                "additional_forms": "",
+                "confidence": 0.95,
+            },
+            {
+                "lemma": "laufen",
+                "part_of_speech": "verb",
+                "article": None,
+                "translation": "бежать",
+                "example": "Ich laufe schnell",
+                "additional_forms": "",
+                "confidence": 0.95,
+            },
+            {
+                "lemma": "schön",
+                "part_of_speech": "adjective",
+                "article": None,
+                "translation": "красивый",
+                "example": "Das ist schön",
+                "additional_forms": "",
+                "confidence": 0.95,
+            },
+        ]
+
+        temp_db.add_words_to_user(user_id, words_data)
+
+        # Test getting only verbs
+        verb_words = temp_db.get_verb_words(user_id, limit=10)
+
+        # Should only return verbs
+        assert len(verb_words) == 2
+        assert all(word["part_of_speech"] == "verb" for word in verb_words)
+
+        # Check specific verbs
+        verb_lemmas = [word["lemma"] for word in verb_words]
+        assert "gehen" in verb_lemmas
+        assert "laufen" in verb_lemmas
+        assert "Haus" not in verb_lemmas
+        assert "schön" not in verb_lemmas
+
+    def test_get_verb_words_empty_result(self, temp_db):
+        """Test getting verb words when no verbs exist"""
+        # Create a test user
+        user_id = 123456789
+        temp_db.create_user(user_id, "testuser")
+
+        # Add only non-verb words
+        words_data = [
+            {
+                "lemma": "Haus",
+                "part_of_speech": "noun",
+                "article": "das",
+                "translation": "дом",
+                "example": "Das Haus ist groß",
+                "additional_forms": "",
+                "confidence": 0.95,
+            },
+            {
+                "lemma": "schön",
+                "part_of_speech": "adjective",
+                "article": None,
+                "translation": "красивый",
+                "example": "Das ist schön",
+                "additional_forms": "",
+                "confidence": 0.95,
+            },
+        ]
+
+        temp_db.add_words_to_user(user_id, words_data)
+
+        # Test getting verbs - should return empty list
+        verb_words = temp_db.get_verb_words(user_id, limit=10)
+
+        assert len(verb_words) == 0
+        assert verb_words == []
+
+    def test_get_verb_words_with_randomization(self, temp_db):
+        """Test verb words retrieval with randomization parameter"""
+        # Create a test user
+        user_id = 123456789
+        temp_db.create_user(user_id, "testuser")
+
+        # Add multiple verbs
+        words_data = [
+            {
+                "lemma": "gehen",
+                "part_of_speech": "verb",
+                "article": None,
+                "translation": "идти",
+                "example": "Ich gehe nach Hause",
+                "additional_forms": "",
+                "confidence": 0.95,
+            },
+            {
+                "lemma": "laufen",
+                "part_of_speech": "verb",
+                "article": None,
+                "translation": "бежать",
+                "example": "Ich laufe schnell",
+                "additional_forms": "",
+                "confidence": 0.95,
+            },
+            {
+                "lemma": "sprechen",
+                "part_of_speech": "verb",
+                "article": None,
+                "translation": "говорить",
+                "example": "Ich spreche Deutsch",
+                "additional_forms": "",
+                "confidence": 0.95,
+            },
+        ]
+
+        temp_db.add_words_to_user(user_id, words_data)
+
+        # Test with randomization enabled
+        verb_words_random = temp_db.get_verb_words(user_id, limit=10, randomize=True)
+        assert len(verb_words_random) == 3
+        assert all(word["part_of_speech"] == "verb" for word in verb_words_random)
+
+        # Test with randomization disabled
+        verb_words_ordered = temp_db.get_verb_words(user_id, limit=10, randomize=False)
+        assert len(verb_words_ordered) == 3
+        assert all(word["part_of_speech"] == "verb" for word in verb_words_ordered)
+
+    def test_get_verb_words_limit(self, temp_db):
+        """Test verb words retrieval with limit parameter"""
+        # Create a test user
+        user_id = 123456789
+        temp_db.create_user(user_id, "testuser")
+
+        # Add multiple verbs
+        words_data = [
+            {
+                "lemma": f"verb{i}",
+                "part_of_speech": "verb",
+                "article": None,
+                "translation": f"verb{i}",
+                "example": f"Example {i}",
+                "additional_forms": "",
+                "confidence": 0.95,
+            }
+            for i in range(5)
+        ]
+
+        temp_db.add_words_to_user(user_id, words_data)
+
+        # Test with limit smaller than available verbs
+        verb_words_limited = temp_db.get_verb_words(user_id, limit=3)
+        assert len(verb_words_limited) == 3
+        assert all(word["part_of_speech"] == "verb" for word in verb_words_limited)
+
+        # Test with limit larger than available verbs
+        verb_words_all = temp_db.get_verb_words(user_id, limit=10)
+        assert len(verb_words_all) == 5
+        assert all(word["part_of_speech"] == "verb" for word in verb_words_all)
+
 
 class TestDatabaseGlobals:
     """Test global database functions"""

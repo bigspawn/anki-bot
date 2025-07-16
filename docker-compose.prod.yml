@@ -12,7 +12,7 @@ services:
       - ALLOWED_USERS=${ALLOWED_USERS:-}
       - DATABASE_URL=sqlite:///data/bot.db
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
-      - DEBUG=false
+      - DEBUG=true
       - POLLING_INTERVAL=${POLLING_INTERVAL:-1.0}
       - PYTHONUNBUFFERED=1
 

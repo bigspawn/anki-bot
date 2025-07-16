@@ -221,6 +221,33 @@ class WordRepository:
             logger.error(f"Error getting difficult words: {e}")
             return []
 
+    def get_verb_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get verb words for study"""
+        try:
+            with self.db_connection.get_connection() as conn:
+                order_clause = (
+                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
+                )
+
+                cursor = conn.execute(
+                    f"""
+                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
+                           lp.next_review_date, lp.last_reviewed
+                    FROM words w
+                    JOIN learning_progress lp ON w.id = lp.word_id
+                    WHERE lp.telegram_id = ? AND w.part_of_speech = 'verb'
+                    {order_clause}
+                    LIMIT ?
+                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
+                    (telegram_id, limit),
+                )
+                return [dict(row) for row in cursor.fetchall()]
+        except Exception as e:
+            logger.error(f"Error getting verb words: {e}")
+            return []
+
     def add_words_to_user(
         self, telegram_id: int, words_data: list[dict[str, Any]]
     ) -> int:
