@@ -317,8 +317,17 @@ class BotHandler:
             processing_msg = await self._safe_reply(
                 update,
                 "🔍 Извлекаю слова из текста...\n⏳ Проверяю новые слова...",
+                parse_mode="HTML",
                 reply_markup=ReplyKeyboardRemove(),
             )
+
+            # Log details about the created message
+            if processing_msg:
+                logger.info(
+                    f"Created processing message - ID: {processing_msg.message_id}, Text: {processing_msg.text}"
+                )
+            else:
+                logger.error("Failed to create processing message!")
 
             timer = Timer()
             timer.start()
@@ -331,6 +340,7 @@ class BotHandler:
                     processing_msg,
                     "❌ Не удалось извлечь слова из текста.\n\n"
                     "Убедитесь, что текст содержит немецкие слова.",
+                    parse_mode="HTML",
                 )
                 return
 
@@ -443,6 +453,7 @@ class BotHandler:
                         processing_msg,
                         "⚠️ Не удалось обработать слова с помощью OpenAI.\n"
                         "Попробуйте позже или обратитесь к администратору.",
+                        parse_mode="HTML",
                     )
             else:
                 # Get details for all existing words
@@ -472,6 +483,7 @@ class BotHandler:
                     processing_msg,
                     "❌ Произошла ошибка при обработке текста.\n"
                     "Попробуйте позже или обратитесь к администратору.",
+                    parse_mode="HTML",
                 )
         finally:
             # Always release the lock
@@ -513,14 +525,26 @@ class BotHandler:
         try:
             return await message.edit_text(text, **kwargs)
         except TelegramError as e:
-            logger.debug(f"Message edit failed: {e}")
+            logger.error(f"Message edit failed: {e}")
+            logger.error(f"Message ID: {getattr(message, 'message_id', 'unknown')}")
+            logger.error(f"Message text: {getattr(message, 'text', 'unknown')}")
+            logger.error(f"New text: {text}")
+            logger.error(f"Kwargs: {kwargs}")
 
-            # If editing fails, send a new message instead
-            try:
-                return await message.reply_text(text, **kwargs)
-            except TelegramError as e2:
-                logger.error(f"Error sending fallback message: {e2}")
-                return None
+            # Try to edit without changing parse_mode if we have it
+            if "parse_mode" in kwargs:
+                try:
+                    logger.info("Trying to edit without parse_mode...")
+                    kwargs_without_parse_mode = {
+                        k: v for k, v in kwargs.items() if k != "parse_mode"
+                    }
+                    return await message.edit_text(text, **kwargs_without_parse_mode)
+                except TelegramError as e2:
+                    logger.error(f"Edit without parse_mode also failed: {e2}")
+
+            # For now, don't send fallback - we need to understand why edits fail
+            logger.error("Skipping fallback message to avoid multiple messages")
+            return None
 
     async def error_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle errors"""
