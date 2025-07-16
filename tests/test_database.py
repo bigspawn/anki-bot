@@ -618,7 +618,8 @@ class TestDatabaseManager:
                 "example": f"Example {i}",
                 "additional_forms": "",
                 "confidence": 0.95,
-            } for i in range(5)
+            }
+            for i in range(5)
         ]
 
         temp_db.add_words_to_user(user_id, words_data)

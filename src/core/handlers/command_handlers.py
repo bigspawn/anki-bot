@@ -305,9 +305,7 @@ class CommandHandlers:
             )
             return
 
-        verb_words = self.db_manager.get_verb_words(
-            db_user["telegram_id"], limit=10
-        )
+        verb_words = self.db_manager.get_verb_words(db_user["telegram_id"], limit=10)
 
         if not verb_words:
             await self._safe_reply(

@@ -1,6 +1,7 @@
 """
 Tests for the study verbs feature
 """
+
 from unittest.mock import AsyncMock, Mock
 
 import pytest
@@ -22,7 +23,7 @@ class TestStudyVerbsFeature:
         mock_db.get_user_by_telegram_id.return_value = {
             "telegram_id": 123456789,
             "username": "testuser",
-            "created_at": "2023-01-01"
+            "created_at": "2023-01-01",
         }
         mock_db.get_verb_words.return_value = [
             {
@@ -36,7 +37,7 @@ class TestStudyVerbsFeature:
                 "easiness_factor": 2.5,
                 "interval_days": 1,
                 "next_review_date": None,
-                "last_reviewed": None
+                "last_reviewed": None,
             },
             {
                 "id": 2,
@@ -49,8 +50,8 @@ class TestStudyVerbsFeature:
                 "easiness_factor": 2.4,
                 "interval_days": 2,
                 "next_review_date": None,
-                "last_reviewed": None
-            }
+                "last_reviewed": None,
+            },
         ]
         return mock_db
 
@@ -70,7 +71,7 @@ class TestStudyVerbsFeature:
                 "easiness_factor": 2.5,
                 "interval_days": 1,
                 "next_review_date": None,
-                "last_reviewed": None
+                "last_reviewed": None,
             }
         ]
         return mock_repo
@@ -133,23 +134,33 @@ class TestStudyVerbsFeature:
         assert result[1]["lemma"] == "machen"
 
         # Verify method was called with correct parameters
-        mock_db_manager.get_verb_words.assert_called_once_with(123456789, limit=10, randomize=True)
+        mock_db_manager.get_verb_words.assert_called_once_with(
+            123456789, limit=10, randomize=True
+        )
 
     @pytest.mark.asyncio
-    async def test_study_verbs_command_success(self, command_handlers, mock_update, mock_context):
+    async def test_study_verbs_command_success(
+        self, command_handlers, mock_update, mock_context
+    ):
         """Test successful execution of study_verbs command"""
         # Test successful command execution
         await command_handlers.study_verbs_command(mock_update, mock_context)
 
         # Verify database methods were called
-        command_handlers.db_manager.get_user_by_telegram_id.assert_called_once_with(123456789)
-        command_handlers.db_manager.get_verb_words.assert_called_once_with(123456789, limit=10)
+        command_handlers.db_manager.get_user_by_telegram_id.assert_called_once_with(
+            123456789
+        )
+        command_handlers.db_manager.get_verb_words.assert_called_once_with(
+            123456789, limit=10
+        )
 
         # Verify study session was started
         command_handlers._start_study_session.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_study_verbs_command_no_user(self, command_handlers, mock_update, mock_context):
+    async def test_study_verbs_command_no_user(
+        self, command_handlers, mock_update, mock_context
+    ):
         """Test study_verbs command when user is not found"""
         # Mock user not found
         command_handlers.db_manager.get_user_by_telegram_id.return_value = None
@@ -163,7 +174,9 @@ class TestStudyVerbsFeature:
         assert "❌ Пользователь не найден" in call_args[0][1]
 
     @pytest.mark.asyncio
-    async def test_study_verbs_command_no_verbs(self, command_handlers, mock_update, mock_context):
+    async def test_study_verbs_command_no_verbs(
+        self, command_handlers, mock_update, mock_context
+    ):
         """Test study_verbs command when no verbs are available"""
         # Mock no verbs available
         command_handlers.db_manager.get_verb_words.return_value = []
@@ -177,7 +190,9 @@ class TestStudyVerbsFeature:
         assert "🔤 У вас нет глаголов для изучения" in call_args[0][1]
 
     @pytest.mark.asyncio
-    async def test_study_verbs_command_no_effective_user(self, command_handlers, mock_context):
+    async def test_study_verbs_command_no_effective_user(
+        self, command_handlers, mock_context
+    ):
         """Test study_verbs command when no effective user"""
         # Mock update with no effective user
         mock_update = Mock(spec=Update)
@@ -196,7 +211,11 @@ class TestStudyVerbsFeature:
             {"lemma": "gehen", "part_of_speech": "verb", "translation": "идти"},
             {"lemma": "Haus", "part_of_speech": "noun", "translation": "дом"},
             {"lemma": "laufen", "part_of_speech": "verb", "translation": "бежать"},
-            {"lemma": "schön", "part_of_speech": "adjective", "translation": "красивый"},
+            {
+                "lemma": "schön",
+                "part_of_speech": "adjective",
+                "translation": "красивый",
+            },
             {"lemma": "sprechen", "part_of_speech": "verb", "translation": "говорить"},
         ]
 
@@ -227,11 +246,15 @@ class TestStudyVerbsFeature:
         """Test randomization parameter in verb words retrieval"""
         # Test with randomization enabled
         mock_db_manager.get_verb_words(123456789, limit=5, randomize=True)
-        mock_db_manager.get_verb_words.assert_called_with(123456789, limit=5, randomize=True)
+        mock_db_manager.get_verb_words.assert_called_with(
+            123456789, limit=5, randomize=True
+        )
 
         # Test with randomization disabled
         mock_db_manager.get_verb_words(123456789, limit=5, randomize=False)
-        mock_db_manager.get_verb_words.assert_called_with(123456789, limit=5, randomize=False)
+        mock_db_manager.get_verb_words.assert_called_with(
+            123456789, limit=5, randomize=False
+        )
 
     def test_verb_words_limit_parameter(self, mock_db_manager):
         """Test limit parameter in verb words retrieval"""

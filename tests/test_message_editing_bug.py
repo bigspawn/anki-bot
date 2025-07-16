@@ -1,6 +1,7 @@
 """
 Tests for the message editing bug fix
 """
+
 from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
@@ -38,7 +39,9 @@ class TestMessageEditingBugFix:
         """Test fallback to reply when edit fails"""
         # Create a mock message
         mock_message = Mock()
-        mock_message.edit_text = AsyncMock(side_effect=TelegramError("Message can't be edited"))
+        mock_message.edit_text = AsyncMock(
+            side_effect=TelegramError("Message can't be edited")
+        )
         mock_message.reply_text = AsyncMock(return_value=Mock())
 
         # Test edit with fallback
@@ -54,7 +57,9 @@ class TestMessageEditingBugFix:
         """Test when both edit and reply fail"""
         # Create a mock message
         mock_message = Mock()
-        mock_message.edit_text = AsyncMock(side_effect=TelegramError("Message can't be edited"))
+        mock_message.edit_text = AsyncMock(
+            side_effect=TelegramError("Message can't be edited")
+        )
         mock_message.reply_text = AsyncMock(side_effect=TelegramError("Reply failed"))
 
         # Test when both fail
@@ -74,17 +79,12 @@ class TestMessageEditingBugFix:
 
         # Test with kwargs
         result = await bot_handler._safe_edit_message(
-            mock_message,
-            "Test message",
-            parse_mode="HTML",
-            reply_markup=None
+            mock_message, "Test message", parse_mode="HTML", reply_markup=None
         )
 
         # Verify kwargs were passed
         mock_message.edit_text.assert_called_once_with(
-            "Test message",
-            parse_mode="HTML",
-            reply_markup=None
+            "Test message", parse_mode="HTML", reply_markup=None
         )
         assert result is not None
 
@@ -93,27 +93,22 @@ class TestMessageEditingBugFix:
         """Test fallback with kwargs when edit fails"""
         # Create a mock message
         mock_message = Mock()
-        mock_message.edit_text = AsyncMock(side_effect=TelegramError("Message can't be edited"))
+        mock_message.edit_text = AsyncMock(
+            side_effect=TelegramError("Message can't be edited")
+        )
         mock_message.reply_text = AsyncMock(return_value=Mock())
 
         # Test with kwargs
         result = await bot_handler._safe_edit_message(
-            mock_message,
-            "Test message",
-            parse_mode="HTML",
-            reply_markup=None
+            mock_message, "Test message", parse_mode="HTML", reply_markup=None
         )
 
         # Verify kwargs were passed to both methods
         mock_message.edit_text.assert_called_once_with(
-            "Test message",
-            parse_mode="HTML",
-            reply_markup=None
+            "Test message", parse_mode="HTML", reply_markup=None
         )
         mock_message.reply_text.assert_called_once_with(
-            "Test message",
-            parse_mode="HTML",
-            reply_markup=None
+            "Test message", parse_mode="HTML", reply_markup=None
         )
         assert result is not None
 
@@ -122,14 +117,66 @@ class TestMessageEditingBugFix:
         """Test that edit failures are logged at debug level, not error"""
         # Create a mock message
         mock_message = Mock()
-        mock_message.edit_text = AsyncMock(side_effect=TelegramError("Message can't be edited"))
+        mock_message.edit_text = AsyncMock(
+            side_effect=TelegramError("Message can't be edited")
+        )
         mock_message.reply_text = AsyncMock(return_value=Mock())
 
         # Test with logger patching
-        with patch('src.bot_handler.logger') as mock_logger:
+        with patch("src.bot_handler.logger") as mock_logger:
             result = await bot_handler._safe_edit_message(mock_message, "Test message")
 
             # Verify debug level is used for edit failure, not error
-            mock_logger.debug.assert_called_once_with("Message edit failed, using fallback: Message can't be edited")
+            mock_logger.debug.assert_called_once_with(
+                "Message edit failed: Message can't be edited"
+            )
             mock_logger.error.assert_not_called()
             assert result is not None
+
+    @pytest.mark.asyncio
+    async def test_safe_edit_message_no_fallback(self, bot_handler):
+        """Test that use_fallback=False doesn't send fallback message"""
+        # Create a mock message
+        mock_message = Mock()
+        mock_message.edit_text = AsyncMock(
+            side_effect=TelegramError("Message can't be edited")
+        )
+        mock_message.reply_text = AsyncMock(return_value=Mock())
+
+        # Test with use_fallback=False
+        result = await bot_handler._safe_edit_message(
+            mock_message, "Test message", use_fallback=False
+        )
+
+        # Verify edit was attempted but no fallback was used
+        mock_message.edit_text.assert_called_once_with("Test message")
+        mock_message.reply_text.assert_not_called()
+
+        # Verify result is None (failed silently)
+        assert result is None
+
+    @pytest.mark.asyncio
+    async def test_safe_edit_message_no_fallback_logging(self, bot_handler):
+        """Test that use_fallback=False logs appropriately"""
+        # Create a mock message
+        mock_message = Mock()
+        mock_message.edit_text = AsyncMock(
+            side_effect=TelegramError("Message can't be edited")
+        )
+
+        # Test with logging capture
+        with patch("src.bot_handler.logger") as mock_logger:
+            result = await bot_handler._safe_edit_message(
+                mock_message, "Test message", use_fallback=False
+            )
+
+            # Verify debug logging was used for edit failure
+            mock_logger.debug.assert_called_with(
+                "Message edit failed, no fallback used: Message can't be edited"
+            )
+
+            # Verify no error logging
+            mock_logger.error.assert_not_called()
+
+            # Verify result is None
+            assert result is None

@@ -228,9 +228,7 @@ class WordRepository:
         try:
             with self.db_connection.get_connection() as conn:
                 order_clause = (
-                    "ORDER BY RANDOM()"
-                    if randomize
-                    else "ORDER BY lp.created_at ASC"
+                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
                 )
 
                 cursor = conn.execute(
