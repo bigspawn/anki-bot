@@ -7,7 +7,7 @@ import logging
 import time
 from functools import wraps
 
-from telegram import ReplyKeyboardRemove, Update
+from telegram import Update
 from telegram.error import TelegramError
 from telegram.ext import (
     Application,
@@ -307,7 +307,6 @@ class BotHandler:
                 await self._safe_reply(
                     update,
                     "❌ Пользователь не найден. Используйте /start для регистрации.",
-
                 )
                 return
 
