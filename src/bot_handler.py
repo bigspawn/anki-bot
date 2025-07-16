@@ -331,7 +331,6 @@ class BotHandler:
                     processing_msg,
                     "❌ Не удалось извлечь слова из текста.\n\n"
                     "Убедитесь, что текст содержит немецкие слова.",
-                    use_fallback=False,
                 )
                 return
 
@@ -357,7 +356,6 @@ class BotHandler:
                     f"↩️ Уже изучаются: <b>{len(existing_words)}</b>\n\n"
                     f"🤖 Обрабатываю новые слова с OpenAI...\n"
                     f"⏳ Это может занять несколько секунд.",
-                    use_fallback=False,
                     parse_mode="HTML",
                 )
 
@@ -438,7 +436,6 @@ class BotHandler:
                     await self._safe_edit_message(
                         processing_msg,
                         success_msg,
-                        use_fallback=False,
                         parse_mode="HTML",
                     )
                 else:
@@ -446,7 +443,6 @@ class BotHandler:
                         processing_msg,
                         "⚠️ Не удалось обработать слова с помощью OpenAI.\n"
                         "Попробуйте позже или обратитесь к администратору.",
-                        use_fallback=False,
                     )
             else:
                 # Get details for all existing words
@@ -467,9 +463,7 @@ class BotHandler:
 
                 msg += "🎯 Используйте /study для повторения слов."
 
-                await self._safe_edit_message(
-                    processing_msg, msg, use_fallback=False, parse_mode="HTML"
-                )
+                await self._safe_edit_message(processing_msg, msg, parse_mode="HTML")
 
         except Exception as e:
             logger.error(f"Error processing text: {e}")
@@ -478,7 +472,6 @@ class BotHandler:
                     processing_msg,
                     "❌ Произошла ошибка при обработке текста.\n"
                     "Попробуйте позже или обратитесь к администратору.",
-                    use_fallback=False,
                 )
         finally:
             # Always release the lock
@@ -505,25 +498,28 @@ class BotHandler:
             logger.error(f"Error editing message: {e}")
             return None
 
-    async def _safe_edit_message(
-        self, message, text: str, use_fallback: bool = True, **kwargs
-    ):
-        """Safely edit a message with optional fallback to new message"""
+    async def _safe_edit_message(self, message, text: str, **kwargs):
+        """Safely edit a message with fallback to new message"""
+        # Check if message is None (initial message creation failed)
+        if message is None:
+            logger.debug("Cannot edit message: message is None")
+            return None
+
+        # Check if the content is actually different from current message
+        if hasattr(message, "text") and message.text == text:
+            logger.debug("Message content is identical, skipping edit")
+            return message
+
         try:
             return await message.edit_text(text, **kwargs)
         except TelegramError as e:
             logger.debug(f"Message edit failed: {e}")
 
-            if use_fallback:
-                # If editing fails, send a new message instead
-                try:
-                    return await message.reply_text(text, **kwargs)
-                except TelegramError as e2:
-                    logger.error(f"Error sending fallback message: {e2}")
-                    return None
-            else:
-                # Just fail silently for progress updates
-                logger.debug(f"Message edit failed, no fallback used: {e}")
+            # If editing fails, send a new message instead
+            try:
+                return await message.reply_text(text, **kwargs)
+            except TelegramError as e2:
+                logger.error(f"Error sending fallback message: {e2}")
                 return None
 
     async def error_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):

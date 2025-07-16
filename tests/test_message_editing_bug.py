@@ -134,49 +134,26 @@ class TestMessageEditingBugFix:
             assert result is not None
 
     @pytest.mark.asyncio
-    async def test_safe_edit_message_no_fallback(self, bot_handler):
-        """Test that use_fallback=False doesn't send fallback message"""
-        # Create a mock message
-        mock_message = Mock()
-        mock_message.edit_text = AsyncMock(
-            side_effect=TelegramError("Message can't be edited")
-        )
-        mock_message.reply_text = AsyncMock(return_value=Mock())
+    async def test_safe_edit_message_none_message(self, bot_handler):
+        """Test that None message is handled gracefully"""
+        # Test with None message
+        result = await bot_handler._safe_edit_message(None, "Test message")
 
-        # Test with use_fallback=False
-        result = await bot_handler._safe_edit_message(
-            mock_message, "Test message", use_fallback=False
-        )
-
-        # Verify edit was attempted but no fallback was used
-        mock_message.edit_text.assert_called_once_with("Test message")
-        mock_message.reply_text.assert_not_called()
-
-        # Verify result is None (failed silently)
+        # Verify result is None
         assert result is None
 
     @pytest.mark.asyncio
-    async def test_safe_edit_message_no_fallback_logging(self, bot_handler):
-        """Test that use_fallback=False logs appropriately"""
-        # Create a mock message
+    async def test_safe_edit_message_identical_content(self, bot_handler):
+        """Test that identical content is handled gracefully"""
+        # Create a mock message with existing text
         mock_message = Mock()
+        mock_message.text = "Test message"
         mock_message.edit_text = AsyncMock(
             side_effect=TelegramError("Message can't be edited")
         )
 
-        # Test with logging capture
-        with patch("src.bot_handler.logger") as mock_logger:
-            result = await bot_handler._safe_edit_message(
-                mock_message, "Test message", use_fallback=False
-            )
+        # Test with identical content
+        result = await bot_handler._safe_edit_message(mock_message, "Test message")
 
-            # Verify debug logging was used for edit failure
-            mock_logger.debug.assert_called_with(
-                "Message edit failed, no fallback used: Message can't be edited"
-            )
-
-            # Verify no error logging
-            mock_logger.error.assert_not_called()
-
-            # Verify result is None
-            assert result is None
+        # Verify the message object is returned as-is
+        assert result == mock_message
