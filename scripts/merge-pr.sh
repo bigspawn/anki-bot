@@ -36,9 +36,17 @@ if [ "$PR_STATE" != "OPEN" ]; then
     exit 1
 fi
 
+# Check if PR is draft
+IS_DRAFT=$(gh pr view "$PR_NUMBER" --json isDraft -q .isDraft)
+if [ "$IS_DRAFT" = "true" ]; then
+    echo -e "${YELLOW}PR is in draft state. Marking as ready for review...${NC}"
+    gh pr ready "$PR_NUMBER"
+    sleep 2
+fi
+
 # Check CI status
 echo -e "${YELLOW}Checking CI status...${NC}"
-CHECKS_STATUS=$(gh pr checks "$PR_NUMBER" --json status -q '.[] | select(.status != "COMPLETED") | .status' | head -1)
+CHECKS_STATUS=$(gh pr checks "$PR_NUMBER" --json state -q '.[] | select(.state != "COMPLETED") | .state' | head -1)
 
 if [ -n "$CHECKS_STATUS" ]; then
     echo -e "${YELLOW}CI checks are still running. Waiting for completion...${NC}"
@@ -46,7 +54,7 @@ if [ -n "$CHECKS_STATUS" ]; then
 fi
 
 # Check if all checks passed
-FAILED_CHECKS=$(gh pr checks "$PR_NUMBER" --json conclusion -q '.[] | select(.conclusion != "SUCCESS" and .conclusion != "SKIPPED") | .conclusion' | head -1)
+FAILED_CHECKS=$(gh pr checks "$PR_NUMBER" --json state -q '.[] | select(.state == "FAILURE") | .state' | head -1)
 
 if [ -n "$FAILED_CHECKS" ]; then
     echo -e "${RED}Error: Some CI checks failed${NC}"

@@ -40,6 +40,16 @@ PR_TITLE="feat: Add $FEATURE_NAME"
 
 # Create PR using gh CLI
 echo -e "${YELLOW}Creating pull request...${NC}"
+
+# Ask if should be draft
+echo -n "Create as draft PR? [y/N]: "
+read -r IS_DRAFT
+
+DRAFT_FLAG=""
+if [ "$IS_DRAFT" = "y" ] || [ "$IS_DRAFT" = "Y" ]; then
+    DRAFT_FLAG="--draft"
+fi
+
 PR_URL=$(gh pr create \
   --title "$PR_TITLE" \
   --body "## Summary
@@ -56,7 +66,7 @@ PR_URL=$(gh pr create \
 
 🤖 Generated with automation script" \
   --base main \
-  --draft)
+  $DRAFT_FLAG)
 
 echo -e "${GREEN}✅ Pull request created: $PR_URL${NC}"
 
