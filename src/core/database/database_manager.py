@@ -46,6 +46,10 @@ class DatabaseManager:
         """Get comprehensive user statistics"""
         return self.user_repo.get_user_stats(telegram_id)
 
+    def get_all_active_users(self) -> list[User]:
+        """Get all active users"""
+        return self.user_repo.get_all_active_users()
+
     # Word methods
     def get_word_by_lemma(self, lemma: str) -> Word | None:
         """Get word by lemma"""

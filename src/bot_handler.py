@@ -23,6 +23,7 @@ from .core.database.database_manager import get_db_manager
 from .core.handlers.command_handlers import CommandHandlers
 from .core.handlers.message_handlers import MessageHandlers
 from .core.locks.user_lock_manager import UserLockManager
+from .core.scheduler.reminder_scheduler import ReminderScheduler
 from .core.session.session_manager import SessionManager
 from .core.state.user_state_manager import UserStateManager
 from .spaced_repetition import get_srs_system
@@ -44,6 +45,7 @@ class BotHandler:
         self.srs_system = get_srs_system()
         self.lock_manager = UserLockManager(lock_timeout_minutes=5)
         self.state_manager = UserStateManager(state_timeout_minutes=10)
+        self.reminder_scheduler = ReminderScheduler(self._send_daily_reminders)
 
         self.application = None
 
@@ -115,9 +117,10 @@ class BotHandler:
         # Initialize database
         self.db_manager.init_database()
 
-        # Start lock manager and state manager
+        # Start lock manager, state manager, and reminder scheduler
         await self.lock_manager.start()
         await self.state_manager.start()
+        await self.reminder_scheduler.start()
 
         try:
             # Create application
@@ -146,6 +149,7 @@ class BotHandler:
             # Stop managers on shutdown
             await self.lock_manager.stop()
             await self.state_manager.stop()
+            await self.reminder_scheduler.stop()
 
     def run(self):
         """Run the bot (synchronous entry point)"""
@@ -632,6 +636,48 @@ class BotHandler:
             except TelegramError as e2:
                 logger.error(f"Fallback message also failed: {e2}")
                 return None
+
+    async def _send_daily_reminders(self):
+        """Send daily study reminders to all active users"""
+        try:
+            active_users = self.db_manager.get_all_active_users()
+
+            if not active_users:
+                logger.info("No active users found for daily reminders")
+                return
+
+            reminder_message = (
+                "🎯 <b>Время изучения немецкого!</b>\n\n"
+                "📚 Не забудьте позаниматься сегодня.\n"
+                "💪 Регулярные занятия — ключ к успеху!\n\n"
+                "Используйте /study для начала изучения."
+            )
+
+            successful_sends = 0
+            failed_sends = 0
+
+            for user in active_users:
+                try:
+                    await self.application.bot.send_message(
+                        chat_id=user["telegram_id"],
+                        text=reminder_message,
+                        parse_mode="HTML",
+                    )
+                    successful_sends += 1
+                    logger.debug(f"Reminder sent to user {user['telegram_id']}")
+                except Exception as e:
+                    failed_sends += 1
+                    logger.error(
+                        f"Failed to send reminder to user {user['telegram_id']}: {e}"
+                    )
+
+            logger.info(
+                f"Daily reminders sent: {successful_sends} successful, "
+                f"{failed_sends} failed out of {len(active_users)} users"
+            )
+
+        except Exception as e:
+            logger.error(f"Error sending daily reminders: {e}")
 
     async def error_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle errors"""

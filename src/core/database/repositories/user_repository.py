@@ -113,6 +113,17 @@ class UserRepository:
             logger.error(f"Error deactivating user: {e}")
             return False
 
+    def get_all_active_users(self) -> list[User]:
+        """Get all active users"""
+        try:
+            with self.db_connection.get_connection() as conn:
+                cursor = conn.execute("SELECT * FROM users WHERE is_active = 1")
+                rows = cursor.fetchall()
+                return [dict(row) for row in rows] if rows else []
+        except Exception as e:
+            logger.error(f"Error getting all active users: {e}")
+            return []
+
     def get_user_stats(self, telegram_id: int) -> UserStats | None:
         """Get comprehensive user statistics"""
         try:
