@@ -232,12 +232,16 @@ class TestRateLimitingIntegration:
     def mock_bot_handler(self):
         """Create a mock bot handler with lock manager"""
         with (
-            patch("src.bot_handler.get_settings"),
+            patch("src.bot_handler.get_settings") as mock_settings,
             patch("src.bot_handler.get_db_manager"),
             patch("src.bot_handler.get_word_processor"),
             patch("src.bot_handler.get_text_parser"),
             patch("src.bot_handler.get_srs_system"),
         ):
+            # Mock the settings to return proper values
+            mock_settings.return_value.default_reminder_time = "18:00"
+            mock_settings.return_value.timezone = "UTC"
+
             from src.bot_handler import BotHandler
 
             handler = BotHandler()

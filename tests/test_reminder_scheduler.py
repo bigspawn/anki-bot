@@ -6,6 +6,7 @@ import asyncio
 import contextlib
 from datetime import datetime, time, timedelta
 from unittest.mock import AsyncMock, patch
+from zoneinfo import ZoneInfo
 
 import pytest
 
@@ -23,16 +24,19 @@ class TestReminderScheduler:
     @pytest.fixture
     def scheduler(self, mock_callback):
         """Create a ReminderScheduler instance for testing"""
-        return ReminderScheduler(mock_callback)
+        return ReminderScheduler(mock_callback, reminder_time="18:00", timezone="UTC")
 
     def test_reminder_scheduler_initialization(self, mock_callback):
         """Test ReminderScheduler initialization"""
-        scheduler = ReminderScheduler(mock_callback)
+        scheduler = ReminderScheduler(
+            mock_callback, reminder_time="18:00", timezone="UTC"
+        )
 
         assert scheduler.send_reminder_callback == mock_callback
         assert scheduler.is_running is False
         assert scheduler.task is None
         assert scheduler.reminder_time == time(18, 0)
+        assert scheduler.timezone == ZoneInfo("UTC")
 
     @pytest.mark.asyncio
     async def test_start_scheduler(self, scheduler):
@@ -92,20 +96,22 @@ class TestReminderScheduler:
         """Test getting next reminder time when today's time hasn't passed"""
         # Mock current time to be 17:00 (before 18:00)
         with patch("src.core.scheduler.reminder_scheduler.datetime") as mock_datetime:
-            mock_now = datetime(2024, 1, 15, 17, 0, 0)  # 5 PM
+            mock_now = datetime(2024, 1, 15, 17, 0, 0, tzinfo=ZoneInfo("UTC"))  # 5 PM
             mock_datetime.now.return_value = mock_now
             mock_datetime.combine = datetime.combine
 
             next_reminder = scheduler._get_next_reminder_time()
 
-            expected = datetime(2024, 1, 15, 18, 0, 0)  # Today at 6 PM
+            expected = datetime(
+                2024, 1, 15, 18, 0, 0, tzinfo=ZoneInfo("UTC")
+            )  # Today at 6 PM
             assert next_reminder == expected
 
     def test_get_next_reminder_time_tomorrow(self, scheduler):
         """Test getting next reminder time when today's time has passed"""
         # Mock current time to be 19:00 (after 18:00)
         with patch("src.core.scheduler.reminder_scheduler.datetime") as mock_datetime:
-            mock_now = datetime(2024, 1, 15, 19, 0, 0)  # 7 PM
+            mock_now = datetime(2024, 1, 15, 19, 0, 0, tzinfo=ZoneInfo("UTC"))  # 7 PM
             mock_datetime.now.return_value = mock_now
             mock_datetime.combine = datetime.combine
 
@@ -114,7 +120,9 @@ class TestReminderScheduler:
 
             next_reminder = scheduler._get_next_reminder_time()
 
-            expected = datetime(2024, 1, 16, 18, 0, 0)  # Tomorrow at 6 PM
+            expected = datetime(
+                2024, 1, 16, 18, 0, 0, tzinfo=ZoneInfo("UTC")
+            )  # Tomorrow at 6 PM
             assert next_reminder == expected
 
     @pytest.mark.asyncio
@@ -214,7 +222,9 @@ class TestReminderSchedulerIntegration:
             nonlocal callback_called
             callback_called = True
 
-        scheduler = ReminderScheduler(test_callback)
+        scheduler = ReminderScheduler(
+            test_callback, reminder_time="18:00", timezone="UTC"
+        )
 
         # Start
         await scheduler.start()
@@ -228,7 +238,7 @@ class TestReminderSchedulerIntegration:
     async def test_multiple_start_stop_cycles(self):
         """Test multiple start/stop cycles"""
         callback = AsyncMock()
-        scheduler = ReminderScheduler(callback)
+        scheduler = ReminderScheduler(callback, reminder_time="18:00", timezone="UTC")
 
         # Multiple cycles
         for _ in range(3):
@@ -242,11 +252,13 @@ class TestReminderSchedulerIntegration:
     async def test_scheduler_with_immediate_reminder_time(self):
         """Test scheduler when reminder time is immediate"""
         callback = AsyncMock()
-        scheduler = ReminderScheduler(callback)
+        scheduler = ReminderScheduler(callback, reminder_time="18:00", timezone="UTC")
 
         # Mock time to be exactly reminder time
         with patch("src.core.scheduler.reminder_scheduler.datetime") as mock_datetime:
-            mock_now = datetime(2024, 1, 15, 18, 0, 0)  # Exactly 6 PM
+            mock_now = datetime(
+                2024, 1, 15, 18, 0, 0, tzinfo=ZoneInfo("UTC")
+            )  # Exactly 6 PM
             mock_datetime.now.return_value = mock_now
             mock_datetime.combine = datetime.combine
 
@@ -256,5 +268,5 @@ class TestReminderSchedulerIntegration:
             next_reminder = scheduler._get_next_reminder_time()
 
             # Should schedule for tomorrow since current time >= reminder time
-            expected = datetime(2024, 1, 16, 18, 0, 0)
+            expected = datetime(2024, 1, 16, 18, 0, 0, tzinfo=ZoneInfo("UTC"))
             assert next_reminder == expected

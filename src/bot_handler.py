@@ -45,7 +45,11 @@ class BotHandler:
         self.srs_system = get_srs_system()
         self.lock_manager = UserLockManager(lock_timeout_minutes=5)
         self.state_manager = UserStateManager(state_timeout_minutes=10)
-        self.reminder_scheduler = ReminderScheduler(self._send_daily_reminders)
+        self.reminder_scheduler = ReminderScheduler(
+            self._send_daily_reminders,
+            reminder_time=self.settings.default_reminder_time,
+            timezone=self.settings.timezone,
+        )
 
         self.application = None
 
@@ -120,7 +124,14 @@ class BotHandler:
         # Start lock manager, state manager, and reminder scheduler
         await self.lock_manager.start()
         await self.state_manager.start()
-        await self.reminder_scheduler.start()
+
+        # Start reminder scheduler only if enabled
+        logger.info(f"Reminder configuration: enabled={self.settings.reminder_enabled}, time={self.settings.default_reminder_time}, timezone={self.settings.timezone}")
+        if self.settings.reminder_enabled:
+            await self.reminder_scheduler.start()
+            logger.info("Reminder scheduler enabled and started")
+        else:
+            logger.info("Reminder scheduler is disabled in configuration")
 
         try:
             # Create application
@@ -138,48 +149,47 @@ class BotHandler:
             # Add handlers
             self._add_handlers()
 
+            # Initialize the application
+            await self.application.initialize()
+            await self.application.start()
+            
             # Start polling
             logger.info("Bot started successfully!")
-            await self.application.run_polling(
+            await self.application.updater.start_polling(
                 poll_interval=self.settings.polling_interval,
                 timeout=10,
                 bootstrap_retries=3,
             )
+            
+            # Keep the application running until interrupted
+            import asyncio
+            try:
+                while True:
+                    await asyncio.sleep(1)
+            except (KeyboardInterrupt, asyncio.CancelledError):
+                logger.info("Shutdown signal received, stopping gracefully...")
+                # Don't re-raise, let it go to finally block
         finally:
+            logger.info("Stopping all services...")
+            
             # Stop managers on shutdown
-            await self.lock_manager.stop()
-            await self.state_manager.stop()
-            await self.reminder_scheduler.stop()
+            try:
+                await self.lock_manager.stop()
+                await self.state_manager.stop()
+                await self.reminder_scheduler.stop()
+            except Exception as e:
+                logger.error(f"Error stopping managers: {e}")
+            
+            # Stop application
+            if hasattr(self, 'application') and self.application:
+                try:
+                    await self.application.updater.stop()
+                    await self.application.stop()
+                    await self.application.shutdown()
+                    logger.info("Application stopped successfully")
+                except Exception as e:
+                    logger.error(f"Error stopping application: {e}")
 
-    def run(self):
-        """Run the bot (synchronous entry point)"""
-        logger.info("Starting German Learning Bot...")
-
-        # Initialize database
-        self.db_manager.init_database()
-
-        # Create application
-        self.application = (
-            Application.builder()
-            .token(self.settings.telegram_bot_token)
-            .read_timeout(30)
-            .write_timeout(30)
-            .connect_timeout(30)
-            .pool_timeout(30)
-            .post_init(self.setup_bot_menu)
-            .build()
-        )
-
-        # Add handlers
-        self._add_handlers()
-
-        # Start polling
-        logger.info("Bot started successfully!")
-        self.application.run_polling(
-            poll_interval=self.settings.polling_interval,
-            timeout=10,
-            bootstrap_retries=3,
-        )
 
     def _add_handlers(self):
         """Add command and message handlers"""
@@ -641,6 +651,7 @@ class BotHandler:
         """Send daily study reminders to all active users"""
         try:
             active_users = self.db_manager.get_all_active_users()
+            logger.info(f"Found {len(active_users)} active users for daily reminders")
 
             if not active_users:
                 logger.info("No active users found for daily reminders")

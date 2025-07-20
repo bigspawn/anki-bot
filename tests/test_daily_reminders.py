@@ -325,7 +325,9 @@ class TestDailyRemindersIntegration:
 
             # Verify scheduler was created with correct callback
             mock_scheduler_class.assert_called_once_with(
-                bot_handler._send_daily_reminders
+                bot_handler._send_daily_reminders,
+                reminder_time=bot_handler.settings.default_reminder_time,
+                timezone=bot_handler.settings.timezone,
             )
             assert bot_handler.reminder_scheduler == mock_scheduler
 
@@ -360,7 +362,9 @@ class TestDailyRemindersIntegration:
 
             # Verify scheduler was created with correct callback
             mock_scheduler_class.assert_called_once_with(
-                bot_handler._send_daily_reminders
+                bot_handler._send_daily_reminders,
+                reminder_time=bot_handler.settings.default_reminder_time,
+                timezone=bot_handler.settings.timezone,
             )
             assert bot_handler.reminder_scheduler == mock_scheduler
 
