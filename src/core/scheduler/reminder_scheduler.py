@@ -38,7 +38,9 @@ class ReminderScheduler:
 
         self.is_running = True
         self.task = asyncio.create_task(self._schedule_loop())
-        logger.info(f"Reminder scheduler started: reminder_time={self.reminder_time}, timezone={self.timezone}")
+        logger.info(
+            f"Reminder scheduler started: reminder_time={self.reminder_time}, timezone={self.timezone}"
+        )
 
     async def stop(self):
         """Stop the reminder scheduler"""

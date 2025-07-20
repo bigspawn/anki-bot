@@ -126,7 +126,9 @@ class BotHandler:
         await self.state_manager.start()
 
         # Start reminder scheduler only if enabled
-        logger.info(f"Reminder configuration: enabled={self.settings.reminder_enabled}, time={self.settings.default_reminder_time}, timezone={self.settings.timezone}")
+        logger.info(
+            f"Reminder configuration: enabled={self.settings.reminder_enabled}, time={self.settings.default_reminder_time}, timezone={self.settings.timezone}"
+        )
         if self.settings.reminder_enabled:
             await self.reminder_scheduler.start()
             logger.info("Reminder scheduler enabled and started")
@@ -152,7 +154,7 @@ class BotHandler:
             # Initialize the application
             await self.application.initialize()
             await self.application.start()
-            
+
             # Start polling
             logger.info("Bot started successfully!")
             await self.application.updater.start_polling(
@@ -160,9 +162,10 @@ class BotHandler:
                 timeout=10,
                 bootstrap_retries=3,
             )
-            
+
             # Keep the application running until interrupted
             import asyncio
+
             try:
                 while True:
                     await asyncio.sleep(1)
@@ -171,7 +174,7 @@ class BotHandler:
                 # Don't re-raise, let it go to finally block
         finally:
             logger.info("Stopping all services...")
-            
+
             # Stop managers on shutdown
             try:
                 await self.lock_manager.stop()
@@ -179,9 +182,9 @@ class BotHandler:
                 await self.reminder_scheduler.stop()
             except Exception as e:
                 logger.error(f"Error stopping managers: {e}")
-            
+
             # Stop application
-            if hasattr(self, 'application') and self.application:
+            if hasattr(self, "application") and self.application:
                 try:
                     await self.application.updater.stop()
                     await self.application.stop()
@@ -189,7 +192,6 @@ class BotHandler:
                     logger.info("Application stopped successfully")
                 except Exception as e:
                     logger.error(f"Error stopping application: {e}")
-
 
     def _add_handlers(self):
         """Add command and message handlers"""
