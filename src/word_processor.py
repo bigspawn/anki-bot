@@ -30,6 +30,7 @@ class ProcessedWord:
     example: str
     additional_forms: str | None
     confidence: float = 1.0
+    level: str | None = None
 
 
 def validate_article(
@@ -362,6 +363,7 @@ class WordProcessor:
                 example=existing_word["example"] or "",
                 additional_forms=existing_word["additional_forms"],
                 confidence=1.0,
+                level=existing_word.get("level"),
             )
 
         # Process new word with OpenAI
@@ -476,6 +478,8 @@ For each German word, provide:
 4. Russian translation
 5. Example sentence in German
 6. Additional forms (plural for nouns, conjugations for verbs, etc.)
+7. CEFR level (A1, A2, B1, B2, C1, or C2) — your best estimate of how
+   advanced/rare this word is for a German learner
 
 Always respond in valid JSON format with these exact keys:
 - "lemma": base form of the word
@@ -485,6 +489,26 @@ Always respond in valid JSON format with these exact keys:
 - "example": German example sentence
 - "additional_forms": JSON string with additional forms
 - "confidence": confidence score from 0.0 to 1.0
+- "level": one of "A1", "A2", "B1", "B2", "C1", "C2"
+
+Strict rules:
+- "translation" must be written entirely in Russian. Never repeat, echo, or
+  include the German word (or any German text) inside "translation" — if you
+  cannot translate a word, lower "confidence" instead of leaving it untranslated.
+- "example" must be a single plain German sentence only. Never include a
+  Russian translation, gloss, or parenthetical explanation inside "example".
+- "lemma" must always be the canonical dictionary form: verbs as the
+  infinitive (ending in -en/-eln/-ern/-n), nouns as the singular nominative
+  and capitalized, adjectives in their base (non-inflected, non-comparative)
+  form. Never return a conjugated verb, a participle, or a plural noun as
+  "lemma". "lemma" must never be empty — always give your best-guess
+  canonical German form.
+- "part_of_speech" must be exactly one value from: noun, verb, adjective,
+  adverb, pronoun, preposition, conjunction, numeral, interjection, article,
+  particle. Never combine multiple values or add descriptive commentary.
+- Never treat a preposition+article contraction (e.g. "zu dem", "an das",
+  "im", "zum") as a standalone word to analyze — analyze the underlying
+  preposition instead.
 
 Be accurate and provide high-quality linguistic analysis."""
 
@@ -499,6 +523,8 @@ For each German word in the list, provide:
 4. Russian translation
 5. Example sentence in German
 6. Additional forms (plural for nouns, conjugations for verbs, etc.)
+7. CEFR level (A1, A2, B1, B2, C1, or C2) — your best estimate of how
+   advanced/rare this word is for a German learner
 
 Respond with a JSON object where keys are the original words and values are objects with these exact keys:
 - "lemma": base form of the word
@@ -508,6 +534,7 @@ Respond with a JSON object where keys are the original words and values are obje
 - "example": German example sentence
 - "additional_forms": JSON string with additional forms
 - "confidence": confidence score from 0.0 to 1.0
+- "level": one of "A1", "A2", "B1", "B2", "C1", "C2"
 
 Example format:
 {
@@ -518,10 +545,30 @@ Example format:
     "translation": "перевод",
     "example": "Example sentence",
     "additional_forms": "{\"plural\": \"form\"}",
-    "confidence": 0.95
+    "confidence": 0.95,
+    "level": "A1"
   },
   "word2": { ... }
 }
+
+Strict rules:
+- "translation" must be written entirely in Russian. Never repeat, echo, or
+  include the German word (or any German text) inside "translation" — if you
+  cannot translate a word, lower "confidence" instead of leaving it untranslated.
+- "example" must be a single plain German sentence only. Never include a
+  Russian translation, gloss, or parenthetical explanation inside "example".
+- "lemma" must always be the canonical dictionary form: verbs as the
+  infinitive (ending in -en/-eln/-ern/-n), nouns as the singular nominative
+  and capitalized, adjectives in their base (non-inflected, non-comparative)
+  form. Never return a conjugated verb, a participle, or a plural noun as
+  "lemma". "lemma" must never be empty — always give your best-guess
+  canonical German form.
+- "part_of_speech" must be exactly one value from: noun, verb, adjective,
+  adverb, pronoun, preposition, conjunction, numeral, interjection, article,
+  particle. Never combine multiple values or add descriptive commentary.
+- Never treat a preposition+article contraction (e.g. "zu dem", "an das",
+  "im", "zum") as a standalone word to analyze — analyze the underlying
+  preposition instead.
 
 Be accurate and provide high-quality linguistic analysis for all words."""
 
@@ -583,6 +630,7 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                 example=data.get("example", ""),
                 additional_forms=data.get("additional_forms"),
                 confidence=float(data.get("confidence", 1.0)),
+                level=data.get("level"),
             )
         except (TypeError, ValueError) as e:
             logger.error(f"Error parsing OpenAI response: {e}")
@@ -744,6 +792,7 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                         example=word_data.get("example", ""),
                         additional_forms=word_data.get("additional_forms"),
                         confidence=float(word_data.get("confidence", 1.0)),
+                        level=word_data.get("level"),
                     )
                     processed_words.append(processed_word)
                 except (TypeError, ValueError) as e:
@@ -797,6 +846,7 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                     example=existing_word["example"] or "",
                     additional_forms=existing_word["additional_forms"],
                     confidence=1.0,
+                    level=existing_word.get("level"),
                 )
                 processed_words.append(processed_word)
                 existing_words.append(word)

@@ -114,6 +114,65 @@ SQLite database with four main tables:
 - **Async Operations**: All bot operations use async/await patterns
 - **Graceful Shutdown**: Bot handles shutdown signals and cleanup properly
 
+## Adding a New Bot Feature (Checklist)
+
+When adding a new study command / filter / rubric (anything like `/study_*`),
+always touch the full standard flow, not just the DB query — it's easy to
+ship a command that works in isolation but is unreachable or undocumented:
+
+1. **Repository method** (`src/core/database/repositories/*.py`) — the raw
+   SQL query.
+2. **`DatabaseManager` wrapper** (`src/core/database/database_manager.py`) —
+   thin pass-through, matches the pattern of existing `get_*` methods.
+3. **`CommandHandlers` method** (`src/core/handlers/command_handlers.py`) —
+   prefer flat, argument-free commands (`/study_nouns`, `/study_a1`, ...)
+   over one command taking a variant as `context.args` — the user explicitly
+   rejected the arg-based design ("не нравится что команды надо еще както
+   выбирать хочу плоские команды"), so a family of variants gets a thin
+   command method per variant delegating to a shared private helper (see
+   `_study_pos` / `_study_level` and their `study_nouns_command` /
+   `study_a1_command` etc. wrappers). Each guards on
+   `update.effective_user`, looks up `db_user`, replies with
+   `ReplyKeyboardRemove()` on every branch, and handles the empty-results
+   case with its own message.
+4. **Register the command** in `src/bot_handler.py`:
+   - `CommandHandler(...)` in `_add_handlers` (wrapped in
+     `self.require_authorization(...)`)
+   - `BotCommand(...)` entry in `setup_bot_menu` — a command that isn't in
+     this list won't show in the Telegram UI even if it works when typed.
+5. **Update `/help` text** in `command_handlers.py` (`help_command`) — same
+   omission risk as the menu entry.
+6. **Schema changes**, if any, go in
+   `src/core/database/connection.py::_run_migrations`, guarded by
+   `PRAGMA table_info(...)` checks (see the `level`/`confidence` column
+   pattern) — never a manual `ALTER TABLE` run by hand against the live DB.
+7. **OpenAI prompt changes**, if the new feature needs a new field from the
+   model, go in both `_get_system_prompt` and `_get_batch_system_prompt` in
+   `src/word_processor.py` — the two prompts drift apart easily if only one
+   is updated.
+
+### Test coverage checklist per command handler
+
+Each new `*_command` needs its own `tests/test_*_feature.py` covering, at
+minimum (mirror `tests/test_study_pos_feature.py` /
+`tests/test_study_level_feature.py`):
+- happy path (valid input → correct `db_manager` call + `_start_study_session`
+  called)
+- missing/invalid argument (if the command takes one) → helpful message, no
+  DB call
+- `db_user` not found → "❌ Пользователь не найден" message
+- empty result set from the DB → its own "nothing to study" message
+- `update.effective_user is None` → early return, no DB calls at all
+
+### Before calling any feature done
+
+- `make lint` (ruff + mypy) must be clean.
+- Run the FULL suite (`uv run pytest tests/ -q`), not just the new test
+  file, and diff the pass/fail/error counts against a clean run on `main`
+  (`git stash` + rerun) — a fixed baseline of pre-existing failures/errors
+  exists (missing env vars in test config, unrelated to app code). The bar
+  is "no NEW failures", not "zero failures".
+
 ## Memories
 
 ### Database Best Practices

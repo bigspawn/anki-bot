@@ -51,10 +51,28 @@ make run
 
 - `/start` - Welcome and instructions
 - `/add <text>` - Add German words from text
-- `/study` - Start spaced repetition session
-- `/study_new` - Study only new words
-- `/study_difficult` - Review difficult words
-- `/stats` - Show learning statistics
+- `/study` - Study words due for review (SM2 schedule)
+- `/study_new` - Study only new words (never reviewed)
+- `/study_difficult` - Review difficult words (low easiness factor)
+- `/study_verbs`, `/study_nouns`, `/study_adjectives`, `/study_adverbs`,
+  `/study_pronouns`, `/study_prepositions`, `/study_conjunctions`,
+  `/study_numerals`, `/study_interjections` - Study only words of that part
+  of speech
+- `/study_recent [N]` - Study the last N added words (default 10, max 200),
+  regardless of due date
+- `/study_a1`, `/study_a2`, `/study_b1`, `/study_b2`, `/study_c1`,
+  `/study_c2` - Study words tagged with that CEFR level (level is assigned
+  automatically by OpenAI for words added going forward; older words may not
+  have one)
+- `/study_common_verbs` - Study from a curated list of the most frequent
+  German verbs, intersected with your own vocabulary
+- `/study_question_words` - Study German question words (Fragewörter: wer,
+  was, wo, wann, warum, wie...), intersected with your own vocabulary
+- `/study_modal_verbs` - Study the core German modal verbs (können, müssen,
+  dürfen, sollen, wollen, mögen, möchten), intersected with your own
+  vocabulary
+- `/stats` - Show learning statistics (total/new/due words, words added
+  today, study streak, correct/incorrect reviews)
 - `/settings` - Configure session settings
 - `/help` - Command help
 

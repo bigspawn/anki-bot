@@ -15,6 +15,38 @@ from ...word_processor import WordProcessor
 
 logger = logging.getLogger(__name__)
 
+# Curated list of the most frequent German verbs (standard DaF/Goethe-Institut
+# frequency lists), used for the /study_common_verbs rubric.
+COMMON_VERBS = [
+    "sein", "haben", "werden", "können", "müssen", "sollen", "wollen", "mögen",
+    "dürfen", "machen", "gehen", "kommen", "sagen", "geben", "sehen", "wissen",
+    "finden", "denken", "nehmen", "lassen", "stehen", "bleiben", "liegen",
+    "heißen", "halten", "bringen", "führen", "sprechen", "leben", "fahren",
+    "meinen", "fragen", "kennen", "gelten", "stellen", "spielen", "arbeiten",
+    "brauchen", "folgen", "lernen", "verstehen", "setzen", "erhalten",
+    "schreiben", "laufen", "erklären", "sitzen", "ziehen", "scheinen",
+    "fallen", "gehören", "erwarten", "verlieren", "wohnen", "beginnen",
+    "versuchen", "treffen", "schaffen", "kaufen", "erreichen", "feiern",
+    "essen", "trinken", "schlafen", "hören", "lesen", "warten", "helfen",
+    "tragen", "öffnen", "schließen", "zeigen", "lieben", "reisen", "kochen",
+    "tanzen", "singen", "lachen", "weinen", "glauben", "verlassen",
+    "erzählen", "antworten", "verkaufen", "bezahlen", "bestellen",
+    "wechseln", "entscheiden", "vergessen", "erinnern", "wünschen", "hoffen",
+    "erfahren", "benutzen",
+]
+
+# German question words (Fragewörter), used for the /study_question_words rubric.
+QUESTION_WORDS = [
+    "wer", "was", "wo", "wohin", "woher", "wann", "warum", "wieso",
+    "weshalb", "wie", "welcher", "welche", "welches", "wessen", "wem",
+    "wen", "wieviel", "wie viel", "inwiefern", "inwieweit",
+]
+
+# Core German modal verbs, used for the /study_modal_verbs rubric.
+MODAL_VERBS = [
+    "können", "müssen", "dürfen", "sollen", "wollen", "mögen", "möchten",
+]
+
 
 class CommandHandlers:
     """Handles all bot commands"""
@@ -99,6 +131,19 @@ class CommandHandlers:
 /study_new - Только новые слова (ещё не изучались)
 /study_difficult - Сложные слова (низкий рейтинг успешности)
 /study_verbs - Только глаголы
+/study_nouns - Только существительные
+/study_adjectives - Только прилагательные
+/study_adverbs - Только наречия
+/study_pronouns - Только местоимения
+/study_prepositions - Только предлоги
+/study_conjunctions - Только союзы
+/study_numerals - Только числительные
+/study_interjections - Только междометия
+/study_recent [N] - Последние N добавленных слов (по умолчанию 10)
+/study_a1, /study_a2, /study_b1, /study_b2, /study_c1, /study_c2 - Слова по уровню CEFR
+/study_common_verbs - Популярные немецкие глаголы из вашего списка
+/study_question_words - Вопросительные слова (wer, was, wo...)
+/study_modal_verbs - Модальные глаголы (können, müssen, wollen...)
 
 📊 <b>Статистика:</b>
 /stats - Подробная статистика изучения
@@ -134,7 +179,6 @@ class CommandHandlers:
             existing_session = self.session_manager.get_session(telegram_id)
             if existing_session:
                 # Calculate partial statistics for the interrupted session
-                elapsed_time = existing_session.timer.get_elapsed_time()
                 accuracy = (
                     (
                         existing_session.correct_answers
@@ -152,7 +196,6 @@ class CommandHandlers:
 • Слов изучено: <b>{existing_session.current_word_index}/{len(existing_session.words)}</b>
 • Правильных ответов: <b>{existing_session.correct_answers}/{existing_session.total_answers}</b>
 • Точность: <b>{accuracy:.1f}%</b>
-• Время: <b>{elapsed_time:.1f}с</b>
 
 📝 Переходим к добавлению новых слов..."""
 
@@ -317,6 +360,304 @@ class CommandHandlers:
             return
 
         await self._start_study_session(update, verb_words, "verbs")
+
+    async def study_recent_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_recent [N] command - study the last N added words"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        limit = 10
+        if context.args:
+            try:
+                limit = int(context.args[0])
+            except ValueError:
+                await self._safe_reply(
+                    update,
+                    "❌ Укажите число слов, например: /study_recent 20",
+                    reply_markup=ReplyKeyboardRemove(),
+                )
+                return
+        limit = max(1, min(limit, 200))
+
+        recent_words = self.db_manager.get_recent_words(
+            db_user["telegram_id"], limit=limit
+        )
+
+        if not recent_words:
+            await self._safe_reply(
+                update,
+                "📚 У вас пока нет добавленных слов.\n\n"
+                "Используйте /add для добавления новых слов из текста.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, recent_words, "recent")
+
+    async def _study_pos(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE, part_of_speech: str
+    ):
+        """Shared logic for the flat /study_<pos> commands"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        pos_words = self.db_manager.get_words_by_part_of_speech(
+            db_user["telegram_id"], part_of_speech, limit=10
+        )
+
+        if not pos_words:
+            await self._safe_reply(
+                update,
+                f"📚 У вас нет слов с частью речи «{part_of_speech}».\n\n"
+                "Используйте /add для добавления новых слов из текста.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, pos_words, f"pos:{part_of_speech}")
+
+    async def study_nouns_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_nouns command"""
+        await self._study_pos(update, context, "noun")
+
+    async def study_adjectives_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_adjectives command"""
+        await self._study_pos(update, context, "adjective")
+
+    async def study_adverbs_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_adverbs command"""
+        await self._study_pos(update, context, "adverb")
+
+    async def study_pronouns_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_pronouns command"""
+        await self._study_pos(update, context, "pronoun")
+
+    async def study_prepositions_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_prepositions command"""
+        await self._study_pos(update, context, "preposition")
+
+    async def study_conjunctions_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_conjunctions command"""
+        await self._study_pos(update, context, "conjunction")
+
+    async def study_numerals_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_numerals command"""
+        await self._study_pos(update, context, "numeral")
+
+    async def study_interjections_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_interjections command"""
+        await self._study_pos(update, context, "interjection")
+
+    async def _study_level(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE, level: str
+    ):
+        """Shared logic for the flat /study_<level> commands"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        level_words = self.db_manager.get_words_by_level(
+            db_user["telegram_id"], level, limit=10
+        )
+
+        if not level_words:
+            await self._safe_reply(
+                update,
+                f"📚 У вас нет слов уровня «{level}».\n\n"
+                "Слова получают уровень при добавлении через /add — "
+                "старые слова, добавленные раньше, могут быть без уровня.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, level_words, f"level:{level}")
+
+    async def study_a1_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_a1 command"""
+        await self._study_level(update, context, "A1")
+
+    async def study_a2_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_a2 command"""
+        await self._study_level(update, context, "A2")
+
+    async def study_b1_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_b1 command"""
+        await self._study_level(update, context, "B1")
+
+    async def study_b2_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_b2 command"""
+        await self._study_level(update, context, "B2")
+
+    async def study_c1_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_c1 command"""
+        await self._study_level(update, context, "C1")
+
+    async def study_c2_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_c2 command"""
+        await self._study_level(update, context, "C2")
+
+    async def study_common_verbs_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_common_verbs command - study from a curated list of
+        the most frequent German verbs"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        common_verb_words = self.db_manager.get_words_by_lemma_set(
+            db_user["telegram_id"], COMMON_VERBS, limit=10
+        )
+
+        if not common_verb_words:
+            await self._safe_reply(
+                update,
+                "📚 Среди ваших слов нет популярных глаголов из списка.\n\n"
+                "Используйте /add для добавления новых слов из текста.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, common_verb_words, "common_verbs")
+
+    async def study_question_words_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_question_words command - study German question words
+        (Fragewörter)"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        question_words = self.db_manager.get_words_by_lemma_set(
+            db_user["telegram_id"], QUESTION_WORDS, limit=10
+        )
+
+        if not question_words:
+            await self._safe_reply(
+                update,
+                "📚 Среди ваших слов нет вопросительных слов из списка.\n\n"
+                "Используйте /add для добавления новых слов из текста.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, question_words, "question_words")
+
+    async def study_modal_verbs_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_modal_verbs command - study German modal verbs"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        modal_verb_words = self.db_manager.get_words_by_lemma_set(
+            db_user["telegram_id"], MODAL_VERBS, limit=10
+        )
+
+        if not modal_verb_words:
+            await self._safe_reply(
+                update,
+                "📚 Среди ваших слов нет модальных глаголов из списка.\n\n"
+                "Используйте /add для добавления новых слов из текста.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, modal_verb_words, "modal_verbs")
 
     async def stats_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /stats command"""

@@ -147,6 +147,7 @@ class DatabaseConnection:
                 example TEXT NOT NULL,
                 additional_forms TEXT,
                 confidence REAL DEFAULT 1.0,
+                level TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -272,6 +273,12 @@ class DatabaseConnection:
                 conn.commit()
                 logger.info("Successfully added confidence column to words table")
 
+            if "level" not in columns:
+                logger.info("Adding missing level column to words table")
+                conn.execute("ALTER TABLE words ADD COLUMN level TEXT")
+                conn.commit()
+                logger.info("Successfully added level column to words table")
+
             # Check if response_time_ms column exists in review_history table
             cursor = conn.execute("PRAGMA table_info(review_history)")
             review_table_info = cursor.fetchall()
@@ -308,6 +315,7 @@ class DatabaseConnection:
                         example TEXT NOT NULL,
                         additional_forms TEXT,
                         confidence REAL DEFAULT 1.0,
+                        level TEXT,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
@@ -329,6 +337,11 @@ class DatabaseConnection:
                     "COALESCE(confidence, 1.0) as confidence",
                 ]
 
+                if "level" in old_columns:
+                    select_parts.append("level")
+                else:
+                    select_parts.append("NULL as level")
+
                 if "created_at" in old_columns:
                     select_parts.append("created_at")
                 else:
@@ -342,7 +355,7 @@ class DatabaseConnection:
                 select_query = f"""
                     INSERT INTO words_new (
                         id, lemma, part_of_speech, article, translation,
-                        example, additional_forms, confidence, created_at, updated_at
+                        example, additional_forms, confidence, level, created_at, updated_at
                     )
                     SELECT {", ".join(select_parts)}
                     FROM words

@@ -297,7 +297,6 @@ class TestSessionManagerInterruption:
         assert "1/2" in message  # Words studied
         assert "3/4" in message  # Correct answers
         assert "75.0%" in message  # Accuracy
-        assert "Время:" in message  # Time
 
 
 class TestCommandHandlersInterruption:

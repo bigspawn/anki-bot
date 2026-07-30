@@ -25,9 +25,9 @@ class WordRepository:
                     """
                     INSERT INTO words (
                         lemma, part_of_speech, article, translation,
-                        example, additional_forms, confidence
+                        example, additional_forms, confidence, level
                     )
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
                         word_data.get("lemma"),
@@ -37,6 +37,7 @@ class WordRepository:
                         word_data.get("example"),
                         word_data.get("additional_forms"),
                         word_data.get("confidence", 1.0),
+                        word_data.get("level"),
                     ),
                 )
 
@@ -248,6 +249,127 @@ class WordRepository:
             logger.error(f"Error getting verb words: {e}")
             return []
 
+    def get_words_by_part_of_speech(
+        self,
+        telegram_id: int,
+        part_of_speech: str,
+        limit: int = 10,
+        randomize: bool = True,
+    ) -> list[dict[str, Any]]:
+        """Get words filtered by part of speech (prefix match, e.g. 'noun' also
+        matches 'noun (informal)') for study"""
+        try:
+            with self.db_connection.get_connection() as conn:
+                order_clause = (
+                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
+                )
+
+                cursor = conn.execute(
+                    f"""
+                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
+                           lp.next_review_date, lp.last_reviewed
+                    FROM words w
+                    JOIN learning_progress lp ON w.id = lp.word_id
+                    WHERE lp.telegram_id = ? AND LOWER(w.part_of_speech) LIKE LOWER(?) || '%'
+                    {order_clause}
+                    LIMIT ?
+                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
+                    (telegram_id, part_of_speech, limit),
+                )
+                return [dict(row) for row in cursor.fetchall()]
+        except Exception as e:
+            logger.error(f"Error getting words by part of speech: {e}")
+            return []
+
+    def get_words_by_level(
+        self,
+        telegram_id: int,
+        level: str,
+        limit: int = 10,
+        randomize: bool = True,
+    ) -> list[dict[str, Any]]:
+        """Get words filtered by CEFR level (A1-C2) for study"""
+        try:
+            with self.db_connection.get_connection() as conn:
+                order_clause = (
+                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
+                )
+
+                cursor = conn.execute(
+                    f"""
+                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
+                           lp.next_review_date, lp.last_reviewed
+                    FROM words w
+                    JOIN learning_progress lp ON w.id = lp.word_id
+                    WHERE lp.telegram_id = ? AND UPPER(w.level) = UPPER(?)
+                    {order_clause}
+                    LIMIT ?
+                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
+                    (telegram_id, level, limit),
+                )
+                return [dict(row) for row in cursor.fetchall()]
+        except Exception as e:
+            logger.error(f"Error getting words by level: {e}")
+            return []
+
+    def get_words_by_lemma_set(
+        self,
+        telegram_id: int,
+        lemmas: list[str],
+        limit: int = 10,
+        randomize: bool = True,
+    ) -> list[dict[str, Any]]:
+        """Get user's words whose lemma (case-insensitive) is in a given set,
+        e.g. a curated list of common verbs, for study"""
+        if not lemmas:
+            return []
+        try:
+            with self.db_connection.get_connection() as conn:
+                order_clause = (
+                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
+                )
+                placeholders = ",".join("?" for _ in lemmas)
+
+                cursor = conn.execute(
+                    f"""
+                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
+                           lp.next_review_date, lp.last_reviewed
+                    FROM words w
+                    JOIN learning_progress lp ON w.id = lp.word_id
+                    WHERE lp.telegram_id = ? AND LOWER(w.lemma) IN ({placeholders})
+                    {order_clause}
+                    LIMIT ?
+                    """,  # noqa: S608  # Safe: placeholders contains only ? chars
+                    [telegram_id] + [lemma.lower() for lemma in lemmas] + [limit],
+                )
+                return [dict(row) for row in cursor.fetchall()]
+        except Exception as e:
+            logger.error(f"Error getting words by lemma set: {e}")
+            return []
+
+    def get_recent_words(
+        self, telegram_id: int, limit: int = 10
+    ) -> list[dict[str, Any]]:
+        """Get the most recently added words for study, regardless of SM2 due date"""
+        try:
+            with self.db_connection.get_connection() as conn:
+                cursor = conn.execute(
+                    """
+                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
+                           lp.next_review_date, lp.last_reviewed
+                    FROM words w
+                    JOIN learning_progress lp ON w.id = lp.word_id
+                    WHERE lp.telegram_id = ?
+                    ORDER BY lp.created_at DESC
+                    LIMIT ?
+                    """,
+                    (telegram_id, limit),
+                )
+                return [dict(row) for row in cursor.fetchall()]
+        except Exception as e:
+            logger.error(f"Error getting recent words: {e}")
+            return []
+
     def add_words_to_user(
         self, telegram_id: int, words_data: list[dict[str, Any]]
     ) -> int:
@@ -291,8 +413,8 @@ class WordRepository:
                             logger.debug(f"Creating new word entry for '{lemma}'")
                             cursor = conn.execute(
                                 """
-                                INSERT INTO words (lemma, part_of_speech, article, translation, example, additional_forms, confidence)
-                                VALUES (?, ?, ?, ?, ?, ?, ?)
+                                INSERT INTO words (lemma, part_of_speech, article, translation, example, additional_forms, confidence, level)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                                 """,
                                 (
                                     lemma,
@@ -302,6 +424,7 @@ class WordRepository:
                                     word_data.get("example", ""),
                                     word_data.get("additional_forms"),
                                     word_data.get("confidence", 1.0),
+                                    word_data.get("level"),
                                 ),
                             )
                             word_id = cursor.lastrowid

@@ -3,7 +3,7 @@ User repository for database operations
 """
 
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from ..connection import DatabaseConnection
 from ..models import User, UserStats
@@ -136,7 +136,8 @@ class UserRepository:
                         SUM(CASE WHEN lp.repetitions = 0 THEN 1 ELSE 0 END) as new_words,
                         SUM(CASE WHEN datetime(lp.next_review_date) <= datetime('now', 'localtime') AND lp.repetitions > 0 THEN 1 ELSE 0 END) as due_words,
                         SUM(CASE WHEN lp.repetitions >= 3 THEN 1 ELSE 0 END) as learned_words,
-                        SUM(CASE WHEN lp.easiness_factor < 2.0 THEN 1 ELSE 0 END) as difficult_words
+                        SUM(CASE WHEN lp.easiness_factor < 2.0 THEN 1 ELSE 0 END) as difficult_words,
+                        SUM(CASE WHEN date(lp.created_at) = date('now', 'localtime') THEN 1 ELSE 0 END) as words_today
                     FROM learning_progress lp
                     WHERE lp.telegram_id = ?
                     """,
@@ -149,10 +150,13 @@ class UserRepository:
 
                 stats = dict(row)
 
-                # Get average accuracy from recent reviews
+                # Get review accuracy (correct/incorrect) from recent reviews
                 cursor = conn.execute(
                     """
-                    SELECT AVG(CASE WHEN rating >= 3 THEN 1.0 ELSE 0.0 END) as avg_accuracy
+                    SELECT
+                        COUNT(*) as total_reviews,
+                        SUM(CASE WHEN rating >= 3 THEN 1 ELSE 0 END) as correct_reviews,
+                        SUM(CASE WHEN rating < 3 THEN 1 ELSE 0 END) as incorrect_reviews
                     FROM review_history
                     WHERE telegram_id = ? AND reviewed_at >= datetime('now', '-30 days')
                     """,
@@ -160,9 +164,12 @@ class UserRepository:
                 )
 
                 accuracy_row = cursor.fetchone()
+                total_reviews = accuracy_row["total_reviews"] or 0
+                stats["correct_reviews"] = accuracy_row["correct_reviews"] or 0
+                stats["incorrect_reviews"] = accuracy_row["incorrect_reviews"] or 0
                 stats["average_accuracy"] = (
-                    accuracy_row["avg_accuracy"]
-                    if accuracy_row["avg_accuracy"]
+                    stats["correct_reviews"] / total_reviews
+                    if total_reviews
                     else 0.0
                 )
 
@@ -172,7 +179,7 @@ class UserRepository:
                     SELECT
                         COUNT(DISTINCT word_id) as reviews_today
                     FROM review_history
-                    WHERE telegram_id = ? AND date(reviewed_at) = date('now')
+                    WHERE telegram_id = ? AND date(reviewed_at, 'localtime') = date('now', 'localtime')
                     """,
                     (telegram_id,),
                 )
@@ -180,12 +187,42 @@ class UserRepository:
                 today_row = cursor.fetchone()
                 stats["reviews_today"] = today_row["reviews_today"] if today_row else 0
 
-                # Calculate study streak (simplified)
-                stats["study_streak"] = 0  # Would need more complex logic
-                stats["words_today"] = 0  # Would need to track word additions
+                # Calculate study streak: consecutive days (ending today or
+                # yesterday) with at least one review
+                cursor = conn.execute(
+                    """
+                    SELECT DISTINCT date(reviewed_at, 'localtime') as review_date
+                    FROM review_history
+                    WHERE telegram_id = ?
+                    """,
+                    (telegram_id,),
+                )
+                review_dates = {r["review_date"] for r in cursor.fetchall()}
+                stats["study_streak"] = self._calculate_streak(review_dates)
 
                 return stats
 
         except Exception as e:
             logger.error(f"Error getting user stats: {e}")
             return None
+
+    @staticmethod
+    def _calculate_streak(review_dates: set[str]) -> int:
+        """Count consecutive days with at least one review, walking back from today"""
+        if not review_dates:
+            return 0
+
+        today = datetime.now().date()
+        cursor_date = today
+        if cursor_date.isoformat() not in review_dates:
+            # No review today yet - streak can still continue from yesterday
+            cursor_date -= timedelta(days=1)
+            if cursor_date.isoformat() not in review_dates:
+                return 0
+
+        streak = 0
+        while cursor_date.isoformat() in review_dates:
+            streak += 1
+            cursor_date -= timedelta(days=1)
+
+        return streak

@@ -29,6 +29,7 @@ class Word(TypedDict):
     example: str
     additional_forms: str | None
     confidence: float
+    level: str | None
     created_at: datetime
     updated_at: datetime
 
@@ -71,3 +72,5 @@ class UserStats(TypedDict):
     study_streak: int
     words_today: int
     reviews_today: int
+    correct_reviews: int
+    incorrect_reviews: int

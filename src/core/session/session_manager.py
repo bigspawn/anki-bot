@@ -88,7 +88,6 @@ class SessionManager:
         existing_session = self.user_sessions.get(telegram_id)
         if existing_session:
             # Calculate partial statistics for the interrupted session
-            elapsed_time = existing_session.timer.get_elapsed_time()
             accuracy = (
                 (
                     existing_session.correct_answers
@@ -106,7 +105,6 @@ class SessionManager:
 • Слов изучено: <b>{existing_session.current_word_index}/{len(existing_session.words)}</b>
 • Правильных ответов: <b>{existing_session.correct_answers}/{existing_session.total_answers}</b>
 • Точность: <b>{accuracy:.1f}%</b>
-• Время: <b>{elapsed_time:.1f}с</b>
 
 🔄 Начинаем новую сессию изучения..."""
 
@@ -290,7 +288,6 @@ class SessionManager:
 • Слов изучено: <b>{len(session.words)}</b>
 • Правильных ответов: <b>{session.correct_answers}/{session.total_answers}</b>
 • Точность: <b>{accuracy:.1f}%</b>
-• Время: <b>{session.timer.get_elapsed_time():.1f}с</b>
 
 🎯 Отличная работа! Продолжайте изучение для лучшего запоминания."""
 
@@ -322,7 +319,6 @@ class SessionManager:
 • Слов изучено: <b>{len(session.words)}</b>
 • Правильных ответов: <b>{session.correct_answers}/{session.total_answers}</b>
 • Точность: <b>{accuracy:.1f}%</b>
-• Время: <b>{session.timer.get_elapsed_time():.1f}с</b>
 
 🎯 Отличная работа! Продолжайте изучение для лучшего запоминания."""
 
