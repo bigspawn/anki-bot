@@ -192,6 +192,7 @@ class TestSendDailyReminders:
         ]
 
         bot_handler.db_manager = MagicMock()
+        bot_handler.db_manager.has_reviewed_today.return_value = False
         bot_handler.db_manager.get_all_active_users.return_value = mock_users
         bot_handler.application = mock_application
 
@@ -218,6 +219,7 @@ class TestSendDailyReminders:
     ):
         """Test when no active users found"""
         bot_handler.db_manager = MagicMock()
+        bot_handler.db_manager.has_reviewed_today.return_value = False
         bot_handler.db_manager.get_all_active_users.return_value = []
         bot_handler.application = mock_application
 
@@ -239,6 +241,7 @@ class TestSendDailyReminders:
         ]
 
         bot_handler.db_manager = MagicMock()
+        bot_handler.db_manager.has_reviewed_today.return_value = False
         bot_handler.db_manager.get_all_active_users.return_value = mock_users
         bot_handler.application = mock_application
 
@@ -260,6 +263,7 @@ class TestSendDailyReminders:
     ):
         """Test when database error occurs"""
         bot_handler.db_manager = MagicMock()
+        bot_handler.db_manager.has_reviewed_today.return_value = False
         bot_handler.db_manager.get_all_active_users.side_effect = Exception(
             "Database error"
         )
@@ -279,6 +283,7 @@ class TestSendDailyReminders:
         mock_users = [{"telegram_id": 123456, "first_name": "John"}]
 
         bot_handler.db_manager = MagicMock()
+        bot_handler.db_manager.has_reviewed_today.return_value = False
         bot_handler.db_manager.get_all_active_users.return_value = mock_users
         bot_handler.application = mock_application
 
@@ -294,6 +299,44 @@ class TestSendDailyReminders:
         assert "📚 Не забудьте позаниматься сегодня." in message_text
         assert "💪 Регулярные занятия — ключ к успеху!" in message_text
         assert "/study" in message_text
+
+    @pytest.mark.asyncio
+    async def test_send_daily_reminders_skips_users_who_already_studied(
+        self, bot_handler, mock_application
+    ):
+        """Users who already reviewed words today should not get a reminder"""
+        mock_users = [
+            {"telegram_id": 123456, "first_name": "John"},
+            {"telegram_id": 789012, "first_name": "Jane"},
+        ]
+
+        bot_handler.db_manager = MagicMock()
+        bot_handler.db_manager.get_all_active_users.return_value = mock_users
+        # John already studied today, Jane hasn't
+        bot_handler.db_manager.has_reviewed_today.side_effect = lambda tid: tid == 123456
+        bot_handler.application = mock_application
+
+        await bot_handler._send_daily_reminders()
+
+        mock_application.bot.send_message.assert_called_once()
+        call_args = mock_application.bot.send_message.call_args
+        assert call_args[1]["chat_id"] == 789012
+
+    @pytest.mark.asyncio
+    async def test_send_daily_reminders_all_skipped_when_all_studied(
+        self, bot_handler, mock_application
+    ):
+        """No reminders sent at all if every active user already studied today"""
+        mock_users = [{"telegram_id": 123456, "first_name": "John"}]
+
+        bot_handler.db_manager = MagicMock()
+        bot_handler.db_manager.get_all_active_users.return_value = mock_users
+        bot_handler.db_manager.has_reviewed_today.return_value = True
+        bot_handler.application = mock_application
+
+        await bot_handler._send_daily_reminders()
+
+        mock_application.bot.send_message.assert_not_called()
 
 
 class TestDailyRemindersIntegration:

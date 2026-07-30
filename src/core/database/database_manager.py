@@ -194,6 +194,10 @@ class DatabaseManager:
         """Get performance statistics for user"""
         return self.progress_repo.get_performance_stats(telegram_id, days)
 
+    def has_reviewed_today(self, telegram_id: int) -> bool:
+        """Check whether the user has already reviewed at least one word today"""
+        return self.progress_repo.has_reviewed_today(telegram_id)
+
     # Additional methods for complete API
     def add_word(self, telegram_id: int, word_data: dict[str, Any]) -> Word | None:
         """Add a single word to user's learning progress"""

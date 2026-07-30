@@ -225,6 +225,23 @@ class ProgressRepository:
             logger.error(f"Error getting review history: {e}")
             return []
 
+    def has_reviewed_today(self, telegram_id: int) -> bool:
+        """Check whether the user has already reviewed at least one word today"""
+        try:
+            with self.db_connection.get_connection() as conn:
+                cursor = conn.execute(
+                    """
+                    SELECT 1 FROM review_history
+                    WHERE telegram_id = ? AND date(reviewed_at, 'localtime') = date('now', 'localtime')
+                    LIMIT 1
+                    """,
+                    (telegram_id,),
+                )
+                return cursor.fetchone() is not None
+        except Exception as e:
+            logger.error(f"Error checking today's reviews: {e}")
+            return False
+
     def get_recent_reviews(
         self, telegram_id: int, days: int = 7
     ) -> list[dict[str, Any]]:

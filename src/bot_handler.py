@@ -809,8 +809,17 @@ class BotHandler:
 
             successful_sends = 0
             failed_sends = 0
+            skipped_already_studied = 0
 
             for user in active_users:
+                if self.db_manager.has_reviewed_today(user["telegram_id"]):
+                    skipped_already_studied += 1
+                    logger.debug(
+                        f"Skipping reminder for user {user['telegram_id']}: "
+                        "already reviewed words today"
+                    )
+                    continue
+
                 try:
                     await self.application.bot.send_message(
                         chat_id=user["telegram_id"],
@@ -827,7 +836,8 @@ class BotHandler:
 
             logger.info(
                 f"Daily reminders sent: {successful_sends} successful, "
-                f"{failed_sends} failed out of {len(active_users)} users"
+                f"{failed_sends} failed, {skipped_already_studied} skipped "
+                f"(already studied today) out of {len(active_users)} users"
             )
 
         except Exception as e:
