@@ -18,7 +18,7 @@ help:
 	@echo "  docker-stop - Stop Docker container"
 	@echo "  export-words - Export words data to JSON"
 	@echo "  import-words - Import words data from JSON"
-	@echo "  deploy      - Deploy to server (HOST=ip USER=user TAG=version)"
+	@echo "  deploy      - Deploy to production NAS (TAG=version, default latest)"
 	@echo "  all         - Install, test, lint, format"
 
 # Install dependencies
@@ -115,19 +115,18 @@ import-words:
 	echo "Importing from $$JSON_PATH to $$DB_PATH"; \
 	python scripts/import_words.py "$$JSON_PATH" "$$DB_PATH"
 
-# Deploy to production server
-# Usage: make deploy HOST=host USER=root [TAG=v1.0.0]
+# Deploy to production (NAS) over SSH + docker compose, no extra tooling needed
+# Usage: make deploy [TAG=v1.0.0] [HOST=other-host]
 deploy:
-	@if [ -z "$$HOST" ]; then \
-		echo "Error: HOST parameter is required"; \
-		echo "Usage: make deploy HOST=host USER=root [TAG=v1.0.0]"; \
-		exit 1; \
-	fi; \
-	if [ -z "$$USER" ]; then \
-		echo "Error: USER parameter is required"; \
-		echo "Usage: make deploy HOST=host USER=root [TAG=v1.0.0]"; \
-		exit 1; \
-	fi; \
+	@HOST=$${HOST:-bgspwn-home-nas.tailba405.ts.net}; \
 	TAG=$${TAG:-latest}; \
-	echo "Deploying $$TAG to $$HOST as user $$USER..."; \
-	spot -t $$HOST -u $$USER -e IMAGE_TAG:$$TAG
+	DEPLOY_DIR=/volume1/docker/anki-bot; \
+	DOCKER=/usr/local/bin/docker; \
+	echo "Deploying anki-bot:$$TAG to $$HOST..."; \
+	ssh "$$HOST" "cd $$DEPLOY_DIR && \
+		IMAGE_TAG=$$TAG $$DOCKER compose -f docker-compose.prod.yml pull && \
+		IMAGE_TAG=$$TAG $$DOCKER compose -f docker-compose.prod.yml up -d && \
+		echo '=== Status ===' && \
+		$$DOCKER compose -f docker-compose.prod.yml ps && \
+		echo '=== Recent logs ===' && \
+		$$DOCKER compose -f docker-compose.prod.yml logs --tail=15 german-bot"

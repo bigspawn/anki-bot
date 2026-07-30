@@ -45,7 +45,7 @@ make docker-run           # Run with docker-compose
 make docker-stop          # Stop docker containers
 
 # Deployment
-make deploy HOST=ip USER=user TAG=v1.0.0  # Deploy to server using spot
+make deploy TAG=v1.0.0  # SSH + docker compose pull/up on the production NAS (default TAG=latest)
 ```
 
 ### Environment Setup
