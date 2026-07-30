@@ -234,8 +234,8 @@ class TestStatsFieldMapping:
 🆕 Новых слов: 623
 ➕ Добавлено сегодня: 3
 🔥 Дней подряд: 2
-✅ Средний успех (30д): 34.3%
-   верно: 34 / неверно: 65"""
+✅ Хорошо/легко вспомнил (➕✅) за 30д: 34.3%
+   хорошо/легко: 34 / нужно повторить: 65"""
 
         assert result.strip() == expected_output.strip()
 
@@ -243,7 +243,7 @@ class TestStatsFieldMapping:
         assert "📚 Всего слов: 716" in result
         assert "🔄 К повторению: 0" in result
         assert "🆕 Новых слов: 623" in result
-        assert "✅ Средний успех (30д): 34.3%" in result
+        assert "✅ Хорошо/легко вспомнил (➕✅) за 30д: 34.3%" in result
 
     def test_legacy_field_name_fallback(self):
         """Test that old field name still works for backward compatibility if needed"""

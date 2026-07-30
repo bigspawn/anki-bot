@@ -81,8 +81,8 @@ def format_progress_stats(stats: dict[str, Any]) -> str:
     result += f"🆕 Новых слов: {new_words}\n"
     result += f"➕ Добавлено сегодня: {words_today}\n"
     result += f"🔥 Дней подряд: {study_streak}\n"
-    result += f"✅ Средний успех (30д): {avg_success_rate:.1%}\n"
-    result += f"   верно: {correct_reviews} / неверно: {incorrect_reviews}\n"
+    result += f"✅ Хорошо/легко вспомнил (➕✅) за 30д: {avg_success_rate:.1%}\n"
+    result += f"   хорошо/легко: {correct_reviews} / нужно повторить: {incorrect_reviews}\n"
 
     return result
 

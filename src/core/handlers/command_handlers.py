@@ -194,7 +194,7 @@ class CommandHandlers:
 
 📊 <b>Частичные результаты:</b>
 • Слов изучено: <b>{existing_session.current_word_index}/{len(existing_session.words)}</b>
-• Правильных ответов: <b>{existing_session.correct_answers}/{existing_session.total_answers}</b>
+• Хорошо/легко вспомнил (➕✅): <b>{existing_session.correct_answers}/{existing_session.total_answers}</b>
 • Точность: <b>{accuracy:.1f}%</b>
 
 📝 Переходим к добавлению новых слов..."""

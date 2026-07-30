@@ -103,7 +103,7 @@ class SessionManager:
 
 📊 <b>Частичные результаты:</b>
 • Слов изучено: <b>{existing_session.current_word_index}/{len(existing_session.words)}</b>
-• Правильных ответов: <b>{existing_session.correct_answers}/{existing_session.total_answers}</b>
+• Хорошо/легко вспомнил (➕✅): <b>{existing_session.correct_answers}/{existing_session.total_answers}</b>
 • Точность: <b>{accuracy:.1f}%</b>
 
 🔄 Начинаем новую сессию изучения..."""
@@ -286,7 +286,7 @@ class SessionManager:
 
 📊 <b>Результаты:</b>
 • Слов изучено: <b>{len(session.words)}</b>
-• Правильных ответов: <b>{session.correct_answers}/{session.total_answers}</b>
+• Хорошо/легко вспомнил (➕✅): <b>{session.correct_answers}/{session.total_answers}</b>
 • Точность: <b>{accuracy:.1f}%</b>
 
 🎯 Отличная работа! Продолжайте изучение для лучшего запоминания."""
@@ -317,7 +317,7 @@ class SessionManager:
 
 📊 <b>Результаты:</b>
 • Слов изучено: <b>{len(session.words)}</b>
-• Правильных ответов: <b>{session.correct_answers}/{session.total_answers}</b>
+• Хорошо/легко вспомнил (➕✅): <b>{session.correct_answers}/{session.total_answers}</b>
 • Точность: <b>{accuracy:.1f}%</b>
 
 🎯 Отличная работа! Продолжайте изучение для лучшего запоминания."""
