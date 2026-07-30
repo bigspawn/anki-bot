@@ -128,20 +128,27 @@ class TestFalsePositiveBug:
             "difficult_words": 10,
         }
 
-        # Accuracy query
+        # Correct/incorrect review counts query
         mock_cursor_accuracy = MagicMock()
         mock_cursor_accuracy.fetchone.return_value = {
-            "avg_accuracy": 0.65  # Repository returns this field name
+            "total_reviews": 100,
+            "correct_reviews": 65,
+            "incorrect_reviews": 35,
         }
 
         # Today's activity query
         mock_cursor_today = MagicMock()
         mock_cursor_today.fetchone.return_value = {"reviews_today": 5}
 
+        # Study streak query
+        mock_cursor_streak = MagicMock()
+        mock_cursor_streak.fetchall.return_value = []
+
         mock_conn.execute.side_effect = [
             mock_cursor_main,
             mock_cursor_accuracy,
             mock_cursor_today,
+            mock_cursor_streak,
         ]
 
         # Get stats from repository
@@ -207,7 +214,7 @@ class TestFalsePositiveBug:
 
         # Show the fix
         new_result = format_progress_stats(repo_output)  # Uses fixed version
-        assert "✅ Средний успех: 34.3%" in new_result  # FIXED: Shows correct 34.3%
+        assert "34.3%" in new_result  # FIXED: Shows correct 34.3%
 
         print(f"OLD (buggy): {old_result}")
         print(f"NEW (fixed): {new_result}")

@@ -8,10 +8,49 @@ This test suite specifically reproduces and prevents regression of the bug where
 - Result: success rate always showed 0.0% regardless of actual performance
 """
 
+from datetime import datetime, timedelta
 from unittest.mock import MagicMock, patch
 
 from src.core.database.repositories.user_repository import UserRepository
 from src.utils import format_progress_stats
+
+
+class TestCalculateStreak:
+    """Test UserRepository._calculate_streak"""
+
+    def test_no_reviews(self):
+        assert UserRepository._calculate_streak(set()) == 0
+
+    def test_streak_ending_today(self):
+        today = datetime.now().date()
+        dates = {
+            today.isoformat(),
+            (today - timedelta(days=1)).isoformat(),
+            (today - timedelta(days=2)).isoformat(),
+        }
+        assert UserRepository._calculate_streak(dates) == 3
+
+    def test_streak_ending_yesterday_still_counts(self):
+        """No review yet today, but streak continues if yesterday was covered"""
+        today = datetime.now().date()
+        dates = {
+            (today - timedelta(days=1)).isoformat(),
+            (today - timedelta(days=2)).isoformat(),
+        }
+        assert UserRepository._calculate_streak(dates) == 2
+
+    def test_streak_broken_by_gap(self):
+        today = datetime.now().date()
+        dates = {
+            today.isoformat(),
+            (today - timedelta(days=3)).isoformat(),
+        }
+        assert UserRepository._calculate_streak(dates) == 1
+
+    def test_no_review_today_or_yesterday_resets_streak(self):
+        today = datetime.now().date()
+        dates = {(today - timedelta(days=2)).isoformat()}
+        assert UserRepository._calculate_streak(dates) == 0
 
 
 class TestStatsFieldMapping:
@@ -121,21 +160,31 @@ class TestStatsFieldMapping:
             "due_words": 0,
             "learned_words": 1,
             "difficult_words": 0,
+            "words_today": 5,
         }
 
-        # Mock the accuracy query response
+        # Mock the correct/incorrect review counts query response
         mock_cursor_accuracy = MagicMock()
-        mock_cursor_accuracy.fetchone.return_value = {"avg_accuracy": 0.343434343434343}
+        mock_cursor_accuracy.fetchone.return_value = {
+            "total_reviews": 99,
+            "correct_reviews": 34,
+            "incorrect_reviews": 65,
+        }
 
         # Mock the today's activity query response
         mock_cursor_today = MagicMock()
         mock_cursor_today.fetchone.return_value = {"reviews_today": 0}
 
+        # Mock the streak query response (no reviews yesterday/today -> streak 0)
+        mock_cursor_streak = MagicMock()
+        mock_cursor_streak.fetchall.return_value = []
+
         # Set up the execute call returns in order
         mock_conn.execute.side_effect = [
             mock_cursor_main,  # Main stats query
-            mock_cursor_accuracy,  # Accuracy query
+            mock_cursor_accuracy,  # Correct/incorrect query
             mock_cursor_today,  # Today's activity query
+            mock_cursor_streak,  # Study streak query
         ]
 
         # Test the actual repository
@@ -146,7 +195,10 @@ class TestStatsFieldMapping:
         assert stats is not None
         assert "total_words" in stats
         assert "average_accuracy" in stats  # This is the critical field
-        assert stats["average_accuracy"] == 0.343434343434343
+        assert stats["average_accuracy"] == 34 / 99
+        assert stats["correct_reviews"] == 34
+        assert stats["incorrect_reviews"] == 65
+        assert stats["words_today"] == 5
 
         # Test that these stats work with format_progress_stats
         formatted = format_progress_stats(stats)
@@ -164,8 +216,10 @@ class TestStatsFieldMapping:
             "difficult_words": 0,
             "average_accuracy": 0.343434343434343,  # 34 good reviews out of 99 total
             "reviews_today": 0,
-            "study_streak": 0,
-            "words_today": 0,
+            "study_streak": 2,
+            "words_today": 3,
+            "correct_reviews": 34,
+            "incorrect_reviews": 65,
         }
 
         # Format the stats
@@ -178,7 +232,10 @@ class TestStatsFieldMapping:
 📚 Всего слов: 716
 🔄 К повторению: 0
 🆕 Новых слов: 623
-✅ Средний успех: 34.3%"""
+➕ Добавлено сегодня: 3
+🔥 Дней подряд: 2
+✅ Средний успех (30д): 34.3%
+   верно: 34 / неверно: 65"""
 
         assert result.strip() == expected_output.strip()
 
@@ -186,7 +243,7 @@ class TestStatsFieldMapping:
         assert "📚 Всего слов: 716" in result
         assert "🔄 К повторению: 0" in result
         assert "🆕 Новых слов: 623" in result
-        assert "✅ Средний успех: 34.3%" in result
+        assert "✅ Средний успех (30д): 34.3%" in result
 
     def test_legacy_field_name_fallback(self):
         """Test that old field name still works for backward compatibility if needed"""

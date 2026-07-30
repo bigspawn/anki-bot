@@ -69,13 +69,20 @@ def format_progress_stats(stats: dict[str, Any]) -> str:
     total_words = stats.get("total_words", 0)
     due_words = stats.get("due_words", 0)
     new_words = stats.get("new_words", 0)
+    words_today = stats.get("words_today", 0)
     avg_success_rate = stats.get("average_accuracy", 0.0)
+    correct_reviews = stats.get("correct_reviews", 0)
+    incorrect_reviews = stats.get("incorrect_reviews", 0)
+    study_streak = stats.get("study_streak", 0)
 
     result = "📊 Ваша статистика:\n\n"
     result += f"📚 Всего слов: {total_words}\n"
     result += f"🔄 К повторению: {due_words}\n"
     result += f"🆕 Новых слов: {new_words}\n"
-    result += f"✅ Средний успех: {avg_success_rate:.1%}\n"
+    result += f"➕ Добавлено сегодня: {words_today}\n"
+    result += f"🔥 Дней подряд: {study_streak}\n"
+    result += f"✅ Средний успех (30д): {avg_success_rate:.1%}\n"
+    result += f"   верно: {correct_reviews} / неверно: {incorrect_reviews}\n"
 
     return result
 

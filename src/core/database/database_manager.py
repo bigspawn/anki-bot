@@ -115,6 +115,42 @@ class DatabaseManager:
         """Get verb words for study"""
         return self.word_repo.get_verb_words(telegram_id, limit, randomize)
 
+    def get_recent_words(
+        self, telegram_id: int, limit: int = 10
+    ) -> list[dict[str, Any]]:
+        """Get the most recently added words for study"""
+        return self.word_repo.get_recent_words(telegram_id, limit)
+
+    def get_words_by_part_of_speech(
+        self,
+        telegram_id: int,
+        part_of_speech: str,
+        limit: int = 10,
+        randomize: bool = True,
+    ) -> list[dict[str, Any]]:
+        """Get words filtered by part of speech for study"""
+        return self.word_repo.get_words_by_part_of_speech(
+            telegram_id, part_of_speech, limit, randomize
+        )
+
+    def get_words_by_level(
+        self, telegram_id: int, level: str, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get words filtered by CEFR level for study"""
+        return self.word_repo.get_words_by_level(telegram_id, level, limit, randomize)
+
+    def get_words_by_lemma_set(
+        self,
+        telegram_id: int,
+        lemmas: list[str],
+        limit: int = 10,
+        randomize: bool = True,
+    ) -> list[dict[str, Any]]:
+        """Get user's words whose lemma is in a given set for study"""
+        return self.word_repo.get_words_by_lemma_set(
+            telegram_id, lemmas, limit, randomize
+        )
+
     def add_words_to_user(
         self, telegram_id: int, words_data: list[dict[str, Any]]
     ) -> int:

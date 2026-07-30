@@ -240,6 +240,112 @@ class BotHandler:
         )
         app.add_handler(
             CommandHandler(
+                "study_recent",
+                self.require_authorization(self.command_handlers.study_recent_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_nouns",
+                self.require_authorization(self.command_handlers.study_nouns_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_adjectives",
+                self.require_authorization(
+                    self.command_handlers.study_adjectives_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_adverbs",
+                self.require_authorization(self.command_handlers.study_adverbs_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_pronouns",
+                self.require_authorization(self.command_handlers.study_pronouns_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_prepositions",
+                self.require_authorization(
+                    self.command_handlers.study_prepositions_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_conjunctions",
+                self.require_authorization(
+                    self.command_handlers.study_conjunctions_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_numerals",
+                self.require_authorization(self.command_handlers.study_numerals_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_interjections",
+                self.require_authorization(
+                    self.command_handlers.study_interjections_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_a1",
+                self.require_authorization(self.command_handlers.study_a1_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_a2",
+                self.require_authorization(self.command_handlers.study_a2_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_b1",
+                self.require_authorization(self.command_handlers.study_b1_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_b2",
+                self.require_authorization(self.command_handlers.study_b2_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_c1",
+                self.require_authorization(self.command_handlers.study_c1_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_c2",
+                self.require_authorization(self.command_handlers.study_c2_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_common_verbs",
+                self.require_authorization(
+                    self.command_handlers.study_common_verbs_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
                 "stats", self.require_authorization(self.command_handlers.stats_command)
             )
         )
@@ -279,6 +385,22 @@ class BotHandler:
             BotCommand("study_new", "🆕 Изучать только новые слова"),
             BotCommand("study_difficult", "🔥 Повторить сложные слова"),
             BotCommand("study_verbs", "🔤 Изучать только глаголы"),
+            BotCommand("study_recent", "🕐 Изучать последние N добавленных слов"),
+            BotCommand("study_nouns", "🧩 Только существительные"),
+            BotCommand("study_adjectives", "🧩 Только прилагательные"),
+            BotCommand("study_adverbs", "🧩 Только наречия"),
+            BotCommand("study_pronouns", "🧩 Только местоимения"),
+            BotCommand("study_prepositions", "🧩 Только предлоги"),
+            BotCommand("study_conjunctions", "🧩 Только союзы"),
+            BotCommand("study_numerals", "🧩 Только числительные"),
+            BotCommand("study_interjections", "🧩 Только междометия"),
+            BotCommand("study_a1", "🎓 Слова уровня A1"),
+            BotCommand("study_a2", "🎓 Слова уровня A2"),
+            BotCommand("study_b1", "🎓 Слова уровня B1"),
+            BotCommand("study_b2", "🎓 Слова уровня B2"),
+            BotCommand("study_c1", "🎓 Слова уровня C1"),
+            BotCommand("study_c2", "🎓 Слова уровня C2"),
+            BotCommand("study_common_verbs", "⭐ Популярные глаголы"),
             BotCommand("stats", "📊 Показать статистику"),
             BotCommand("help", "❓ Справка по командам"),
             BotCommand("settings", "⚙️ Настройки бота"),
@@ -405,6 +527,7 @@ class BotHandler:
                                 "example": pw.example,
                                 "additional_forms": pw.additional_forms,
                                 "confidence": pw.confidence,
+                                "level": pw.level,
                             }
                         )
 
