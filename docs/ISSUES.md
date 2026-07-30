@@ -273,7 +273,14 @@ Status: **implemented (level rubric + common-verbs rubric)**
   (`WordRepository.get_words_by_lemma_set`). Deliberately NOT AI-generated
   per-word popularity, to avoid the same kind of hallucination risk found in
   item 4. Already argument-free, no redo needed.
+- `/study_question_words` and `/study_modal_verbs` — same curated-lemma-set
+  pattern as `/study_common_verbs` (`QUESTION_WORDS` / `MODAL_VERBS` in
+  `src/core/handlers/command_handlers.py`), added on request after user asked
+  "какие еще категории можно добавить?". No DB/schema/AI changes needed —
+  reuses `WordRepository.get_words_by_lemma_set`.
 - Tests: `tests/test_study_level_feature.py`.
 - Not done: arbitrary free-form topic tagging (e.g. "travel", "food") beyond
-  level + common-verbs — would need its own tagging scheme; not requested
-  with that level of detail, can be added later if wanted.
+  level + common-verbs/question-words/modal-verbs — would need its own
+  tagging scheme (AI classification with the same hallucination risk as
+  item 4, or manual per-word curation that doesn't scale to 2000+ words);
+  not requested with that level of detail, can be added later if wanted.

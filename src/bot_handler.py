@@ -346,6 +346,22 @@ class BotHandler:
         )
         app.add_handler(
             CommandHandler(
+                "study_question_words",
+                self.require_authorization(
+                    self.command_handlers.study_question_words_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_modal_verbs",
+                self.require_authorization(
+                    self.command_handlers.study_modal_verbs_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
                 "stats", self.require_authorization(self.command_handlers.stats_command)
             )
         )
@@ -401,6 +417,8 @@ class BotHandler:
             BotCommand("study_c1", "🎓 Слова уровня C1"),
             BotCommand("study_c2", "🎓 Слова уровня C2"),
             BotCommand("study_common_verbs", "⭐ Популярные глаголы"),
+            BotCommand("study_question_words", "❓ Вопросительные слова"),
+            BotCommand("study_modal_verbs", "🔧 Модальные глаголы"),
             BotCommand("stats", "📊 Показать статистику"),
             BotCommand("help", "❓ Справка по командам"),
             BotCommand("settings", "⚙️ Настройки бота"),

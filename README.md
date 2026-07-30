@@ -66,6 +66,11 @@ make run
   have one)
 - `/study_common_verbs` - Study from a curated list of the most frequent
   German verbs, intersected with your own vocabulary
+- `/study_question_words` - Study German question words (Fragewörter: wer,
+  was, wo, wann, warum, wie...), intersected with your own vocabulary
+- `/study_modal_verbs` - Study the core German modal verbs (können, müssen,
+  dürfen, sollen, wollen, mögen, möchten), intersected with your own
+  vocabulary
 - `/stats` - Show learning statistics (total/new/due words, words added
   today, study streak, correct/incorrect reviews)
 - `/settings` - Configure session settings

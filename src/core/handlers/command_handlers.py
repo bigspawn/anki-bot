@@ -35,6 +35,18 @@ COMMON_VERBS = [
     "erfahren", "benutzen",
 ]
 
+# German question words (Fragewörter), used for the /study_question_words rubric.
+QUESTION_WORDS = [
+    "wer", "was", "wo", "wohin", "woher", "wann", "warum", "wieso",
+    "weshalb", "wie", "welcher", "welche", "welches", "wessen", "wem",
+    "wen", "wieviel", "wie viel", "inwiefern", "inwieweit",
+]
+
+# Core German modal verbs, used for the /study_modal_verbs rubric.
+MODAL_VERBS = [
+    "können", "müssen", "dürfen", "sollen", "wollen", "mögen", "möchten",
+]
+
 
 class CommandHandlers:
     """Handles all bot commands"""
@@ -130,6 +142,8 @@ class CommandHandlers:
 /study_recent [N] - Последние N добавленных слов (по умолчанию 10)
 /study_a1, /study_a2, /study_b1, /study_b2, /study_c1, /study_c2 - Слова по уровню CEFR
 /study_common_verbs - Популярные немецкие глаголы из вашего списка
+/study_question_words - Вопросительные слова (wer, was, wo...)
+/study_modal_verbs - Модальные глаголы (können, müssen, wollen...)
 
 📊 <b>Статистика:</b>
 /stats - Подробная статистика изучения
@@ -165,7 +179,6 @@ class CommandHandlers:
             existing_session = self.session_manager.get_session(telegram_id)
             if existing_session:
                 # Calculate partial statistics for the interrupted session
-                elapsed_time = existing_session.timer.get_elapsed_time()
                 accuracy = (
                     (
                         existing_session.correct_answers
@@ -183,7 +196,6 @@ class CommandHandlers:
 • Слов изучено: <b>{existing_session.current_word_index}/{len(existing_session.words)}</b>
 • Правильных ответов: <b>{existing_session.correct_answers}/{existing_session.total_answers}</b>
 • Точность: <b>{accuracy:.1f}%</b>
-• Время: <b>{elapsed_time:.1f}с</b>
 
 📝 Переходим к добавлению новых слов..."""
 
@@ -579,6 +591,73 @@ class CommandHandlers:
             return
 
         await self._start_study_session(update, common_verb_words, "common_verbs")
+
+    async def study_question_words_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_question_words command - study German question words
+        (Fragewörter)"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        question_words = self.db_manager.get_words_by_lemma_set(
+            db_user["telegram_id"], QUESTION_WORDS, limit=10
+        )
+
+        if not question_words:
+            await self._safe_reply(
+                update,
+                "📚 Среди ваших слов нет вопросительных слов из списка.\n\n"
+                "Используйте /add для добавления новых слов из текста.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, question_words, "question_words")
+
+    async def study_modal_verbs_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_modal_verbs command - study German modal verbs"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        modal_verb_words = self.db_manager.get_words_by_lemma_set(
+            db_user["telegram_id"], MODAL_VERBS, limit=10
+        )
+
+        if not modal_verb_words:
+            await self._safe_reply(
+                update,
+                "📚 Среди ваших слов нет модальных глаголов из списка.\n\n"
+                "Используйте /add для добавления новых слов из текста.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, modal_verb_words, "modal_verbs")
 
     async def stats_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /stats command"""
