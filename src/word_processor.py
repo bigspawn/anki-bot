@@ -509,6 +509,18 @@ Strict rules:
 - Never treat a preposition+article contraction (e.g. "zu dem", "an das",
   "im", "zum") as a standalone word to analyze — analyze the underlying
   preposition instead.
+- "additional_forms" must follow a strict schema depending on
+  "part_of_speech":
+  - For "verb": a JSON object with EXACTLY two keys, "praeteritum" (3rd
+    person singular Präteritum, e.g. "ging") and "partizip_ii" (bare past
+    participle, e.g. "gegangen" — never include the auxiliary "haben"/"sein",
+    never a full Perfekt phrase like "ist gegangen"). Example:
+    {"praeteritum": "ging", "partizip_ii": "gegangen"}. No other keys.
+  - For "noun": a JSON object with exactly one key, "plural" (the plural
+    form, or null if the noun has no plural). Example: {"plural": "Häuser"}.
+  - For any other part of speech: null.
+  Never use different key names, language variants, or extra conjugation
+  tables (no Präsens, no person/number breakdown, no imperative, etc.).
 
 Be accurate and provide high-quality linguistic analysis."""
 
@@ -569,6 +581,18 @@ Strict rules:
 - Never treat a preposition+article contraction (e.g. "zu dem", "an das",
   "im", "zum") as a standalone word to analyze — analyze the underlying
   preposition instead.
+- "additional_forms" must follow a strict schema depending on
+  "part_of_speech":
+  - For "verb": a JSON object with EXACTLY two keys, "praeteritum" (3rd
+    person singular Präteritum, e.g. "ging") and "partizip_ii" (bare past
+    participle, e.g. "gegangen" — never include the auxiliary "haben"/"sein",
+    never a full Perfekt phrase like "ist gegangen"). Example:
+    {"praeteritum": "ging", "partizip_ii": "gegangen"}. No other keys.
+  - For "noun": a JSON object with exactly one key, "plural" (the plural
+    form, or null if the noun has no plural). Example: {"plural": "Häuser"}.
+  - For any other part of speech: null.
+  Never use different key names, language variants, or extra conjugation
+  tables (no Präsens, no person/number breakdown, no imperative, etc.).
 
 Be accurate and provide high-quality linguistic analysis for all words."""
 

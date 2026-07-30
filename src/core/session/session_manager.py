@@ -18,6 +18,7 @@ from ...utils import (
     Timer,
     create_inline_keyboard_data,
     format_study_card,
+    format_verb_forms,
     get_rating_emoji,
     parse_inline_keyboard_data,
 )
@@ -181,6 +182,8 @@ class SessionManager:
         else:
             word_display = f"{word['lemma']} - {word['part_of_speech']}"
 
+        verb_forms = format_verb_forms(word)
+
         answer_text = f"""🔤 <b>{word["lemma"]}</b>
 {word_display}
 
@@ -188,7 +191,7 @@ class SessionManager:
 
 📝 <i>{word["example"]}</i>
 
-Как хорошо вы знаете это слово?"""
+{verb_forms}Как хорошо вы знаете это слово?"""
 
         # Create rating keyboard
         rating_buttons = []

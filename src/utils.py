@@ -335,6 +335,32 @@ def validate_rating(rating: int | str) -> int | None:
     return None
 
 
+def format_verb_forms(word: dict[str, Any]) -> str:
+    """Format the Präteritum/Partizip II line for a verb's additional_forms,
+    or '' if the word isn't a verb or has no clean forms stored"""
+    if word.get("part_of_speech") != "verb":
+        return ""
+
+    raw = word.get("additional_forms")
+    if not raw:
+        return ""
+
+    try:
+        forms = json.loads(raw)
+    except (TypeError, ValueError):
+        return ""
+
+    if not isinstance(forms, dict):
+        return ""
+
+    praeteritum = forms.get("praeteritum")
+    partizip_ii = forms.get("partizip_ii")
+    if not praeteritum or not partizip_ii:
+        return ""
+
+    return f"🔄 {praeteritum} – {partizip_ii}\n\n"
+
+
 def get_rating_emoji(rating: int) -> str:
     """Get emoji for rating"""
     emojis = {1: "❌", 2: "➖", 3: "➕", 4: "✅"}  # Again  # Hard  # Good  # Easy

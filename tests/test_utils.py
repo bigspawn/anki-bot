@@ -19,6 +19,7 @@ from src.utils import (
     format_json_safely,
     format_progress_stats,
     format_study_card,
+    format_verb_forms,
     format_word_display,
     get_difficulty_level,
     get_rating_emoji,
@@ -209,6 +210,48 @@ class TestRatingFunctions:
         assert get_rating_text(3) == ""
         assert get_rating_text(4) == ""
         assert get_rating_text(5) == ""
+
+
+class TestFormatVerbForms:
+    """Test format_verb_forms"""
+
+    def test_verb_with_clean_forms(self):
+        word = {
+            "part_of_speech": "verb",
+            "additional_forms": '{"praeteritum": "ging", "partizip_ii": "gegangen"}',
+        }
+        assert format_verb_forms(word) == "🔄 ging – gegangen\n\n"
+
+    def test_not_a_verb(self):
+        word = {
+            "part_of_speech": "noun",
+            "additional_forms": '{"praeteritum": "ging", "partizip_ii": "gegangen"}',
+        }
+        assert format_verb_forms(word) == ""
+
+    def test_verb_missing_additional_forms(self):
+        word = {"part_of_speech": "verb", "additional_forms": None}
+        assert format_verb_forms(word) == ""
+
+    def test_verb_with_legacy_inconsistent_schema(self):
+        """Old data with non-standard keys should not be shown, not crash"""
+        word = {
+            "part_of_speech": "verb",
+            "additional_forms": '{"past": "hat gewohnt", "1st person singular": "wohne"}',
+        }
+        assert format_verb_forms(word) == ""
+
+    def test_verb_with_invalid_json(self):
+        word = {"part_of_speech": "verb", "additional_forms": "not json"}
+        assert format_verb_forms(word) == ""
+
+    def test_verb_with_partial_clean_schema(self):
+        """Only one of the two keys present should not be shown"""
+        word = {
+            "part_of_speech": "verb",
+            "additional_forms": '{"praeteritum": "ging"}',
+        }
+        assert format_verb_forms(word) == ""
 
 
 class TestUtilityFunctions:
