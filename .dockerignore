@@ -83,8 +83,8 @@ docker-compose.yml
 docker-compose.test.yml
 docker-compose.prod.yml
 
-# Scripts (not needed in production)
-scripts/
+# Scripts: shell helpers stay out, maintenance scripts run inside the container
+scripts/*.sh
 
 # Development configuration (keep pyproject.toml and uv.lock for Docker builds)
 mypy.ini
