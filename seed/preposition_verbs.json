@@ -1,0 +1,802 @@
+[
+  {
+    "lemma": "denken an",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "думать о ком-л./чём-л.",
+    "example": "Ich denke oft an meine Familie.",
+    "additional_forms": "{\"preposition\": \"an\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "glauben an",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "верить во что-л./кого-л.",
+    "example": "Sie glaubt an ihren Erfolg.",
+    "additional_forms": "{\"preposition\": \"an\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich erinnern an",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "вспоминать о ком-л./чём-л.",
+    "example": "Er erinnert sich an den Unfall.",
+    "additional_forms": "{\"preposition\": \"an\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich gewöhnen an",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "привыкать к чему-л.",
+    "example": "Ich gewöhne mich an das neue Leben.",
+    "additional_forms": "{\"preposition\": \"an\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich wenden an",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "обращаться к кому-л.",
+    "example": "Wenden Sie sich an das Amt.",
+    "additional_forms": "{\"preposition\": \"an\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "arbeiten an",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "работать над чем-л.",
+    "example": "Wir arbeiten an einem Projekt.",
+    "additional_forms": "{\"preposition\": \"an\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "teilnehmen an",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "участвовать в чём-л.",
+    "example": "Er nimmt an dem Kurs teil.",
+    "additional_forms": "{\"preposition\": \"an\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "leiden an",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "страдать от болезни",
+    "example": "Sie leidet an einer Allergie.",
+    "additional_forms": "{\"preposition\": \"an\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "zweifeln an",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "сомневаться в чём-л.",
+    "example": "Ich zweifle an dieser Idee.",
+    "additional_forms": "{\"preposition\": \"an\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "sterben an",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "умирать от чего-л.",
+    "example": "Er starb an einer Krankheit.",
+    "additional_forms": "{\"preposition\": \"an\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "sich beteiligen an",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "участвовать в чём-л.",
+    "example": "Viele beteiligen sich an der Aktion.",
+    "additional_forms": "{\"preposition\": \"an\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "warten auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "ждать кого-л./чего-л.",
+    "example": "Ich warte auf den Bus.",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich freuen auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "радоваться предстоящему",
+    "example": "Wir freuen uns auf den Urlaub.",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "achten auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "обращать внимание на что-л.",
+    "example": "Achte auf die Verkehrsschilder!",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "aufpassen auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "присматривать за кем-л.",
+    "example": "Ich passe auf die Kinder auf.",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "hoffen auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "надеяться на что-л.",
+    "example": "Wir hoffen auf gutes Wetter.",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "verzichten auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "отказываться от чего-л.",
+    "example": "Er verzichtet auf den Nachtisch.",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "antworten auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "отвечать на что-л.",
+    "example": "Sie antwortet auf meine Frage.",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "reagieren auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "реагировать на что-л.",
+    "example": "Er reagiert nicht auf meine Mails.",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich vorbereiten auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "готовиться к чему-л.",
+    "example": "Ich bereite mich auf die Prüfung vor.",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich konzentrieren auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "сосредоточиться на чём-л.",
+    "example": "Konzentriere dich auf die Arbeit!",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich verlassen auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "полагаться на кого-л.",
+    "example": "Auf sie kann man sich verlassen.",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich beziehen auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "ссылаться на что-л.",
+    "example": "Ich beziehe mich auf Ihr Schreiben.",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "sich einigen auf",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "договориться о чём-л.",
+    "example": "Wir einigen uns auf einen Termin.",
+    "additional_forms": "{\"preposition\": \"auf\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "sich interessieren für",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "интересоваться чем-л.",
+    "example": "Er interessiert sich für Politik.",
+    "additional_forms": "{\"preposition\": \"für\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich entscheiden für",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "выбирать что-л.",
+    "example": "Ich entscheide mich für den blauen Mantel.",
+    "additional_forms": "{\"preposition\": \"für\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich bedanken für",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "благодарить за что-л.",
+    "example": "Ich bedanke mich für Ihre Hilfe.",
+    "additional_forms": "{\"preposition\": \"für\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich entschuldigen für",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "извиняться за что-л.",
+    "example": "Er entschuldigt sich für die Verspätung.",
+    "additional_forms": "{\"preposition\": \"für\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sorgen für",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "заботиться о чём-л., обеспечивать",
+    "example": "Sie sorgt für ihre Kinder.",
+    "additional_forms": "{\"preposition\": \"für\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "danken für",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "благодарить за что-л.",
+    "example": "Wir danken dir für das Geschenk.",
+    "additional_forms": "{\"preposition\": \"für\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich schämen für",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "стыдиться чего-л.",
+    "example": "Er schämt sich für seinen Fehler.",
+    "additional_forms": "{\"preposition\": \"für\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich kümmern um",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "заботиться о ком-л.",
+    "example": "Sie kümmert sich um die Gäste.",
+    "additional_forms": "{\"preposition\": \"um\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "bitten um",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "просить о чём-л.",
+    "example": "Ich bitte um Ihre Hilfe.",
+    "additional_forms": "{\"preposition\": \"um\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich bewerben um",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "претендовать на место",
+    "example": "Er bewirbt sich um eine Stelle.",
+    "additional_forms": "{\"preposition\": \"um\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich bemühen um",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "стараться добиться чего-л.",
+    "example": "Wir bemühen uns um eine Lösung.",
+    "additional_forms": "{\"preposition\": \"um\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "sich streiten über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "спорить о чём-л.",
+    "example": "Sie streiten sich über das Geld.",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sprechen über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "говорить о чём-л.",
+    "example": "Wir sprechen über den Film.",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "reden über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "разговаривать о чём-л.",
+    "example": "Reden wir über das Problem!",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "nachdenken über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "размышлять о чём-л.",
+    "example": "Ich denke über dein Angebot nach.",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich ärgern über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "злиться из-за чего-л.",
+    "example": "Er ärgert sich über den Lärm.",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich freuen über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "радоваться случившемуся",
+    "example": "Sie freut sich über das Geschenk.",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich beschweren über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "жаловаться на что-л.",
+    "example": "Der Gast beschwert sich über das Zimmer.",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich informieren über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "узнавать о чём-л.",
+    "example": "Ich informiere mich über den Kurs.",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich wundern über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "удивляться чему-л.",
+    "example": "Wir wundern uns über die Preise.",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "lachen über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "смеяться над чем-л.",
+    "example": "Alle lachen über den Witz.",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "berichten über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "сообщать о чём-л.",
+    "example": "Die Zeitung berichtet über den Unfall.",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich unterhalten über",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "беседовать о чём-л.",
+    "example": "Wir unterhalten uns über die Arbeit.",
+    "additional_forms": "{\"preposition\": \"über\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "träumen von",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "мечтать о чём-л.",
+    "example": "Sie träumt von einer Weltreise.",
+    "additional_forms": "{\"preposition\": \"von\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "erzählen von",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "рассказывать о чём-л.",
+    "example": "Er erzählt von seiner Reise.",
+    "additional_forms": "{\"preposition\": \"von\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "abhängen von",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "зависеть от чего-л.",
+    "example": "Das hängt vom Wetter ab.",
+    "additional_forms": "{\"preposition\": \"von\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "halten von",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "быть какого-л. мнения о чём-л.",
+    "example": "Was hältst du von dem Vorschlag?",
+    "additional_forms": "{\"preposition\": \"von\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich verabschieden von",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "прощаться с кем-л.",
+    "example": "Ich verabschiede mich von euch.",
+    "additional_forms": "{\"preposition\": \"von\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sprechen mit",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "говорить с кем-л.",
+    "example": "Ich spreche mit dem Chef.",
+    "additional_forms": "{\"preposition\": \"mit\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "telefonieren mit",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "разговаривать по телефону с кем-л.",
+    "example": "Sie telefoniert mit ihrer Mutter.",
+    "additional_forms": "{\"preposition\": \"mit\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "anfangen mit",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "начинать с чего-л.",
+    "example": "Wir fangen mit der Übung an.",
+    "additional_forms": "{\"preposition\": \"mit\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "aufhören mit",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "прекращать что-л.",
+    "example": "Er hört mit dem Rauchen auf.",
+    "additional_forms": "{\"preposition\": \"mit\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich beschäftigen mit",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "заниматься чем-л.",
+    "example": "Sie beschäftigt sich mit Musik.",
+    "additional_forms": "{\"preposition\": \"mit\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich treffen mit",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "встречаться с кем-л.",
+    "example": "Ich treffe mich mit Freunden.",
+    "additional_forms": "{\"preposition\": \"mit\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich verabreden mit",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "договариваться о встрече с кем-л.",
+    "example": "Er verabredet sich mit ihr.",
+    "additional_forms": "{\"preposition\": \"mit\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "rechnen mit",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "рассчитывать на что-л., ожидать",
+    "example": "Wir rechnen mit Verspätung.",
+    "additional_forms": "{\"preposition\": \"mit\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "fragen nach",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "спрашивать о чём-л.",
+    "example": "Er fragt nach dem Weg.",
+    "additional_forms": "{\"preposition\": \"nach\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "suchen nach",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "искать что-л.",
+    "example": "Ich suche nach meinem Schlüssel.",
+    "additional_forms": "{\"preposition\": \"nach\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "riechen nach",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "пахнуть чем-л.",
+    "example": "Hier riecht es nach Kaffee.",
+    "additional_forms": "{\"preposition\": \"nach\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "schmecken nach",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "иметь вкус чего-л.",
+    "example": "Der Tee schmeckt nach Zitrone.",
+    "additional_forms": "{\"preposition\": \"nach\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich erkundigen nach",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "справляться о чём-л.",
+    "example": "Sie erkundigt sich nach dem Preis.",
+    "additional_forms": "{\"preposition\": \"nach\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "Angst haben vor",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "бояться чего-л.",
+    "example": "Er hat Angst vor Hunden.",
+    "additional_forms": "{\"preposition\": \"vor\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich fürchten vor",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "бояться чего-л.",
+    "example": "Das Kind fürchtet sich vor dem Gewitter.",
+    "additional_forms": "{\"preposition\": \"vor\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "warnen vor",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "предупреждать о чём-л.",
+    "example": "Die Polizei warnt vor Betrügern.",
+    "additional_forms": "{\"preposition\": \"vor\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "schützen vor",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "защищать от чего-л.",
+    "example": "Die Creme schützt vor der Sonne.",
+    "additional_forms": "{\"preposition\": \"vor\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "gehören zu",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "относиться к чему-л.",
+    "example": "Das gehört zu meinen Aufgaben.",
+    "additional_forms": "{\"preposition\": \"zu\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "einladen zu",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "приглашать на что-л.",
+    "example": "Er lädt uns zu seiner Party ein.",
+    "additional_forms": "{\"preposition\": \"zu\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "gratulieren zu",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "поздравлять с чем-л.",
+    "example": "Ich gratuliere dir zum Geburtstag.",
+    "additional_forms": "{\"preposition\": \"zu\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "passen zu",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "подходить к чему-л.",
+    "example": "Die Schuhe passen zu der Hose.",
+    "additional_forms": "{\"preposition\": \"zu\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "führen zu",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "приводить к чему-л.",
+    "example": "Das führt zu Problemen.",
+    "additional_forms": "{\"preposition\": \"zu\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "helfen bei",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "помогать в чём-л.",
+    "example": "Er hilft mir bei den Hausaufgaben.",
+    "additional_forms": "{\"preposition\": \"bei\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich bedanken bei",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "благодарить кого-л.",
+    "example": "Ich bedanke mich bei meinem Lehrer.",
+    "additional_forms": "{\"preposition\": \"bei\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich bewerben bei",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "подавать заявление куда-л.",
+    "example": "Sie bewirbt sich bei einer Bank.",
+    "additional_forms": "{\"preposition\": \"bei\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "bestehen aus",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "состоять из чего-л.",
+    "example": "Das Team besteht aus fünf Personen.",
+    "additional_forms": "{\"preposition\": \"aus\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich verlieben in",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "влюбляться в кого-л.",
+    "example": "Er hat sich in sie verliebt.",
+    "additional_forms": "{\"preposition\": \"in\", \"case\": \"Akkusativ\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "leiden unter",
+    "part_of_speech": "verb + preposition",
+    "article": null,
+    "translation": "страдать от чего-л.",
+    "example": "Sie leidet unter dem Stress.",
+    "additional_forms": "{\"preposition\": \"unter\", \"case\": \"Dativ\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  }
+]

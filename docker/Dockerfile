@@ -21,6 +21,11 @@ RUN uv sync --frozen
 COPY src/ src/
 COPY main.py ./
 
+# Maintenance scripts and curated word lists (data/ is a mounted volume in
+# production, so the seed files live outside it)
+COPY scripts/ scripts/
+COPY seed/ seed/
+
 # Create directories
 RUN mkdir -p data logs
 

@@ -1,0 +1,682 @@
+[
+  {
+    "lemma": "sich verlaufen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "заблудиться (пешком)",
+    "example": "Im Wald haben wir uns verlaufen.",
+    "additional_forms": "{\"praeteritum\": \"verlief\", \"partizip_ii\": \"verlaufen\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich verfahren",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "заблудиться (за рулём)",
+    "example": "Wir haben uns in der Stadt verfahren.",
+    "additional_forms": "{\"praeteritum\": \"verfuhr\", \"partizip_ii\": \"verfahren\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich beeilen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "торопиться, спешить",
+    "example": "Beeil dich, der Bus kommt gleich!",
+    "additional_forms": "{\"praeteritum\": \"beeilte\", \"partizip_ii\": \"beeilt\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich freuen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "радоваться",
+    "example": "Ich freue mich sehr über dein Geschenk.",
+    "additional_forms": "{\"praeteritum\": \"freute\", \"partizip_ii\": \"gefreut\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "sich ärgern",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "злиться, сердиться",
+    "example": "Er ärgert sich über den Stau.",
+    "additional_forms": "{\"praeteritum\": \"ärgerte\", \"partizip_ii\": \"geärgert\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich erinnern",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "вспоминать, помнить",
+    "example": "Ich erinnere mich gut an diesen Tag.",
+    "additional_forms": "{\"praeteritum\": \"erinnerte\", \"partizip_ii\": \"erinnert\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich interessieren",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "интересоваться",
+    "example": "Sie interessiert sich für Musik.",
+    "additional_forms": "{\"praeteritum\": \"interessierte\", \"partizip_ii\": \"interessiert\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich vorstellen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "представляться; представлять себе",
+    "example": "Darf ich mich kurz vorstellen?",
+    "additional_forms": "{\"praeteritum\": \"stellte vor\", \"partizip_ii\": \"vorgestellt\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "sich setzen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "садиться",
+    "example": "Bitte setzen Sie sich!",
+    "additional_forms": "{\"praeteritum\": \"setzte\", \"partizip_ii\": \"gesetzt\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "sich hinsetzen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "присесть, сесть",
+    "example": "Er hat sich auf die Bank hingesetzt.",
+    "additional_forms": "{\"praeteritum\": \"setzte hin\", \"partizip_ii\": \"hingesetzt\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich hinlegen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "прилечь",
+    "example": "Ich lege mich kurz hin.",
+    "additional_forms": "{\"praeteritum\": \"legte hin\", \"partizip_ii\": \"hingelegt\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich legen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "ложиться",
+    "example": "Das Kind legt sich ins Bett.",
+    "additional_forms": "{\"praeteritum\": \"legte\", \"partizip_ii\": \"gelegt\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich fühlen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "чувствовать себя",
+    "example": "Heute fühle ich mich viel besser.",
+    "additional_forms": "{\"praeteritum\": \"fühlte\", \"partizip_ii\": \"gefühlt\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich waschen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "мыться, умываться",
+    "example": "Er wäscht sich jeden Morgen.",
+    "additional_forms": "{\"praeteritum\": \"wusch\", \"partizip_ii\": \"gewaschen\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "sich duschen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "принимать душ",
+    "example": "Ich dusche mich nach dem Sport.",
+    "additional_forms": "{\"praeteritum\": \"duschte\", \"partizip_ii\": \"geduscht\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "sich rasieren",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "бриться",
+    "example": "Er rasiert sich jeden zweiten Tag.",
+    "additional_forms": "{\"praeteritum\": \"rasierte\", \"partizip_ii\": \"rasiert\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich kämmen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "причёсываться",
+    "example": "Sie kämmt sich vor dem Spiegel.",
+    "additional_forms": "{\"praeteritum\": \"kämmte\", \"partizip_ii\": \"gekämmt\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich schminken",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "краситься, наносить макияж",
+    "example": "Sie schminkt sich für die Party.",
+    "additional_forms": "{\"praeteritum\": \"schminkte\", \"partizip_ii\": \"geschminkt\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich anziehen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "одеваться",
+    "example": "Zieh dich warm an, es ist kalt.",
+    "additional_forms": "{\"praeteritum\": \"zog an\", \"partizip_ii\": \"angezogen\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "sich ausziehen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "раздеваться",
+    "example": "Die Kinder ziehen sich im Flur aus.",
+    "additional_forms": "{\"praeteritum\": \"zog aus\", \"partizip_ii\": \"ausgezogen\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "sich umziehen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "переодеваться",
+    "example": "Ich ziehe mich schnell um.",
+    "additional_forms": "{\"praeteritum\": \"zog um\", \"partizip_ii\": \"umgezogen\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich ausruhen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "отдыхать",
+    "example": "Nach der Arbeit ruhe ich mich aus.",
+    "additional_forms": "{\"praeteritum\": \"ruhte aus\", \"partizip_ii\": \"ausgeruht\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich erholen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "восстанавливаться, отдыхать",
+    "example": "Im Urlaub habe ich mich gut erholt.",
+    "additional_forms": "{\"praeteritum\": \"erholte\", \"partizip_ii\": \"erholt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich entspannen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "расслабляться",
+    "example": "Bei Musik entspanne ich mich am besten.",
+    "additional_forms": "{\"praeteritum\": \"entspannte\", \"partizip_ii\": \"entspannt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich langweilen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "скучать",
+    "example": "Die Kinder langweilen sich zu Hause.",
+    "additional_forms": "{\"praeteritum\": \"langweilte\", \"partizip_ii\": \"gelangweilt\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich entschuldigen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "извиняться",
+    "example": "Ich möchte mich für die Verspätung entschuldigen.",
+    "additional_forms": "{\"praeteritum\": \"entschuldigte\", \"partizip_ii\": \"entschuldigt\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich bedanken",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "благодарить",
+    "example": "Er bedankte sich herzlich für die Hilfe.",
+    "additional_forms": "{\"praeteritum\": \"bedankte\", \"partizip_ii\": \"bedankt\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich beschweren",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "жаловаться",
+    "example": "Der Gast beschwert sich beim Kellner.",
+    "additional_forms": "{\"praeteritum\": \"beschwerte\", \"partizip_ii\": \"beschwert\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich bewerben",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "подавать заявление, претендовать на место",
+    "example": "Sie bewirbt sich bei einer großen Firma.",
+    "additional_forms": "{\"praeteritum\": \"bewarb\", \"partizip_ii\": \"beworben\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich anmelden",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "записываться, регистрироваться",
+    "example": "Ich habe mich für den Deutschkurs angemeldet.",
+    "additional_forms": "{\"praeteritum\": \"meldete an\", \"partizip_ii\": \"angemeldet\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich abmelden",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "выписываться, сниматься с учёта",
+    "example": "Vor dem Umzug muss man sich abmelden.",
+    "additional_forms": "{\"praeteritum\": \"meldete ab\", \"partizip_ii\": \"abgemeldet\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich melden",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "давать о себе знать, отзываться",
+    "example": "Melde dich, wenn du angekommen bist!",
+    "additional_forms": "{\"praeteritum\": \"meldete\", \"partizip_ii\": \"gemeldet\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich verabreden",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "договариваться о встрече",
+    "example": "Wir haben uns für Freitag verabredet.",
+    "additional_forms": "{\"praeteritum\": \"verabredete\", \"partizip_ii\": \"verabredet\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich verabschieden",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "прощаться",
+    "example": "Er verabschiedete sich von seinen Gästen.",
+    "additional_forms": "{\"praeteritum\": \"verabschiedete\", \"partizip_ii\": \"verabschiedet\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich treffen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "встречаться",
+    "example": "Wir treffen uns morgen im Café.",
+    "additional_forms": "{\"praeteritum\": \"traf\", \"partizip_ii\": \"getroffen\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "sich unterhalten",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "беседовать, развлекаться",
+    "example": "Wir haben uns lange unterhalten.",
+    "additional_forms": "{\"praeteritum\": \"unterhielt\", \"partizip_ii\": \"unterhalten\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich streiten",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "ссориться",
+    "example": "Die Brüder streiten sich oft.",
+    "additional_forms": "{\"praeteritum\": \"stritt\", \"partizip_ii\": \"gestritten\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich vertragen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "ладить, мириться",
+    "example": "Die Kinder vertragen sich wieder.",
+    "additional_forms": "{\"praeteritum\": \"vertrug\", \"partizip_ii\": \"vertragen\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich verlieben",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "влюбляться",
+    "example": "Er hat sich sofort verliebt.",
+    "additional_forms": "{\"praeteritum\": \"verliebte\", \"partizip_ii\": \"verliebt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich verloben",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "обручаться",
+    "example": "Sie haben sich im Sommer verlobt.",
+    "additional_forms": "{\"praeteritum\": \"verlobte\", \"partizip_ii\": \"verlobt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich kümmern",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "заботиться, ухаживать",
+    "example": "Sie kümmert sich um ihre Eltern.",
+    "additional_forms": "{\"praeteritum\": \"kümmerte\", \"partizip_ii\": \"gekümmert\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich konzentrieren",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "концентрироваться",
+    "example": "Ich kann mich hier nicht konzentrieren.",
+    "additional_forms": "{\"praeteritum\": \"konzentrierte\", \"partizip_ii\": \"konzentriert\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich gewöhnen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "привыкать",
+    "example": "Man gewöhnt sich schnell an das Klima.",
+    "additional_forms": "{\"praeteritum\": \"gewöhnte\", \"partizip_ii\": \"gewöhnt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich entscheiden",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "решаться, делать выбор",
+    "example": "Ich habe mich für die Wohnung entschieden.",
+    "additional_forms": "{\"praeteritum\": \"entschied\", \"partizip_ii\": \"entschieden\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich vorbereiten",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "готовиться",
+    "example": "Wir bereiten uns auf die Prüfung vor.",
+    "additional_forms": "{\"praeteritum\": \"bereitete vor\", \"partizip_ii\": \"vorbereitet\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich informieren",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "узнавать, наводить справки",
+    "example": "Bitte informieren Sie sich vorher im Internet.",
+    "additional_forms": "{\"praeteritum\": \"informierte\", \"partizip_ii\": \"informiert\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich erkundigen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "справляться, расспрашивать",
+    "example": "Er erkundigte sich nach dem Preis.",
+    "additional_forms": "{\"praeteritum\": \"erkundigte\", \"partizip_ii\": \"erkundigt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich beschäftigen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "заниматься чем-л.",
+    "example": "Sie beschäftigt sich mit Kunst.",
+    "additional_forms": "{\"praeteritum\": \"beschäftigte\", \"partizip_ii\": \"beschäftigt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich bemühen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "стараться, прилагать усилия",
+    "example": "Wir bemühen uns um eine schnelle Lösung.",
+    "additional_forms": "{\"praeteritum\": \"bemühte\", \"partizip_ii\": \"bemüht\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "sich schämen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "стыдиться",
+    "example": "Ich schäme mich für mein Verhalten.",
+    "additional_forms": "{\"praeteritum\": \"schämte\", \"partizip_ii\": \"geschämt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich fürchten",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "бояться",
+    "example": "Das Kind fürchtet sich vor dem Hund.",
+    "additional_forms": "{\"praeteritum\": \"fürchtete\", \"partizip_ii\": \"gefürchtet\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich wundern",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "удивляться",
+    "example": "Ich wundere mich über seine Antwort.",
+    "additional_forms": "{\"praeteritum\": \"wunderte\", \"partizip_ii\": \"gewundert\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich irren",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "ошибаться",
+    "example": "Da irrst du dich leider.",
+    "additional_forms": "{\"praeteritum\": \"irrte\", \"partizip_ii\": \"geirrt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich verspäten",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "опаздывать",
+    "example": "Der Zug hat sich um zehn Minuten verspätet.",
+    "additional_forms": "{\"praeteritum\": \"verspätete\", \"partizip_ii\": \"verspätet\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich verletzen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "получать травму, ранить себя",
+    "example": "Beim Sport hat er sich verletzt.",
+    "additional_forms": "{\"praeteritum\": \"verletzte\", \"partizip_ii\": \"verletzt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich erkälten",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "простужаться",
+    "example": "Zieh dich an, sonst erkältest du dich.",
+    "additional_forms": "{\"praeteritum\": \"erkältete\", \"partizip_ii\": \"erkältet\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich bewegen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "двигаться",
+    "example": "Du solltest dich mehr bewegen.",
+    "additional_forms": "{\"praeteritum\": \"bewegte\", \"partizip_ii\": \"bewegt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich befinden",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "находиться",
+    "example": "Das Büro befindet sich im dritten Stock.",
+    "additional_forms": "{\"praeteritum\": \"befand\", \"partizip_ii\": \"befunden\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich ändern",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "меняться",
+    "example": "Die Zeiten haben sich geändert.",
+    "additional_forms": "{\"praeteritum\": \"änderte\", \"partizip_ii\": \"geändert\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich verändern",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "изменяться",
+    "example": "Die Stadt hat sich stark verändert.",
+    "additional_forms": "{\"praeteritum\": \"veränderte\", \"partizip_ii\": \"verändert\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich entwickeln",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "развиваться",
+    "example": "Das Projekt entwickelt sich gut.",
+    "additional_forms": "{\"praeteritum\": \"entwickelte\", \"partizip_ii\": \"entwickelt\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich unterscheiden",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "отличаться",
+    "example": "Die beiden Modelle unterscheiden sich kaum.",
+    "additional_forms": "{\"praeteritum\": \"unterschied\", \"partizip_ii\": \"unterschieden\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "sich einigen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "приходить к соглашению",
+    "example": "Wir haben uns auf einen Termin geeinigt.",
+    "additional_forms": "{\"praeteritum\": \"einigte\", \"partizip_ii\": \"geeinigt\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "sich weigern",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "отказываться",
+    "example": "Er weigert sich zu unterschreiben.",
+    "additional_forms": "{\"praeteritum\": \"weigerte\", \"partizip_ii\": \"geweigert\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "sich trauen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "решаться, осмеливаться",
+    "example": "Ich traue mich nicht zu fragen.",
+    "additional_forms": "{\"praeteritum\": \"traute\", \"partizip_ii\": \"getraut\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich verlassen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "полагаться",
+    "example": "Auf ihn kann man sich verlassen.",
+    "additional_forms": "{\"praeteritum\": \"verließ\", \"partizip_ii\": \"verlassen\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "sich beteiligen",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "участвовать",
+    "example": "Viele Studenten beteiligen sich an dem Projekt.",
+    "additional_forms": "{\"praeteritum\": \"beteiligte\", \"partizip_ii\": \"beteiligt\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  },
+  {
+    "lemma": "sich orientieren",
+    "part_of_speech": "reflexive verb",
+    "article": null,
+    "translation": "ориентироваться",
+    "example": "In der Altstadt orientiere ich mich schlecht.",
+    "additional_forms": "{\"praeteritum\": \"orientierte\", \"partizip_ii\": \"orientiert\"}",
+    "confidence": 1.0,
+    "level": "B2"
+  }
+]

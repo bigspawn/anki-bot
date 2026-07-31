@@ -58,10 +58,18 @@ def format_study_card(
     # Question format based on part of speech
     if part_of_speech == "noun" and article:
         result = f"{progress_info}Какой артикль у {lemma}?"
+    elif is_preposition_verb(word_data):
+        result = f"{progress_info}Как переводится {lemma} и какой падеж?"
     else:
         result = f"{progress_info}Как переводится {lemma}?"
 
     return result
+
+
+def is_preposition_verb(word_data: dict[str, Any]) -> bool:
+    """Check whether the word is a verb governing a preposition"""
+    part_of_speech = (word_data.get("part_of_speech") or "").lower()
+    return "verb" in part_of_speech and "preposition" in part_of_speech
 
 
 def format_progress_stats(stats: dict[str, Any]) -> str:
@@ -338,7 +346,8 @@ def validate_rating(rating: int | str) -> int | None:
 def format_verb_forms(word: dict[str, Any]) -> str:
     """Format the Präteritum/Partizip II line for a verb's additional_forms,
     or '' if the word isn't a verb or has no clean forms stored"""
-    if word.get("part_of_speech") != "verb":
+    part_of_speech = (word.get("part_of_speech") or "").lower()
+    if part_of_speech not in ("verb", "reflexive verb"):
         return ""
 
     raw = word.get("additional_forms")
@@ -359,6 +368,32 @@ def format_verb_forms(word: dict[str, Any]) -> str:
         return ""
 
     return f"🔄 {praeteritum} – {partizip_ii}\n\n"
+
+
+def format_verb_case(word: dict[str, Any]) -> str:
+    """Format the 'preposition + case' line for a verb governing a preposition,
+    or '' if the word has no case stored"""
+    if not is_preposition_verb(word):
+        return ""
+
+    raw = word.get("additional_forms")
+    if not raw:
+        return ""
+
+    try:
+        forms = json.loads(raw)
+    except (TypeError, ValueError):
+        return ""
+
+    if not isinstance(forms, dict):
+        return ""
+
+    preposition = forms.get("preposition")
+    case = forms.get("case")
+    if not preposition or not case:
+        return ""
+
+    return f"🧭 {preposition} + {case}\n\n"
 
 
 def get_rating_emoji(rating: int) -> str:

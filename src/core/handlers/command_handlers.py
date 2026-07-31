@@ -131,6 +131,8 @@ class CommandHandlers:
 /study_new - Только новые слова (ещё не изучались)
 /study_difficult - Сложные слова (низкий рейтинг успешности)
 /study_verbs - Только глаголы
+/study_reflexive - Возвратные глаголы (sich verlaufen...)
+/study_rektion - Глаголы с предлогами и падежом (denken an + Akk)
 /study_nouns - Только существительные
 /study_adjectives - Только прилагательные
 /study_adverbs - Только наречия
@@ -360,6 +362,68 @@ class CommandHandlers:
             return
 
         await self._start_study_session(update, verb_words, "verbs")
+
+    async def study_reflexive_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_reflexive command"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        words = self.db_manager.get_reflexive_verbs(db_user["telegram_id"], limit=10)
+
+        if not words:
+            await self._safe_reply(
+                update,
+                "🪞 У вас нет возвратных глаголов для изучения.\n\n"
+                "Используйте /add для добавления новых слов из текста.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, words, "reflexive")
+
+    async def study_rektion_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_rektion command - verbs governing a preposition"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        words = self.db_manager.get_preposition_verbs(db_user["telegram_id"], limit=10)
+
+        if not words:
+            await self._safe_reply(
+                update,
+                "🧭 У вас нет глаголов с предлогами для изучения.\n\n"
+                "Используйте /add для добавления новых слов из текста.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, words, "rektion")
 
     async def study_recent_command(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE

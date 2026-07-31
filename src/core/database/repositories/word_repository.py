@@ -249,6 +249,64 @@ class WordRepository:
             logger.error(f"Error getting verb words: {e}")
             return []
 
+    def get_reflexive_verbs(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get reflexive verbs ('sich ...') for study"""
+        return self._get_words_where(
+            telegram_id,
+            "(LOWER(w.lemma) LIKE 'sich %' "
+            "OR LOWER(w.part_of_speech) LIKE '%reflexive%')",
+            limit,
+            randomize,
+            "reflexive verbs",
+        )
+
+    def get_preposition_verbs(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get verbs governing a preposition ('denken an + Akk') for study"""
+        return self._get_words_where(
+            telegram_id,
+            "LOWER(w.part_of_speech) LIKE '%preposition%' "
+            "AND LOWER(w.part_of_speech) LIKE '%verb%'",
+            limit,
+            randomize,
+            "preposition verbs",
+        )
+
+    def _get_words_where(
+        self,
+        telegram_id: int,
+        condition: str,
+        limit: int,
+        randomize: bool,
+        what: str,
+    ) -> list[dict[str, Any]]:
+        """Run a study query with a caller-supplied literal WHERE condition"""
+        try:
+            with self.db_connection.get_connection() as conn:
+                order_clause = (
+                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
+                )
+
+                cursor = conn.execute(
+                    f"""
+                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
+                           lp.next_review_date, lp.last_reviewed
+                    FROM words w
+                    JOIN learning_progress lp ON w.id = lp.word_id
+                    WHERE lp.telegram_id = ? AND {condition}
+                    {order_clause}
+                    LIMIT ?
+                    """,  # noqa: S608  # Safe: condition/order_clause are literals
+                    (telegram_id, limit),
+                )
+                return [dict(row) for row in cursor.fetchall()]
+        except Exception as e:
+            logger.error(f"Error getting {what}: {e}")
+            return []
+
     def get_words_by_part_of_speech(
         self,
         telegram_id: int,

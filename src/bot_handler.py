@@ -240,6 +240,20 @@ class BotHandler:
         )
         app.add_handler(
             CommandHandler(
+                "study_reflexive",
+                self.require_authorization(
+                    self.command_handlers.study_reflexive_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_rektion",
+                self.require_authorization(self.command_handlers.study_rektion_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
                 "study_recent",
                 self.require_authorization(self.command_handlers.study_recent_command),
             )
@@ -401,6 +415,8 @@ class BotHandler:
             BotCommand("study_new", "🆕 Изучать только новые слова"),
             BotCommand("study_difficult", "🔥 Повторить сложные слова"),
             BotCommand("study_verbs", "🔤 Изучать только глаголы"),
+            BotCommand("study_reflexive", "🪞 Возвратные глаголы (sich ...)"),
+            BotCommand("study_rektion", "🧭 Глаголы с предлогами и падежом"),
             BotCommand("study_recent", "🕐 Изучать последние N добавленных слов"),
             BotCommand("study_nouns", "🧩 Только существительные"),
             BotCommand("study_adjectives", "🧩 Только прилагательные"),
@@ -610,6 +626,18 @@ class BotHandler:
                         f"\n\n⏱️ <b>Время обработки:</b> "
                         f"{timer.get_elapsed_time():.1f}с"
                     )
+
+                    # Add the words that were just added, with translations
+                    added_details = [
+                        w for w in words_data if w["lemma"] in set(add_result["added"])
+                    ]
+                    if added_details:
+                        success_msg += "\n\n🆕 <b>Добавленные слова:</b>\n"
+                        for word in added_details:
+                            article_part = (
+                                f"{word['article']} " if word.get("article") else ""
+                            )
+                            success_msg += f"• {article_part}<i>{word['lemma']}</i> — {word['translation']}\n"
 
                     # Add existing words list if any
                     if existing_words_details:

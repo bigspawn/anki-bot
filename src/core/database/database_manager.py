@@ -115,6 +115,18 @@ class DatabaseManager:
         """Get verb words for study"""
         return self.word_repo.get_verb_words(telegram_id, limit, randomize)
 
+    def get_reflexive_verbs(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get reflexive verbs for study"""
+        return self.word_repo.get_reflexive_verbs(telegram_id, limit, randomize)
+
+    def get_preposition_verbs(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get verbs governing a preposition for study"""
+        return self.word_repo.get_preposition_verbs(telegram_id, limit, randomize)
+
     def get_recent_words(
         self, telegram_id: int, limit: int = 10
     ) -> list[dict[str, Any]]:
