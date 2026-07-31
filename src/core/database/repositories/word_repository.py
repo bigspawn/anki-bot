@@ -537,6 +537,9 @@ class WordRepository:
                         logger.error(
                             f"Error adding word {word_data.get('lemma', 'unknown')}: {e}"
                         )
+                        # Counted as invalid, otherwise the word vanishes from
+                        # every counter shown to the user
+                        invalid.append(str(word_data.get("lemma")))
                         continue
 
                 conn.commit()

@@ -33,6 +33,24 @@ class ProcessedWord:
     level: str | None = None
 
 
+def normalize_additional_forms(value: Any) -> str | None:
+    """Return additional_forms as a JSON string.
+
+    The model answers with a real JSON object about as often as with a string,
+    and sqlite3 cannot bind a dict — such words used to be dropped silently.
+    """
+    if value is None or value == "":
+        return None
+
+    if isinstance(value, str):
+        return value
+
+    if isinstance(value, dict | list):
+        return json.dumps(value, ensure_ascii=False)
+
+    return None
+
+
 def validate_article(
     article: str | None, lemma: str, part_of_speech: str
 ) -> str | None:
@@ -487,7 +505,7 @@ Always respond in valid JSON format with these exact keys:
 - "article": article for nouns (null for other parts of speech)
 - "translation": Russian translation
 - "example": German example sentence
-- "additional_forms": JSON string with additional forms
+- "additional_forms": JSON object with additional forms, or null
 - "confidence": confidence score from 0.0 to 1.0
 - "level": one of "A1", "A2", "B1", "B2", "C1", "C2"
 
@@ -503,15 +521,21 @@ Strict rules:
   form. Never return a conjugated verb, a participle, or a plural noun as
   "lemma". "lemma" must never be empty — always give your best-guess
   canonical German form.
-- "part_of_speech" must be exactly one value from: noun, verb, adjective,
-  adverb, pronoun, preposition, conjunction, numeral, interjection, article,
-  particle. Never combine multiple values or add descriptive commentary.
+- "part_of_speech" must be exactly one value from: noun, verb, reflexive
+  verb, adjective, adverb, pronoun, preposition, conjunction, numeral,
+  interjection, article, particle. Never combine multiple values or add
+  descriptive commentary.
+- Verbs that exist only (or almost only) with the reflexive pronoun — e.g.
+  sich verlaufen, sich verfahren, sich beeilen, sich erinnern, sich freuen —
+  must get "lemma" as "sich " + infinitive and "part_of_speech" set to
+  "reflexive verb". Verbs that are merely optionally reflexive (waschen,
+  treffen) stay plain verbs.
 - Never treat a preposition+article contraction (e.g. "zu dem", "an das",
   "im", "zum") as a standalone word to analyze — analyze the underlying
   preposition instead.
 - "additional_forms" must follow a strict schema depending on
   "part_of_speech":
-  - For "verb": a JSON object with EXACTLY two keys, "praeteritum" (3rd
+  - For "verb" and "reflexive verb": a JSON object with EXACTLY two keys, "praeteritum" (3rd
     person singular Präteritum, e.g. "ging") and "partizip_ii" (bare past
     participle, e.g. "gegangen" — never include the auxiliary "haben"/"sein",
     never a full Perfekt phrase like "ist gegangen"). Example:
@@ -544,7 +568,7 @@ Respond with a JSON object where keys are the original words and values are obje
 - "article": article for nouns (null for other parts of speech)
 - "translation": Russian translation
 - "example": German example sentence
-- "additional_forms": JSON string with additional forms
+- "additional_forms": JSON object with additional forms, or null
 - "confidence": confidence score from 0.0 to 1.0
 - "level": one of "A1", "A2", "B1", "B2", "C1", "C2"
 
@@ -575,15 +599,21 @@ Strict rules:
   form. Never return a conjugated verb, a participle, or a plural noun as
   "lemma". "lemma" must never be empty — always give your best-guess
   canonical German form.
-- "part_of_speech" must be exactly one value from: noun, verb, adjective,
-  adverb, pronoun, preposition, conjunction, numeral, interjection, article,
-  particle. Never combine multiple values or add descriptive commentary.
+- "part_of_speech" must be exactly one value from: noun, verb, reflexive
+  verb, adjective, adverb, pronoun, preposition, conjunction, numeral,
+  interjection, article, particle. Never combine multiple values or add
+  descriptive commentary.
+- Verbs that exist only (or almost only) with the reflexive pronoun — e.g.
+  sich verlaufen, sich verfahren, sich beeilen, sich erinnern, sich freuen —
+  must get "lemma" as "sich " + infinitive and "part_of_speech" set to
+  "reflexive verb". Verbs that are merely optionally reflexive (waschen,
+  treffen) stay plain verbs.
 - Never treat a preposition+article contraction (e.g. "zu dem", "an das",
   "im", "zum") as a standalone word to analyze — analyze the underlying
   preposition instead.
 - "additional_forms" must follow a strict schema depending on
   "part_of_speech":
-  - For "verb": a JSON object with EXACTLY two keys, "praeteritum" (3rd
+  - For "verb" and "reflexive verb": a JSON object with EXACTLY two keys, "praeteritum" (3rd
     person singular Präteritum, e.g. "ging") and "partizip_ii" (bare past
     participle, e.g. "gegangen" — never include the auxiliary "haben"/"sein",
     never a full Perfekt phrase like "ist gegangen"). Example:
@@ -652,7 +682,9 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                 ),
                 translation=translation,
                 example=data.get("example", ""),
-                additional_forms=data.get("additional_forms"),
+                additional_forms=normalize_additional_forms(
+                    data.get("additional_forms")
+                ),
                 confidence=float(data.get("confidence", 1.0)),
                 level=data.get("level"),
             )
@@ -814,7 +846,9 @@ Be accurate and provide high-quality linguistic analysis for all words."""
                         ),
                         translation=translation,
                         example=word_data.get("example", ""),
-                        additional_forms=word_data.get("additional_forms"),
+                        additional_forms=normalize_additional_forms(
+                            word_data.get("additional_forms")
+                        ),
                         confidence=float(word_data.get("confidence", 1.0)),
                         level=word_data.get("level"),
                     )
