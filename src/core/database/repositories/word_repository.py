@@ -374,7 +374,20 @@ class WordRepository:
         self, telegram_id: int, words_data: list[dict[str, Any]]
     ) -> int:
         """Add multiple words to user's learning progress"""
-        added_count = 0
+        return len(self.add_words_with_details(telegram_id, words_data)["added"])
+
+    def add_words_with_details(
+        self, telegram_id: int, words_data: list[dict[str, Any]]
+    ) -> dict[str, list[str]]:
+        """Add words and report per-lemma outcome.
+
+        Callers need the duplicate lemmas: the caller-side existence check runs
+        on surface forms, so a word can only be recognized as already learned
+        after lemmatization.
+        """
+        added: list[str] = []
+        duplicates: list[str] = []
+        invalid: list[str] = []
 
         logger.info(f"Starting to add {len(words_data)} words to user {telegram_id}")
         for i, word_data in enumerate(words_data):
@@ -394,6 +407,7 @@ class WordRepository:
                             logger.warning(
                                 f"SKIP REASON 1: Word '{lemma}' has invalid translation: '{translation}'"
                             )
+                            invalid.append(str(lemma))
                             continue
 
                         # Check if word already exists in shared table (case-insensitive)
@@ -451,11 +465,12 @@ class WordRepository:
                                 """,
                                 (telegram_id, word_id),
                             )
-                            added_count += 1
+                            added.append(str(lemma))
                             logger.info(
                                 f"SUCCESS: Added '{lemma}' to user {telegram_id}'s learning progress"
                             )
                         else:
+                            duplicates.append(str(lemma))
                             logger.warning(
                                 f"SKIP REASON 2: Word '{lemma}' already exists in learning progress for user {telegram_id}"
                             )
@@ -472,15 +487,15 @@ class WordRepository:
             logger.error(f"Error adding words to user: {e}")
 
         logger.info(
-            f"FINAL RESULT: Successfully added {added_count} out of {len(words_data)} words to user {telegram_id}"
+            f"FINAL RESULT: Successfully added {len(added)} out of {len(words_data)} words to user {telegram_id}"
         )
-        if added_count < len(words_data):
-            skipped = len(words_data) - added_count
+        if len(added) < len(words_data):
             logger.warning(
-                f"SUMMARY: {skipped} words were skipped during addition process"
+                f"SUMMARY: {len(duplicates)} duplicates, {len(invalid)} invalid "
+                f"words were skipped during addition process"
             )
 
-        return added_count
+        return {"added": added, "duplicates": duplicates, "invalid": invalid}
 
     def _is_valid_translation(self, translation: str) -> bool:
         """Check if translation is valid and usable"""
@@ -518,7 +533,7 @@ class WordRepository:
                         SELECT w.lemma, w.part_of_speech, w.article, w.translation, w.example, w.additional_forms
                         FROM words w
                         JOIN learning_progress lp ON w.id = lp.word_id
-                        WHERE lp.telegram_id = ? AND w.lemma = ?
+                        WHERE lp.telegram_id = ? AND LOWER(w.lemma) = LOWER(?)
                         """,
                         (telegram_id, lemma),
                     )

@@ -157,6 +157,12 @@ class DatabaseManager:
         """Add multiple words to user's learning progress"""
         return self.word_repo.add_words_to_user(telegram_id, words_data)
 
+    def add_words_with_details(
+        self, telegram_id: int, words_data: list[dict[str, Any]]
+    ) -> dict[str, list[str]]:
+        """Add words and report which lemmas were added, duplicated or invalid"""
+        return self.word_repo.add_words_with_details(telegram_id, words_data)
+
     def add_word_to_user(
         self, telegram_id: int, word_data: dict[str, Any]
     ) -> Word | None:

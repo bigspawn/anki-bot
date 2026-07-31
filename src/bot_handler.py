@@ -550,9 +550,14 @@ class BotHandler:
                         )
 
                     # Add to database
-                    added_count = self.db_manager.add_words_to_user(
+                    add_result = self.db_manager.add_words_with_details(
                         db_user["telegram_id"], words_data
                     )
+                    added_count = len(add_result["added"])
+
+                    # A surface form can only be recognized as already learned
+                    # after OpenAI lemmatization, so fold those into "existing"
+                    already_known = existing_words + add_result["duplicates"]
 
                     # Log detailed results
                     processed_count = len(processed_words)
@@ -574,12 +579,19 @@ class BotHandler:
 
                     # Get details for existing words if any
                     existing_words_details = []
-                    if existing_words:
+                    if already_known:
                         existing_words_details = (
                             self.db_manager.get_existing_words_details(
-                                db_user["telegram_id"], existing_words
+                                db_user["telegram_id"], already_known
                             )
                         )
+
+                    # Words lost to lemma merges or bad translations, so the
+                    # three counters always add up to the words found
+                    unprocessed_count = max(
+                        0,
+                        len(extracted_words) - added_count - len(already_known),
+                    )
 
                     # Build success message
                     success_msg = f"""✅ <b>Обработка завершена!</b>
@@ -587,9 +599,17 @@ class BotHandler:
 📊 <b>Результаты:</b>
 • Всего слов найдено: <b>{len(extracted_words)}</b>
 • Новых добавлено: <b>{added_count}</b>
-• Уже изучаются: <b>{len(existing_words)}</b>
+• Уже изучаются: <b>{len(already_known)}</b>"""
 
-⏱️ <b>Время обработки:</b> {timer.get_elapsed_time():.1f}с"""
+                    if unprocessed_count:
+                        success_msg += (
+                            f"\n• Не удалось обработать: <b>{unprocessed_count}</b>"
+                        )
+
+                    success_msg += (
+                        f"\n\n⏱️ <b>Время обработки:</b> "
+                        f"{timer.get_elapsed_time():.1f}с"
+                    )
 
                     # Add existing words list if any
                     if existing_words_details:
