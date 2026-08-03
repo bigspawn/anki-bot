@@ -19,7 +19,7 @@ help:
 	@echo "  export-words - Export words data to JSON"
 	@echo "  import-words - Import words data from JSON"
 	@echo "  backfill-levels - Fill CEFR levels for old words"
-	@echo "  seed-words  - Seed reflexive verbs and verbs with prepositions"
+	@echo "  seed-words  - Seed curated groups (verbs, route phrases, drills)"
 	@echo "  deploy      - Deploy to production NAS (TAG=version, default latest)"
 	@echo "  all         - Install, test, lint, format"
 
@@ -124,14 +124,16 @@ backfill-levels:
 	FLAGS=$${DRY_RUN:+--dry-run}; \
 	uv run python scripts/backfill_word_levels.py "$$DB_PATH" seed/word_levels.json $$FLAGS
 
-# Seed curated word groups (reflexive verbs, verbs with prepositions)
+# Seed curated word groups (reflexive verbs, verbs with prepositions,
+# route phrases, cloze and error-correction drills)
 # Usage: make seed-words TELEGRAM_ID=739529 [DB_PATH=data/bot.db] [DRY_RUN=1]
 seed-words:
 	@DB_PATH=$${DB_PATH:-data/bot.db}; \
 	FLAGS=$${DRY_RUN:+--dry-run}; \
 	if [ -z "$$TELEGRAM_ID" ]; then echo "TELEGRAM_ID is required"; exit 1; fi; \
 	uv run python scripts/seed_words.py "$$DB_PATH" "$$TELEGRAM_ID" \
-		seed/reflexive_verbs.json seed/preposition_verbs.json $$FLAGS
+		seed/reflexive_verbs.json seed/preposition_verbs.json \
+		seed/route_phrases.json seed/cloze_route.json seed/error_fix_route.json $$FLAGS
 
 # Deploy to production (NAS) over SSH + docker compose, no extra tooling needed
 # Usage: make deploy [TAG=v1.0.0] [HOST=other-host]

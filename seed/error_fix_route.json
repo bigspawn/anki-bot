@@ -1,0 +1,122 @@
+[
+  {
+    "lemma": "❌ Nach der Brücke bei der Ampel ist er abgebogen.",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "Nach der Brücke ist er bei der Ampel abgebogen — перед глаголом только одно поле",
+    "example": "Nach der Brücke ist er bei der Ampel abgebogen.",
+    "additional_forms": "{\"topic\": \"word-order-vorfeld\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "❌ und bin ich gegenüber dem Supermarkt",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "und ich bin / und dann bin ich — und инверсии не даёт",
+    "example": "und dann bin ich gegenüber dem Supermarkt",
+    "additional_forms": "{\"topic\": \"word-order-vorfeld\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "❌ Über die Brücke gegangen.",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "Er ist über die Brücke gegangen — нужны подлежащее и ist",
+    "example": "Er ist über die Brücke gegangen.",
+    "additional_forms": "{\"topic\": \"word-order-vorfeld\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "❌ Er muss die Querstraße zurück entlang gehen.",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "die Querstraße zurückgehen — две приставки на один глагол не ставятся",
+    "example": "Er muss die Querstraße zurückgehen.",
+    "additional_forms": "{\"topic\": \"separable-route-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "❌ Ich gehe in die Straße. (о повороте)",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "in die Straße abbiegen — поворот это abbiegen, не gehen",
+    "example": "Ich biege in die Straße ab.",
+    "additional_forms": "{\"topic\": \"separable-route-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "❌ bis zu der Kirche",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "bis zur Kirche — zu + der = zur",
+    "example": "bis zur Kirche",
+    "additional_forms": "{\"topic\": \"bis-zu\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "❌ Gehen Sie über die Ampel.",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "An der Ampel über die Straße gehen — переходят улицу, светофор ориентир",
+    "example": "Gehen Sie an der Ampel über die Straße.",
+    "additional_forms": "{\"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "❌ Ich fahre mit Transport.",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "mit öffentlichen Verkehrsmitteln — «mit Transport» не существует",
+    "example": "Ich fahre mit öffentlichen Verkehrsmitteln.",
+    "additional_forms": "{\"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "❌ Ich steige an U-Bahn um.",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "in die U-Bahn umsteigen — предлог заучивается вместе с глаголом",
+    "example": "Ich steige in die U-Bahn um.",
+    "additional_forms": "{\"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "❌ Friedrichstraße Haltestelle",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "die Haltestelle Friedrichstraße — родовое слово впереди",
+    "example": "die Haltestelle Friedrichstraße",
+    "additional_forms": "{\"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "❌ S-Bahn Haltestelle",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "S-Bahn-Haltestelle — через дефис",
+    "example": "die S-Bahn-Haltestelle",
+    "additional_forms": "{\"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "❌ zweimal (в смысле «ещё раз»)",
+    "part_of_speech": "error fix",
+    "article": null,
+    "translation": "noch einmal — zweimal значит «всего два раза»",
+    "example": "Ich gehe noch einmal zur Haltestelle.",
+    "additional_forms": "{\"topic\": \"derselbe\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  }
+]

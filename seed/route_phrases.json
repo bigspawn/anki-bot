@@ -1,0 +1,242 @@
+[
+  {
+    "lemma": "vor dem Bahnhof",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "перед вокзалом (ориентир, Dativ)",
+    "example": "Vor dem Bahnhof links.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"route-case\", \"role\": \"landmark\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "am Supermarkt abbiegen",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "повернуть у супермаркета",
+    "example": "Biegen Sie am Supermarkt rechts ab.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"route-case\", \"role\": \"landmark\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "an der Ampel",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "у светофора (ориентир, Dativ)",
+    "example": "An der Ampel links abbiegen.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"route-case\", \"role\": \"landmark\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "hinter dem Kirchplatz",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "за церковной площадью (ориентир, Dativ)",
+    "example": "Gehen Sie hinter dem Kirchplatz in den Kirchweg.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"route-case\", \"role\": \"landmark\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "auf der linken Seite",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "на левой стороне",
+    "example": "Das zweite Haus auf der linken Seite.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"route-case\", \"role\": \"side\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "in die Querstraße abbiegen",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "повернуть в поперечную улицу",
+    "example": "Biegen Sie rechts in die Querstraße ab.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"route-case\", \"role\": \"target-street\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "in den Kirchweg abbiegen",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "повернуть в Кирхвег",
+    "example": "Dann nach links in den Kirchweg abbiegen.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"route-case\", \"role\": \"target-street\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "über die Straße gehen",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "перейти улицу",
+    "example": "Gehen Sie an der Ampel über die Straße.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"route-case\", \"role\": \"crossing\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "auf die andere Seite wechseln",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "перейти на другую сторону",
+    "example": "Wechseln Sie auf die andere Seite.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"route-case\", \"role\": \"crossing\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Straße entlanggehen",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "идти вдоль улицы",
+    "example": "Er ist die Straße entlanggegangen.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"separable-route-verbs\", \"perfekt\": \"ist entlanggegangen\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "zurückgehen",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "идти обратно",
+    "example": "Er muss die Querstraße bis zur Kirche zurückgehen.",
+    "additional_forms": "{\"topic\": \"separable-route-verbs\", \"perfekt\": \"ist zurückgegangen\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "bis zur Kreuzung",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "до перекрёстка (дошёл и делаешь следующий шаг)",
+    "example": "Gehen Sie bis zur Kreuzung, dann links.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"bis-zu\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "bis zur Haltestelle",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "до остановки",
+    "example": "Ich gehe über die Straße bis zur S-Bahn-Haltestelle.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"bis-zu\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "an der Kirche vorbei",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "мимо церкви",
+    "example": "Da kommen Sie an der Kirche vorbei.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"route-frames\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "um den Kreisverkehr herum",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "вокруг кругового движения",
+    "example": "Du fährst um den Kreisverkehr herum.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"route-frames\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "gegenüber dem Supermarkt",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "напротив супермаркета",
+    "example": "Dann bin ich gegenüber dem Supermarkt.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"route-frames\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "in die U-Bahn umsteigen",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "пересесть на метро",
+    "example": "Ich steige in die U-Bahn um.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"transport-verbs\", \"preposition\": \"in\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "in den Bus einsteigen",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "сесть в автобус",
+    "example": "Wir steigen in den Bus ein.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"transport-verbs\", \"preposition\": \"in\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "aus dem Bus aussteigen",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "выйти из автобуса",
+    "example": "Wir steigen aus dem Bus aus.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"transport-verbs\", \"preposition\": \"aus\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "mit öffentlichen Verkehrsmitteln",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "общественным транспортом",
+    "example": "Ich fahre mit öffentlichen Verkehrsmitteln ins Büro.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Haltestelle Friedrichstraße",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "остановка Фридрихштрассе (родовое слово впереди)",
+    "example": "Ich fahre bis zur Haltestelle Friedrichstraße.",
+    "additional_forms": "{\"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "denselben Weg noch einmal",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "тем же путём ещё раз",
+    "example": "Ich gehe denselben Weg noch einmal.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"derselbe\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "von dort",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "оттуда",
+    "example": "Von dort gehe ich zum Büro.",
+    "additional_forms": "{\"topic\": \"direction-adverbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "dorthin",
+    "part_of_speech": "route phrase",
+    "article": null,
+    "translation": "туда",
+    "example": "Ich gehe dorthin.",
+    "additional_forms": "{\"topic\": \"direction-adverbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  }
+]

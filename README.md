@@ -71,8 +71,20 @@ make run
 - `/study_modal_verbs` - Study the core German modal verbs (können, müssen,
   dürfen, sollen, wollen, mögen, möchten), intersected with your own
   vocabulary
+- `/study_route` - Study multi-word chunks used to describe a route
+  (`am Supermarkt abbiegen`, `bis zur Kreuzung`), seeded from
+  `seed/route_phrases.json`
+- `/study_cloze` - Study gap-fill drills (`Vor ___ Bahnhof links.` → `dem`)
+  and error-correction drills, seeded from `seed/cloze_route.json` and
+  `seed/error_fix_route.json`. The gapped sentence is shown first, the answer
+  and the rule only after reveal
+- `/study_topic <slug>` - Study every card tagged with a topic slug
+  (`route-case`, `separable-route-verbs`, `transport-verbs`...), regardless
+  of due date. Without a slug the bot lists the topics you have
 - `/stats` - Show learning statistics (total/new/due words, words added
   today, study streak, correct/incorrect reviews)
+- `/stats_topics` - Accuracy per topic (cards, reviews, accuracy, worst card,
+  mean easiness factor), worst topic first
 - `/settings` - Configure session settings
 - `/help` - Command help
 

@@ -306,6 +306,57 @@ class ProgressRepository:
                 "avg_response_time": 0.0,
             }
 
+    def get_topic_stats(self, telegram_id: int) -> list[dict[str, Any]]:
+        """Aggregate review history per topic slug, worst accuracy first.
+
+        Topics with no reviews yet are skipped: they carry no signal about
+        what keeps failing.
+        """
+        try:
+            with self.db_connection.get_connection() as conn:
+                cursor = conn.execute(
+                    """
+                    WITH card AS (
+                        SELECT
+                            json_extract(w.additional_forms, '$.topic') AS topic,
+                            w.lemma AS lemma,
+                            lp.easiness_factor AS easiness_factor,
+                            (SELECT COUNT(*) FROM review_history rh
+                             WHERE rh.telegram_id = lp.telegram_id
+                               AND rh.word_id = w.id) AS reviews,
+                            (SELECT COUNT(*) FROM review_history rh
+                             WHERE rh.telegram_id = lp.telegram_id
+                               AND rh.word_id = w.id
+                               AND rh.rating >= 3) AS correct
+                        FROM words w
+                        JOIN learning_progress lp ON w.id = lp.word_id
+                        WHERE lp.telegram_id = ?
+                          AND json_valid(w.additional_forms)
+                          AND json_extract(w.additional_forms, '$.topic') IS NOT NULL
+                    )
+                    SELECT
+                        topic,
+                        COUNT(*) AS cards,
+                        SUM(reviews) AS reviews,
+                        CAST(SUM(correct) AS REAL) / SUM(reviews) AS accuracy,
+                        AVG(easiness_factor) AS mean_easiness_factor,
+                        (SELECT inner_card.lemma FROM card AS inner_card
+                         WHERE inner_card.topic = card.topic AND inner_card.reviews > 0
+                         ORDER BY CAST(inner_card.correct AS REAL) / inner_card.reviews ASC,
+                                  inner_card.easiness_factor ASC
+                         LIMIT 1) AS worst_card
+                    FROM card
+                    GROUP BY topic
+                    HAVING SUM(reviews) > 0
+                    ORDER BY accuracy ASC, reviews DESC, topic ASC
+                    """,
+                    (telegram_id,),
+                )
+                return [dict(row) for row in cursor.fetchall()]
+        except Exception as e:
+            logger.error(f"Error getting topic stats: {e}")
+            return []
+
     def reset_word_progress(self, telegram_id: int, word_id: int) -> bool:
         """Reset learning progress for a specific word"""
         try:

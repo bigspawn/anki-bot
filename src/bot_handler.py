@@ -260,6 +260,24 @@ class BotHandler:
         )
         app.add_handler(
             CommandHandler(
+                "study_route",
+                self.require_authorization(self.command_handlers.study_route_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_cloze",
+                self.require_authorization(self.command_handlers.study_cloze_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_topic",
+                self.require_authorization(self.command_handlers.study_topic_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
                 "study_nouns",
                 self.require_authorization(self.command_handlers.study_nouns_command),
             )
@@ -281,7 +299,9 @@ class BotHandler:
         app.add_handler(
             CommandHandler(
                 "study_pronouns",
-                self.require_authorization(self.command_handlers.study_pronouns_command),
+                self.require_authorization(
+                    self.command_handlers.study_pronouns_command
+                ),
             )
         )
         app.add_handler(
@@ -303,7 +323,9 @@ class BotHandler:
         app.add_handler(
             CommandHandler(
                 "study_numerals",
-                self.require_authorization(self.command_handlers.study_numerals_command),
+                self.require_authorization(
+                    self.command_handlers.study_numerals_command
+                ),
             )
         )
         app.add_handler(
@@ -381,6 +403,12 @@ class BotHandler:
         )
         app.add_handler(
             CommandHandler(
+                "stats_topics",
+                self.require_authorization(self.command_handlers.stats_topics_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
                 "settings",
                 self.require_authorization(self.command_handlers.settings_command),
             )
@@ -408,8 +436,10 @@ class BotHandler:
         """Setup bot menu with commands for better UX"""
         from telegram import BotCommand
 
-        # Define bot commands with descriptions
+        # Every registered command is listed here: a command missing from the
+        # menu still works when typed but stays invisible in the Telegram UI.
         commands = [
+            BotCommand("start", "👋 Начало работы и регистрация"),
             BotCommand("add", "📚 Добавить слова из текста"),
             BotCommand("study", "🎯 Начать изучение слов"),
             BotCommand("study_new", "🆕 Изучать только новые слова"),
@@ -418,6 +448,11 @@ class BotHandler:
             BotCommand("study_reflexive", "🪞 Возвратные глаголы (sich ...)"),
             BotCommand("study_rektion", "🧭 Глаголы с предлогами и падежом"),
             BotCommand("study_recent", "🕐 Изучать последние N добавленных слов"),
+            BotCommand("study_route", "🗺 Фразы для описания дороги"),
+            BotCommand("study_cloze", "✍️ Пропуски и работа над ошибками"),
+            BotCommand(
+                "study_topic", "🏷 Карточки одной темы (/study_topic route-case)"
+            ),
             BotCommand("study_nouns", "🧩 Только существительные"),
             BotCommand("study_adjectives", "🧩 Только прилагательные"),
             BotCommand("study_adverbs", "🧩 Только наречия"),
@@ -436,6 +471,7 @@ class BotHandler:
             BotCommand("study_question_words", "❓ Вопросительные слова"),
             BotCommand("study_modal_verbs", "🔧 Модальные глаголы"),
             BotCommand("stats", "📊 Показать статистику"),
+            BotCommand("stats_topics", "🏷 Успеваемость по темам"),
             BotCommand("help", "❓ Справка по командам"),
             BotCommand("settings", "⚙️ Настройки бота"),
         ]
@@ -623,8 +659,7 @@ class BotHandler:
                         )
 
                     success_msg += (
-                        f"\n\n⏱️ <b>Время обработки:</b> "
-                        f"{timer.get_elapsed_time():.1f}с"
+                        f"\n\n⏱️ <b>Время обработки:</b> {timer.get_elapsed_time():.1f}с"
                     )
 
                     # Add the words that were just added, with translations

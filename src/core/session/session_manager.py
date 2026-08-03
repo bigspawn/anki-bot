@@ -21,6 +21,7 @@ from ...utils import (
     format_verb_case,
     format_verb_forms,
     get_rating_emoji,
+    is_drill_card,
     parse_inline_keyboard_data,
 )
 
@@ -163,6 +164,37 @@ class SessionManager:
 
         await self._safe_reply(update, card_text, reply_markup=reply_markup)
 
+    @staticmethod
+    def _format_answer_text(word: dict) -> str:
+        """Build the reveal side of a flashcard"""
+        if is_drill_card(word):
+            # The rule lives in the translation, the example is the fixed
+            # sentence — an article line would be noise here.
+            return f"""✍️ <b>{word["lemma"]}</b>
+
+✅ {word["translation"]}
+
+📝 <i>{word["example"]}</i>
+
+Как хорошо вы знаете это правило?"""
+
+        article = word.get("article")
+        if article and article != "None" and article.strip():
+            word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
+        else:
+            word_display = f"{word['lemma']} - {word['part_of_speech']}"
+
+        verb_forms = format_verb_forms(word) or format_verb_case(word)
+
+        return f"""🔤 <b>{word["lemma"]}</b>
+{word_display}
+
+🇷🇺 {word["translation"]}
+
+📝 <i>{word["example"]}</i>
+
+{verb_forms}Как хорошо вы знаете это слово?"""
+
     async def handle_show_answer(self, query, data: dict):
         """Handle showing the answer to a flashcard"""
         telegram_id = query.from_user.id
@@ -176,23 +208,7 @@ class SessionManager:
         if not word:
             return
 
-        # Show answer with rating buttons
-        article = word.get("article")
-        if article and article != "None" and article.strip():
-            word_display = f"{article} {word['lemma']} - {word['part_of_speech']}"
-        else:
-            word_display = f"{word['lemma']} - {word['part_of_speech']}"
-
-        verb_forms = format_verb_forms(word) or format_verb_case(word)
-
-        answer_text = f"""🔤 <b>{word["lemma"]}</b>
-{word_display}
-
-🇷🇺 {word["translation"]}
-
-📝 <i>{word["example"]}</i>
-
-{verb_forms}Как хорошо вы знаете это слово?"""
+        answer_text = self._format_answer_text(word)
 
         # Create rating keyboard
         rating_buttons = []

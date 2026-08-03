@@ -20,6 +20,31 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.core.database.database_manager import DatabaseManager  # noqa: E402
 
 
+def validate_words(words: list[dict]) -> list[str]:
+    """Return a message per malformed card.
+
+    A cloze card without an answer is unusable: the reveal side would show a
+    rule with nothing to check it against.
+    """
+    problems = []
+    for word in words:
+        lemma = word.get("lemma", "<no lemma>")
+
+        if word.get("part_of_speech") != "cloze":
+            continue
+
+        try:
+            forms = json.loads(word.get("additional_forms") or "{}")
+        except ValueError:
+            problems.append(f"{lemma}: additional_forms is not valid JSON")
+            continue
+
+        if not isinstance(forms, dict) or not forms.get("answer"):
+            problems.append(f"{lemma}: cloze card without additional_forms.answer")
+
+    return problems
+
+
 def seed_words(
     db_path: str, telegram_id: int, json_paths: list[str], dry_run: bool = False
 ) -> bool:
@@ -29,6 +54,14 @@ def seed_words(
         batch = json.loads(Path(path).read_text(encoding="utf-8"))
         print(f"📖 {path}: {len(batch)} words")
         words.extend(batch)
+
+    problems = validate_words(words)
+    if problems:
+        print(f"⚠️ Skipped as invalid: {len(problems)}")
+        for problem in problems:
+            print(f"    ! {problem}")
+        return False
+    print("  ✔️ Invalid: 0")
 
     db_manager = DatabaseManager(db_path)
     db_manager.init_database()

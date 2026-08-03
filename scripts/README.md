@@ -58,6 +58,33 @@ Interactive script to create a new release with proper versioning.
 ```
 Fast track for small fixes and patches.
 
+### 📚 Seed Curated Word Lists
+```bash
+uv run python scripts/seed_words.py <db> <telegram_id> <seed/*.json> [--dry-run]
+```
+Loads authored card sets into a user's dictionary. Words already in the
+user's list are skipped, so re-running adds nothing.
+
+**Examples:**
+```bash
+# Preview the route and drill sets without writing
+uv run python scripts/seed_words.py data/bot.db 739529 \
+    seed/route_phrases.json seed/cloze_route.json seed/error_fix_route.json --dry-run
+
+# Load everything (same set the Makefile target uses)
+make seed-words TELEGRAM_ID=739529
+```
+
+**Available sets:**
+- `seed/reflexive_verbs.json` — reflexive verbs, studied via `/study_reflexive`
+- `seed/preposition_verbs.json` — verbs governing a preposition, `/study_rektion`
+- `seed/route_phrases.json` — route chunks, `/study_route`
+- `seed/cloze_route.json` — gap-fill drills, `/study_cloze`
+- `seed/error_fix_route.json` — error-correction drills, `/study_cloze`
+
+A `cloze` card is rejected before anything is written unless its
+`additional_forms` carries an `answer`.
+
 ## Workflow Examples
 
 ### New Feature Development

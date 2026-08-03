@@ -10,7 +10,7 @@ from telegram.ext import ContextTypes
 from ...database import DatabaseManager
 from ...spaced_repetition import SpacedRepetitionSystem
 from ...text_parser import GermanTextParser
-from ...utils import format_progress_stats
+from ...utils import format_progress_stats, format_topic_stats
 from ...word_processor import WordProcessor
 
 logger = logging.getLogger(__name__)
@@ -147,9 +147,16 @@ class CommandHandlers:
 /study_question_words - Вопросительные слова (wer, was, wo...)
 /study_modal_verbs - Модальные глаголы (können, müssen, wollen...)
 
+🗺 <b>Грамматика и маршруты:</b>
+/study_route - Фразы для описания дороги (am Supermarkt abbiegen...)
+/study_cloze - Пропуски и работа над ошибками (vor ___ Bahnhof → dem)
+/study_topic &lt;тема&gt; - Карточки одной темы, независимо от расписания
+Пример: /study_topic route-case
+
 📊 <b>Статистика:</b>
 /stats - Подробная статистика изучения
 Показывает общее количество слов, слова к повторению, новые слова и средний успех
+/stats_topics - Успеваемость по темам, худшие сверху
 
 ⚙️ <b>Настройки:</b>
 /settings - Настройки количества карточек в сессии и напоминаний
@@ -424,6 +431,152 @@ class CommandHandlers:
             return
 
         await self._start_study_session(update, words, "rektion")
+
+    async def study_route_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_route command - multi-word chunks used to describe a route"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        words = self.db_manager.get_words_by_part_of_speech(
+            db_user["telegram_id"], "route phrase", limit=10
+        )
+
+        if not words:
+            await self._safe_reply(
+                update,
+                "🗺 У вас нет фраз для описания маршрута.\n\n"
+                "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, words, "route")
+
+    async def study_cloze_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_cloze command - gap-fill and error-correction drills"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        words = self.db_manager.get_cloze_words(db_user["telegram_id"], limit=10)
+
+        if not words:
+            await self._safe_reply(
+                update,
+                "✍️ У вас нет упражнений с пропусками.\n\n"
+                "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, words, "cloze")
+
+    async def study_topic_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_topic <slug> command - study one topic, due or not"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        telegram_id = db_user["telegram_id"]
+
+        if not context.args:
+            await self._safe_reply(
+                update,
+                self._topic_hint(
+                    telegram_id, "❓ Укажите тему, например: /study_topic route-case"
+                ),
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        topic = context.args[0]
+        words = self.db_manager.get_words_by_topic(telegram_id, topic, limit=10)
+
+        if not words:
+            await self._safe_reply(
+                update,
+                self._topic_hint(telegram_id, f"📚 Нет карточек по теме «{topic}»."),
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        await self._start_study_session(update, words, f"topic:{topic}")
+
+    def _topic_hint(self, telegram_id: int, headline: str) -> str:
+        """Build a message listing the topic slugs the user actually has"""
+        slugs = self.db_manager.get_topic_slugs(telegram_id)
+        if not slugs:
+            return (
+                f"{headline}\n\n"
+                "У вас пока нет карточек с темами. Их можно загрузить набором: "
+                "make seed-words TELEGRAM_ID=<ваш id>"
+            )
+
+        listed = "\n".join(f"• {slug}" for slug in slugs)
+        return f"{headline}\n\n🏷 Доступные темы:\n{listed}"
+
+    async def stats_topics_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /stats_topics command - accuracy per topic, worst first"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        rows = self.db_manager.get_topic_stats(db_user["telegram_id"])
+
+        await self._safe_reply(
+            update,
+            format_topic_stats(rows),
+            reply_markup=ReplyKeyboardRemove(),
+        )
 
     async def study_recent_command(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE

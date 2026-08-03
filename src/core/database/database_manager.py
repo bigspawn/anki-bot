@@ -127,6 +127,22 @@ class DatabaseManager:
         """Get verbs governing a preposition for study"""
         return self.word_repo.get_preposition_verbs(telegram_id, limit, randomize)
 
+    def get_cloze_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get gap-fill and error-correction drills for study"""
+        return self.word_repo.get_cloze_words(telegram_id, limit, randomize)
+
+    def get_words_by_topic(
+        self, telegram_id: int, topic: str, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get cards tagged with a topic slug for study"""
+        return self.word_repo.get_words_by_topic(telegram_id, topic, limit, randomize)
+
+    def get_topic_slugs(self, telegram_id: int) -> list[str]:
+        """Get every topic slug present in the user's cards"""
+        return self.word_repo.get_topic_slugs(telegram_id)
+
     def get_recent_words(
         self, telegram_id: int, limit: int = 10
     ) -> list[dict[str, Any]]:
@@ -211,6 +227,10 @@ class DatabaseManager:
     def get_performance_stats(self, telegram_id: int, days: int = 30) -> dict[str, Any]:
         """Get performance statistics for user"""
         return self.progress_repo.get_performance_stats(telegram_id, days)
+
+    def get_topic_stats(self, telegram_id: int) -> list[dict[str, Any]]:
+        """Aggregate review history per topic slug, worst accuracy first"""
+        return self.progress_repo.get_topic_stats(telegram_id)
 
     def has_reviewed_today(self, telegram_id: int) -> bool:
         """Check whether the user has already reviewed at least one word today"""

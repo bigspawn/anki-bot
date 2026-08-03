@@ -1,0 +1,192 @@
+[
+  {
+    "lemma": "Vor ___ Bahnhof links.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "dem — ориентир, где поворачиваю → Dativ",
+    "example": "Vor dem Bahnhof links.",
+    "additional_forms": "{\"answer\": \"dem\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Biegen Sie ___ Supermarkt rechts ab.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "am (an + dem) — ориентир поворота → Dativ",
+    "example": "Biegen Sie am Supermarkt rechts ab.",
+    "additional_forms": "{\"answer\": \"am\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Biegen Sie rechts in ___ Querstraße ab.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "die — попадаю внутрь улицы → Akkusativ",
+    "example": "Biegen Sie rechts in die Querstraße ab.",
+    "additional_forms": "{\"answer\": \"die\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Gehen Sie hinter ___ Kirchplatz in den Kirchweg.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "dem — площадь прохожу, она ориентир → Dativ",
+    "example": "Gehen Sie hinter dem Kirchplatz in den Kirchweg.",
+    "additional_forms": "{\"answer\": \"dem\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Links in ___ Kirchweg gehen.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "den — der Weg, попадаю внутрь → Akkusativ",
+    "example": "Links in den Kirchweg gehen.",
+    "additional_forms": "{\"answer\": \"den\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Das zweite Haus auf ___ linken Seite.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "der — die Seite, дом просто стоит там → Dativ",
+    "example": "Das zweite Haus auf der linken Seite.",
+    "additional_forms": "{\"answer\": \"der\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Wechseln Sie auf ___ andere Seite.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "die — перехожу, значит Akkusativ",
+    "example": "Wechseln Sie auf die andere Seite.",
+    "additional_forms": "{\"answer\": \"die\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Gehen Sie ___ die Straße. (поперёк)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "über die Straße — перехожу улицу",
+    "example": "Gehen Sie über die Straße.",
+    "additional_forms": "{\"answer\": \"über\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich wohne ___ ___ Bahnhofstraße. (адрес)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "in der — адрес всегда in, не auf",
+    "example": "Ich wohne in der Bahnhofstraße.",
+    "additional_forms": "{\"answer\": \"in der\", \"topic\": \"street-prepositions\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Die Kinder spielen ___ ___ Straße.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "auf der — физически на дорожном полотне",
+    "example": "Die Kinder spielen auf der Straße.",
+    "additional_forms": "{\"answer\": \"auf der\", \"topic\": \"street-prepositions\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Er ist die Straße ___. (идти вдоль, Perfekt)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "entlanggegangen — одно слово",
+    "example": "Er ist die Straße entlanggegangen.",
+    "additional_forms": "{\"answer\": \"entlanggegangen\", \"topic\": \"separable-route-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Er ___ rechts abgebogen.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "ist — движение, Perfekt с sein",
+    "example": "Er ist rechts abgebogen.",
+    "additional_forms": "{\"answer\": \"ist\", \"topic\": \"separable-route-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Biegen Sie am Supermarkt rechts ___.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "ab — отделяемая приставка уезжает в конец",
+    "example": "Biegen Sie am Supermarkt rechts ab.",
+    "additional_forms": "{\"answer\": \"ab\", \"topic\": \"separable-route-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich gehe ___ ___ Kreuzung, dann links.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "bis zur — дошёл до точки и делаю следующий шаг",
+    "example": "Ich gehe bis zur Kreuzung, dann links.",
+    "additional_forms": "{\"answer\": \"bis zur\", \"topic\": \"bis-zu\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Wir fahren ___ ___ S-Bahn.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "mit der — на чём едешь → mit + Dativ",
+    "example": "Wir fahren mit der S-Bahn.",
+    "additional_forms": "{\"answer\": \"mit der\", \"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich steige ___ ___ U-Bahn um.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "in die — umsteigen in + Akkusativ",
+    "example": "Ich steige in die U-Bahn um.",
+    "additional_forms": "{\"answer\": \"in die\", \"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich steige ___ ___ Bus aus.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "aus dem — aussteigen aus + Dativ",
+    "example": "Ich steige aus dem Bus aus.",
+    "additional_forms": "{\"answer\": \"aus dem\", \"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich gehe ___ Weg noch einmal. (тем же)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "denselben — der Weg → Akkusativ, одно слово",
+    "example": "Ich gehe denselben Weg noch einmal.",
+    "additional_forms": "{\"answer\": \"denselben\", \"topic\": \"derselbe\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "___ gehe ich zum Büro. (оттуда)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "von dort — откуда; dort = где, dorthin = куда",
+    "example": "Von dort gehe ich zum Büro.",
+    "additional_forms": "{\"answer\": \"Von dort\", \"topic\": \"direction-adverbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  }
+]

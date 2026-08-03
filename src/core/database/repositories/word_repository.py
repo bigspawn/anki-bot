@@ -275,6 +275,68 @@ class WordRepository:
             "preposition verbs",
         )
 
+    def get_cloze_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get gap-fill and error-correction drills for study"""
+        return self._get_words_where(
+            telegram_id,
+            "LOWER(w.part_of_speech) IN ('cloze', 'error fix')",
+            limit,
+            randomize,
+            "cloze words",
+        )
+
+    def get_words_by_topic(
+        self, telegram_id: int, topic: str, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get cards tagged with a topic slug, regardless of SM2 due date"""
+        try:
+            with self.db_connection.get_connection() as conn:
+                order_clause = (
+                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
+                )
+
+                cursor = conn.execute(
+                    f"""
+                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
+                           lp.next_review_date, lp.last_reviewed
+                    FROM words w
+                    JOIN learning_progress lp ON w.id = lp.word_id
+                    WHERE lp.telegram_id = ?
+                      AND json_valid(w.additional_forms)
+                      AND LOWER(json_extract(w.additional_forms, '$.topic')) = LOWER(?)
+                    {order_clause}
+                    LIMIT ?
+                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
+                    (telegram_id, topic, limit),
+                )
+                return [dict(row) for row in cursor.fetchall()]
+        except Exception as e:
+            logger.error(f"Error getting words by topic: {e}")
+            return []
+
+    def get_topic_slugs(self, telegram_id: int) -> list[str]:
+        """Get every topic slug present in the user's cards, alphabetically"""
+        try:
+            with self.db_connection.get_connection() as conn:
+                cursor = conn.execute(
+                    """
+                    SELECT DISTINCT json_extract(w.additional_forms, '$.topic') AS topic
+                    FROM words w
+                    JOIN learning_progress lp ON w.id = lp.word_id
+                    WHERE lp.telegram_id = ?
+                      AND json_valid(w.additional_forms)
+                      AND json_extract(w.additional_forms, '$.topic') IS NOT NULL
+                    ORDER BY topic
+                    """,
+                    (telegram_id,),
+                )
+                return [row["topic"] for row in cursor.fetchall()]
+        except Exception as e:
+            logger.error(f"Error getting topic slugs: {e}")
+            return []
+
     def _get_words_where(
         self,
         telegram_id: int,

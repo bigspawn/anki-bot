@@ -56,7 +56,11 @@ def format_study_card(
     progress_info = f"{current_index}/{total_words}. " if total_words > 0 else ""
 
     # Question format based on part of speech
-    if part_of_speech == "noun" and article:
+    if is_cloze_card(word_data):
+        result = f"{progress_info}Заполните пропуск:\n\n{lemma}"
+    elif is_error_fix_card(word_data):
+        result = f"{progress_info}Исправьте ошибку:\n\n{lemma}"
+    elif part_of_speech == "noun" and article:
         result = f"{progress_info}Какой артикль у {lemma}?"
     elif is_preposition_verb(word_data):
         result = f"{progress_info}Как переводится {lemma} и какой падеж?"
@@ -70,6 +74,25 @@ def is_preposition_verb(word_data: dict[str, Any]) -> bool:
     """Check whether the word is a verb governing a preposition"""
     part_of_speech = (word_data.get("part_of_speech") or "").lower()
     return "verb" in part_of_speech and "preposition" in part_of_speech
+
+
+def is_cloze_card(word_data: dict[str, Any]) -> bool:
+    """Check whether the card is a gap-fill drill"""
+    return (word_data.get("part_of_speech") or "").lower() == "cloze"
+
+
+def is_error_fix_card(word_data: dict[str, Any]) -> bool:
+    """Check whether the card is an error-correction drill"""
+    return (word_data.get("part_of_speech") or "").lower() == "error fix"
+
+
+def is_drill_card(word_data: dict[str, Any]) -> bool:
+    """Check whether the card is drilled as a sentence rather than a word.
+
+    Drills carry the rule in the translation, so the article and part-of-speech
+    lines of a normal card would only add noise.
+    """
+    return is_cloze_card(word_data) or is_error_fix_card(word_data)
 
 
 def format_progress_stats(stats: dict[str, Any]) -> str:
@@ -90,9 +113,36 @@ def format_progress_stats(stats: dict[str, Any]) -> str:
     result += f"➕ Добавлено сегодня: {words_today}\n"
     result += f"🔥 Дней подряд: {study_streak}\n"
     result += f"✅ Хорошо/легко вспомнил (➕✅) за 30д: {avg_success_rate:.1%}\n"
-    result += f"   хорошо/легко: {correct_reviews} / нужно повторить: {incorrect_reviews}\n"
+    result += (
+        f"   хорошо/легко: {correct_reviews} / нужно повторить: {incorrect_reviews}\n"
+    )
 
     return result
+
+
+def format_topic_stats(rows: list[dict[str, Any]]) -> str:
+    """Format the per-topic accuracy breakdown, worst topic first"""
+    if not rows:
+        return (
+            "📊 Пока нет статистики по темам.\n\n"
+            "Темы появляются у карточек из готовых наборов (маршруты, "
+            "пропуски, работа над ошибками) после первого повторения."
+        )
+
+    result = "📊 Статистика по темам (худшие сверху):\n\n"
+    for row in rows:
+        accuracy = (row.get("accuracy") or 0.0) * 100
+        result += f"🏷 {row['topic']}\n"
+        result += (
+            f"   карточек: {row['cards']} | повторений: {row['reviews']} | "
+            f"успех: {accuracy:.0f}%\n"
+        )
+        result += f"   средний EF: {row.get('mean_easiness_factor') or 0.0:.2f}\n"
+        if row.get("worst_card"):
+            result += f"   слабое место: {row['worst_card']}\n"
+        result += f"   повторить: /study_topic {row['topic']}\n\n"
+
+    return result.strip()
 
 
 def validate_german_text(text: str) -> bool:
