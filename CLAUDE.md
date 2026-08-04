@@ -214,11 +214,26 @@ minimum (mirror `tests/test_study_pos_feature.py` /
 ### Before calling any feature done
 
 - `make lint` (ruff + mypy) must be clean.
+- `make security` (bandit) must be clean — see the SQL rule above.
 - Run the FULL suite (`uv run pytest tests/ -q`), not just the new test
-  file, and diff the pass/fail/error counts against a clean run on `main`
-  (`git stash` + rerun) — a fixed baseline of pre-existing failures/errors
-  exists (missing env vars in test config, unrelated to app code). The bar
-  is "no NEW failures", not "zero failures".
+  file. **The bar is zero failures and zero errors.** There is no accepted
+  baseline of "expected" failures: the suite used to show 11 failed / 25
+  errors on a clean checkout because it depended on `TELEGRAM_BOT_TOKEN` and
+  `OPENAI_API_KEY` being exported (CI injected them, nothing else did).
+  `tests/conftest.py` now pins those, so a red test is a real regression.
+
+### The suite is hermetic — keep it that way
+
+`tests/conftest.py` pins the credentials and, importantly, `DATABASE_URL`.
+Without that pin `get_db_manager()` with no explicit path resolves to
+`data/bot.db` — the developer's own vocabulary — and tests write to it.
+
+- Never read configuration from the ambient environment in a test; if a test
+  needs a setting, pass it explicitly (`Settings(...)`) or extend conftest.
+- Always construct `DatabaseManager` with a temp path in tests that touch the
+  database directly (see the `db_manager` fixtures).
+- `tests/test_suite_isolation.py` fails if the resolved database ever lands
+  inside the repo, so this cannot regress silently.
 
 ## Memories
 
