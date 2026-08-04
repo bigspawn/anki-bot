@@ -5,7 +5,7 @@
     "article": null,
     "translation": "den — Akkusativ мужского рода",
     "example": "Ich sehe den Mann.",
-    "additional_forms": "{\"answer\": \"den\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"den\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -15,7 +15,7 @@
     "article": null,
     "translation": "der — Dativ женского рода; совпадает с м. Nominativ",
     "example": "Ich helfe der Frau.",
-    "additional_forms": "{\"answer\": \"der\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"der\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -25,7 +25,7 @@
     "article": null,
     "translation": "den — Dativ Plural, и у существительного появляется -n",
     "example": "Ich helfe den Kindern.",
-    "additional_forms": "{\"answer\": \"den\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"den\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -35,7 +35,7 @@
     "article": null,
     "translation": "keinen — Akkusativ мужского рода",
     "example": "Ich habe keinen Hunger.",
-    "additional_forms": "{\"answer\": \"keinen\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"keinen\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -45,7 +45,7 @@
     "article": null,
     "translation": "keine — Akkusativ женского рода",
     "example": "Ich habe keine Zeit.",
-    "additional_forms": "{\"answer\": \"keine\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"keine\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -55,7 +55,7 @@
     "article": null,
     "translation": "einen — es gibt всегда с Akkusativ",
     "example": "Es gibt einen Supermarkt.",
-    "additional_forms": "{\"answer\": \"einen\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"einen\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -65,7 +65,7 @@
     "article": null,
     "translation": "des — Genitiv мужского рода",
     "example": "Das Auto des Mannes.",
-    "additional_forms": "{\"answer\": \"des\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"des\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -75,7 +75,7 @@
     "article": null,
     "translation": "mich — Akkusativ от ich",
     "example": "Er sieht mich.",
-    "additional_forms": "{\"answer\": \"mich\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"mich\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -85,7 +85,7 @@
     "article": null,
     "translation": "mir — Dativ от ich; helfen требует Dativ",
     "example": "Er hilft mir.",
-    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -95,7 +95,7 @@
     "article": null,
     "translation": "ihn — Akkusativ от er",
     "example": "Ich sehe ihn.",
-    "additional_forms": "{\"answer\": \"ihn\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"ihn\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -105,7 +105,7 @@
     "article": null,
     "translation": "ihm — Dativ от er",
     "example": "Ich helfe ihm.",
-    "additional_forms": "{\"answer\": \"ihm\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"ihm\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -115,7 +115,7 @@
     "article": null,
     "translation": "ihr — Dativ от sie",
     "example": "Ich helfe ihr.",
-    "additional_forms": "{\"answer\": \"ihr\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"ihr\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -125,7 +125,7 @@
     "article": null,
     "translation": "Ihnen — Dativ от Sie, с большой буквы",
     "example": "Ich danke Ihnen.",
-    "additional_forms": "{\"answer\": \"Ihnen\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"Ihnen\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -135,7 +135,7 @@
     "article": null,
     "translation": "meinen — Akkusativ, m → -en",
     "example": "Ich sehe meinen Vater.",
-    "additional_forms": "{\"answer\": \"meinen\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"meinen\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -145,7 +145,7 @@
     "article": null,
     "translation": "meinen — Dativ Plural, Pl → -en",
     "example": "Ich helfe meinen Eltern.",
-    "additional_forms": "{\"answer\": \"meinen\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"answer\": \"meinen\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   }

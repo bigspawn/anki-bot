@@ -5,7 +5,7 @@
     "article": null,
     "translation": "mich — только себя, второго объекта нет → Akkusativ",
     "example": "Ich wasche mich.",
-    "additional_forms": "{\"answer\": \"mich\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"mich\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -15,7 +15,7 @@
     "article": null,
     "translation": "mir — есть второй объект (die Hände) → Dativ",
     "example": "Ich wasche mir die Hände.",
-    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -25,7 +25,7 @@
     "article": null,
     "translation": "sich — Dativ, объект занят словом die Zähne",
     "example": "Er putzt sich die Zähne.",
-    "additional_forms": "{\"answer\": \"sich\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"sich\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -35,7 +35,7 @@
     "article": null,
     "translation": "mir — есть Akk-объект (einen Urlaub) → Dativ",
     "example": "Ich wünsche mir einen Urlaub.",
-    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -45,7 +45,7 @@
     "article": null,
     "translation": "mir — рефлексив в Dativ, объект den Film в Akk",
     "example": "Ich sehe mir den Film an.",
-    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -55,7 +55,7 @@
     "article": null,
     "translation": "mich — представиться другим → Akkusativ",
     "example": "Ich möchte mich vorstellen.",
-    "additional_forms": "{\"answer\": \"mich\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"mich\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -65,7 +65,7 @@
     "article": null,
     "translation": "mir — представить себе → Dativ; es уже занимает Akk",
     "example": "Ich kann es mir nicht vorstellen.",
-    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -75,7 +75,7 @@
     "article": null,
     "translation": "dich — знакомство → Akkusativ",
     "example": "Stell dich vor!",
-    "additional_forms": "{\"answer\": \"dich\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"dich\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -85,7 +85,7 @@
     "article": null,
     "translation": "dir — воображение → Dativ",
     "example": "Stell dir vor!",
-    "additional_forms": "{\"answer\": \"dir\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"dir\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -95,7 +95,7 @@
     "article": null,
     "translation": "mir — есть второй объект (die Jacke) → Dativ",
     "example": "Ich ziehe mir die Jacke an.",
-    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -105,7 +105,7 @@
     "article": null,
     "translation": "uns — торопимся сами, второго объекта нет → Akkusativ",
     "example": "Wir müssen uns beeilen.",
-    "additional_forms": "{\"answer\": \"uns\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"uns\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -115,7 +115,7 @@
     "article": null,
     "translation": "helfen + Dativ — помогать кому",
     "example": "Ich helfe dir.",
-    "additional_forms": "{\"answer\": \"dir\", \"topic\": \"dativ-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"dir\", \"topic\": \"zatyk-16-dativ-verben\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -125,7 +125,7 @@
     "article": null,
     "translation": "danken + Dativ, хотя по-русски винительный",
     "example": "Ich danke dir.",
-    "additional_forms": "{\"answer\": \"dir\", \"topic\": \"dativ-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"dir\", \"topic\": \"zatyk-16-dativ-verben\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -135,7 +135,7 @@
     "article": null,
     "translation": "gratulieren + Dativ, хотя по-русски винительный",
     "example": "Ich gratuliere dir.",
-    "additional_forms": "{\"answer\": \"dir\", \"topic\": \"dativ-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"dir\", \"topic\": \"zatyk-16-dativ-verben\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -145,7 +145,7 @@
     "article": null,
     "translation": "gefallen + Dativ — подлежащее вещь, человек в Dativ",
     "example": "Das gefällt mir.",
-    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"dativ-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"zatyk-16-dativ-verben\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -155,7 +155,7 @@
     "article": null,
     "translation": "schmecken + Dativ — вещь воспринимается человеком",
     "example": "Die Torte schmeckt mir.",
-    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"dativ-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"zatyk-16-dativ-verben\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -165,7 +165,7 @@
     "article": null,
     "translation": "beraten + Akkusativ — консультировать кого",
     "example": "Tim berät sie.",
-    "additional_forms": "{\"answer\": \"sie\", \"topic\": \"dativ-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"sie\", \"topic\": \"zatyk-16-dativ-verben\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -175,7 +175,7 @@
     "article": null,
     "translation": "raten + Dativ — советовать кому; ловушка против beraten",
     "example": "Tim rät ihr.",
-    "additional_forms": "{\"answer\": \"ihr\", \"topic\": \"dativ-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"ihr\", \"topic\": \"zatyk-16-dativ-verben\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -185,7 +185,7 @@
     "article": null,
     "translation": "Mir — человек в Dativ выносится вперёд, глагол согласуется с вещью",
     "example": "Mir fällt keine Lösung ein.",
-    "additional_forms": "{\"answer\": \"Mir\", \"topic\": \"dativ-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"Mir\", \"topic\": \"zatyk-16-dativ-verben\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -195,7 +195,7 @@
     "article": null,
     "translation": "zuhören + Dativ; hören без zu = Akkusativ",
     "example": "Ich höre dir zu.",
-    "additional_forms": "{\"answer\": \"dir\", \"topic\": \"dativ-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "additional_forms": "{\"answer\": \"dir\", \"topic\": \"zatyk-16-dativ-verben\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
     "confidence": 1.0,
     "level": "A2"
   },

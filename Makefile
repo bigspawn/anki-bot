@@ -136,10 +136,10 @@ seed-words:
 		seed/route_phrases.json seed/cloze_route.json seed/error_fix_route.json \
 		seed/reflexive_case.json seed/dativ_verbs.json seed/dat_akk_verbs.json \
 		seed/cloze_verb_case.json seed/pronoun_case.json seed/article_case.json \
-		seed/cloze_paradigm.json $$FLAGS; \
-	uv run python scripts/backfill_verb_case.py "$$DB_PATH" \
-		seed/reflexive_verbs.json seed/reflexive_case.json \
-		seed/dativ_verbs.json seed/dat_akk_verbs.json $$FLAGS
+		seed/cloze_paradigm.json seed/wo_wohin.json seed/verschmelzung.json \
+		seed/wortstellung.json seed/adjektive.json seed/verbformen.json \
+		seed/zeitangaben.json seed/cloze_zatyk.json $$FLAGS; \
+	uv run python scripts/backfill_verb_case.py "$$DB_PATH" seed/*.json $$FLAGS
 
 # Deploy to production (NAS) over SSH + docker compose, no extra tooling needed
 # Usage: make deploy [TAG=v1.0.0] [HOST=other-host]

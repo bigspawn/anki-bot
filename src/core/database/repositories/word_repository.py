@@ -70,10 +70,21 @@ SQL_CLOZE_WORDS = (
     + _ORDER_RANDOM_OR
     + _BY_CREATED
 )
+# Grammar drills whose part_of_speech shares a prefix with a real one:
+# 'pronoun case' would otherwise land in /study_pronouns and 'adjective
+# ending' in /study_adjectives, mixed in with actual vocabulary.
+_NOT_A_DRILL = (
+    " AND LOWER(w.part_of_speech) NOT IN ("
+    "'pronoun case', 'article case', 'reflexive case', 'wo wohin',"
+    " 'verschmelzung', 'word order', 'adjective ending', 'verb form',"
+    " 'zeitangabe', 'dativ verb', 'dativ akkusativ verb', 'cloze', 'error fix')"
+)
+
 # Prefix match, so 'noun' also picks up 'noun (informal)'
 SQL_WORDS_BY_PART_OF_SPEECH = (
     _SELECT_STUDY_WORDS
     + "LOWER(w.part_of_speech) LIKE LOWER(?) || '%'"
+    + _NOT_A_DRILL
     + _ORDER_RANDOM_OR
     + _BY_CREATED
 )
@@ -121,10 +132,30 @@ SQL_ARTICLE_CASE = (
 SQL_DATIV_VERBS = (
     _SELECT_STUDY_WORDS
     + _HAS_CASE
-    + " AND json_extract(w.additional_forms, '$.topic') = 'dativ-verbs'"
+    + " AND json_extract(w.additional_forms, '$.topic') = 'zatyk-16-dativ-verben'"
     + _ORDER_RANDOM_OR
     + _BY_CREATED
 )
+
+
+def _by_part_of_speech(value: str) -> str:
+    """Build a study statement for one exact part_of_speech value"""
+    return (
+        _SELECT_STUDY_WORDS
+        + "LOWER(w.part_of_speech) = "
+        + value
+        + _ORDER_RANDOM_OR
+        + _BY_CREATED
+    )
+
+
+# Rubrics from the vault's Затыки list, each keyed by its own part_of_speech
+SQL_WO_WOHIN = _by_part_of_speech("'wo wohin'")
+SQL_VERSCHMELZUNG = _by_part_of_speech("'verschmelzung'")
+SQL_WORD_ORDER = _by_part_of_speech("'word order'")
+SQL_ADJECTIVE_ENDING = _by_part_of_speech("'adjective ending'")
+SQL_VERB_FORM = _by_part_of_speech("'verb form'")
+SQL_ZEITANGABE = _by_part_of_speech("'zeitangabe'")
 SQL_DAT_AKK_VERBS = (
     _SELECT_STUDY_WORDS
     + _HAS_CASE
@@ -375,6 +406,64 @@ class WordRepository:
             SQL_DAT_AKK_VERBS,
             (telegram_id, int(randomize), limit),
             "dativ+akkusativ verbs",
+        )
+
+    def get_wo_wohin_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get wo/wohin preposition triples for study"""
+        return self._fetch_study_words(
+            SQL_WO_WOHIN,
+            (telegram_id, int(randomize), limit),
+            "wo/wohin preposition triples",
+        )
+
+    def get_verschmelzung_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get preposition-article contractions for study"""
+        return self._fetch_study_words(
+            SQL_VERSCHMELZUNG,
+            (telegram_id, int(randomize), limit),
+            "preposition-article contractions",
+        )
+
+    def get_word_order_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get word order cards for study"""
+        return self._fetch_study_words(
+            SQL_WORD_ORDER, (telegram_id, int(randomize), limit), "word order cards"
+        )
+
+    def get_adjective_ending_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get adjective ending cards for study"""
+        return self._fetch_study_words(
+            SQL_ADJECTIVE_ENDING,
+            (telegram_id, int(randomize), limit),
+            "adjective ending cards",
+        )
+
+    def get_verb_form_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get imperative and modal past cards for study"""
+        return self._fetch_study_words(
+            SQL_VERB_FORM,
+            (telegram_id, int(randomize), limit),
+            "imperative and modal past cards",
+        )
+
+    def get_zeitangabe_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get date and duration cards for study"""
+        return self._fetch_study_words(
+            SQL_ZEITANGABE,
+            (telegram_id, int(randomize), limit),
+            "date and duration cards",
         )
 
     def get_words_by_topic(

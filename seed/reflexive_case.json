@@ -5,7 +5,7 @@
     "article": null,
     "translation": "мыть себе руки (есть второй объект → Dat)",
     "example": "Ich wasche mir die Hände.",
-    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -15,7 +15,7 @@
     "article": null,
     "translation": "чистить себе зубы (есть второй объект → Dat)",
     "example": "Er putzt sich die Zähne.",
-    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -25,7 +25,7 @@
     "article": null,
     "translation": "желать себе чего-то (есть второй объект → Dat)",
     "example": "Ich wünsche mir einen Urlaub.",
-    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -35,7 +35,7 @@
     "article": null,
     "translation": "смотреть что-то нарочно (рефл. = Dat, объект = Akk)",
     "example": "Ich sehe mir den Film an.",
-    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -45,7 +45,7 @@
     "article": null,
     "translation": "представиться другим → mich (Akk)",
     "example": "Ich möchte mich vorstellen.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -55,7 +55,7 @@
     "article": null,
     "translation": "представить себе → mir (Dat)",
     "example": "Ich kann es mir nicht vorstellen.",
-    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -65,7 +65,7 @@
     "article": null,
     "translation": "надевать себе куртку (второй объект → Dat)",
     "example": "Ich ziehe mir die Jacke an.",
-    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -75,7 +75,7 @@
     "article": null,
     "translation": "расчёсывать себе волосы (второй объект → Dat)",
     "example": "Ich kämme mir die Haare.",
-    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"reflexive-case\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"zatyk-08-reflexive-kasus\", \"source\": \"vault:01 – Грамматика/Глаголы/Возвратные глаголы\"}",
     "confidence": 1.0,
     "level": "A2"
   }

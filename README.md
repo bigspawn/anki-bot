@@ -84,6 +84,18 @@ make run
   `danken`), seeded from `seed/dativ_verbs.json`
 - `/study_dat_akk` - Verbs taking a Dativ receiver and an Akkusativ object
   (`Er gibt mir das Geld`), seeded from `seed/dat_akk_verbs.json`
+- `/study_wo_wohin` - Woher/Wo/Wohin as one decision: the type of place picks
+  all three prepositions (`aus/in/in`, `von/an/zu`, `von/bei/zu`)
+- `/study_verschmelzung` - Preposition-article contractions (`zu + der = zur`,
+  `an + dem = am`, `in + das = ins`)
+- `/study_wortstellung` - Word order: the Satzklammer, the conjunctions that
+  send the verb to the end, and the ones that do not invert
+- `/study_adjektive` - Adjective endings before a noun vs after
+  `sein/finden/werden`, plus `jedes Jahr` and `ein` with plurals
+- `/study_verbformen` - Imperative (`Lern!`/`Lernt!`/`Lernen Sie!`, `Lies!`)
+  and the modal past (`wollte`/`musste`/`sollte`/`durfte`/`konnte`)
+- `/study_zeitangaben` - Dates (`am dritten Mai`), `seit` forms and the Dativ
+  plural `-n`
 - `/study_route` - Study multi-word chunks used to describe a route
   (`am Supermarkt abbiegen`, `bis zur Kreuzung`), seeded from
   `seed/route_phrases.json`
@@ -97,7 +109,9 @@ make run
 - `/stats` - Show learning statistics (total/new/due words, words added
   today, study streak, correct/incorrect reviews)
 - `/stats_topics` - Accuracy per topic (cards, reviews, accuracy, worst card,
-  mean easiness factor), worst topic first
+  mean easiness factor), worst topic first. Topic slugs that map to an entry
+  in the vault's Затыки list carry its number (`zatyk-21-route-kasus`), so
+  this command doubles as the repeat tracker kept by hand there
 - `/settings` - Configure session settings
 - `/help` - Command help
 

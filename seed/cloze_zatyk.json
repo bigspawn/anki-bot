@@ -1,0 +1,242 @@
+[
+  {
+    "lemma": "Ich steige ___ Auto. (внутрь)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "ins — закрытое пространство, куда → Akk",
+    "example": "Ich steige ins Auto.",
+    "additional_forms": "{\"answer\": \"ins\", \"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich sitze ___ Auto.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "im — закрытое пространство, где → Dativ",
+    "example": "Ich sitze im Auto.",
+    "additional_forms": "{\"answer\": \"im\", \"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich fahre ___ Tankstelle. (куда)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "zur — точка на пути, куда → zu",
+    "example": "Ich fahre zur Tankstelle.",
+    "additional_forms": "{\"answer\": \"zur\", \"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich stehe ___ Tankstelle. (где)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "an der — точка на пути, где → an + Dat",
+    "example": "Ich stehe an der Tankstelle.",
+    "additional_forms": "{\"answer\": \"an der\", \"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich bin ___ Friseur. (где)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "beim — человек-специалист, где → bei + Dat",
+    "example": "Ich bin beim Friseur.",
+    "additional_forms": "{\"answer\": \"beim\", \"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich gehe ___ Arzt. (куда)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "zum — человек-специалист, куда → zu",
+    "example": "Ich gehe zum Arzt.",
+    "additional_forms": "{\"answer\": \"zum\", \"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich gehe ___ Arbeit.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "zur — zu + der, голый zu почти всегда ошибка",
+    "example": "Ich gehe zur Arbeit.",
+    "additional_forms": "{\"answer\": \"zur\", \"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich fahre ___ Meer.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "ans — an + das",
+    "example": "Ich fahre ans Meer.",
+    "additional_forms": "{\"answer\": \"ans\", \"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich komme ___ Friseur.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "vom — von + dem",
+    "example": "Ich komme vom Friseur.",
+    "additional_forms": "{\"answer\": \"vom\", \"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich will einen Saft ___. (kaufen)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "kaufen — вторая часть глагола уезжает в конец",
+    "example": "Ich will einen Saft kaufen.",
+    "additional_forms": "{\"answer\": \"kaufen\", \"topic\": \"zatyk-18-satzklammer\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich bleibe, weil ich müde ___. (sein)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "bin — weil отправляет глагол в конец",
+    "example": "Ich bleibe, weil ich müde bin.",
+    "additional_forms": "{\"answer\": \"bin\", \"topic\": \"zatyk-04-nebensatz\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich bleibe, denn ich ___ krank. (sein)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "bin — denn не меняет порядок, глагол на 2-й позиции",
+    "example": "Ich bleibe, denn ich bin krank.",
+    "additional_forms": "{\"answer\": \"bin\", \"topic\": \"zatyk-03-denn-weil\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Er findet die Sachen ___. (gemütlich)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "gemütlich — после finden окончания нет",
+    "example": "Er findet die Sachen gemütlich.",
+    "additional_forms": "{\"answer\": \"gemütlich\", \"topic\": \"zatyk-14-adjektivendung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich trinke einen ___ Saft. (lecker)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "leckeren — перед существительным окончание есть",
+    "example": "Ich trinke einen leckeren Saft.",
+    "additional_forms": "{\"answer\": \"leckeren\", \"topic\": \"zatyk-14-adjektivendung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "___ Jahr fahre ich nach Berlin. (jeder)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "Jedes — das Jahr средний род → -es",
+    "example": "Jedes Jahr fahre ich nach Berlin.",
+    "additional_forms": "{\"answer\": \"Jedes\", \"topic\": \"zatyk-12-jedes-jahr\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "___ das Buch! (lesen, du)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "Lies — исключение, e→i сохраняется",
+    "example": "Lies das Buch!",
+    "additional_forms": "{\"answer\": \"Lies\", \"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "___ Sie sich! (sich setzen)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "Setzen Sie sich! — инфинитив + Sie",
+    "example": "Setzen Sie sich!",
+    "additional_forms": "{\"answer\": \"Setzen\", \"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich ___ arbeiten. (müssen, прошедшее)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "musste — пришлось",
+    "example": "Ich musste arbeiten.",
+    "additional_forms": "{\"answer\": \"musste\", \"topic\": \"zatyk-06-modal-praeteritum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich ___ nicht rauchen. (dürfen, прошедшее)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "durfte — нельзя было",
+    "example": "Ich durfte nicht rauchen.",
+    "additional_forms": "{\"answer\": \"durfte\", \"topic\": \"zatyk-06-modal-praeteritum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Das Treffen ist ___ dritten Mai.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "am — an+dem → Dativ → окончание -en",
+    "example": "Das Treffen ist am dritten Mai.",
+    "additional_forms": "{\"answer\": \"am\", \"topic\": \"zatyk-02-datum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich lerne Deutsch seit 3,5 ___. (Jahr)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "Jahren — Dativ Plural → -n",
+    "example": "Ich lerne Deutsch seit 3,5 Jahren.",
+    "additional_forms": "{\"answer\": \"Jahren\", \"topic\": \"zatyk-05-seit\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich helfe den ___. (die Kinder)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "Kindern — den + существительному -n",
+    "example": "Ich helfe den Kindern.",
+    "additional_forms": "{\"answer\": \"Kindern\", \"topic\": \"zatyk-11-dativ-plural\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich fahre mit den ___. (die Autos)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "Autos — -s уже есть, -n не добавляем",
+    "example": "Ich fahre mit den Autos.",
+    "additional_forms": "{\"answer\": \"Autos\", \"topic\": \"zatyk-11-dativ-plural\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Das darf man ___ nicht! (упрёк)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "doch — «ты же сам знаешь»",
+    "example": "Das darf man doch nicht!",
+    "additional_forms": "{\"answer\": \"doch\", \"topic\": \"zatyk-19-partikeln\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  }
+]

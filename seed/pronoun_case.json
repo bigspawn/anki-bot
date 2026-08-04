@@ -5,7 +5,7 @@
     "article": null,
     "translation": "mir — мне",
     "example": "Er hilft mir.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"mir\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"mir\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -15,7 +15,7 @@
     "article": null,
     "translation": "mich — меня",
     "example": "Er sieht mich.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"mich\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"mich\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -25,7 +25,7 @@
     "article": null,
     "translation": "dir — тебе",
     "example": "Ich danke dir.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"dir\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"dir\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -35,7 +35,7 @@
     "article": null,
     "translation": "dich — тебя",
     "example": "Ich sehe dich.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"dich\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"dich\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -45,7 +45,7 @@
     "article": null,
     "translation": "ihm — ему",
     "example": "Ich helfe ihm.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"ihm\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"ihm\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -55,7 +55,7 @@
     "article": null,
     "translation": "ihn — его",
     "example": "Ich sehe ihn.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"ihn\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"ihn\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -65,7 +65,7 @@
     "article": null,
     "translation": "ihr — ей",
     "example": "Ich helfe ihr.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"ihr\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"ihr\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -75,7 +75,7 @@
     "article": null,
     "translation": "sie — её — форма не меняется",
     "example": "Ich sehe sie.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"sie\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"sie\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -85,7 +85,7 @@
     "article": null,
     "translation": "ihm — ему",
     "example": "Ich gebe ihm einen Namen.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"ihm\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"ihm\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -95,7 +95,7 @@
     "article": null,
     "translation": "es — его — форма не меняется",
     "example": "Ich sehe es.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"es\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"es\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -105,7 +105,7 @@
     "article": null,
     "translation": "uns — нам",
     "example": "Er hilft uns.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"uns\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"uns\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -115,7 +115,7 @@
     "article": null,
     "translation": "uns — нас — совпадает с Dativ",
     "example": "Er sieht uns.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"uns\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"uns\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -125,7 +125,7 @@
     "article": null,
     "translation": "euch — вам",
     "example": "Ich danke euch.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"euch\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"euch\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -135,7 +135,7 @@
     "article": null,
     "translation": "euch — вас — совпадает с Dativ",
     "example": "Ich sehe euch.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"euch\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"euch\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -145,7 +145,7 @@
     "article": null,
     "translation": "ihnen/Ihnen — им / Вам",
     "example": "Ich danke Ihnen.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"ihnen/Ihnen\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"ihnen/Ihnen\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -155,7 +155,7 @@
     "article": null,
     "translation": "sie/Sie — их / Вас — форма не меняется",
     "example": "Ich sehe Sie.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"sie/Sie\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"sie/Sie\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -165,7 +165,7 @@
     "article": null,
     "translation": "meinen Vater — m → -en",
     "example": "Ich sehe meinen Vater.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meinen Vater\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meinen Vater\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -175,7 +175,7 @@
     "article": null,
     "translation": "meinem Vater — m → -em",
     "example": "Ich helfe meinem Vater.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinem Vater\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinem Vater\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -185,7 +185,7 @@
     "article": null,
     "translation": "meine Mutter — f → без изменений",
     "example": "Ich sehe meine Mutter.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meine Mutter\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meine Mutter\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -195,7 +195,7 @@
     "article": null,
     "translation": "meiner Mutter — f → -er",
     "example": "Ich helfe meiner Mutter.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meiner Mutter\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meiner Mutter\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -205,7 +205,7 @@
     "article": null,
     "translation": "mein Kind — n → без изменений",
     "example": "Ich sehe mein Kind.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"mein Kind\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"mein Kind\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -215,7 +215,7 @@
     "article": null,
     "translation": "meinem Kind — n → -em",
     "example": "Ich helfe meinem Kind.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinem Kind\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinem Kind\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -225,7 +225,7 @@
     "article": null,
     "translation": "meine Eltern — Pl → без изменений",
     "example": "Ich sehe meine Eltern.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meine Eltern\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meine Eltern\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -235,7 +235,7 @@
     "article": null,
     "translation": "meinen Eltern — Pl → -en",
     "example": "Ich helfe meinen Eltern.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinen Eltern\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinen Eltern\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   }

@@ -1,0 +1,122 @@
+[
+  {
+    "lemma": "Er findet die Sachen ___ (gemütlich)",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "gemütlich — после finden окончания нет",
+    "example": "Er findet die Sachen gemütlich.",
+    "additional_forms": "{\"topic\": \"zatyk-14-adjektivendung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Die Wohnung ist ___ (schön)",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "schön — после sein окончания нет",
+    "example": "Die Wohnung ist schön.",
+    "additional_forms": "{\"topic\": \"zatyk-14-adjektivendung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Das Wetter wird ___ (kalt)",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "kalt — после werden окончания нет",
+    "example": "Das Wetter wird kalt.",
+    "additional_forms": "{\"topic\": \"zatyk-14-adjektivendung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "einen ___ Kerzenhalter (groß)",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "großen — перед существительным окончание есть",
+    "example": "Ich kaufe einen großen Kerzenhalter.",
+    "additional_forms": "{\"topic\": \"zatyk-14-adjektivendung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "einen ___ Saft (lecker)",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "leckeren — перед существительным окончание есть",
+    "example": "Ich trinke einen leckeren Saft.",
+    "additional_forms": "{\"topic\": \"zatyk-14-adjektivendung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "eine ___ Wohnung (schön)",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "schöne — перед существительным окончание есть",
+    "example": "Wir haben eine schöne Wohnung.",
+    "additional_forms": "{\"topic\": \"zatyk-14-adjektivendung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "___ Jahr (jeder)",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "jedes Jahr — das Jahr средний род → -es",
+    "example": "Jedes Jahr fahre ich nach Berlin.",
+    "additional_forms": "{\"topic\": \"zatyk-12-jedes-jahr\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "___ Jahr (letzter)",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "letztes Jahr — средний род → -es",
+    "example": "Letztes Jahr war ich in Wien.",
+    "additional_forms": "{\"topic\": \"zatyk-12-jedes-jahr\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "___ Jahr (dieser)",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "dieses Jahr — средний род → -es",
+    "example": "Dieses Jahr lerne ich Deutsch.",
+    "additional_forms": "{\"topic\": \"zatyk-12-jedes-jahr\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "много стаканов",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "Gläser / ein paar Gläser — ein с множественным не ставится",
+    "example": "Wir brauchen ein paar Gläser.",
+    "additional_forms": "{\"topic\": \"zatyk-17-ein-plural\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "один стакан",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "ein Glas — ein = одна штука",
+    "example": "Ich nehme ein Glas.",
+    "additional_forms": "{\"topic\": \"zatyk-17-ein-plural\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Saftgläser",
+    "part_of_speech": "adjective ending",
+    "article": null,
+    "translation": "Saftgläser без артикля — уже множественное",
+    "example": "Auf dem Tisch stehen Saftgläser.",
+    "additional_forms": "{\"topic\": \"zatyk-17-ein-plural\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  }
+]

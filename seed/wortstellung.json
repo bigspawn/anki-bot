@@ -1,0 +1,182 @@
+[
+  {
+    "lemma": "Рамка: модальный глагол",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "will … kaufen — вторая часть глагола уезжает в конец",
+    "example": "Ich will einen Saft kaufen.",
+    "additional_forms": "{\"topic\": \"zatyk-18-satzklammer\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "Рамка: Perfekt",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "habe … gekauft — причастие в конец",
+    "example": "Ich habe einen Saft gekauft.",
+    "additional_forms": "{\"topic\": \"zatyk-18-satzklammer\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "Рамка: разделяемая приставка",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "richtet … ein — приставка в конец",
+    "example": "Er richtet die Wohnung ein.",
+    "additional_forms": "{\"topic\": \"zatyk-18-satzklammer\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "Рамка: Perfekt движения",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "ist … gegangen — sein + причастие в конец",
+    "example": "Er ist über die Brücke gegangen.",
+    "additional_forms": "{\"topic\": \"zatyk-18-satzklammer\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "weil",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "глагол в конец",
+    "example": "Ich bleibe, weil ich müde bin.",
+    "additional_forms": "{\"topic\": \"zatyk-04-nebensatz\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "dass",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "глагол в конец",
+    "example": "Ich glaube, dass er morgen kommt.",
+    "additional_forms": "{\"topic\": \"zatyk-04-nebensatz\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "wenn",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "глагол в конец",
+    "example": "Wenn ich Zeit habe, komme ich.",
+    "additional_forms": "{\"topic\": \"zatyk-04-nebensatz\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "als",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "глагол в конец",
+    "example": "Als ich klein war, wohnte ich hier.",
+    "additional_forms": "{\"topic\": \"zatyk-04-nebensatz\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "ob",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "глагол в конец",
+    "example": "Ich weiß nicht, ob er kommt.",
+    "additional_forms": "{\"topic\": \"zatyk-04-nebensatz\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "obwohl",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "глагол в конец",
+    "example": "Ich komme, obwohl ich müde bin.",
+    "additional_forms": "{\"topic\": \"zatyk-04-nebensatz\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "damit",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "глагол в конец",
+    "example": "Ich lerne, damit ich es verstehe.",
+    "additional_forms": "{\"topic\": \"zatyk-04-nebensatz\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "denn",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "глагол на 2-й позиции; denn нельзя поставить в начало",
+    "example": "Ich bleibe, denn ich bin krank.",
+    "additional_forms": "{\"topic\": \"zatyk-03-denn-weil\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "aber",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "глагол на 2-й позиции, инверсии не даёт",
+    "example": "Ich bin müde, aber ich komme.",
+    "additional_forms": "{\"topic\": \"zatyk-03-denn-weil\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "und",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "инверсии не даёт — подлежащее остаётся перед глаголом",
+    "example": "Ich gehe, und dann bin ich da.",
+    "additional_forms": "{\"topic\": \"zatyk-03-denn-weil\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "oder",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "глагол на 2-й позиции, инверсии не даёт",
+    "example": "Wir bleiben, oder wir gehen.",
+    "additional_forms": "{\"topic\": \"zatyk-03-denn-weil\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "doch",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "«ты же сам знаешь» — упрёк",
+    "example": "Das darf man doch nicht.",
+    "additional_forms": "{\"topic\": \"zatyk-19-partikeln\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "gar nicht",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "вообще не — усиление",
+    "example": "Das darf man gar nicht.",
+    "additional_forms": "{\"topic\": \"zatyk-19-partikeln\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "doch gar nicht",
+    "part_of_speech": "word order",
+    "article": null,
+    "translation": "упрёк + усиление вместе",
+    "example": "Das darf man doch gar nicht!",
+    "additional_forms": "{\"topic\": \"zatyk-19-partikeln\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  }
+]

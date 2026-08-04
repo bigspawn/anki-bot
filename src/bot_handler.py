@@ -302,6 +302,54 @@ class BotHandler:
         )
         app.add_handler(
             CommandHandler(
+                "study_wo_wohin",
+                self.require_authorization(
+                    self.command_handlers.study_wo_wohin_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_verschmelzung",
+                self.require_authorization(
+                    self.command_handlers.study_verschmelzung_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_wortstellung",
+                self.require_authorization(
+                    self.command_handlers.study_wortstellung_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_adjektive",
+                self.require_authorization(
+                    self.command_handlers.study_adjektive_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_verbformen",
+                self.require_authorization(
+                    self.command_handlers.study_verbformen_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_zeitangaben",
+                self.require_authorization(
+                    self.command_handlers.study_zeitangaben_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
                 "study_route",
                 self.require_authorization(self.command_handlers.study_route_command),
             )
@@ -497,6 +545,12 @@ class BotHandler:
             BotCommand("study_reflexive_case", "🪞 Падеж у sich (mich или mir)"),
             BotCommand("study_dativ_verbs", "📐 Глаголы с Dativ (helfen, gefallen)"),
             BotCommand("study_dat_akk", "📦 Глаголы с двумя объектами (Dat + Akk)"),
+            BotCommand("study_wo_wohin", "🧭 Woher/Wo/Wohin (aus/in/zu, bei/von)"),
+            BotCommand("study_verschmelzung", "🔗 Слияния: zu+der=zur, an+dem=am"),
+            BotCommand("study_wortstellung", "📐 Порядок слов (рамка, weil, denn)"),
+            BotCommand("study_adjektive", "🎨 Окончания прилагательных"),
+            BotCommand("study_verbformen", "🔨 Императив и модальные в прошедшем"),
+            BotCommand("study_zeitangaben", "📅 Даты, seit, Dativ Plural"),
             BotCommand("study_route", "🗺 Фразы для описания дороги"),
             BotCommand("study_cloze", "✍️ Пропуски и работа над ошибками"),
             BotCommand(

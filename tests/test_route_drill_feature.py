@@ -134,7 +134,7 @@ class TestSeedValidation:
                 {
                     "lemma": "Vor ___ Bahnhof links.",
                     "part_of_speech": "cloze",
-                    "additional_forms": json.dumps({"topic": "route-case"}),
+                    "additional_forms": json.dumps({"topic": "zatyk-21-route-kasus"}),
                 }
             ]
         )
@@ -181,7 +181,9 @@ class TestSeedValidation:
                         "part_of_speech": "cloze",
                         "translation": "dem — Dativ",
                         "example": "Vor dem Bahnhof links.",
-                        "additional_forms": json.dumps({"topic": "route-case"}),
+                        "additional_forms": json.dumps(
+                            {"topic": "zatyk-21-route-kasus"}
+                        ),
                     }
                 ]
             ),
@@ -242,10 +244,14 @@ class TestRubricQueries:
             conn.commit()
 
         assert seeded_db.get_due_words(TELEGRAM_ID, limit=100) == []
-        assert seeded_db.get_words_by_topic(TELEGRAM_ID, "route-case", limit=100)
+        assert seeded_db.get_words_by_topic(
+            TELEGRAM_ID, "zatyk-21-route-kasus", limit=100
+        )
 
     def test_study_topic_is_case_insensitive(self, seeded_db):
-        assert seeded_db.get_words_by_topic(TELEGRAM_ID, "ROUTE-CASE", limit=100)
+        assert seeded_db.get_words_by_topic(
+            TELEGRAM_ID, "ZATYK-21-ROUTE-KASUS", limit=100
+        )
 
     def test_unknown_topic_returns_nothing(self, seeded_db):
         assert (
@@ -255,8 +261,8 @@ class TestRubricQueries:
     def test_topic_slugs_are_listed_alphabetically(self, seeded_db):
         slugs = seeded_db.get_topic_slugs(TELEGRAM_ID)
 
-        assert "route-case" in slugs
-        assert "transport-verbs" in slugs
+        assert "zatyk-21-route-kasus" in slugs
+        assert "zatyk-24-verb-praeposition" in slugs
         assert slugs == sorted(slugs)
 
     def test_queries_survive_cards_with_non_json_additional_forms(self, seeded_db):
@@ -275,7 +281,9 @@ class TestRubricQueries:
             )
             conn.commit()
 
-        assert seeded_db.get_words_by_topic(TELEGRAM_ID, "route-case", limit=100)
+        assert seeded_db.get_words_by_topic(
+            TELEGRAM_ID, "zatyk-21-route-kasus", limit=100
+        )
         assert seeded_db.get_topic_slugs(TELEGRAM_ID)
         assert seeded_db.get_topic_stats(TELEGRAM_ID) == []
 
@@ -398,7 +406,7 @@ class TestTopicStatsFormatting:
         text = format_topic_stats(
             [
                 {
-                    "topic": "route-case",
+                    "topic": "zatyk-21-route-kasus",
                     "cards": 18,
                     "reviews": 6,
                     "accuracy": 0.5,
@@ -408,12 +416,12 @@ class TestTopicStatsFormatting:
             ]
         )
 
-        assert "route-case" in text
+        assert "zatyk-21-route-kasus" in text
         assert "18" in text
         assert "50%" in text
         assert "2.34" in text
         assert "an der Ampel" in text
-        assert "/study_topic route-case" in text
+        assert "/study_topic zatyk-21-route-kasus" in text
 
 
 class TestDrillCardRendering:
@@ -428,7 +436,9 @@ class TestDrillCardRendering:
             "article": None,
             "translation": "am (an + dem) — ориентир поворота → Dativ",
             "example": "Biegen Sie am Supermarkt rechts ab.",
-            "additional_forms": json.dumps({"answer": "am", "topic": "route-case"}),
+            "additional_forms": json.dumps(
+                {"answer": "am", "topic": "zatyk-21-route-kasus"}
+            ),
         }
 
     @pytest.fixture
@@ -524,10 +534,13 @@ class TestDrillCommands:
         mock_db.get_words_by_part_of_speech.return_value = [card]
         mock_db.get_cloze_words.return_value = [card]
         mock_db.get_words_by_topic.return_value = [card]
-        mock_db.get_topic_slugs.return_value = ["route-case", "transport-verbs"]
+        mock_db.get_topic_slugs.return_value = [
+            "zatyk-21-route-kasus",
+            "transport-verbs",
+        ]
         mock_db.get_topic_stats.return_value = [
             {
-                "topic": "route-case",
+                "topic": "zatyk-21-route-kasus",
                 "cards": 2,
                 "reviews": 4,
                 "accuracy": 0.25,
@@ -606,10 +619,12 @@ class TestDrillCommands:
 
     @pytest.mark.asyncio
     async def test_study_topic_studies_the_requested_slug(self, handlers, mock_update):
-        await handlers.study_topic_command(mock_update, self._context(["route-case"]))
+        await handlers.study_topic_command(
+            mock_update, self._context(["zatyk-21-route-kasus"])
+        )
 
         handlers.db_manager.get_words_by_topic.assert_called_once_with(
-            TELEGRAM_ID, "route-case", limit=10
+            TELEGRAM_ID, "zatyk-21-route-kasus", limit=10
         )
         handlers._start_study_session.assert_called_once()
 
@@ -622,7 +637,7 @@ class TestDrillCommands:
         handlers.db_manager.get_words_by_topic.assert_not_called()
         handlers._start_study_session.assert_not_called()
         message = handlers._safe_reply.call_args[0][1]
-        assert "route-case" in message
+        assert "zatyk-21-route-kasus" in message
         assert "transport-verbs" in message
 
     @pytest.mark.asyncio
@@ -634,7 +649,7 @@ class TestDrillCommands:
         handlers._start_study_session.assert_not_called()
         message = handlers._safe_reply.call_args[0][1]
         assert "«nope»" in message
-        assert "route-case" in message
+        assert "zatyk-21-route-kasus" in message
 
     @pytest.mark.asyncio
     async def test_topic_hint_without_any_topics(self, handlers, mock_update):
@@ -651,7 +666,7 @@ class TestDrillCommands:
 
         handlers.db_manager.get_topic_stats.assert_called_once_with(TELEGRAM_ID)
         message = handlers._safe_reply.call_args[0][1]
-        assert "route-case" in message
+        assert "zatyk-21-route-kasus" in message
         assert "25%" in message
 
     @pytest.mark.parametrize(
@@ -670,7 +685,7 @@ class TestDrillCommands:
         handlers.db_manager.get_user_by_telegram_id.return_value = None
 
         await getattr(handlers, command_name)(
-            mock_update, self._context(["route-case"])
+            mock_update, self._context(["zatyk-21-route-kasus"])
         )
 
         handlers._start_study_session.assert_not_called()

@@ -255,6 +255,12 @@ class CommandHandlers:
 /study_reflexive_case - Падеж возвратного местоимения (mich или mir)
 /study_dativ_verbs - Глаголы с Dativ (helfen, gefallen, danken...)
 /study_dat_akk - Глаголы с двумя объектами (geben mir das Buch)
+/study_wo_wohin - Woher/Wo/Wohin — тип места решает всю тройку
+/study_verschmelzung - Слияния предлога с артиклем (zu+der=zur, an+dem=am)
+/study_wortstellung - Порядок слов: рамка, weil/dass в конец, denn без инверсии
+/study_adjektive - Окончания прилагательных (перед словом с хвостом, после sein без)
+/study_verbformen - Императив и модальные в прошедшем (Lies! / musste)
+/study_zeitangaben - Даты, seit и Dativ Plural (am dritten Mai, seit 3,5 Jahren)
 /study_route - Фразы для описания дороги (am Supermarkt abbiegen...)
 /study_cloze - Пропуски и работа над ошибками (vor ___ Bahnhof → dem)
 /study_topic &lt;тема&gt; - Карточки одной темы, независимо от расписания
@@ -659,6 +665,78 @@ class CommandHandlers:
             "📦 У вас нет глаголов с двумя объектами.\n\n"
             "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
             "dat_akk",
+        )
+
+    async def study_wo_wohin_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_wo_wohin - Woher/Wo/Wohin — тройки предлогов по типу места"""
+        await self._study_case_rubric(
+            update,
+            "get_wo_wohin_words",
+            "🧭 У вас нет карточек Woher/Wo/Wohin.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "wo_wohin",
+        )
+
+    async def study_verschmelzung_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_verschmelzung - preposition-article contractions"""
+        await self._study_case_rubric(
+            update,
+            "get_verschmelzung_words",
+            "🔗 У вас нет карточек со слияниями предлогов.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "verschmelzung",
+        )
+
+    async def study_wortstellung_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_wortstellung - word order: Satzklammer, Nebensatz, denn/weil"""
+        await self._study_case_rubric(
+            update,
+            "get_word_order_words",
+            "📐 У вас нет карточек с порядком слов.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "wortstellung",
+        )
+
+    async def study_adjektive_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_adjektive - adjective endings"""
+        await self._study_case_rubric(
+            update,
+            "get_adjective_ending_words",
+            "🎨 У вас нет карточек с окончаниями прилагательных.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "adjektive",
+        )
+
+    async def study_verbformen_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_verbformen - imperative and modal past forms"""
+        await self._study_case_rubric(
+            update,
+            "get_verb_form_words",
+            "🔨 У вас нет карточек с формами глагола.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "verbformen",
+        )
+
+    async def study_zeitangaben_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_zeitangaben - dates, seit and Dativ plural"""
+        await self._study_case_rubric(
+            update,
+            "get_zeitangabe_words",
+            "📅 У вас нет карточек с датами и сроками.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "zeitangaben",
         )
 
     async def study_cloze_command(

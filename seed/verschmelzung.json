@@ -1,0 +1,112 @@
+[
+  {
+    "lemma": "zu + der",
+    "part_of_speech": "verschmelzung",
+    "article": null,
+    "translation": "zur — zu срастается с der",
+    "example": "Ich gehe zur Arbeit.",
+    "additional_forms": "{\"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "zu + dem",
+    "part_of_speech": "verschmelzung",
+    "article": null,
+    "translation": "zum — zu срастается с dem",
+    "example": "Ich gehe zum Arzt.",
+    "additional_forms": "{\"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "an + dem",
+    "part_of_speech": "verschmelzung",
+    "article": null,
+    "translation": "am — an срастается с dem",
+    "example": "Ich warte am Bahnhof.",
+    "additional_forms": "{\"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "an + das",
+    "part_of_speech": "verschmelzung",
+    "article": null,
+    "translation": "ans",
+    "example": "Ich fahre ans Meer.",
+    "additional_forms": "{\"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "in + dem",
+    "part_of_speech": "verschmelzung",
+    "article": null,
+    "translation": "im — in срастается с dem",
+    "example": "Ich bin im Haus.",
+    "additional_forms": "{\"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "in + das",
+    "part_of_speech": "verschmelzung",
+    "article": null,
+    "translation": "ins",
+    "example": "Ich gehe ins Kino.",
+    "additional_forms": "{\"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "von + dem",
+    "part_of_speech": "verschmelzung",
+    "article": null,
+    "translation": "vom",
+    "example": "Ich komme vom Friseur.",
+    "additional_forms": "{\"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "bei + dem",
+    "part_of_speech": "verschmelzung",
+    "article": null,
+    "translation": "beim",
+    "example": "Ich bin beim Arzt.",
+    "additional_forms": "{\"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "auf + das",
+    "part_of_speech": "verschmelzung",
+    "article": null,
+    "translation": "aufs",
+    "example": "Ich gehe aufs Dach.",
+    "additional_forms": "{\"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "bis zu + der",
+    "part_of_speech": "verschmelzung",
+    "article": null,
+    "translation": "bis zur",
+    "example": "Gehen Sie bis zur Kreuzung.",
+    "additional_forms": "{\"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "bis zu + dem",
+    "part_of_speech": "verschmelzung",
+    "article": null,
+    "translation": "bis zum",
+    "example": "Gehen Sie bis zum Bahnhof.",
+    "additional_forms": "{\"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  }
+]

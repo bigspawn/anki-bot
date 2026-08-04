@@ -122,7 +122,7 @@ class TestSeedData:
         for word in dativ_words:
             forms = json.loads(word["additional_forms"])
             assert forms["case"] == "Dativ"
-            assert forms["topic"] == "dativ-verbs"
+            assert forms["topic"] == "zatyk-16-dativ-verben"
 
     def test_two_object_cards_govern_both_cases(self, dat_akk_words):
         assert dat_akk_words
@@ -153,7 +153,7 @@ class TestSeedData:
         for word in reflexive_words:
             forms = json.loads(word["additional_forms"])
             assert forms.get("case") in CASES, word["lemma"]
-            assert forms.get("topic") == "reflexive-case", word["lemma"]
+            assert forms.get("topic") == "zatyk-08-reflexive-kasus", word["lemma"]
 
     def test_the_principal_parts_survived_the_backfill(self, reflexive_words):
         for word in reflexive_words:
@@ -370,7 +370,7 @@ class TestCardRendering:
             "translation": "мыть себе руки (есть второй объект → Dat)",
             "example": "Ich wasche mir die Hände.",
             "additional_forms": json.dumps(
-                {"case": "Dativ", "topic": "reflexive-case"}
+                {"case": "Dativ", "topic": "zatyk-08-reflexive-kasus"}
             ),
         }
 
@@ -383,7 +383,9 @@ class TestCardRendering:
             "article": None,
             "translation": "помогать (кому — Dativ)",
             "example": "Ich helfe dir.",
-            "additional_forms": json.dumps({"case": "Dativ", "topic": "dativ-verbs"}),
+            "additional_forms": json.dumps(
+                {"case": "Dativ", "topic": "zatyk-16-dativ-verben"}
+            ),
         }
 
     @pytest.fixture
@@ -461,7 +463,7 @@ class TestCardRendering:
                     "praeteritum": "verlief",
                     "partizip_ii": "verlaufen",
                     "case": "Akkusativ",
-                    "topic": "reflexive-case",
+                    "topic": "zatyk-08-reflexive-kasus",
                 }
             ),
         }

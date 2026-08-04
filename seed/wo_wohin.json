@@ -1,0 +1,182 @@
+[
+  {
+    "lemma": "das Auto: woher?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "aus dem Auto — закрытое пространство → aus",
+    "example": "Ich steige aus dem Auto.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "das Auto: wo?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "im Auto — закрытое пространство → in + Dativ",
+    "example": "Ich sitze im Auto.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "das Auto: wohin?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "ins Auto — закрытое пространство → in + Akkusativ",
+    "example": "Ich steige ins Auto.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "das Haus: woher?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "aus dem Haus — закрытое пространство → aus",
+    "example": "Ich komme aus dem Haus.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "das Haus: wo?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "im Haus — закрытое пространство → in + Dativ",
+    "example": "Ich bin im Haus.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "das Haus: wohin?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "ins Haus — закрытое пространство → in + Akkusativ",
+    "example": "Ich gehe ins Haus.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "das Kino: wohin?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "ins Kino — закрытое пространство → in + Akkusativ",
+    "example": "Wir gehen ins Kino.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "der Bahnhof: woher?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "vom Bahnhof — точка на пути → von",
+    "example": "Ich komme vom Bahnhof.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "der Bahnhof: wo?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "am Bahnhof — точка на пути → an + Dativ",
+    "example": "Ich warte am Bahnhof.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "der Bahnhof: wohin?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "zum Bahnhof — точка на пути → zu",
+    "example": "Ich fahre zum Bahnhof.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Tankstelle: woher?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "von der Tankstelle — точка на пути → von",
+    "example": "Ich komme von der Tankstelle.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Tankstelle: wo?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "an der Tankstelle — точка на пути → an + Dativ",
+    "example": "Ich stehe an der Tankstelle.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Tankstelle: wohin?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "zur Tankstelle — точка на пути → zu",
+    "example": "Ich fahre zur Tankstelle.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "der Friseur: woher?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "vom Friseur — человек-специалист → von",
+    "example": "Ich komme vom Friseur.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "der Friseur: wo?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "beim Friseur — человек-специалист → bei + Dativ",
+    "example": "Ich bin beim Friseur.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "der Friseur: wohin?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "zum Friseur — человек-специалист → zu",
+    "example": "Ich gehe zum Friseur.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "der Arzt: wo?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "beim Arzt — человек-специалист → bei + Dativ",
+    "example": "Ich bin beim Arzt.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "der Arzt: wohin?",
+    "part_of_speech": "wo wohin",
+    "article": null,
+    "translation": "zum Arzt — человек-специалист → zu",
+    "example": "Ich gehe zum Arzt.",
+    "additional_forms": "{\"topic\": \"zatyk-20-wo-wohin\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  }
+]

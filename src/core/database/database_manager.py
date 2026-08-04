@@ -163,6 +163,42 @@ class DatabaseManager:
         """Get verbs taking both a Dativ and an Akkusativ object for study"""
         return self.word_repo.get_dat_akk_verbs(telegram_id, limit, randomize)
 
+    def get_wo_wohin_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get wo/wohin preposition triples for study"""
+        return self.word_repo.get_wo_wohin_words(telegram_id, limit, randomize)
+
+    def get_verschmelzung_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get preposition-article contractions for study"""
+        return self.word_repo.get_verschmelzung_words(telegram_id, limit, randomize)
+
+    def get_word_order_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get word order cards for study"""
+        return self.word_repo.get_word_order_words(telegram_id, limit, randomize)
+
+    def get_adjective_ending_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get adjective ending cards for study"""
+        return self.word_repo.get_adjective_ending_words(telegram_id, limit, randomize)
+
+    def get_verb_form_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get imperative and modal past cards for study"""
+        return self.word_repo.get_verb_form_words(telegram_id, limit, randomize)
+
+    def get_zeitangabe_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get date and duration cards for study"""
+        return self.word_repo.get_zeitangabe_words(telegram_id, limit, randomize)
+
     def get_words_by_topic(
         self, telegram_id: int, topic: str, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:

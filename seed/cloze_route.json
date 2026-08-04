@@ -5,7 +5,7 @@
     "article": null,
     "translation": "dem — ориентир, где поворачиваю → Dativ",
     "example": "Vor dem Bahnhof links.",
-    "additional_forms": "{\"answer\": \"dem\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"dem\", \"topic\": \"zatyk-21-route-kasus\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -15,7 +15,7 @@
     "article": null,
     "translation": "am (an + dem) — ориентир поворота → Dativ",
     "example": "Biegen Sie am Supermarkt rechts ab.",
-    "additional_forms": "{\"answer\": \"am\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"am\", \"topic\": \"zatyk-21-route-kasus\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -25,7 +25,7 @@
     "article": null,
     "translation": "die — попадаю внутрь улицы → Akkusativ",
     "example": "Biegen Sie rechts in die Querstraße ab.",
-    "additional_forms": "{\"answer\": \"die\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"die\", \"topic\": \"zatyk-21-route-kasus\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -35,7 +35,7 @@
     "article": null,
     "translation": "dem — площадь прохожу, она ориентир → Dativ",
     "example": "Gehen Sie hinter dem Kirchplatz in den Kirchweg.",
-    "additional_forms": "{\"answer\": \"dem\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"dem\", \"topic\": \"zatyk-21-route-kasus\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -45,7 +45,7 @@
     "article": null,
     "translation": "den — der Weg, попадаю внутрь → Akkusativ",
     "example": "Links in den Kirchweg gehen.",
-    "additional_forms": "{\"answer\": \"den\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"den\", \"topic\": \"zatyk-21-route-kasus\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -55,7 +55,7 @@
     "article": null,
     "translation": "der — die Seite, дом просто стоит там → Dativ",
     "example": "Das zweite Haus auf der linken Seite.",
-    "additional_forms": "{\"answer\": \"der\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"der\", \"topic\": \"zatyk-21-route-kasus\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -65,7 +65,7 @@
     "article": null,
     "translation": "die — перехожу, значит Akkusativ",
     "example": "Wechseln Sie auf die andere Seite.",
-    "additional_forms": "{\"answer\": \"die\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"die\", \"topic\": \"zatyk-21-route-kasus\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -75,7 +75,7 @@
     "article": null,
     "translation": "über die Straße — перехожу улицу",
     "example": "Gehen Sie über die Straße.",
-    "additional_forms": "{\"answer\": \"über\", \"topic\": \"route-case\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"über\", \"topic\": \"zatyk-21-route-kasus\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -105,7 +105,7 @@
     "article": null,
     "translation": "entlanggegangen — одно слово",
     "example": "Er ist die Straße entlanggegangen.",
-    "additional_forms": "{\"answer\": \"entlanggegangen\", \"topic\": \"separable-route-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"entlanggegangen\", \"topic\": \"zatyk-23-trennbare\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -115,7 +115,7 @@
     "article": null,
     "translation": "ist — движение, Perfekt с sein",
     "example": "Er ist rechts abgebogen.",
-    "additional_forms": "{\"answer\": \"ist\", \"topic\": \"separable-route-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"ist\", \"topic\": \"zatyk-23-trennbare\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -125,7 +125,7 @@
     "article": null,
     "translation": "ab — отделяемая приставка уезжает в конец",
     "example": "Biegen Sie am Supermarkt rechts ab.",
-    "additional_forms": "{\"answer\": \"ab\", \"topic\": \"separable-route-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"ab\", \"topic\": \"zatyk-23-trennbare\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -135,7 +135,7 @@
     "article": null,
     "translation": "bis zur — дошёл до точки и делаю следующий шаг",
     "example": "Ich gehe bis zur Kreuzung, dann links.",
-    "additional_forms": "{\"answer\": \"bis zur\", \"topic\": \"bis-zu\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"bis zur\", \"topic\": \"zatyk-15-verschmelzung\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -145,7 +145,7 @@
     "article": null,
     "translation": "mit der — на чём едешь → mit + Dativ",
     "example": "Wir fahren mit der S-Bahn.",
-    "additional_forms": "{\"answer\": \"mit der\", \"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"mit der\", \"topic\": \"zatyk-24-verb-praeposition\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -155,7 +155,7 @@
     "article": null,
     "translation": "in die — umsteigen in + Akkusativ",
     "example": "Ich steige in die U-Bahn um.",
-    "additional_forms": "{\"answer\": \"in die\", \"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"in die\", \"topic\": \"zatyk-24-verb-praeposition\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -165,7 +165,7 @@
     "article": null,
     "translation": "aus dem — aussteigen aus + Dativ",
     "example": "Ich steige aus dem Bus aus.",
-    "additional_forms": "{\"answer\": \"aus dem\", \"topic\": \"transport-verbs\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
+    "additional_forms": "{\"answer\": \"aus dem\", \"topic\": \"zatyk-24-verb-praeposition\", \"source\": \"vault:03 – Фразы/Как объяснить дорогу\"}",
     "confidence": 1.0,
     "level": "A2"
   },

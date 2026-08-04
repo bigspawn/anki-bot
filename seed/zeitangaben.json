@@ -1,0 +1,152 @@
+[
+  {
+    "lemma": "Heute ist ___ dritte Mai. (der)",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "der dritte — Nominativ → -e",
+    "example": "Heute ist der dritte Mai.",
+    "additional_forms": "{\"topic\": \"zatyk-02-datum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Das Treffen ist ___ dritten Mai. (an)",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "am dritten — am = an+dem → Dativ → -en",
+    "example": "Das Treffen ist am dritten Mai.",
+    "additional_forms": "{\"topic\": \"zatyk-02-datum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "am ___ Mai (erst-)",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "am ersten Mai — erst- исключение",
+    "example": "Der Feiertag ist am ersten Mai.",
+    "additional_forms": "{\"topic\": \"zatyk-02-datum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "am ___ Mai (dritt-)",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "am dritten Mai — dritt- исключение",
+    "example": "Das Treffen ist am dritten Mai.",
+    "additional_forms": "{\"topic\": \"zatyk-02-datum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "am ___ Mai (siebt-)",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "am siebten Mai — siebt- исключение",
+    "example": "Der Termin ist am siebten Mai.",
+    "additional_forms": "{\"topic\": \"zatyk-02-datum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "am ___ Mai (acht-)",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "am achten Mai — acht- исключение",
+    "example": "Der Kurs beginnt am achten Mai.",
+    "additional_forms": "{\"topic\": \"zatyk-02-datum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "seit + год",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "seit 2022 — год без изменений",
+    "example": "Ich wohne hier seit 2022.",
+    "additional_forms": "{\"topic\": \"zatyk-05-seit\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "seit + число и существительное",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "seit 3,5 Jahren — Dativ Plural → -n",
+    "example": "Ich lerne Deutsch seit 3,5 Jahren.",
+    "additional_forms": "{\"topic\": \"zatyk-05-seit\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "seit + артикль",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "seit einem Jahr — Dativ",
+    "example": "Ich arbeite hier seit einem Jahr.",
+    "additional_forms": "{\"topic\": \"zatyk-05-seit\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "seit + месяц",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "seit Januar — без артикля",
+    "example": "Ich bin hier seit Januar.",
+    "additional_forms": "{\"topic\": \"zatyk-05-seit\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "seit + день недели",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "seit Montag — без артикля",
+    "example": "Ich warte seit Montag.",
+    "additional_forms": "{\"topic\": \"zatyk-05-seit\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Dativ Plural: die Männer",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "den Männern — den + существительному -n",
+    "example": "Ich helfe den Männern.",
+    "additional_forms": "{\"topic\": \"zatyk-11-dativ-plural\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Dativ Plural: die Kinder",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "den Kindern — den + существительному -n",
+    "example": "Ich helfe den Kindern.",
+    "additional_forms": "{\"topic\": \"zatyk-11-dativ-plural\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Dativ Plural: die Frauen",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "den Frauen — -n уже есть, второй не добавляем",
+    "example": "Ich helfe den Frauen.",
+    "additional_forms": "{\"topic\": \"zatyk-11-dativ-plural\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Dativ Plural: die Autos",
+    "part_of_speech": "zeitangabe",
+    "article": null,
+    "translation": "den Autos — -s уже есть, -n не добавляем",
+    "example": "Ich fahre mit den Autos.",
+    "additional_forms": "{\"topic\": \"zatyk-11-dativ-plural\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  }
+]

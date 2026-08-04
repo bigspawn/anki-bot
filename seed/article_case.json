@@ -5,7 +5,7 @@
     "article": null,
     "translation": "den Mann — der → den",
     "example": "Ich sehe den Mann.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"den Mann\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"den Mann\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -15,7 +15,7 @@
     "article": null,
     "translation": "dem Mann — der → dem",
     "example": "Ich helfe dem Mann.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"dem Mann\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"dem Mann\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -25,7 +25,7 @@
     "article": null,
     "translation": "des Mannes — der → des, у слова +es",
     "example": "Das Auto des Mannes.",
-    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"des Mannes\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"des Mannes\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -35,7 +35,7 @@
     "article": null,
     "translation": "die Frau — die → die, ничего не меняется",
     "example": "Ich sehe die Frau.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"die Frau\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"die Frau\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -45,7 +45,7 @@
     "article": null,
     "translation": "der Frau — die → der (совпадает с м. Nominativ!)",
     "example": "Ich helfe der Frau.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"der Frau\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"der Frau\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -55,7 +55,7 @@
     "article": null,
     "translation": "der Frau — die → der",
     "example": "Das Auto der Frau.",
-    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"der Frau\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"der Frau\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -65,7 +65,7 @@
     "article": null,
     "translation": "das Kind — das → das, ничего не меняется",
     "example": "Ich sehe das Kind.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"das Kind\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"das Kind\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -75,7 +75,7 @@
     "article": null,
     "translation": "dem Kind — das → dem",
     "example": "Ich helfe dem Kind.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"dem Kind\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"dem Kind\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -85,7 +85,7 @@
     "article": null,
     "translation": "des Kindes — das → des, у слова +es",
     "example": "Das Spielzeug des Kindes.",
-    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"des Kindes\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"des Kindes\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -95,7 +95,7 @@
     "article": null,
     "translation": "die Kinder — Pl die → die",
     "example": "Ich sehe die Kinder.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"die Kinder\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"die Kinder\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -105,7 +105,7 @@
     "article": null,
     "translation": "den Kindern — Pl die → den, у слова +n",
     "example": "Ich helfe den Kindern.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"den Kindern\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"den Kindern\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -115,7 +115,7 @@
     "article": null,
     "translation": "der Kinder — Pl die → der",
     "example": "Die Spielsachen der Kinder.",
-    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"der Kinder\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"der Kinder\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -125,7 +125,7 @@
     "article": null,
     "translation": "einen Mann — ein → einen",
     "example": "Ich sehe einen Mann.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"einen Mann\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"einen Mann\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -135,7 +135,7 @@
     "article": null,
     "translation": "einem Mann — ein → einem",
     "example": "Ich helfe einem Mann.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"einem Mann\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"einem Mann\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -145,7 +145,7 @@
     "article": null,
     "translation": "eines Mannes — ein → eines",
     "example": "Das Auto eines Mannes.",
-    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"eines Mannes\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"eines Mannes\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -155,7 +155,7 @@
     "article": null,
     "translation": "eine Frau — eine → eine, не меняется",
     "example": "Ich sehe eine Frau.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"eine Frau\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"eine Frau\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -165,7 +165,7 @@
     "article": null,
     "translation": "einer Frau — eine → einer",
     "example": "Ich helfe einer Frau.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"einer Frau\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"einer Frau\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -175,7 +175,7 @@
     "article": null,
     "translation": "einer Frau — eine → einer",
     "example": "Das Auto einer Frau.",
-    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"einer Frau\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"einer Frau\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -185,7 +185,7 @@
     "article": null,
     "translation": "ein Kind — ein → ein, не меняется",
     "example": "Ich sehe ein Kind.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"ein Kind\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"ein Kind\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -195,7 +195,7 @@
     "article": null,
     "translation": "einem Kind — ein → einem",
     "example": "Ich helfe einem Kind.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"einem Kind\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"einem Kind\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -205,7 +205,7 @@
     "article": null,
     "translation": "eines Kindes — ein → eines",
     "example": "Das Spielzeug eines Kindes.",
-    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"eines Kindes\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Genitiv\", \"answer\": \"eines Kindes\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -215,7 +215,7 @@
     "article": null,
     "translation": "keinen Mann — kein → keinen",
     "example": "Ich sehe keinen Mann.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"keinen Mann\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"keinen Mann\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -225,7 +225,7 @@
     "article": null,
     "translation": "keinem Mann — kein → keinem",
     "example": "Ich helfe keinem Mann.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"keinem Mann\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"keinem Mann\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -235,7 +235,7 @@
     "article": null,
     "translation": "keine Frau — keine → keine, не меняется",
     "example": "Ich sehe keine Frau.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"keine Frau\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"keine Frau\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -245,7 +245,7 @@
     "article": null,
     "translation": "keiner Frau — keine → keiner",
     "example": "Ich helfe keiner Frau.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"keiner Frau\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"keiner Frau\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -255,7 +255,7 @@
     "article": null,
     "translation": "kein Kind — kein → kein, не меняется",
     "example": "Ich sehe kein Kind.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"kein Kind\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"kein Kind\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -265,7 +265,7 @@
     "article": null,
     "translation": "keinem Kind — kein → keinem",
     "example": "Ich helfe keinem Kind.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"keinem Kind\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"keinem Kind\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -275,7 +275,7 @@
     "article": null,
     "translation": "keine Kinder — Pl keine → keine",
     "example": "Ich sehe keine Kinder.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"keine Kinder\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"keine Kinder\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -285,7 +285,7 @@
     "article": null,
     "translation": "keinen Kindern — Pl keine → keinen, у слова +n",
     "example": "Ich helfe keinen Kindern.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"keinen Kindern\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"keinen Kindern\", \"topic\": \"zatyk-13-artikel-kasus\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
     "confidence": 1.0,
     "level": "A1"
   }

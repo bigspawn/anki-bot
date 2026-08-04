@@ -62,6 +62,8 @@ def format_study_card(
         result = f"{progress_info}Исправьте ошибку:\n\n{lemma}"
     elif is_paradigm_card(word_data):
         result = f"{progress_info}Поставьте в нужный падеж:\n\n{lemma}"
+    elif is_rule_card(word_data):
+        result = f"{progress_info}Как правильно?\n\n{lemma}"
     elif part_of_speech == "noun" and article:
         result = f"{progress_info}Какой артикль у {lemma}?"
     elif is_reflexive_case_card(word_data):
@@ -149,6 +151,23 @@ def is_paradigm_card(word_data: dict[str, Any]) -> bool:
     return part_of_speech in ("pronoun case", "article case")
 
 
+def is_rule_card(word_data: dict[str, Any]) -> bool:
+    """Check whether the card drills a rule from the vault's Затыки list.
+
+    Unlike a declension cell these are not always about case — word order and
+    the imperative are asked for the same way, so they share a prompt.
+    """
+    part_of_speech = (word_data.get("part_of_speech") or "").lower()
+    return part_of_speech in (
+        "wo wohin",
+        "verschmelzung",
+        "word order",
+        "adjective ending",
+        "verb form",
+        "zeitangabe",
+    )
+
+
 def is_drill_card(word_data: dict[str, Any]) -> bool:
     """Check whether the card is drilled as a form rather than a word.
 
@@ -159,6 +178,7 @@ def is_drill_card(word_data: dict[str, Any]) -> bool:
         is_cloze_card(word_data)
         or is_error_fix_card(word_data)
         or is_paradigm_card(word_data)
+        or is_rule_card(word_data)
     )
 
 

@@ -1,0 +1,152 @@
+[
+  {
+    "lemma": "lernen → du",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "Lern! — убираешь -st от lernst",
+    "example": "Lern Deutsch!",
+    "additional_forms": "{\"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "lernen → ihr",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "Lernt! — как в Präsens",
+    "example": "Lernt Deutsch!",
+    "additional_forms": "{\"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "lernen → Sie",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "Lernen Sie! — инфинитив + Sie",
+    "example": "Lernen Sie Deutsch!",
+    "additional_forms": "{\"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "kommen → du",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "Komm!",
+    "example": "Komm her!",
+    "additional_forms": "{\"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "lesen → du",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "Lies! — исключение, e→i сохраняется",
+    "example": "Lies das Buch!",
+    "additional_forms": "{\"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "nehmen → du",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "Nimm! — исключение, e→i сохраняется",
+    "example": "Nimm den Bus!",
+    "additional_forms": "{\"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sprechen → du",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "Sprich! — исключение, e→i сохраняется",
+    "example": "Sprich lauter!",
+    "additional_forms": "{\"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "essen → du",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "Iss! — исключение, e→i сохраняется",
+    "example": "Iss dein Brot!",
+    "additional_forms": "{\"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich setzen → du",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "Setz dich! — возвратное местоимение после глагола",
+    "example": "Setz dich!",
+    "additional_forms": "{\"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sich setzen → Sie",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "Setzen Sie sich!",
+    "example": "Setzen Sie sich!",
+    "additional_forms": "{\"topic\": \"zatyk-01-imperativ\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "wollen → Präteritum",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "wollte — хотел сам",
+    "example": "Ich wollte schlafen.",
+    "additional_forms": "{\"topic\": \"zatyk-06-modal-praeteritum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "müssen → Präteritum",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "musste — пришлось, был вынужден",
+    "example": "Ich musste arbeiten.",
+    "additional_forms": "{\"topic\": \"zatyk-06-modal-praeteritum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sollen → Präteritum",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "sollte — должен был, кто-то сказал",
+    "example": "Ich sollte anrufen.",
+    "additional_forms": "{\"topic\": \"zatyk-06-modal-praeteritum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "dürfen → Präteritum",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "durfte — имел право / нельзя было",
+    "example": "Ich durfte nicht rauchen.",
+    "additional_forms": "{\"topic\": \"zatyk-06-modal-praeteritum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "können → Präteritum",
+    "part_of_speech": "verb form",
+    "article": null,
+    "translation": "konnte — мог / не мог",
+    "example": "Ich konnte nicht kommen.",
+    "additional_forms": "{\"topic\": \"zatyk-06-modal-praeteritum\", \"source\": \"vault:00 – Навигация/Затыки\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  }
+]
