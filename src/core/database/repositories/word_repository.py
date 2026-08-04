@@ -2,6 +2,7 @@
 Word repository for database operations
 """
 
+import json
 import logging
 from typing import Any
 
@@ -9,6 +10,90 @@ from ..connection import DatabaseConnection
 from ..models import Word
 
 logger = logging.getLogger(__name__)
+
+# Study queries are assembled here, at import time, from literal fragments:
+# every statement below is a constant by the time anything runs, so no value
+# a user can influence ever reaches the SQL text.
+_SELECT_STUDY_WORDS = """
+    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
+           lp.next_review_date, lp.last_reviewed
+    FROM words w
+    JOIN learning_progress lp ON w.id = lp.word_id
+    WHERE lp.telegram_id = ? AND """
+
+# Randomization is a bound flag rather than a swapped-in ORDER BY: when it is
+# off every row ties on 0 and the tiebreaker below decides the order.
+_ORDER_RANDOM_OR = """
+    ORDER BY CASE WHEN ? = 1 THEN RANDOM() ELSE 0 END, """
+
+_LIMIT = """
+    LIMIT ?"""
+
+_BY_CREATED = "lp.created_at ASC" + _LIMIT
+_BY_DUE_DATE = "lp.next_review_date ASC" + _LIMIT
+_BY_EASINESS = "lp.easiness_factor ASC" + _LIMIT
+
+SQL_DUE_WORDS = (
+    _SELECT_STUDY_WORDS
+    + "datetime(lp.next_review_date) <= datetime('now', 'localtime')"
+    + _ORDER_RANDOM_OR
+    + _BY_DUE_DATE
+)
+SQL_NEW_WORDS = (
+    _SELECT_STUDY_WORDS + "lp.repetitions = 0" + _ORDER_RANDOM_OR + _BY_CREATED
+)
+SQL_DIFFICULT_WORDS = (
+    _SELECT_STUDY_WORDS
+    + "lp.easiness_factor < 2.0 AND lp.repetitions > 0"
+    + _ORDER_RANDOM_OR
+    + _BY_EASINESS
+)
+SQL_VERB_WORDS = (
+    _SELECT_STUDY_WORDS + "w.part_of_speech = 'verb'" + _ORDER_RANDOM_OR + _BY_CREATED
+)
+SQL_REFLEXIVE_VERBS = (
+    _SELECT_STUDY_WORDS
+    + "(LOWER(w.lemma) LIKE 'sich %' OR LOWER(w.part_of_speech) LIKE '%reflexive%')"
+    + _ORDER_RANDOM_OR
+    + _BY_CREATED
+)
+SQL_PREPOSITION_VERBS = (
+    _SELECT_STUDY_WORDS
+    + "LOWER(w.part_of_speech) LIKE '%preposition%'"
+    + " AND LOWER(w.part_of_speech) LIKE '%verb%'"
+    + _ORDER_RANDOM_OR
+    + _BY_CREATED
+)
+SQL_CLOZE_WORDS = (
+    _SELECT_STUDY_WORDS
+    + "LOWER(w.part_of_speech) IN ('cloze', 'error fix')"
+    + _ORDER_RANDOM_OR
+    + _BY_CREATED
+)
+# Prefix match, so 'noun' also picks up 'noun (informal)'
+SQL_WORDS_BY_PART_OF_SPEECH = (
+    _SELECT_STUDY_WORDS
+    + "LOWER(w.part_of_speech) LIKE LOWER(?) || '%'"
+    + _ORDER_RANDOM_OR
+    + _BY_CREATED
+)
+SQL_WORDS_BY_LEVEL = (
+    _SELECT_STUDY_WORDS + "UPPER(w.level) = UPPER(?)" + _ORDER_RANDOM_OR + _BY_CREATED
+)
+SQL_WORDS_BY_TOPIC = (
+    _SELECT_STUDY_WORDS
+    + "json_valid(w.additional_forms)"
+    + " AND LOWER(json_extract(w.additional_forms, '$.topic')) = LOWER(?)"
+    + _ORDER_RANDOM_OR
+    + _BY_CREATED
+)
+# A JSON array carries the variable-length lemma set, so the statement itself
+# stays fixed no matter how many lemmas are asked for.
+_LEMMA_IN_JSON_ARRAY = "LOWER(w.lemma) IN (SELECT value FROM json_each(?))"
+
+SQL_WORDS_BY_LEMMA_SET = (
+    _SELECT_STUDY_WORDS + _LEMMA_IN_JSON_ARRAY + _ORDER_RANDOM_OR + _BY_CREATED
+)
 
 
 class WordRepository:
@@ -95,16 +180,14 @@ class WordRepository:
         """Check existence of multiple words at once"""
         try:
             with self.db_connection.get_connection() as conn:
-                # Create placeholders for the IN clause
-                placeholders = ",".join("?" for _ in lemmas)
-
                 cursor = conn.execute(
-                    f"""
+                    """
                     SELECT w.lemma FROM learning_progress lp
                     JOIN words w ON lp.word_id = w.id
-                    WHERE lp.telegram_id = ? AND LOWER(w.lemma) IN ({placeholders})
-                    """,  # noqa: S608  # Safe: placeholders contains only ? chars
-                    [telegram_id] + [lemma.lower() for lemma in lemmas],
+                    WHERE lp.telegram_id = ?
+                      AND LOWER(w.lemma) IN (SELECT value FROM json_each(?))
+                    """,
+                    (telegram_id, json.dumps([lemma.lower() for lemma in lemmas])),
                 )
 
                 existing_lemmas = {row["lemma"].lower() for row in cursor.fetchall()}
@@ -113,6 +196,18 @@ class WordRepository:
         except Exception as e:
             logger.error(f"Error checking multiple words existence: {e}")
             return dict.fromkeys(lemmas, False)
+
+    def _fetch_study_words(
+        self, sql: str, params: tuple, what: str
+    ) -> list[dict[str, Any]]:
+        """Run one of the module-level study statements"""
+        try:
+            with self.db_connection.get_connection() as conn:
+                cursor = conn.execute(sql, params)
+                return [dict(row) for row in cursor.fetchall()]
+        except Exception as e:
+            logger.error(f"Error getting {what}: {e}")
+            return []
 
     def get_words_by_user(self, telegram_id: int) -> list[dict[str, Any]]:
         """Get all words for a user with learning progress"""
@@ -138,140 +233,49 @@ class WordRepository:
         self, telegram_id: int, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:
         """Get words due for review"""
-        try:
-            with self.db_connection.get_connection() as conn:
-                # Choose ordering based on randomize parameter
-                order_clause = (
-                    "ORDER BY RANDOM()"
-                    if randomize
-                    else "ORDER BY lp.next_review_date ASC"
-                )
-
-                cursor = conn.execute(
-                    f"""
-                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
-                           lp.next_review_date, lp.last_reviewed
-                    FROM words w
-                    JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.telegram_id = ? AND datetime(lp.next_review_date) <= datetime('now', 'localtime')
-                    {order_clause}
-                    LIMIT ?
-                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
-                    (telegram_id, limit),
-                )
-                return [dict(row) for row in cursor.fetchall()]
-        except Exception as e:
-            logger.error(f"Error getting due words: {e}")
-            return []
+        return self._fetch_study_words(
+            SQL_DUE_WORDS, (telegram_id, int(randomize), limit), "due words"
+        )
 
     def get_new_words(
         self, telegram_id: int, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:
         """Get new words (never reviewed)"""
-        try:
-            with self.db_connection.get_connection() as conn:
-                # Choose ordering based on randomize parameter
-                order_clause = (
-                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
-                )
-
-                cursor = conn.execute(
-                    f"""
-                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
-                           lp.next_review_date, lp.last_reviewed
-                    FROM words w
-                    JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.telegram_id = ? AND lp.repetitions = 0
-                    {order_clause}
-                    LIMIT ?
-                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
-                    (telegram_id, limit),
-                )
-                return [dict(row) for row in cursor.fetchall()]
-        except Exception as e:
-            logger.error(f"Error getting new words: {e}")
-            return []
+        return self._fetch_study_words(
+            SQL_NEW_WORDS, (telegram_id, int(randomize), limit), "new words"
+        )
 
     def get_difficult_words(
         self, telegram_id: int, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:
         """Get difficult words (low easiness factor)"""
-        try:
-            with self.db_connection.get_connection() as conn:
-                # Choose ordering based on randomize parameter
-                order_clause = (
-                    "ORDER BY RANDOM()"
-                    if randomize
-                    else "ORDER BY lp.easiness_factor ASC"
-                )
-
-                cursor = conn.execute(
-                    f"""
-                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
-                           lp.next_review_date, lp.last_reviewed
-                    FROM words w
-                    JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.telegram_id = ? AND lp.easiness_factor < 2.0 AND lp.repetitions > 0
-                    {order_clause}
-                    LIMIT ?
-                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
-                    (telegram_id, limit),
-                )
-                return [dict(row) for row in cursor.fetchall()]
-        except Exception as e:
-            logger.error(f"Error getting difficult words: {e}")
-            return []
+        return self._fetch_study_words(
+            SQL_DIFFICULT_WORDS, (telegram_id, int(randomize), limit), "difficult words"
+        )
 
     def get_verb_words(
         self, telegram_id: int, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:
         """Get verb words for study"""
-        try:
-            with self.db_connection.get_connection() as conn:
-                order_clause = (
-                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
-                )
-
-                cursor = conn.execute(
-                    f"""
-                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
-                           lp.next_review_date, lp.last_reviewed
-                    FROM words w
-                    JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.telegram_id = ? AND w.part_of_speech = 'verb'
-                    {order_clause}
-                    LIMIT ?
-                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
-                    (telegram_id, limit),
-                )
-                return [dict(row) for row in cursor.fetchall()]
-        except Exception as e:
-            logger.error(f"Error getting verb words: {e}")
-            return []
+        return self._fetch_study_words(
+            SQL_VERB_WORDS, (telegram_id, int(randomize), limit), "verb words"
+        )
 
     def get_reflexive_verbs(
         self, telegram_id: int, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:
         """Get reflexive verbs ('sich ...') for study"""
-        return self._get_words_where(
-            telegram_id,
-            "(LOWER(w.lemma) LIKE 'sich %' "
-            "OR LOWER(w.part_of_speech) LIKE '%reflexive%')",
-            limit,
-            randomize,
-            "reflexive verbs",
+        return self._fetch_study_words(
+            SQL_REFLEXIVE_VERBS, (telegram_id, int(randomize), limit), "reflexive verbs"
         )
 
     def get_preposition_verbs(
         self, telegram_id: int, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:
         """Get verbs governing a preposition ('denken an + Akk') for study"""
-        return self._get_words_where(
-            telegram_id,
-            "LOWER(w.part_of_speech) LIKE '%preposition%' "
-            "AND LOWER(w.part_of_speech) LIKE '%verb%'",
-            limit,
-            randomize,
+        return self._fetch_study_words(
+            SQL_PREPOSITION_VERBS,
+            (telegram_id, int(randomize), limit),
             "preposition verbs",
         )
 
@@ -279,42 +283,19 @@ class WordRepository:
         self, telegram_id: int, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:
         """Get gap-fill and error-correction drills for study"""
-        return self._get_words_where(
-            telegram_id,
-            "LOWER(w.part_of_speech) IN ('cloze', 'error fix')",
-            limit,
-            randomize,
-            "cloze words",
+        return self._fetch_study_words(
+            SQL_CLOZE_WORDS, (telegram_id, int(randomize), limit), "cloze words"
         )
 
     def get_words_by_topic(
         self, telegram_id: int, topic: str, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:
         """Get cards tagged with a topic slug, regardless of SM2 due date"""
-        try:
-            with self.db_connection.get_connection() as conn:
-                order_clause = (
-                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
-                )
-
-                cursor = conn.execute(
-                    f"""
-                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
-                           lp.next_review_date, lp.last_reviewed
-                    FROM words w
-                    JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.telegram_id = ?
-                      AND json_valid(w.additional_forms)
-                      AND LOWER(json_extract(w.additional_forms, '$.topic')) = LOWER(?)
-                    {order_clause}
-                    LIMIT ?
-                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
-                    (telegram_id, topic, limit),
-                )
-                return [dict(row) for row in cursor.fetchall()]
-        except Exception as e:
-            logger.error(f"Error getting words by topic: {e}")
-            return []
+        return self._fetch_study_words(
+            SQL_WORDS_BY_TOPIC,
+            (telegram_id, topic, int(randomize), limit),
+            "words by topic",
+        )
 
     def get_topic_slugs(self, telegram_id: int) -> list[str]:
         """Get every topic slug present in the user's cards, alphabetically"""
@@ -337,38 +318,6 @@ class WordRepository:
             logger.error(f"Error getting topic slugs: {e}")
             return []
 
-    def _get_words_where(
-        self,
-        telegram_id: int,
-        condition: str,
-        limit: int,
-        randomize: bool,
-        what: str,
-    ) -> list[dict[str, Any]]:
-        """Run a study query with a caller-supplied literal WHERE condition"""
-        try:
-            with self.db_connection.get_connection() as conn:
-                order_clause = (
-                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
-                )
-
-                cursor = conn.execute(
-                    f"""
-                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
-                           lp.next_review_date, lp.last_reviewed
-                    FROM words w
-                    JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.telegram_id = ? AND {condition}
-                    {order_clause}
-                    LIMIT ?
-                    """,  # noqa: S608  # Safe: condition/order_clause are literals
-                    (telegram_id, limit),
-                )
-                return [dict(row) for row in cursor.fetchall()]
-        except Exception as e:
-            logger.error(f"Error getting {what}: {e}")
-            return []
-
     def get_words_by_part_of_speech(
         self,
         telegram_id: int,
@@ -378,28 +327,11 @@ class WordRepository:
     ) -> list[dict[str, Any]]:
         """Get words filtered by part of speech (prefix match, e.g. 'noun' also
         matches 'noun (informal)') for study"""
-        try:
-            with self.db_connection.get_connection() as conn:
-                order_clause = (
-                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
-                )
-
-                cursor = conn.execute(
-                    f"""
-                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
-                           lp.next_review_date, lp.last_reviewed
-                    FROM words w
-                    JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.telegram_id = ? AND LOWER(w.part_of_speech) LIKE LOWER(?) || '%'
-                    {order_clause}
-                    LIMIT ?
-                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
-                    (telegram_id, part_of_speech, limit),
-                )
-                return [dict(row) for row in cursor.fetchall()]
-        except Exception as e:
-            logger.error(f"Error getting words by part of speech: {e}")
-            return []
+        return self._fetch_study_words(
+            SQL_WORDS_BY_PART_OF_SPEECH,
+            (telegram_id, part_of_speech, int(randomize), limit),
+            "words by part of speech",
+        )
 
     def get_words_by_level(
         self,
@@ -409,28 +341,11 @@ class WordRepository:
         randomize: bool = True,
     ) -> list[dict[str, Any]]:
         """Get words filtered by CEFR level (A1-C2) for study"""
-        try:
-            with self.db_connection.get_connection() as conn:
-                order_clause = (
-                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
-                )
-
-                cursor = conn.execute(
-                    f"""
-                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
-                           lp.next_review_date, lp.last_reviewed
-                    FROM words w
-                    JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.telegram_id = ? AND UPPER(w.level) = UPPER(?)
-                    {order_clause}
-                    LIMIT ?
-                    """,  # noqa: S608  # Safe: order_clause is from predefined strings
-                    (telegram_id, level, limit),
-                )
-                return [dict(row) for row in cursor.fetchall()]
-        except Exception as e:
-            logger.error(f"Error getting words by level: {e}")
-            return []
+        return self._fetch_study_words(
+            SQL_WORDS_BY_LEVEL,
+            (telegram_id, level, int(randomize), limit),
+            "words by level",
+        )
 
     def get_words_by_lemma_set(
         self,
@@ -443,29 +358,17 @@ class WordRepository:
         e.g. a curated list of common verbs, for study"""
         if not lemmas:
             return []
-        try:
-            with self.db_connection.get_connection() as conn:
-                order_clause = (
-                    "ORDER BY RANDOM()" if randomize else "ORDER BY lp.created_at ASC"
-                )
-                placeholders = ",".join("?" for _ in lemmas)
 
-                cursor = conn.execute(
-                    f"""
-                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
-                           lp.next_review_date, lp.last_reviewed
-                    FROM words w
-                    JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.telegram_id = ? AND LOWER(w.lemma) IN ({placeholders})
-                    {order_clause}
-                    LIMIT ?
-                    """,  # noqa: S608  # Safe: placeholders contains only ? chars
-                    [telegram_id] + [lemma.lower() for lemma in lemmas] + [limit],
-                )
-                return [dict(row) for row in cursor.fetchall()]
-        except Exception as e:
-            logger.error(f"Error getting words by lemma set: {e}")
-            return []
+        return self._fetch_study_words(
+            SQL_WORDS_BY_LEMMA_SET,
+            (
+                telegram_id,
+                json.dumps([lemma.lower() for lemma in lemmas]),
+                int(randomize),
+                limit,
+            ),
+            "words by lemma set",
+        )
 
     def get_recent_words(
         self, telegram_id: int, limit: int = 10

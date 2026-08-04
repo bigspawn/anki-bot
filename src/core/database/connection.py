@@ -12,6 +12,32 @@ from ...config import get_database_path
 
 logger = logging.getLogger(__name__)
 
+# Fragments of the words-table migration, kept apart because a legacy table
+# may lack the trailing columns. Assembled from these constants only.
+_MIGRATE_WORDS_HEAD = """
+    INSERT INTO words_new (
+        id, lemma, part_of_speech, article, translation,
+        example, additional_forms, confidence, level, created_at, updated_at
+    )
+    SELECT id,
+           lemma,
+           COALESCE(part_of_speech, 'unknown') as part_of_speech,
+           article,
+           translation,
+           COALESCE(example, '') as example,
+           additional_forms,
+           COALESCE(confidence, 1.0) as confidence,
+           """
+
+_LEVEL_KEPT = "level,\n           "
+_LEVEL_DEFAULTED = "NULL as level,\n           "
+_CREATED_AT_KEPT = "created_at,\n           "
+_CREATED_AT_DEFAULTED = "CURRENT_TIMESTAMP as created_at,\n           "
+_UPDATED_AT_KEPT = "updated_at"
+_UPDATED_AT_DEFAULTED = "CURRENT_TIMESTAMP as updated_at"
+
+_MIGRATE_WORDS_TAIL = "\n    FROM words\n"
+
 
 class DatabaseConnection:
     """Manages SQLite database connections and settings"""
@@ -325,41 +351,24 @@ class DatabaseConnection:
                 # First check what columns exist
                 old_columns = list(columns.keys())
 
-                # Build SELECT query based on existing columns
-                select_parts = [
-                    "id",
-                    "lemma",
-                    "COALESCE(part_of_speech, 'unknown') as part_of_speech",
-                    "article",
-                    "translation",
-                    "COALESCE(example, '') as example",
-                    "additional_forms",
-                    "COALESCE(confidence, 1.0) as confidence",
-                ]
-
-                if "level" in old_columns:
-                    select_parts.append("level")
-                else:
-                    select_parts.append("NULL as level")
-
-                if "created_at" in old_columns:
-                    select_parts.append("created_at")
-                else:
-                    select_parts.append("CURRENT_TIMESTAMP as created_at")
-
-                if "updated_at" in old_columns:
-                    select_parts.append("updated_at")
-                else:
-                    select_parts.append("CURRENT_TIMESTAMP as updated_at")
-
-                select_query = f"""
-                    INSERT INTO words_new (
-                        id, lemma, part_of_speech, article, translation,
-                        example, additional_forms, confidence, level, created_at, updated_at
+                # Legacy tables may predate these columns; each fragment is a
+                # constant picked by name, so the statement is never built
+                # out of anything but literals.
+                select_query = (
+                    _MIGRATE_WORDS_HEAD
+                    + (_LEVEL_KEPT if "level" in old_columns else _LEVEL_DEFAULTED)
+                    + (
+                        _CREATED_AT_KEPT
+                        if "created_at" in old_columns
+                        else _CREATED_AT_DEFAULTED
                     )
-                    SELECT {", ".join(select_parts)}
-                    FROM words
-                """  # noqa: S608  # Safe: select_parts contains only column names
+                    + (
+                        _UPDATED_AT_KEPT
+                        if "updated_at" in old_columns
+                        else _UPDATED_AT_DEFAULTED
+                    )
+                    + _MIGRATE_WORDS_TAIL
+                )
 
                 conn.execute(select_query)
 

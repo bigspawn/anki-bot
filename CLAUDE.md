@@ -138,8 +138,7 @@ ship a command that works in isolation but is unreachable or undocumented:
 4. **Register the command** in `src/bot_handler.py`:
    - `CommandHandler(...)` in `_add_handlers` (wrapped in
      `self.require_authorization(...)`)
-   - `BotCommand(...)` entry in `setup_bot_menu` — a command that isn't in
-     this list won't show in the Telegram UI even if it works when typed.
+   - `BotCommand(...)` entry in `setup_bot_menu` — see the rule below.
 5. **Update `/help` text** in `command_handlers.py` (`help_command`) — same
    omission risk as the menu entry.
 6. **Schema changes**, if any, go in
@@ -150,6 +149,54 @@ ship a command that works in isolation but is unreachable or undocumented:
    model, go in both `_get_system_prompt` and `_get_batch_system_prompt` in
    `src/word_processor.py` — the two prompts drift apart easily if only one
    is updated.
+
+### EVERY command belongs in the Telegram quick menu
+
+`setup_bot_menu` in `src/bot_handler.py` must list **every** command
+registered in `_add_handlers` — no exceptions, no "internal" commands. The
+quick-menu button is how the bot is actually navigated; a command missing
+from that list still works when typed but is invisible, so in practice it
+does not exist.
+
+This is enforced, not left to review — `tests/test_command_registration.py`
+fails the build on any drift:
+
+- `test_every_registered_command_is_in_the_telegram_menu` — a registered
+  command missing from the menu
+- `test_the_menu_offers_no_command_that_does_not_exist` — a menu entry with
+  no handler behind it
+- `test_every_registered_command_is_documented_in_help` — a command missing
+  from `/help` (only `/start` is exempt, via `COMMANDS_NOT_IN_HELP`)
+- `test_startup_pushes_the_menu_to_telegram` — the menu is actually sent on
+  startup
+
+Add the `BotCommand(...)` entry in the same edit as the `CommandHandler`, and
+these stay green on their own.
+
+**Do not move `setup_bot_menu` back to a `post_init` hook.** PTB only fires
+post_init from `run_polling`/`run_webhook`, and `start()` here drives
+`initialize`/`start`/`start_polling` by hand, so the hook never ran and
+Telegram silently kept a months-stale command list. It is called explicitly
+after `initialize()` for that reason.
+
+### Never build SQL by string formatting
+
+Queries are assembled from module-level literal constants only (see the
+`SQL_*` constants in `word_repository.py`), never from f-strings, `%`,
+`.format()` or concatenation involving runtime values. `make security`
+(bandit B608) is clean and must stay clean — do **not** silence it with
+`# nosec` or `# noqa: S608`. The three patterns that replaced the old
+f-strings:
+
+- **variable-length `IN` lists** → pass a JSON array and match against
+  `(SELECT value FROM json_each(?))`
+- **`ORDER BY RANDOM()` vs a fixed order** → bind a flag:
+  `ORDER BY CASE WHEN ? = 1 THEN RANDOM() ELSE 0 END, <tiebreaker>`
+- **date windows** → bind the modifier: `datetime('now', ?)` with
+  `f"-{int(days)} days"` as the parameter
+
+For a partial `UPDATE`, use `COALESCE(?, column)` per field rather than
+growing a `SET` clause. Covered by `tests/test_sql_hardening.py`.
 
 ### Test coverage checklist per command handler
 

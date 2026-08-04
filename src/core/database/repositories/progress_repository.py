@@ -249,14 +249,14 @@ class ProgressRepository:
         try:
             with self.db_connection.get_connection() as conn:
                 cursor = conn.execute(
-                    f"""
+                    """
                     SELECT rh.*, w.lemma, w.translation
                     FROM review_history rh
                     JOIN words w ON rh.word_id = w.id
-                    WHERE rh.telegram_id = ? AND rh.reviewed_at >= datetime('now', '-{days} days')
+                    WHERE rh.telegram_id = ? AND rh.reviewed_at >= datetime('now', ?)
                     ORDER BY rh.reviewed_at DESC
-                    """,  # noqa: S608  # Safe: days is int parameter
-                    (telegram_id,),
+                    """,
+                    (telegram_id, f"-{int(days)} days"),
                 )
                 return [dict(row) for row in cursor.fetchall()]
         except Exception as e:
@@ -268,16 +268,16 @@ class ProgressRepository:
         try:
             with self.db_connection.get_connection() as conn:
                 cursor = conn.execute(
-                    f"""
+                    """
                     SELECT
                         COUNT(*) as total_reviews,
                         AVG(rating) as avg_rating,
                         SUM(CASE WHEN rating >= 3 THEN 1 ELSE 0 END) as good_reviews,
                         AVG(response_time_ms) as avg_response_time
                     FROM review_history
-                    WHERE telegram_id = ? AND reviewed_at >= datetime('now', '-{days} days')
-                    """,  # noqa: S608  # Safe: days is int parameter
-                    (telegram_id,),
+                    WHERE telegram_id = ? AND reviewed_at >= datetime('now', ?)
+                    """,
+                    (telegram_id, f"-{int(days)} days"),
                 )
 
                 row = cursor.fetchone()

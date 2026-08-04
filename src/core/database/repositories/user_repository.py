@@ -65,32 +65,28 @@ class UserRepository:
     ) -> bool:
         """Update user information"""
         try:
+            if first_name is None and last_name is None and username is None:
+                return False
+
             with self.db_connection.get_connection() as conn:
-                updates = []
-                params = []
-
-                if first_name is not None:
-                    updates.append("first_name = ?")
-                    params.append(first_name)
-
-                if last_name is not None:
-                    updates.append("last_name = ?")
-                    params.append(last_name)
-
-                if username is not None:
-                    updates.append("username = ?")
-                    params.append(username)
-
-                if not updates:
-                    return False
-
-                updates.append("updated_at = ?")
-                params.append(datetime.now())
-                params.append(telegram_id)
-
+                # COALESCE keeps the stored value for every field left as None,
+                # so the statement stays fixed instead of growing a SET clause
                 cursor = conn.execute(
-                    f"UPDATE users SET {', '.join(updates)} WHERE telegram_id = ?",  # noqa: S608
-                    params,
+                    """
+                    UPDATE users
+                    SET first_name = COALESCE(?, first_name),
+                        last_name = COALESCE(?, last_name),
+                        username = COALESCE(?, username),
+                        updated_at = ?
+                    WHERE telegram_id = ?
+                    """,
+                    (
+                        first_name,
+                        last_name,
+                        username,
+                        datetime.now(),
+                        telegram_id,
+                    ),
                 )
                 conn.commit()
 
@@ -168,9 +164,7 @@ class UserRepository:
                 stats["correct_reviews"] = accuracy_row["correct_reviews"] or 0
                 stats["incorrect_reviews"] = accuracy_row["incorrect_reviews"] or 0
                 stats["average_accuracy"] = (
-                    stats["correct_reviews"] / total_reviews
-                    if total_reviews
-                    else 0.0
+                    stats["correct_reviews"] / total_reviews if total_reviews else 0.0
                 )
 
                 # Get today's activity
