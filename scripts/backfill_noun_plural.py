@@ -30,6 +30,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 BATCH_SIZE = 40
+OVERRIDES_PATH = "seed/noun_plurals.json"
 
 # The model answers "null" as a JSON string about as often as as a JSON null,
 # and a string is truthy — that is how 80 nouns ended up displaying
@@ -87,6 +88,36 @@ def set_plural(raw: str | None, plural: str | None) -> str:
         del forms[key]
     forms["plural"] = plural
     return json.dumps(forms, ensure_ascii=False)
+
+
+def apply_overrides(conn: sqlite3.Connection, dry_run: bool) -> None:
+    """Apply the authored corrections, which always win over a generated answer.
+
+    The model is confidently wrong about a handful of everyday words — it
+    calls Sonne and Gehalt uncountable and invents a plural for Türkei — and
+    a generated answer would otherwise overwrite the fix on the next run.
+    """
+    path = Path(OVERRIDES_PATH)
+    if not path.exists():
+        return
+
+    overrides = json.loads(path.read_text(encoding="utf-8"))
+    updates = []
+    for lemma, plural in overrides.items():
+        row = conn.execute(
+            "SELECT id, additional_forms FROM words WHERE lemma = ?", (lemma,)
+        ).fetchone()
+        if not row:
+            continue
+        wanted = set_plural(row["additional_forms"], plural)
+        if wanted != row["additional_forms"]:
+            updates.append((wanted, row["id"]))
+
+    print(f"✍️ Authored corrections applied: {len(updates)}/{len(overrides)}")
+
+    if updates and not dry_run:
+        conn.executemany("UPDATE words SET additional_forms = ? WHERE id = ?", updates)
+        conn.commit()
 
 
 def repair(conn: sqlite3.Connection, dry_run: bool) -> list[sqlite3.Row]:
@@ -268,6 +299,7 @@ def backfill(
         conn.row_factory = sqlite3.Row
 
         missing = repair(conn, dry_run)
+        apply_overrides(conn, dry_run)
 
         if use_openai:
             generate(conn, missing, dry_run)

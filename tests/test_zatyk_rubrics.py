@@ -42,11 +42,13 @@ def load_seed(name: str) -> list[dict]:
 
 
 def all_seed_words() -> list[dict]:
+    """Every card in seed/. Some seed files are lookup maps, not card lists
+    (word_levels.json, noun_plurals.json), so go by shape rather than name."""
     words = []
     for path in SEED.glob("*.json"):
-        if path.name == "word_levels.json":
-            continue
-        words.extend(json.loads(path.read_text(encoding="utf-8")))
+        content = json.loads(path.read_text(encoding="utf-8"))
+        if isinstance(content, list):
+            words.extend(content)
     return words
 
 

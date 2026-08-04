@@ -150,8 +150,9 @@ class TestRepairPass:
                     "additional_forms": "plural: die Beispiele",
                 },
                 {
-                    "lemma": "Sonne", "part_of_speech": "noun", "article": "die",
-                    "translation": "солнце", "example": "Die Sonne.",
+                    # Deliberately not a lemma the override map covers
+                    "lemma": "Blume", "part_of_speech": "noun", "article": "die",
+                    "translation": "цветок", "example": "Die Blume blüht.",
                     "additional_forms": None,
                 },
                 {
@@ -203,7 +204,7 @@ class TestRepairPass:
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
         row = conn.execute(
-            "SELECT additional_forms FROM words WHERE lemma = 'Sonne'"
+            "SELECT additional_forms FROM words WHERE lemma = 'Blume'"
         ).fetchone()
         conn.close()
 
@@ -338,3 +339,79 @@ class TestLiteralNullString:
         conn.close()
 
         assert [r["lemma"] for r in still_missing] == ["Sonne"]
+
+
+class TestAuthoredOverrides:
+    """Authored corrections beat whatever the model produced"""
+
+    def test_the_override_file_is_well_formed(self):
+        overrides = json.loads(
+            (REPO_ROOT / "seed" / "noun_plurals.json").read_text(encoding="utf-8")
+        )
+
+        assert overrides
+        for lemma, plural in overrides.items():
+            assert lemma.strip(), lemma
+            assert plural is None or (isinstance(plural, str) and plural.strip()), lemma
+            assert plural is None or plural.startswith("die "), lemma
+
+    def test_an_override_replaces_a_wrong_null(self, db_path):
+        manager = DatabaseManager(db_path)
+        manager.init_database()
+        manager.create_user(telegram_id=TELEGRAM_ID, first_name="Tester")
+        manager.add_words_with_details(
+            TELEGRAM_ID,
+            [
+                {
+                    "lemma": "Sonne", "part_of_speech": "noun", "article": "die",
+                    "translation": "солнце", "example": "Die Sonne.",
+                    "additional_forms": '{"plural": null}',
+                }
+            ],
+        )
+
+        load_script("backfill_noun_plural").backfill(db_path)
+
+        word = manager.get_word_by_lemma("Sonne")
+        assert stored_plural(word) == "die Sonnen"
+
+    def test_an_override_can_also_remove_a_wrong_plural(self, db_path):
+        manager = DatabaseManager(db_path)
+        manager.init_database()
+        manager.create_user(telegram_id=TELEGRAM_ID, first_name="Tester")
+        manager.add_words_with_details(
+            TELEGRAM_ID,
+            [
+                {
+                    "lemma": "Türkei", "part_of_speech": "noun", "article": "die",
+                    "translation": "Турция", "example": "Die Türkei ist groß.",
+                    "additional_forms": '{"plural": "die Türken"}',
+                }
+            ],
+        )
+
+        load_script("backfill_noun_plural").backfill(db_path)
+
+        assert stored_plural(manager.get_word_by_lemma("Türkei")) is None
+
+    def test_overrides_are_idempotent(self, db_path):
+        manager = DatabaseManager(db_path)
+        manager.init_database()
+        manager.create_user(telegram_id=TELEGRAM_ID, first_name="Tester")
+        manager.add_words_with_details(
+            TELEGRAM_ID,
+            [
+                {
+                    "lemma": "Sonne", "part_of_speech": "noun", "article": "die",
+                    "translation": "солнце", "example": "Die Sonne.",
+                    "additional_forms": "{}",
+                }
+            ],
+        )
+        backfill = load_script("backfill_noun_plural")
+
+        backfill.backfill(db_path)
+        first = manager.get_word_by_lemma("Sonne")["additional_forms"]
+        backfill.backfill(db_path)
+
+        assert manager.get_word_by_lemma("Sonne")["additional_forms"] == first
