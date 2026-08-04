@@ -251,7 +251,11 @@ class CommandHandlers:
 
 🗺 <b>Грамматика и маршруты:</b>
 /study_article_case - Артикли по падежам (der → den → dem → des)
-/study_pronoun_case - Местоимения по падежам (ich → mir → mich)
+/study_pronoun_case - Все местоимения по падежам (сводная рубрика)
+/study_personalpronomen - Личные: ich → mir → mich
+/study_possessiv - Притяжательные: mein/dein/sein/unser/euer и склонение
+/study_reflexivpronomen - Возвратные: mich/mir, dich/dir, sich
+/study_demonstrativ - Указательные: dieser/jener/jeder/solcher, derselbe
 /study_reflexive_case - Падеж возвратного местоимения (mich или mir)
 /study_dativ_verbs - Глаголы с Dativ (helfen, gefallen, danken...)
 /study_dat_akk - Глаголы с двумя объектами (geben mir das Buch)
@@ -737,6 +741,54 @@ class CommandHandlers:
             "📅 У вас нет карточек с датами и сроками.\n\n"
             "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
             "zeitangaben",
+        )
+
+    async def study_personalpronomen_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_personalpronomen - personal pronouns by case"""
+        await self._study_case_rubric(
+            update,
+            "get_personalpronomen_words",
+            "🙋 У вас нет карточек с личными местоимениями.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "personalpronomen",
+        )
+
+    async def study_possessiv_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_possessiv - possessive pronouns by case"""
+        await self._study_case_rubric(
+            update,
+            "get_possessivpronomen_words",
+            "👪 У вас нет карточек с притяжательными местоимениями.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "possessiv",
+        )
+
+    async def study_reflexivpronomen_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_reflexivpronomen - reflexive pronouns by case"""
+        await self._study_case_rubric(
+            update,
+            "get_reflexivpronomen_words",
+            "🪞 У вас нет карточек с возвратными местоимениями.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "reflexivpronomen",
+        )
+
+    async def study_demonstrativ_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_demonstrativ - demonstrative pronouns by case"""
+        await self._study_case_rubric(
+            update,
+            "get_demonstrativ_words",
+            "👉 У вас нет карточек с указательными местоимениями.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "demonstrativ",
         )
 
     async def study_cloze_command(

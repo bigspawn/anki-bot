@@ -165,7 +165,7 @@
     "article": null,
     "translation": "meinen Vater — m → -en",
     "example": "Ich sehe meinen Vater.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meinen Vater\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meinen Vater\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -175,7 +175,7 @@
     "article": null,
     "translation": "meinem Vater — m → -em",
     "example": "Ich helfe meinem Vater.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinem Vater\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinem Vater\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -185,7 +185,7 @@
     "article": null,
     "translation": "meine Mutter — f → без изменений",
     "example": "Ich sehe meine Mutter.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meine Mutter\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meine Mutter\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -195,7 +195,7 @@
     "article": null,
     "translation": "meiner Mutter — f → -er",
     "example": "Ich helfe meiner Mutter.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meiner Mutter\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meiner Mutter\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -205,7 +205,7 @@
     "article": null,
     "translation": "mein Kind — n → без изменений",
     "example": "Ich sehe mein Kind.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"mein Kind\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"mein Kind\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -215,7 +215,7 @@
     "article": null,
     "translation": "meinem Kind — n → -em",
     "example": "Ich helfe meinem Kind.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinem Kind\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinem Kind\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -225,7 +225,7 @@
     "article": null,
     "translation": "meine Eltern — Pl → без изменений",
     "example": "Ich sehe meine Eltern.",
-    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meine Eltern\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"answer\": \"meine Eltern\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -235,7 +235,237 @@
     "article": null,
     "translation": "meinen Eltern — Pl → -en",
     "example": "Ich helfe meinen Eltern.",
-    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinen Eltern\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "additional_forms": "{\"case\": \"Dativ\", \"answer\": \"meinen Eltern\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "ich → притяжательное",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "mein (m/n), meine (f/Pl) — мой",
+    "example": "Das ist mein Vater und meine Mutter.",
+    "additional_forms": "{\"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "du → притяжательное",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "dein (m/n), deine (f/Pl) — твой",
+    "example": "Das ist dein Vater und deine Mutter.",
+    "additional_forms": "{\"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "er/es → притяжательное",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "sein (m/n), seine (f/Pl) — его",
+    "example": "Das ist sein Vater und seine Mutter.",
+    "additional_forms": "{\"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sie (она) → притяжательное",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "ihr (m/n), ihre (f/Pl) — её",
+    "example": "Das ist ihr Vater und ihre Mutter.",
+    "additional_forms": "{\"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "wir → притяжательное",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "unser (m/n), unsere (f/Pl) — наш",
+    "example": "Das ist unser Vater und unsere Mutter.",
+    "additional_forms": "{\"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "ihr → притяжательное",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "euer (m/n), eure (f/Pl) — ваш; euer теряет -e- перед -e",
+    "example": "Das ist euer Vater und eure Mutter.",
+    "additional_forms": "{\"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sie/Sie → притяжательное",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "ihr/Ihr (m/n), ihre/Ihre (f/Pl) — их / Ваш",
+    "example": "Das ist Ihr Vater und Ihre Mutter.",
+    "additional_forms": "{\"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "dein Vater → Akkusativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "deinen Vater — те же окончания, что у mein",
+    "example": "Ich sehe deinen Vater.",
+    "additional_forms": "{\"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "seine Mutter → Dativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "seiner Mutter — f Dativ → -er",
+    "example": "Ich helfe seiner Mutter.",
+    "additional_forms": "{\"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "unsere Eltern → Dativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "unseren Eltern — Pl Dativ → -en",
+    "example": "Ich helfe unseren Eltern.",
+    "additional_forms": "{\"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ihr Kind → Dativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "Ihrem Kind — n Dativ → -em",
+    "example": "Ich helfe Ihrem Kind.",
+    "additional_forms": "{\"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "ich → Reflexiv Akkusativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "mich — себя",
+    "example": "Ich wasche mich.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "ich → Reflexiv Dativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "mir — себе",
+    "example": "Ich wasche mir die Hände.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "du → Reflexiv Akkusativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "dich — себя",
+    "example": "Du wäschst dich.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "du → Reflexiv Dativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "dir — себе",
+    "example": "Du wäschst dir die Hände.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "er/sie/es → Reflexiv Akkusativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "sich — себя",
+    "example": "Er wäscht sich.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "er/sie/es → Reflexiv Dativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "sich — себе; форма та же, что в Akkusativ",
+    "example": "Er putzt sich die Zähne.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "wir → Reflexiv Akkusativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "uns — себя",
+    "example": "Wir waschen uns.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "wir → Reflexiv Dativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "uns — себе; форма та же, что в Akkusativ",
+    "example": "Wir waschen uns die Hände.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "ihr → Reflexiv Akkusativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "euch — себя",
+    "example": "Ihr wascht euch.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "ihr → Reflexiv Dativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "euch — себе; форма та же, что в Akkusativ",
+    "example": "Ihr wascht euch die Hände.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sie/Sie → Reflexiv Akkusativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "sich — себя",
+    "example": "Sie waschen sich.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "sie/Sie → Reflexiv Dativ",
+    "part_of_speech": "pronoun case",
+    "article": null,
+    "translation": "sich — себе; форма та же, что в Akkusativ",
+    "example": "Sie putzen sich die Zähne.",
+    "additional_forms": "{\"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
     "confidence": 1.0,
     "level": "A2"
   }

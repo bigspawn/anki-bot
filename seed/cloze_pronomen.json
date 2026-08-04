@@ -1,0 +1,82 @@
+[
+  {
+    "lemma": "Das ist ___ Vater. (ihr — ваш)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "euer — m/n; перед -e теряет -e- (eure)",
+    "example": "Das ist euer Vater.",
+    "additional_forms": "{\"answer\": \"euer\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Das ist ___ Mutter. (ihr — ваша)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "eure — f, euer → eure",
+    "example": "Das ist eure Mutter.",
+    "additional_forms": "{\"answer\": \"eure\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich helfe ___ Eltern. (unser)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "unseren — Pl Dativ → -en",
+    "example": "Ich helfe unseren Eltern.",
+    "additional_forms": "{\"answer\": \"unseren\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich sehe ___ Vater. (dein)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "deinen — m Akkusativ → -en",
+    "example": "Ich sehe deinen Vater.",
+    "additional_forms": "{\"answer\": \"deinen\", \"topic\": \"possessivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Du wäschst ___. (себя)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "dich — Reflexiv Akkusativ",
+    "example": "Du wäschst dich.",
+    "additional_forms": "{\"answer\": \"dich\", \"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Du wäschst ___ die Hände. (себе)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "dir — Reflexiv Dativ, есть второй объект",
+    "example": "Du wäschst dir die Hände.",
+    "additional_forms": "{\"answer\": \"dir\", \"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ihr wascht ___. (себя)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "euch — Reflexiv, у ihr Akk и Dat совпадают",
+    "example": "Ihr wascht euch.",
+    "additional_forms": "{\"answer\": \"euch\", \"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Wir waschen ___. (себя)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "uns — Reflexiv, у wir Akk и Dat совпадают",
+    "example": "Wir waschen uns.",
+    "additional_forms": "{\"answer\": \"uns\", \"topic\": \"reflexivpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  }
+]

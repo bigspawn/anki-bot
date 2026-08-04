@@ -77,7 +77,8 @@ _NOT_A_DRILL = (
     " AND LOWER(w.part_of_speech) NOT IN ("
     "'pronoun case', 'article case', 'reflexive case', 'wo wohin',"
     " 'verschmelzung', 'word order', 'adjective ending', 'verb form',"
-    " 'zeitangabe', 'dativ verb', 'dativ akkusativ verb', 'cloze', 'error fix')"
+    " 'zeitangabe', 'dativ verb', 'dativ akkusativ verb', 'cloze', 'error fix',"
+    " 'demonstrativ')"
 )
 
 # Prefix match, so 'noun' also picks up 'noun (informal)'
@@ -117,9 +118,35 @@ SQL_REFLEXIVE_CASE = (
     + _ORDER_RANDOM_OR
     + _BY_CREATED
 )
+# Umbrella over every pronoun type; the flat rubrics below narrow it down
 SQL_PRONOUN_CASE = (
     _SELECT_STUDY_WORDS
-    + "LOWER(w.part_of_speech) = 'pronoun case'"
+    + "LOWER(w.part_of_speech) IN ('pronoun case', 'demonstrativ')"
+    + _ORDER_RANDOM_OR
+    + _BY_CREATED
+)
+
+
+def _by_topic(slug: str) -> str:
+    """Build a study statement for one exact topic slug"""
+    return (
+        _SELECT_STUDY_WORDS
+        + "json_valid(w.additional_forms)"
+        + " AND json_extract(w.additional_forms, '$.topic') = "
+        + slug
+        + _ORDER_RANDOM_OR
+        + _BY_CREATED
+    )
+
+
+SQL_PERSONALPRONOMEN = _by_topic("'zatyk-09-pronomen-kasus'")
+SQL_POSSESSIVPRONOMEN = _by_topic("'possessivpronomen'")
+SQL_REFLEXIVPRONOMEN = _by_topic("'reflexivpronomen'")
+SQL_DEMONSTRATIV = (
+    _SELECT_STUDY_WORDS
+    + "json_valid(w.additional_forms)"
+    + " AND json_extract(w.additional_forms, '$.topic')"
+    + " IN ('demonstrativpronomen', 'derselbe')"
     + _ORDER_RANDOM_OR
     + _BY_CREATED
 )
@@ -464,6 +491,46 @@ class WordRepository:
             SQL_ZEITANGABE,
             (telegram_id, int(randomize), limit),
             "date and duration cards",
+        )
+
+    def get_personalpronomen_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get personal pronoun declension cards for study"""
+        return self._fetch_study_words(
+            SQL_PERSONALPRONOMEN,
+            (telegram_id, int(randomize), limit),
+            "personal pronoun declension",
+        )
+
+    def get_possessivpronomen_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get possessive pronoun declension cards for study"""
+        return self._fetch_study_words(
+            SQL_POSSESSIVPRONOMEN,
+            (telegram_id, int(randomize), limit),
+            "possessive pronoun declension",
+        )
+
+    def get_reflexivpronomen_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get reflexive pronoun declension cards for study"""
+        return self._fetch_study_words(
+            SQL_REFLEXIVPRONOMEN,
+            (telegram_id, int(randomize), limit),
+            "reflexive pronoun declension",
+        )
+
+    def get_demonstrativ_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get demonstrative pronoun declension cards for study"""
+        return self._fetch_study_words(
+            SQL_DEMONSTRATIV,
+            (telegram_id, int(randomize), limit),
+            "demonstrative pronoun declension",
         )
 
     def get_words_by_topic(

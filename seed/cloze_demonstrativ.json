@@ -1,0 +1,112 @@
+[
+  {
+    "lemma": "Ich sehe ___ Mann. (dieser)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "diesen — как der → den, Akkusativ",
+    "example": "Ich sehe diesen Mann.",
+    "additional_forms": "{\"answer\": \"diesen\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich helfe ___ Frau. (dieser)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "dieser — как die → der, Dativ",
+    "example": "Ich helfe dieser Frau.",
+    "additional_forms": "{\"answer\": \"dieser\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "___ Buch ist interessant. (dieser)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "Dieses — das Buch → dieses",
+    "example": "Dieses Buch ist interessant.",
+    "additional_forms": "{\"answer\": \"Dieses\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "___ Tag lerne ich Deutsch. (jeder)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "Jeden — Akkusativ времени, как der → den",
+    "example": "Jeden Tag lerne ich Deutsch.",
+    "additional_forms": "{\"answer\": \"Jeden\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "___ Fehler passieren. (solcher)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "Solche — Pl die → solche",
+    "example": "Solche Fehler passieren.",
+    "additional_forms": "{\"answer\": \"Solche\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich helfe ___ Kindern. (dieser)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "diesen — Pl Dativ, у слова тоже -n",
+    "example": "Ich helfe diesen Kindern.",
+    "additional_forms": "{\"answer\": \"diesen\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich gehe ___ Weg. (derselbe)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "denselben — der→den, -selbe→-selben",
+    "example": "Ich gehe denselben Weg.",
+    "additional_forms": "{\"answer\": \"denselben\", \"topic\": \"derselbe\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "In ___ Straße wohnt er. (dieselbe)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "derselben — die→der, -selbe→-selben",
+    "example": "In derselben Straße wohnt er.",
+    "additional_forms": "{\"answer\": \"derselben\", \"topic\": \"derselbe\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich sehe den Mann → Ich sehe ___.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "ihn — m Akkusativ",
+    "example": "Ich sehe ihn.",
+    "additional_forms": "{\"answer\": \"ihn\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich helfe der Frau → Ich helfe ___.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "ihr — f Dativ",
+    "example": "Ich helfe ihr.",
+    "additional_forms": "{\"answer\": \"ihr\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich helfe den Kindern → Ich helfe ___.",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "ihnen — Pl Dativ",
+    "example": "Ich helfe ihnen.",
+    "additional_forms": "{\"answer\": \"ihnen\", \"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  }
+]

@@ -74,8 +74,16 @@ make run
 - `/study_article_case` - Drill the article declension table (`der Mann →
   Akkusativ` → `den Mann`), definite, indefinite and `kein`, seeded from
   `seed/article_case.json`
-- `/study_pronoun_case` - Drill personal and possessive pronoun declension
-  (`ich → Dativ` → `mir`), seeded from `seed/pronoun_case.json`
+- `/study_pronoun_case` - Every pronoun type in one rubric; the four below
+  narrow it down to a single type
+- `/study_personalpronomen` - Personal pronouns by case (`ich → Dativ` → `mir`)
+- `/study_possessiv` - Possessive pronouns: which form belongs to which
+  person (`euer`/`eure`) and how they decline
+- `/study_reflexivpronomen` - The reflexive table (`mich`/`mir`, `dich`/`dir`,
+  `sich`), where several persons share one form
+- `/study_demonstrativ` - Demonstratives `dieser`/`jener`/`jeder`/`solcher`,
+  which decline like `der`, plus the `derselbe` table and replacing a noun
+  with a pronoun (`den Mann` → `ihn`)
 - `/study_reflexive_case` - Drill the case of the reflexive pronoun: `mich`
   with no second object, `mir` once one appears (`mir die Hände`). Covers the
   drill cards in `seed/reflexive_case.json` plus every reflexive verb whose

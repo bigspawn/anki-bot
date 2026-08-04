@@ -199,6 +199,30 @@ class DatabaseManager:
         """Get date and duration cards for study"""
         return self.word_repo.get_zeitangabe_words(telegram_id, limit, randomize)
 
+    def get_personalpronomen_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get personal pronoun declension cards for study"""
+        return self.word_repo.get_personalpronomen_words(telegram_id, limit, randomize)
+
+    def get_possessivpronomen_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get possessive pronoun declension cards for study"""
+        return self.word_repo.get_possessivpronomen_words(telegram_id, limit, randomize)
+
+    def get_reflexivpronomen_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get reflexive pronoun declension cards for study"""
+        return self.word_repo.get_reflexivpronomen_words(telegram_id, limit, randomize)
+
+    def get_demonstrativ_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get demonstrative pronoun declension cards for study"""
+        return self.word_repo.get_demonstrativ_words(telegram_id, limit, randomize)
+
     def get_words_by_topic(
         self, telegram_id: int, topic: str, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:

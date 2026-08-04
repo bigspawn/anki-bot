@@ -617,12 +617,26 @@ class TestParadigmRubrics:
         )
         return db_manager
 
-    def test_every_paradigm_card_carries_its_answer(self):
+    def test_every_paradigm_card_states_a_transformation(self):
         for word in load_seed("pronoun_case.json") + load_seed("article_case.json"):
-            forms = json.loads(word["additional_forms"])
-            assert forms.get("answer"), word["lemma"]
-            assert forms.get("case") in PARADIGM_CASES, word["lemma"]
             assert "→" in word["lemma"], word["lemma"]
+            assert word["translation"].strip(), word["lemma"]
+            assert word["example"].strip(), word["lemma"]
+
+    def test_declension_cells_carry_their_answer_and_case(self):
+        """Only the table cells do: pronoun_case.json also holds cards like
+        'ich → притяжательное', which name a form rather than decline one."""
+        cells = [
+            w
+            for w in load_seed("pronoun_case.json") + load_seed("article_case.json")
+            if json.loads(w["additional_forms"]).get("answer")
+        ]
+
+        assert len(cells) >= 24
+        for word in cells:
+            forms = json.loads(word["additional_forms"])
+            assert forms["answer"], word["lemma"]
+            assert forms.get("case") in PARADIGM_CASES, word["lemma"]
 
     def test_the_answer_is_visible_on_the_back_only(self):
         for word in load_seed("article_case.json"):

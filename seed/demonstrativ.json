@@ -1,0 +1,392 @@
+[
+  {
+    "lemma": "der Mann → dieser?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "dieser Mann — der → dieser (этот)",
+    "example": "Dieser Mann ist nett.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Frau → dieser?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "diese Frau — die → diese",
+    "example": "Diese Frau ist nett.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "das Buch → dieser?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "dieses Buch — das → dieses",
+    "example": "Dieses Buch ist interessant.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Kinder (Pl) → dieser?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "diese Kinder — Pl die → diese",
+    "example": "Diese Kinder spielen.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "der Mann → jener?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "jener Mann — der → jener (тот)",
+    "example": "Jener Mann war hier.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Frau → jener?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "jene Frau — die → jene",
+    "example": "Jene Frau war hier.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "das Restaurant → jener?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "jenes Restaurant — das → jenes",
+    "example": "Jenes Restaurant war besser.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Kinder (Pl) → jener?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "jene Kinder — Pl die → jene",
+    "example": "Jene Kinder waren hier.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "der Tag → jeder?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "jeder Tag — der → jeder (каждый)",
+    "example": "Jeder Tag ist anders.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Woche → jeder?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "jede Woche — die → jede",
+    "example": "Jede Woche lerne ich.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "das Jahr → jeder?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "jedes Jahr — das → jedes",
+    "example": "Jedes Jahr fahre ich weg.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "der Fehler → solcher?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "solcher Fehler — der → solcher (такой)",
+    "example": "Solcher Fehler passiert oft.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Frage → solcher?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "solche Frage — die → solche",
+    "example": "Solche Frage ist schwer.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "das Problem → solcher?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "solches Problem — das → solches",
+    "example": "Solches Problem kenne ich.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "die Fehler (Pl) → solcher?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "solche Fehler — Pl die → solche",
+    "example": "Solche Fehler passieren.",
+    "additional_forms": "{\"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "dieser Mann → Akkusativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "diesen Mann — как der → den",
+    "example": "Ich sehe diesen Mann.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "dieser Mann → Dativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "diesem Mann — как der → dem",
+    "example": "Ich helfe diesem Mann.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "diese Frau → Akkusativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "diese Frau — не меняется, как die → die",
+    "example": "Ich sehe diese Frau.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "diese Frau → Dativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "dieser Frau — как die → der",
+    "example": "Ich helfe dieser Frau.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "dieses Buch → Akkusativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "dieses Buch — не меняется, как das → das",
+    "example": "Ich lese dieses Buch.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "dieses Buch → Dativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "diesem Buch — как das → dem",
+    "example": "In diesem Buch steht es.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "diese Kinder (Pl) → Akkusativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "diese Kinder — Pl не меняется",
+    "example": "Ich sehe diese Kinder.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "diese Kinder (Pl) → Dativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "diesen Kindern — Pl → diesen, у слова +n",
+    "example": "Ich helfe diesen Kindern.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "jeder Tag → Akkusativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "jeden Tag — как der → den; так и говорят «каждый день»",
+    "example": "Jeden Tag lerne ich Deutsch.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "jeder Tag → Dativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "jedem Tag — как der → dem",
+    "example": "An jedem Tag lerne ich.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"demonstrativpronomen\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "derselbe Weg → Akkusativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "denselben Weg — der→den и -selbe→-selben",
+    "example": "Ich gehe denselben Weg.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"derselbe\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "derselbe Weg → Dativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "demselben Weg — der→dem и -selbe→-selben",
+    "example": "Auf demselben Weg kam ich zurück.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"derselbe\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "dieselbe Straße → Akkusativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "dieselbe Straße — не меняется",
+    "example": "Ich nehme dieselbe Straße.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"derselbe\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "dieselbe Straße → Dativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "derselben Straße — die→der и -selbe→-selben",
+    "example": "In derselben Straße wohnt er.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"derselbe\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "dasselbe Haus → Akkusativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "dasselbe Haus — не меняется",
+    "example": "Ich sehe dasselbe Haus.",
+    "additional_forms": "{\"case\": \"Akkusativ\", \"topic\": \"derselbe\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "dasselbe Haus → Dativ",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "demselben Haus — das→dem и -selbe→-selben",
+    "example": "In demselben Haus wohne ich.",
+    "additional_forms": "{\"case\": \"Dativ\", \"topic\": \"derselbe\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich sehe den Mann → ?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "ihn — m Akkusativ",
+    "example": "Ich sehe ihn.",
+    "additional_forms": "{\"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich helfe dem Mann → ?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "ihm — m Dativ",
+    "example": "Ich helfe ihm.",
+    "additional_forms": "{\"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Sie fährt die Straßenbahn → ?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "sie — f Akkusativ",
+    "example": "Sie fährt sie.",
+    "additional_forms": "{\"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich helfe der Frau → ?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "ihr — f Dativ",
+    "example": "Ich helfe ihr.",
+    "additional_forms": "{\"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Fährt sie das Fahrrad → ?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "es — n Akkusativ",
+    "example": "Fährt sie es?",
+    "additional_forms": "{\"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich helfe dem Kind → ?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "ihm — n Dativ",
+    "example": "Ich helfe ihm.",
+    "additional_forms": "{\"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich sehe die Kinder → ?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "sie — Pl Akkusativ",
+    "example": "Ich sehe sie.",
+    "additional_forms": "{\"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  },
+  {
+    "lemma": "Ich helfe den Kindern → ?",
+    "part_of_speech": "demonstrativ",
+    "article": null,
+    "translation": "ihnen — Pl Dativ",
+    "example": "Ich helfe ihnen.",
+    "additional_forms": "{\"topic\": \"zatyk-09-pronomen-kasus\", \"source\": \"vault:01 – Грамматика/Местоимения\"}",
+    "confidence": 1.0,
+    "level": "A2"
+  }
+]

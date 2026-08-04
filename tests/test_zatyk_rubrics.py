@@ -94,11 +94,30 @@ class TestSeedData:
         """words.lemma is UNIQUE: a bare 'weil' would collide with the
         conjunction already in the dictionary and the card would be dropped as
         a duplicate, leaving the rubric short without any error."""
-        plain = {"weil", "dass", "wenn", "als", "ob", "obwohl", "damit", "denn",
-                 "aber", "und", "oder", "doch", "gar nicht"}
+        plain = {
+            "weil",
+            "dass",
+            "wenn",
+            "als",
+            "ob",
+            "obwohl",
+            "damit",
+            "denn",
+            "aber",
+            "und",
+            "oder",
+            "doch",
+            "gar nicht",
+        }
 
-        for rubric in ("wortstellung.json", "wo_wohin.json", "verschmelzung.json",
-                       "adjektive.json", "verbformen.json", "zeitangaben.json"):
+        for rubric in (
+            "wortstellung.json",
+            "wo_wohin.json",
+            "verschmelzung.json",
+            "adjektive.json",
+            "verbformen.json",
+            "zeitangaben.json",
+        ):
             for word in load_seed(rubric):
                 assert word["lemma"].lower() not in plain, f"{rubric}: {word['lemma']}"
 

@@ -148,7 +148,7 @@ def is_error_fix_card(word_data: dict[str, Any]) -> bool:
 def is_paradigm_card(word_data: dict[str, Any]) -> bool:
     """Check whether the card drills one cell of a declension table"""
     part_of_speech = (word_data.get("part_of_speech") or "").lower()
-    return part_of_speech in ("pronoun case", "article case")
+    return part_of_speech in ("pronoun case", "article case", "demonstrativ")
 
 
 def is_rule_card(word_data: dict[str, Any]) -> bool:

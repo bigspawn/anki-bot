@@ -264,6 +264,38 @@ class BotHandler:
         )
         app.add_handler(
             CommandHandler(
+                "study_personalpronomen",
+                self.require_authorization(
+                    self.command_handlers.study_personalpronomen_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_possessiv",
+                self.require_authorization(
+                    self.command_handlers.study_possessiv_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_reflexivpronomen",
+                self.require_authorization(
+                    self.command_handlers.study_reflexivpronomen_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_demonstrativ",
+                self.require_authorization(
+                    self.command_handlers.study_demonstrativ_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
                 "study_article_case",
                 self.require_authorization(
                     self.command_handlers.study_article_case_command
@@ -538,6 +570,10 @@ class BotHandler:
             BotCommand("study_reflexive", "🪞 Возвратные глаголы (sich ...)"),
             BotCommand("study_rektion", "🧭 Глаголы с предлогами и падежом"),
             BotCommand("study_recent", "🕐 Изучать последние N добавленных слов"),
+            BotCommand("study_personalpronomen", "🙋 Личные (ich/mir/mich)"),
+            BotCommand("study_possessiv", "👪 Притяжательные (mein/dein/euer)"),
+            BotCommand("study_reflexivpronomen", "🪞 Возвратные (mich/mir, sich)"),
+            BotCommand("study_demonstrativ", "👉 Указательные (dieser/jener/derselbe)"),
             BotCommand("study_article_case", "🔠 Артикли по падежам (der/den/dem)"),
             BotCommand(
                 "study_pronoun_case", "🙋 Местоимения по падежам (ich/mir/mich)"
