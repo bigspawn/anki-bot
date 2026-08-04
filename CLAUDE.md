@@ -150,6 +150,22 @@ ship a command that works in isolation but is unreachable or undocumented:
    `src/word_processor.py` — the two prompts drift apart easily if only one
    is updated.
 
+### Nouns always carry their plural
+
+Every noun card stores `additional_forms.plural` and shows it on the reveal
+(`🔢 Plural: die Häuser`); the front asks for the article *and* the plural
+whenever one is stored. Both prompts already request it.
+
+The model does not always spell the key the same way, so
+`normalize_additional_forms` rewrites `Plural`/`Plurals` to `plural` on the
+way in — without that, 242 nouns held a plural that nothing could read.
+Read it back with `stored_plural()`, never with a bare dict lookup.
+
+A noun with genuinely no plural (proper noun, plural-only) stores
+`"plural": null` — that is a decided answer, not a gap, and stops the
+backfill asking again. Repair and generation live in
+`scripts/backfill_noun_plural.py` (`make backfill-plural OPENAI=1`).
+
 ### EVERY command belongs in the Telegram quick menu
 
 `setup_bot_menu` in `src/bot_handler.py` must list **every** command

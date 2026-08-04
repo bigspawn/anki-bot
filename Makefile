@@ -1,6 +1,6 @@
 # German Learning Bot Makefile
 
-.PHONY: help install run test test-cov lint format clean init-db docker-build docker-run docker-stop all export-words import-words backfill-levels seed-words deploy
+.PHONY: help install run test test-cov lint format clean init-db docker-build docker-run docker-stop all export-words import-words backfill-levels seed-words backfill-plural deploy
 
 # Default target
 help:
@@ -20,6 +20,7 @@ help:
 	@echo "  import-words - Import words data from JSON"
 	@echo "  backfill-levels - Fill CEFR levels for old words"
 	@echo "  seed-words  - Seed curated groups (verbs, route phrases, drills)"
+	@echo "  backfill-plural - Fill the plural form for nouns (OPENAI=1 to generate)"
 	@echo "  deploy      - Deploy to production NAS (TAG=version, default latest)"
 	@echo "  all         - Install, test, lint, format"
 
@@ -141,6 +142,14 @@ seed-words:
 		seed/zeitangaben.json seed/cloze_zatyk.json seed/demonstrativ.json \
 		seed/cloze_demonstrativ.json seed/cloze_pronomen.json $$FLAGS; \
 	uv run python scripts/backfill_verb_case.py "$$DB_PATH" seed/*.json $$FLAGS
+
+# Fill additional_forms.plural for nouns
+# Usage: make backfill-plural [DB_PATH=data/bot.db] [OPENAI=1] [DRY_RUN=1]
+backfill-plural:
+	@DB_PATH=$${DB_PATH:-data/bot.db}; \
+	FLAGS=$${DRY_RUN:+--dry-run}; \
+	FLAGS="$$FLAGS $${OPENAI:+--openai}"; \
+	uv run python scripts/backfill_noun_plural.py "$$DB_PATH" $$FLAGS
 
 # Deploy to production (NAS) over SSH + docker compose, no extra tooling needed
 # Usage: make deploy [TAG=v1.0.0] [HOST=other-host]

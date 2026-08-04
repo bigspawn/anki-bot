@@ -65,7 +65,11 @@ def format_study_card(
     elif is_rule_card(word_data):
         result = f"{progress_info}Как правильно?\n\n{lemma}"
     elif part_of_speech == "noun" and article:
-        result = f"{progress_info}Какой артикль у {lemma}?"
+        # Ask for the plural too, but only when there is one to reveal
+        if stored_plural(word_data):
+            result = f"{progress_info}Какой артикль и множественное число у {lemma}?"
+        else:
+            result = f"{progress_info}Какой артикль у {lemma}?"
     elif is_reflexive_case_card(word_data):
         result = f"{progress_info}Какой падеж у sich в «{lemma}»?"
     elif is_case_verb(word_data) or is_preposition_verb(word_data):
@@ -118,6 +122,38 @@ def _stored_forms(word_data: dict[str, Any]) -> dict[str, Any]:
         return {}
 
     return forms if isinstance(forms, dict) else {}
+
+
+def stored_plural(word_data: dict[str, Any]) -> str | None:
+    """Read the plural of a noun, tolerating the shapes older prompts produced.
+
+    Early answers stored it under 'Plural' or as a bare 'plural: die Häuser'
+    string, so a strict lookup would hide a form that is actually there.
+    """
+    if "noun" not in (word_data.get("part_of_speech") or "").lower():
+        return None
+
+    forms = _stored_forms(word_data)
+    for key, value in forms.items():
+        if key.lower() == "plural" and isinstance(value, str) and value.strip():
+            return value.strip()
+
+    raw = word_data.get("additional_forms")
+    if isinstance(raw, str) and not forms:
+        match = re.search(r"plurals?\s*[:=]\s*\"?([^\"\n,}]+)", raw, re.IGNORECASE)
+        if match and match.group(1).strip():
+            return match.group(1).strip()
+
+    return None
+
+
+def format_plural_line(word_data: dict[str, Any]) -> str:
+    """Format the plural line for a noun, or '' when none is stored"""
+    plural = stored_plural(word_data)
+    if not plural:
+        return ""
+
+    return f"🔢 Plural: {plural}\n\n"
 
 
 def format_case_line(word_data: dict[str, Any]) -> str:

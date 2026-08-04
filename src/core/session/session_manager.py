@@ -18,6 +18,7 @@ from ...utils import (
     Timer,
     create_inline_keyboard_data,
     format_case_line,
+    format_plural_line,
     format_study_card,
     format_verb_case,
     format_verb_forms,
@@ -186,8 +187,11 @@ class SessionManager:
             word_display = f"{word['lemma']} - {word['part_of_speech']}"
 
         # The case line wins: on these cards it is the answer being drilled
-        verb_forms = (
-            format_case_line(word) or format_verb_forms(word) or format_verb_case(word)
+        extra_forms = (
+            format_plural_line(word)
+            or format_case_line(word)
+            or format_verb_forms(word)
+            or format_verb_case(word)
         )
 
         return f"""🔤 <b>{word["lemma"]}</b>
@@ -197,7 +201,7 @@ class SessionManager:
 
 📝 <i>{word["example"]}</i>
 
-{verb_forms}Как хорошо вы знаете это слово?"""
+{extra_forms}Как хорошо вы знаете это слово?"""
 
     async def handle_show_answer(self, query, data: dict):
         """Handle showing the answer to a flashcard"""

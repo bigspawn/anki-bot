@@ -45,10 +45,30 @@ def normalize_additional_forms(value: Any) -> str | None:
     if isinstance(value, str):
         return value
 
-    if isinstance(value, dict | list):
+    if isinstance(value, dict):
+        return json.dumps(_normalize_plural_key(value), ensure_ascii=False)
+
+    if isinstance(value, list):
         return json.dumps(value, ensure_ascii=False)
 
     return None
+
+
+def _normalize_plural_key(forms: dict[str, Any]) -> dict[str, Any]:
+    """Store the plural under 'plural' whatever spelling the model chose.
+
+    Answers with 'Plural' used to be written through untouched and then never
+    read back, so the form was in the database but invisible on the card.
+    """
+    if "plural" in forms:
+        return forms
+
+    for key in list(forms):
+        if key.lower() in ("plural", "plurals"):
+            forms["plural"] = forms.pop(key)
+            break
+
+    return forms
 
 
 def validate_article(
