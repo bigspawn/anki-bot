@@ -150,16 +150,26 @@ class TestRubricQueries:
             assert not lemmas & seen
             seen |= lemmas
 
-    def test_the_umbrella_covers_every_type(self, seeded):
-        umbrella = {
-            w["lemma"] for w in seeded.get_pronoun_case_words(TELEGRAM_ID, limit=500)
-        }
+    def test_the_umbrella_is_exactly_the_union_of_the_types(self, db_manager):
+        """Including the gap-fill drills, which carry the same topics"""
+        db_manager.add_words_with_details(
+            TELEGRAM_ID,
+            [w for name in PRONOUN_SEEDS for w in load_seed(name)]
+            + load_seed("cloze_pronomen.json")
+            + load_seed("cloze_demonstrativ.json"),
+        )
 
+        umbrella = {
+            w["lemma"] for w in db_manager.get_pronoun_case_words(TELEGRAM_ID, limit=900)
+        }
+        union: set[str] = set()
         for _, getter in RUBRICS.values():
-            lemmas = {
-                w["lemma"] for w in getattr(seeded, getter)(TELEGRAM_ID, limit=500)
+            union |= {
+                w["lemma"] for w in getattr(db_manager, getter)(TELEGRAM_ID, limit=900)
             }
-            assert lemmas <= umbrella
+
+        assert umbrella == union
+        assert any("___" in lemma for lemma in umbrella), "drills are missing"
 
     def test_demonstratives_are_in_the_umbrella_too(self, seeded):
         umbrella = seeded.get_pronoun_case_words(TELEGRAM_ID, limit=500)

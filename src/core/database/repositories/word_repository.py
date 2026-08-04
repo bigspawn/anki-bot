@@ -118,12 +118,18 @@ SQL_REFLEXIVE_CASE = (
     + _ORDER_RANDOM_OR
     + _BY_CREATED
 )
-# Umbrella over every pronoun type; the flat rubrics below narrow it down
+# Umbrella over every pronoun type: the exact union of the four flat rubrics
+# below, so it must select on the same topics they do rather than on the card
+# type — otherwise the gap-fill drills would be missing from it alone.
+_PRONOUN_TOPICS = (
+    "json_valid(w.additional_forms)"
+    " AND json_extract(w.additional_forms, '$.topic') IN ("
+    "'zatyk-09-pronomen-kasus', 'possessivpronomen', 'reflexivpronomen',"
+    " 'demonstrativpronomen', 'derselbe')"
+)
+
 SQL_PRONOUN_CASE = (
-    _SELECT_STUDY_WORDS
-    + "LOWER(w.part_of_speech) IN ('pronoun case', 'demonstrativ')"
-    + _ORDER_RANDOM_OR
-    + _BY_CREATED
+    _SELECT_STUDY_WORDS + _PRONOUN_TOPICS + _ORDER_RANDOM_OR + _BY_CREATED
 )
 
 
