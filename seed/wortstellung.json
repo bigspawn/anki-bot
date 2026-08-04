@@ -40,7 +40,7 @@
     "level": "B1"
   },
   {
-    "lemma": "weil",
+    "lemma": "weil (порядок слов)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "глагол в конец",
@@ -50,7 +50,7 @@
     "level": "B1"
   },
   {
-    "lemma": "dass",
+    "lemma": "dass (порядок слов)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "глагол в конец",
@@ -60,7 +60,7 @@
     "level": "B1"
   },
   {
-    "lemma": "wenn",
+    "lemma": "wenn (порядок слов)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "глагол в конец",
@@ -70,7 +70,7 @@
     "level": "B1"
   },
   {
-    "lemma": "als",
+    "lemma": "als (порядок слов)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "глагол в конец",
@@ -80,7 +80,7 @@
     "level": "B1"
   },
   {
-    "lemma": "ob",
+    "lemma": "ob (порядок слов)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "глагол в конец",
@@ -90,7 +90,7 @@
     "level": "B1"
   },
   {
-    "lemma": "obwohl",
+    "lemma": "obwohl (порядок слов)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "глагол в конец",
@@ -100,7 +100,7 @@
     "level": "B1"
   },
   {
-    "lemma": "damit",
+    "lemma": "damit (порядок слов)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "глагол в конец",
@@ -110,7 +110,7 @@
     "level": "B1"
   },
   {
-    "lemma": "denn",
+    "lemma": "denn (порядок слов)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "глагол на 2-й позиции; denn нельзя поставить в начало",
@@ -120,7 +120,7 @@
     "level": "B1"
   },
   {
-    "lemma": "aber",
+    "lemma": "aber (порядок слов)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "глагол на 2-й позиции, инверсии не даёт",
@@ -130,7 +130,7 @@
     "level": "B1"
   },
   {
-    "lemma": "und",
+    "lemma": "und (порядок слов)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "инверсии не даёт — подлежащее остаётся перед глаголом",
@@ -140,7 +140,7 @@
     "level": "B1"
   },
   {
-    "lemma": "oder",
+    "lemma": "oder (порядок слов)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "глагол на 2-й позиции, инверсии не даёт",
@@ -150,7 +150,7 @@
     "level": "B1"
   },
   {
-    "lemma": "doch",
+    "lemma": "doch (частица)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "«ты же сам знаешь» — упрёк",
@@ -160,7 +160,7 @@
     "level": "B1"
   },
   {
-    "lemma": "gar nicht",
+    "lemma": "gar nicht (частица)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "вообще не — усиление",
@@ -170,7 +170,7 @@
     "level": "B1"
   },
   {
-    "lemma": "doch gar nicht",
+    "lemma": "doch gar nicht (частица)",
     "part_of_speech": "word order",
     "article": null,
     "translation": "упрёк + усиление вместе",

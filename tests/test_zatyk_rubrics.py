@@ -90,6 +90,18 @@ class TestSeedData:
             assert word["translation"].strip(), word["lemma"]
             assert word["example"].strip(), word["lemma"]
 
+    def test_grammar_cards_do_not_reuse_a_plain_vocabulary_lemma(self):
+        """words.lemma is UNIQUE: a bare 'weil' would collide with the
+        conjunction already in the dictionary and the card would be dropped as
+        a duplicate, leaving the rubric short without any error."""
+        plain = {"weil", "dass", "wenn", "als", "ob", "obwohl", "damit", "denn",
+                 "aber", "und", "oder", "doch", "gar nicht"}
+
+        for rubric in ("wortstellung.json", "wo_wohin.json", "verschmelzung.json",
+                       "adjektive.json", "verbformen.json", "zeitangaben.json"):
+            for word in load_seed(rubric):
+                assert word["lemma"].lower() not in plain, f"{rubric}: {word['lemma']}"
+
     def test_lemmas_are_unique_across_every_seed_file(self):
         lemmas = [w["lemma"].lower() for w in all_seed_words()]
 
