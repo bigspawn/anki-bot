@@ -18,6 +18,7 @@ Usage:
     python scripts/backfill_noun_plural.py data/bot.db --dry-run
     python scripts/backfill_noun_plural.py data/bot.db
     python scripts/backfill_noun_plural.py data/bot.db --openai
+    python scripts/backfill_noun_plural.py data/bot.db --recheck-nulls
 """
 
 import json
@@ -112,6 +113,19 @@ def repair(conn: sqlite3.Connection, dry_run: bool) -> list[sqlite3.Row]:
     return still_missing
 
 
+# "Fast jedes" is deliberate: a first version offered null as an option up
+# front and got it for Sonne, Kino and Gehalt, which all have a plural.
+STRICT_PLURAL_PROMPT = (
+    "Gib für jedes deutsche Substantiv den Plural mit Artikel an, "
+    "zum Beispiel 'die Häuser'. Fast jedes Substantiv mit Artikel hat einen "
+    "Plural — gib ihn an. Nur wenn das Wort wirklich unzählbar ist "
+    "(Stoffname wie Wasser, Abstraktum wie Gesundheit), ein Eigenname ist "
+    "oder selbst schon Plural, antworte mit null. Im Zweifel gib die "
+    'Pluralform an. Antworte NUR als JSON-Objekt {"Wort": "die Plural-Form"}.'
+    "\n\n"
+)
+
+
 async def ask_openai(lemmas: list[str]) -> dict[str, str | None]:
     """Ask for the plural of each lemma, null when the noun has none"""
     from src.word_processor import get_word_processor
@@ -121,13 +135,7 @@ async def ask_openai(lemmas: list[str]) -> dict[str, str | None]:
 
     for start in range(0, len(lemmas), BATCH_SIZE):
         batch = lemmas[start : start + BATCH_SIZE]
-        prompt = (
-            "Gib für jedes deutsche Substantiv den Plural mit Artikel an, "
-            "zum Beispiel 'die Häuser'. Wenn das Wort keinen Plural hat "
-            "(Eigenname, Stoffname) oder selbst schon Plural ist, gib null an. "
-            "Antworte NUR als JSON-Objekt {\"Wort\": \"die Plural-Form\"}.\n\n"
-            + "\n".join(batch)
-        )
+        prompt = STRICT_PLURAL_PROMPT + "\n".join(batch)
 
         response = await processor.client.chat.completions.create(
             model=processor.model,
@@ -190,7 +198,56 @@ def generate(conn: sqlite3.Connection, missing: list[sqlite3.Row], dry_run: bool
     print(f"✅ Generated plurals for {len(updates)} nouns")
 
 
-def backfill(db_path: str, dry_run: bool = False, use_openai: bool = False) -> bool:
+def recheck_nulls(conn: sqlite3.Connection, dry_run: bool) -> None:
+    """Ask again about nouns recorded as having no plural.
+
+    Only nouns that carry an article are rechecked — those are ordinary
+    countable words, so a null there is far more likely to be a bad answer
+    than a real gap. A null answer is kept as is, so this can only add.
+    """
+    import asyncio
+
+    rows = conn.execute(
+        "SELECT id, lemma, additional_forms FROM words"
+        " WHERE LOWER(part_of_speech) LIKE 'noun%'"
+        " AND article IS NOT NULL AND TRIM(article) != ''"
+        " AND json_valid(additional_forms)"
+        " AND json_extract(additional_forms, '$.plural') IS NULL"
+    ).fetchall()
+
+    print(f"🔁 Nouns with an article but no plural: {len(rows)}")
+    if not rows:
+        return
+
+    plurals = asyncio.run(ask_openai([row["lemma"] for row in rows]))
+
+    updates = []
+    for row in rows:
+        plural = plurals.get(row["lemma"])
+        if plural:
+            updates.append((set_plural(row["additional_forms"], plural), row["id"]))
+
+    print(f"  ✏️ Now have a plural: {len(updates)}")
+    print(f"  ➖ Still none, kept as null: {len(rows) - len(updates)}")
+
+    if dry_run:
+        for forms, word_id in updates[:15]:
+            lemma = next(r["lemma"] for r in rows if r["id"] == word_id)
+            print(f"    + {lemma} → {json.loads(forms)['plural']}")
+        print("🧪 Dry run — nothing written")
+        return
+
+    conn.executemany("UPDATE words SET additional_forms = ? WHERE id = ?", updates)
+    conn.commit()
+    print(f"✅ Corrected {len(updates)} nouns")
+
+
+def backfill(
+    db_path: str,
+    dry_run: bool = False,
+    use_openai: bool = False,
+    recheck: bool = False,
+) -> bool:
     try:
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
@@ -201,6 +258,9 @@ def backfill(db_path: str, dry_run: bool = False, use_openai: bool = False) -> b
             generate(conn, missing, dry_run)
         elif missing:
             print("  ℹ️ Re-run with --openai to generate the missing ones")
+
+        if recheck:
+            recheck_nulls(conn, dry_run)
 
         if dry_run:
             print("🧪 Dry run — nothing written")
@@ -216,6 +276,7 @@ def main() -> None:
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     dry_run = "--dry-run" in sys.argv
     use_openai = "--openai" in sys.argv
+    recheck = "--recheck-nulls" in sys.argv
 
     if not args:
         print(__doc__)
@@ -226,7 +287,7 @@ def main() -> None:
         print(f"❌ Database not found: {db_path}")
         sys.exit(1)
 
-    sys.exit(0 if backfill(db_path, dry_run, use_openai) else 1)
+    sys.exit(0 if backfill(db_path, dry_run, use_openai, recheck) else 1)
 
 
 if __name__ == "__main__":
