@@ -285,3 +285,56 @@ class TestNormalizationOnWrite:
         word = noun(forms=normalize_additional_forms({"Plural": "die Häuser"}))
 
         assert "🔢 Plural: die Häuser" in SessionManager._format_answer_text(word)
+
+
+class TestLiteralNullString:
+    """The model answers "null" as a string as often as as a JSON null"""
+
+    def test_a_null_string_never_reaches_the_card(self):
+        assert stored_plural(noun(forms='{"plural": "null"}')) is None
+        assert format_plural_line(noun(forms='{"plural": "null"}')) == ""
+        assert "Plural: null" not in SessionManager._format_answer_text(
+            noun(forms='{"plural": "null"}')
+        )
+
+    @pytest.mark.parametrize("value", ["null", "NULL", "none", "-", "n/a", " null "])
+    def test_every_spelling_of_nothing_is_rejected(self, value):
+        assert stored_plural(noun(forms=json.dumps({"plural": value}))) is None
+
+    def test_the_front_does_not_ask_for_a_null_string_plural(self):
+        front = format_study_card(noun(forms='{"plural": "null"}'), 1, 10)
+
+        assert front == "1/10. Какой артикль у Haus?"
+
+    def test_a_real_plural_is_untouched(self):
+        assert stored_plural(noun(forms='{"plural": "die Nullen"}')) == "die Nullen"
+
+    def test_the_backfill_treats_it_as_unanswered(self):
+        backfill = load_script("backfill_noun_plural")
+
+        assert backfill.has_plural('{"plural": "null"}') is False
+        assert backfill.has_plural('{"plural": null}') is True
+        assert backfill.has_plural('{"plural": "die Häuser"}') is True
+
+    def test_the_repair_pass_clears_it(self, db_path):
+        manager = DatabaseManager(db_path)
+        manager.init_database()
+        manager.create_user(telegram_id=TELEGRAM_ID, first_name="Tester")
+        manager.add_words_with_details(
+            TELEGRAM_ID,
+            [
+                {
+                    "lemma": "Sonne", "part_of_speech": "noun", "article": "die",
+                    "translation": "солнце", "example": "Die Sonne.",
+                    "additional_forms": '{"plural": "null"}',
+                }
+            ],
+        )
+
+        backfill = load_script("backfill_noun_plural")
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
+        still_missing = backfill.repair(conn, dry_run=False)
+        conn.close()
+
+        assert [r["lemma"] for r in still_missing] == ["Sonne"]

@@ -136,6 +136,10 @@ def stored_plural(word_data: dict[str, Any]) -> str | None:
     forms = _stored_forms(word_data)
     for key, value in forms.items():
         if key.lower() == "plural" and isinstance(value, str) and value.strip():
+            # The model writes "null" as a string often enough that a card
+            # would otherwise read 'Plural: null'
+            if value.strip().lower() in ("null", "none", "-", "n/a"):
+                return None
             return value.strip()
 
     raw = word_data.get("additional_forms")

@@ -31,6 +31,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 BATCH_SIZE = 40
 
+# The model answers "null" as a JSON string about as often as as a JSON null,
+# and a string is truthy — that is how 80 nouns ended up displaying
+# "Plural: null" on their card.
+NOT_A_PLURAL = {"null", "none", "kein", "keiner", "keine", "-", "—", "n/a", ""}
+
 PLURAL_IN_TEXT = re.compile(r"plurals?\s*[:=]\s*\"?([^\"\n,}]+)", re.IGNORECASE)
 
 
@@ -51,6 +56,8 @@ def recover_plural(raw: str | None) -> str | None:
 
     for key, value in forms.items():
         if key.lower() == "plural" and isinstance(value, str) and value.strip():
+            if value.strip().lower() in NOT_A_PLURAL:
+                return None
             return value.strip()
 
     if not forms and isinstance(raw, str):
@@ -64,7 +71,12 @@ def recover_plural(raw: str | None) -> str | None:
 def has_plural(raw: str | None) -> bool:
     """Whether the row already stores a readable plural, or a decided 'none'"""
     forms = parse_forms(raw)
-    return "plural" in forms
+    if "plural" not in forms:
+        return False
+
+    value = forms["plural"]
+    # A literal "null" is a bad answer, not a decision — ask again
+    return not (isinstance(value, str) and value.strip().lower() in NOT_A_PLURAL)
 
 
 def set_plural(raw: str | None, plural: str | None) -> str:
@@ -161,7 +173,10 @@ async def ask_openai(lemmas: list[str]) -> dict[str, str | None]:
             for lemma in batch:
                 if lemma in answer:
                     value = answer[lemma]
-                    plurals[lemma] = value if isinstance(value, str) else None
+                    if isinstance(value, str) and value.strip().lower() not in NOT_A_PLURAL:
+                        plurals[lemma] = value.strip()
+                    else:
+                        plurals[lemma] = None
 
         print(f"  🤖 {min(start + BATCH_SIZE, len(lemmas))}/{len(lemmas)}")
 
