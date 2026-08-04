@@ -60,9 +60,13 @@ def format_study_card(
         result = f"{progress_info}Заполните пропуск:\n\n{lemma}"
     elif is_error_fix_card(word_data):
         result = f"{progress_info}Исправьте ошибку:\n\n{lemma}"
+    elif is_paradigm_card(word_data):
+        result = f"{progress_info}Поставьте в нужный падеж:\n\n{lemma}"
     elif part_of_speech == "noun" and article:
         result = f"{progress_info}Какой артикль у {lemma}?"
-    elif is_preposition_verb(word_data):
+    elif is_reflexive_case_card(word_data):
+        result = f"{progress_info}Какой падеж у sich в «{lemma}»?"
+    elif is_case_verb(word_data) or is_preposition_verb(word_data):
         result = f"{progress_info}Как переводится {lemma} и какой падеж?"
     else:
         result = f"{progress_info}Как переводится {lemma}?"
@@ -76,6 +80,59 @@ def is_preposition_verb(word_data: dict[str, Any]) -> bool:
     return "verb" in part_of_speech and "preposition" in part_of_speech
 
 
+def is_reflexive_case_card(word_data: dict[str, Any]) -> bool:
+    """Check whether the card drills the case of a reflexive pronoun.
+
+    A verb like 'sich erinnern an' also starts with sich and stores a case,
+    but that case belongs to the object after the preposition, not to the
+    reflexive pronoun — those stay preposition cards.
+    """
+    if is_preposition_verb(word_data):
+        return False
+
+    lemma = (word_data.get("lemma") or "").lower()
+    part_of_speech = (word_data.get("part_of_speech") or "").lower()
+    if not lemma.startswith("sich ") and "reflexive" not in part_of_speech:
+        return False
+
+    return bool(_stored_forms(word_data).get("case"))
+
+
+def is_case_verb(word_data: dict[str, Any]) -> bool:
+    """Check whether the card drills the case a plain verb governs"""
+    part_of_speech = (word_data.get("part_of_speech") or "").lower()
+    return part_of_speech in ("dativ verb", "dativ akkusativ verb")
+
+
+def _stored_forms(word_data: dict[str, Any]) -> dict[str, Any]:
+    """Parse additional_forms, or {} when it is missing or not a JSON object"""
+    raw = word_data.get("additional_forms")
+    if not raw:
+        return {}
+
+    try:
+        forms = json.loads(raw)
+    except (TypeError, ValueError):
+        return {}
+
+    return forms if isinstance(forms, dict) else {}
+
+
+def format_case_line(word_data: dict[str, Any]) -> str:
+    """Format the governed-case line for a reflexive or case-governing verb,
+    or '' when the card has no case stored"""
+    case = _stored_forms(word_data).get("case")
+    if not case:
+        return ""
+
+    if is_reflexive_case_card(word_data):
+        return f"🪞 sich + {case}\n\n"
+    if is_case_verb(word_data):
+        return f"📐 {word_data.get('lemma')} + {case}\n\n"
+
+    return ""
+
+
 def is_cloze_card(word_data: dict[str, Any]) -> bool:
     """Check whether the card is a gap-fill drill"""
     return (word_data.get("part_of_speech") or "").lower() == "cloze"
@@ -86,13 +143,23 @@ def is_error_fix_card(word_data: dict[str, Any]) -> bool:
     return (word_data.get("part_of_speech") or "").lower() == "error fix"
 
 
+def is_paradigm_card(word_data: dict[str, Any]) -> bool:
+    """Check whether the card drills one cell of a declension table"""
+    part_of_speech = (word_data.get("part_of_speech") or "").lower()
+    return part_of_speech in ("pronoun case", "article case")
+
+
 def is_drill_card(word_data: dict[str, Any]) -> bool:
-    """Check whether the card is drilled as a sentence rather than a word.
+    """Check whether the card is drilled as a form rather than a word.
 
     Drills carry the rule in the translation, so the article and part-of-speech
     lines of a normal card would only add noise.
     """
-    return is_cloze_card(word_data) or is_error_fix_card(word_data)
+    return (
+        is_cloze_card(word_data)
+        or is_error_fix_card(word_data)
+        or is_paradigm_card(word_data)
+    )
 
 
 def format_progress_stats(stats: dict[str, Any]) -> str:

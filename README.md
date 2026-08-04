@@ -71,6 +71,19 @@ make run
 - `/study_modal_verbs` - Study the core German modal verbs (können, müssen,
   dürfen, sollen, wollen, mögen, möchten), intersected with your own
   vocabulary
+- `/study_article_case` - Drill the article declension table (`der Mann →
+  Akkusativ` → `den Mann`), definite, indefinite and `kein`, seeded from
+  `seed/article_case.json`
+- `/study_pronoun_case` - Drill personal and possessive pronoun declension
+  (`ich → Dativ` → `mir`), seeded from `seed/pronoun_case.json`
+- `/study_reflexive_case` - Drill the case of the reflexive pronoun: `mich`
+  with no second object, `mir` once one appears (`mir die Hände`). Covers the
+  drill cards in `seed/reflexive_case.json` plus every reflexive verb whose
+  case was filled in by `scripts/backfill_verb_case.py`
+- `/study_dativ_verbs` - Verbs governing Dativ (`helfen`, `gefallen`,
+  `danken`), seeded from `seed/dativ_verbs.json`
+- `/study_dat_akk` - Verbs taking a Dativ receiver and an Akkusativ object
+  (`Er gibt mir das Geld`), seeded from `seed/dat_akk_verbs.json`
 - `/study_route` - Study multi-word chunks used to describe a route
   (`am Supermarkt abbiegen`, `bis zur Kreuzung`), seeded from
   `seed/route_phrases.json`

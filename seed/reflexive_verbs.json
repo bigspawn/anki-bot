@@ -5,7 +5,7 @@
     "article": null,
     "translation": "заблудиться (пешком)",
     "example": "Im Wald haben wir uns verlaufen.",
-    "additional_forms": "{\"praeteritum\": \"verlief\", \"partizip_ii\": \"verlaufen\"}",
+    "additional_forms": "{\"praeteritum\": \"verlief\", \"partizip_ii\": \"verlaufen\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -15,7 +15,7 @@
     "article": null,
     "translation": "заблудиться (за рулём)",
     "example": "Wir haben uns in der Stadt verfahren.",
-    "additional_forms": "{\"praeteritum\": \"verfuhr\", \"partizip_ii\": \"verfahren\"}",
+    "additional_forms": "{\"praeteritum\": \"verfuhr\", \"partizip_ii\": \"verfahren\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -25,7 +25,7 @@
     "article": null,
     "translation": "торопиться, спешить",
     "example": "Beeil dich, der Bus kommt gleich!",
-    "additional_forms": "{\"praeteritum\": \"beeilte\", \"partizip_ii\": \"beeilt\"}",
+    "additional_forms": "{\"praeteritum\": \"beeilte\", \"partizip_ii\": \"beeilt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -35,7 +35,7 @@
     "article": null,
     "translation": "радоваться",
     "example": "Ich freue mich sehr über dein Geschenk.",
-    "additional_forms": "{\"praeteritum\": \"freute\", \"partizip_ii\": \"gefreut\"}",
+    "additional_forms": "{\"praeteritum\": \"freute\", \"partizip_ii\": \"gefreut\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -45,7 +45,7 @@
     "article": null,
     "translation": "злиться, сердиться",
     "example": "Er ärgert sich über den Stau.",
-    "additional_forms": "{\"praeteritum\": \"ärgerte\", \"partizip_ii\": \"geärgert\"}",
+    "additional_forms": "{\"praeteritum\": \"ärgerte\", \"partizip_ii\": \"geärgert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -55,7 +55,7 @@
     "article": null,
     "translation": "вспоминать, помнить",
     "example": "Ich erinnere mich gut an diesen Tag.",
-    "additional_forms": "{\"praeteritum\": \"erinnerte\", \"partizip_ii\": \"erinnert\"}",
+    "additional_forms": "{\"praeteritum\": \"erinnerte\", \"partizip_ii\": \"erinnert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -65,7 +65,7 @@
     "article": null,
     "translation": "интересоваться",
     "example": "Sie interessiert sich für Musik.",
-    "additional_forms": "{\"praeteritum\": \"interessierte\", \"partizip_ii\": \"interessiert\"}",
+    "additional_forms": "{\"praeteritum\": \"interessierte\", \"partizip_ii\": \"interessiert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -75,7 +75,7 @@
     "article": null,
     "translation": "представляться; представлять себе",
     "example": "Darf ich mich kurz vorstellen?",
-    "additional_forms": "{\"praeteritum\": \"stellte vor\", \"partizip_ii\": \"vorgestellt\"}",
+    "additional_forms": "{\"praeteritum\": \"stellte vor\", \"partizip_ii\": \"vorgestellt\", \"case\": \"Akkusativ/Dativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -85,7 +85,7 @@
     "article": null,
     "translation": "садиться",
     "example": "Bitte setzen Sie sich!",
-    "additional_forms": "{\"praeteritum\": \"setzte\", \"partizip_ii\": \"gesetzt\"}",
+    "additional_forms": "{\"praeteritum\": \"setzte\", \"partizip_ii\": \"gesetzt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -95,7 +95,7 @@
     "article": null,
     "translation": "присесть, сесть",
     "example": "Er hat sich auf die Bank hingesetzt.",
-    "additional_forms": "{\"praeteritum\": \"setzte hin\", \"partizip_ii\": \"hingesetzt\"}",
+    "additional_forms": "{\"praeteritum\": \"setzte hin\", \"partizip_ii\": \"hingesetzt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -105,7 +105,7 @@
     "article": null,
     "translation": "прилечь",
     "example": "Ich lege mich kurz hin.",
-    "additional_forms": "{\"praeteritum\": \"legte hin\", \"partizip_ii\": \"hingelegt\"}",
+    "additional_forms": "{\"praeteritum\": \"legte hin\", \"partizip_ii\": \"hingelegt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -115,7 +115,7 @@
     "article": null,
     "translation": "ложиться",
     "example": "Das Kind legt sich ins Bett.",
-    "additional_forms": "{\"praeteritum\": \"legte\", \"partizip_ii\": \"gelegt\"}",
+    "additional_forms": "{\"praeteritum\": \"legte\", \"partizip_ii\": \"gelegt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -125,7 +125,7 @@
     "article": null,
     "translation": "чувствовать себя",
     "example": "Heute fühle ich mich viel besser.",
-    "additional_forms": "{\"praeteritum\": \"fühlte\", \"partizip_ii\": \"gefühlt\"}",
+    "additional_forms": "{\"praeteritum\": \"fühlte\", \"partizip_ii\": \"gefühlt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -135,7 +135,7 @@
     "article": null,
     "translation": "мыться, умываться",
     "example": "Er wäscht sich jeden Morgen.",
-    "additional_forms": "{\"praeteritum\": \"wusch\", \"partizip_ii\": \"gewaschen\"}",
+    "additional_forms": "{\"praeteritum\": \"wusch\", \"partizip_ii\": \"gewaschen\", \"case\": \"Akkusativ/Dativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -145,7 +145,7 @@
     "article": null,
     "translation": "принимать душ",
     "example": "Ich dusche mich nach dem Sport.",
-    "additional_forms": "{\"praeteritum\": \"duschte\", \"partizip_ii\": \"geduscht\"}",
+    "additional_forms": "{\"praeteritum\": \"duschte\", \"partizip_ii\": \"geduscht\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -155,7 +155,7 @@
     "article": null,
     "translation": "бриться",
     "example": "Er rasiert sich jeden zweiten Tag.",
-    "additional_forms": "{\"praeteritum\": \"rasierte\", \"partizip_ii\": \"rasiert\"}",
+    "additional_forms": "{\"praeteritum\": \"rasierte\", \"partizip_ii\": \"rasiert\", \"case\": \"Akkusativ/Dativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -165,7 +165,7 @@
     "article": null,
     "translation": "причёсываться",
     "example": "Sie kämmt sich vor dem Spiegel.",
-    "additional_forms": "{\"praeteritum\": \"kämmte\", \"partizip_ii\": \"gekämmt\"}",
+    "additional_forms": "{\"praeteritum\": \"kämmte\", \"partizip_ii\": \"gekämmt\", \"case\": \"Akkusativ/Dativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -175,7 +175,7 @@
     "article": null,
     "translation": "краситься, наносить макияж",
     "example": "Sie schminkt sich für die Party.",
-    "additional_forms": "{\"praeteritum\": \"schminkte\", \"partizip_ii\": \"geschminkt\"}",
+    "additional_forms": "{\"praeteritum\": \"schminkte\", \"partizip_ii\": \"geschminkt\", \"case\": \"Akkusativ/Dativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -185,7 +185,7 @@
     "article": null,
     "translation": "одеваться",
     "example": "Zieh dich warm an, es ist kalt.",
-    "additional_forms": "{\"praeteritum\": \"zog an\", \"partizip_ii\": \"angezogen\"}",
+    "additional_forms": "{\"praeteritum\": \"zog an\", \"partizip_ii\": \"angezogen\", \"case\": \"Akkusativ/Dativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -195,7 +195,7 @@
     "article": null,
     "translation": "раздеваться",
     "example": "Die Kinder ziehen sich im Flur aus.",
-    "additional_forms": "{\"praeteritum\": \"zog aus\", \"partizip_ii\": \"ausgezogen\"}",
+    "additional_forms": "{\"praeteritum\": \"zog aus\", \"partizip_ii\": \"ausgezogen\", \"case\": \"Akkusativ/Dativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -205,7 +205,7 @@
     "article": null,
     "translation": "переодеваться",
     "example": "Ich ziehe mich schnell um.",
-    "additional_forms": "{\"praeteritum\": \"zog um\", \"partizip_ii\": \"umgezogen\"}",
+    "additional_forms": "{\"praeteritum\": \"zog um\", \"partizip_ii\": \"umgezogen\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -215,7 +215,7 @@
     "article": null,
     "translation": "отдыхать",
     "example": "Nach der Arbeit ruhe ich mich aus.",
-    "additional_forms": "{\"praeteritum\": \"ruhte aus\", \"partizip_ii\": \"ausgeruht\"}",
+    "additional_forms": "{\"praeteritum\": \"ruhte aus\", \"partizip_ii\": \"ausgeruht\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -225,7 +225,7 @@
     "article": null,
     "translation": "восстанавливаться, отдыхать",
     "example": "Im Urlaub habe ich mich gut erholt.",
-    "additional_forms": "{\"praeteritum\": \"erholte\", \"partizip_ii\": \"erholt\"}",
+    "additional_forms": "{\"praeteritum\": \"erholte\", \"partizip_ii\": \"erholt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -235,7 +235,7 @@
     "article": null,
     "translation": "расслабляться",
     "example": "Bei Musik entspanne ich mich am besten.",
-    "additional_forms": "{\"praeteritum\": \"entspannte\", \"partizip_ii\": \"entspannt\"}",
+    "additional_forms": "{\"praeteritum\": \"entspannte\", \"partizip_ii\": \"entspannt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -245,7 +245,7 @@
     "article": null,
     "translation": "скучать",
     "example": "Die Kinder langweilen sich zu Hause.",
-    "additional_forms": "{\"praeteritum\": \"langweilte\", \"partizip_ii\": \"gelangweilt\"}",
+    "additional_forms": "{\"praeteritum\": \"langweilte\", \"partizip_ii\": \"gelangweilt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -255,7 +255,7 @@
     "article": null,
     "translation": "извиняться",
     "example": "Ich möchte mich für die Verspätung entschuldigen.",
-    "additional_forms": "{\"praeteritum\": \"entschuldigte\", \"partizip_ii\": \"entschuldigt\"}",
+    "additional_forms": "{\"praeteritum\": \"entschuldigte\", \"partizip_ii\": \"entschuldigt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -265,7 +265,7 @@
     "article": null,
     "translation": "благодарить",
     "example": "Er bedankte sich herzlich für die Hilfe.",
-    "additional_forms": "{\"praeteritum\": \"bedankte\", \"partizip_ii\": \"bedankt\"}",
+    "additional_forms": "{\"praeteritum\": \"bedankte\", \"partizip_ii\": \"bedankt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -275,7 +275,7 @@
     "article": null,
     "translation": "жаловаться",
     "example": "Der Gast beschwert sich beim Kellner.",
-    "additional_forms": "{\"praeteritum\": \"beschwerte\", \"partizip_ii\": \"beschwert\"}",
+    "additional_forms": "{\"praeteritum\": \"beschwerte\", \"partizip_ii\": \"beschwert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -285,7 +285,7 @@
     "article": null,
     "translation": "подавать заявление, претендовать на место",
     "example": "Sie bewirbt sich bei einer großen Firma.",
-    "additional_forms": "{\"praeteritum\": \"bewarb\", \"partizip_ii\": \"beworben\"}",
+    "additional_forms": "{\"praeteritum\": \"bewarb\", \"partizip_ii\": \"beworben\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -295,7 +295,7 @@
     "article": null,
     "translation": "записываться, регистрироваться",
     "example": "Ich habe mich für den Deutschkurs angemeldet.",
-    "additional_forms": "{\"praeteritum\": \"meldete an\", \"partizip_ii\": \"angemeldet\"}",
+    "additional_forms": "{\"praeteritum\": \"meldete an\", \"partizip_ii\": \"angemeldet\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -305,7 +305,7 @@
     "article": null,
     "translation": "выписываться, сниматься с учёта",
     "example": "Vor dem Umzug muss man sich abmelden.",
-    "additional_forms": "{\"praeteritum\": \"meldete ab\", \"partizip_ii\": \"abgemeldet\"}",
+    "additional_forms": "{\"praeteritum\": \"meldete ab\", \"partizip_ii\": \"abgemeldet\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -315,7 +315,7 @@
     "article": null,
     "translation": "давать о себе знать, отзываться",
     "example": "Melde dich, wenn du angekommen bist!",
-    "additional_forms": "{\"praeteritum\": \"meldete\", \"partizip_ii\": \"gemeldet\"}",
+    "additional_forms": "{\"praeteritum\": \"meldete\", \"partizip_ii\": \"gemeldet\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -325,7 +325,7 @@
     "article": null,
     "translation": "договариваться о встрече",
     "example": "Wir haben uns für Freitag verabredet.",
-    "additional_forms": "{\"praeteritum\": \"verabredete\", \"partizip_ii\": \"verabredet\"}",
+    "additional_forms": "{\"praeteritum\": \"verabredete\", \"partizip_ii\": \"verabredet\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -335,7 +335,7 @@
     "article": null,
     "translation": "прощаться",
     "example": "Er verabschiedete sich von seinen Gästen.",
-    "additional_forms": "{\"praeteritum\": \"verabschiedete\", \"partizip_ii\": \"verabschiedet\"}",
+    "additional_forms": "{\"praeteritum\": \"verabschiedete\", \"partizip_ii\": \"verabschiedet\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -345,7 +345,7 @@
     "article": null,
     "translation": "встречаться",
     "example": "Wir treffen uns morgen im Café.",
-    "additional_forms": "{\"praeteritum\": \"traf\", \"partizip_ii\": \"getroffen\"}",
+    "additional_forms": "{\"praeteritum\": \"traf\", \"partizip_ii\": \"getroffen\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A1"
   },
@@ -355,7 +355,7 @@
     "article": null,
     "translation": "беседовать, развлекаться",
     "example": "Wir haben uns lange unterhalten.",
-    "additional_forms": "{\"praeteritum\": \"unterhielt\", \"partizip_ii\": \"unterhalten\"}",
+    "additional_forms": "{\"praeteritum\": \"unterhielt\", \"partizip_ii\": \"unterhalten\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -365,7 +365,7 @@
     "article": null,
     "translation": "ссориться",
     "example": "Die Brüder streiten sich oft.",
-    "additional_forms": "{\"praeteritum\": \"stritt\", \"partizip_ii\": \"gestritten\"}",
+    "additional_forms": "{\"praeteritum\": \"stritt\", \"partizip_ii\": \"gestritten\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -375,7 +375,7 @@
     "article": null,
     "translation": "ладить, мириться",
     "example": "Die Kinder vertragen sich wieder.",
-    "additional_forms": "{\"praeteritum\": \"vertrug\", \"partizip_ii\": \"vertragen\"}",
+    "additional_forms": "{\"praeteritum\": \"vertrug\", \"partizip_ii\": \"vertragen\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -385,7 +385,7 @@
     "article": null,
     "translation": "влюбляться",
     "example": "Er hat sich sofort verliebt.",
-    "additional_forms": "{\"praeteritum\": \"verliebte\", \"partizip_ii\": \"verliebt\"}",
+    "additional_forms": "{\"praeteritum\": \"verliebte\", \"partizip_ii\": \"verliebt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -395,7 +395,7 @@
     "article": null,
     "translation": "обручаться",
     "example": "Sie haben sich im Sommer verlobt.",
-    "additional_forms": "{\"praeteritum\": \"verlobte\", \"partizip_ii\": \"verlobt\"}",
+    "additional_forms": "{\"praeteritum\": \"verlobte\", \"partizip_ii\": \"verlobt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -405,7 +405,7 @@
     "article": null,
     "translation": "заботиться, ухаживать",
     "example": "Sie kümmert sich um ihre Eltern.",
-    "additional_forms": "{\"praeteritum\": \"kümmerte\", \"partizip_ii\": \"gekümmert\"}",
+    "additional_forms": "{\"praeteritum\": \"kümmerte\", \"partizip_ii\": \"gekümmert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -415,7 +415,7 @@
     "article": null,
     "translation": "концентрироваться",
     "example": "Ich kann mich hier nicht konzentrieren.",
-    "additional_forms": "{\"praeteritum\": \"konzentrierte\", \"partizip_ii\": \"konzentriert\"}",
+    "additional_forms": "{\"praeteritum\": \"konzentrierte\", \"partizip_ii\": \"konzentriert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -425,7 +425,7 @@
     "article": null,
     "translation": "привыкать",
     "example": "Man gewöhnt sich schnell an das Klima.",
-    "additional_forms": "{\"praeteritum\": \"gewöhnte\", \"partizip_ii\": \"gewöhnt\"}",
+    "additional_forms": "{\"praeteritum\": \"gewöhnte\", \"partizip_ii\": \"gewöhnt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -435,7 +435,7 @@
     "article": null,
     "translation": "решаться, делать выбор",
     "example": "Ich habe mich für die Wohnung entschieden.",
-    "additional_forms": "{\"praeteritum\": \"entschied\", \"partizip_ii\": \"entschieden\"}",
+    "additional_forms": "{\"praeteritum\": \"entschied\", \"partizip_ii\": \"entschieden\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -445,7 +445,7 @@
     "article": null,
     "translation": "готовиться",
     "example": "Wir bereiten uns auf die Prüfung vor.",
-    "additional_forms": "{\"praeteritum\": \"bereitete vor\", \"partizip_ii\": \"vorbereitet\"}",
+    "additional_forms": "{\"praeteritum\": \"bereitete vor\", \"partizip_ii\": \"vorbereitet\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -455,7 +455,7 @@
     "article": null,
     "translation": "узнавать, наводить справки",
     "example": "Bitte informieren Sie sich vorher im Internet.",
-    "additional_forms": "{\"praeteritum\": \"informierte\", \"partizip_ii\": \"informiert\"}",
+    "additional_forms": "{\"praeteritum\": \"informierte\", \"partizip_ii\": \"informiert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -465,7 +465,7 @@
     "article": null,
     "translation": "справляться, расспрашивать",
     "example": "Er erkundigte sich nach dem Preis.",
-    "additional_forms": "{\"praeteritum\": \"erkundigte\", \"partizip_ii\": \"erkundigt\"}",
+    "additional_forms": "{\"praeteritum\": \"erkundigte\", \"partizip_ii\": \"erkundigt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -475,7 +475,7 @@
     "article": null,
     "translation": "заниматься чем-л.",
     "example": "Sie beschäftigt sich mit Kunst.",
-    "additional_forms": "{\"praeteritum\": \"beschäftigte\", \"partizip_ii\": \"beschäftigt\"}",
+    "additional_forms": "{\"praeteritum\": \"beschäftigte\", \"partizip_ii\": \"beschäftigt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -485,7 +485,7 @@
     "article": null,
     "translation": "стараться, прилагать усилия",
     "example": "Wir bemühen uns um eine schnelle Lösung.",
-    "additional_forms": "{\"praeteritum\": \"bemühte\", \"partizip_ii\": \"bemüht\"}",
+    "additional_forms": "{\"praeteritum\": \"bemühte\", \"partizip_ii\": \"bemüht\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B2"
   },
@@ -495,7 +495,7 @@
     "article": null,
     "translation": "стыдиться",
     "example": "Ich schäme mich für mein Verhalten.",
-    "additional_forms": "{\"praeteritum\": \"schämte\", \"partizip_ii\": \"geschämt\"}",
+    "additional_forms": "{\"praeteritum\": \"schämte\", \"partizip_ii\": \"geschämt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -505,7 +505,7 @@
     "article": null,
     "translation": "бояться",
     "example": "Das Kind fürchtet sich vor dem Hund.",
-    "additional_forms": "{\"praeteritum\": \"fürchtete\", \"partizip_ii\": \"gefürchtet\"}",
+    "additional_forms": "{\"praeteritum\": \"fürchtete\", \"partizip_ii\": \"gefürchtet\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -515,7 +515,7 @@
     "article": null,
     "translation": "удивляться",
     "example": "Ich wundere mich über seine Antwort.",
-    "additional_forms": "{\"praeteritum\": \"wunderte\", \"partizip_ii\": \"gewundert\"}",
+    "additional_forms": "{\"praeteritum\": \"wunderte\", \"partizip_ii\": \"gewundert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -525,7 +525,7 @@
     "article": null,
     "translation": "ошибаться",
     "example": "Da irrst du dich leider.",
-    "additional_forms": "{\"praeteritum\": \"irrte\", \"partizip_ii\": \"geirrt\"}",
+    "additional_forms": "{\"praeteritum\": \"irrte\", \"partizip_ii\": \"geirrt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -535,7 +535,7 @@
     "article": null,
     "translation": "опаздывать",
     "example": "Der Zug hat sich um zehn Minuten verspätet.",
-    "additional_forms": "{\"praeteritum\": \"verspätete\", \"partizip_ii\": \"verspätet\"}",
+    "additional_forms": "{\"praeteritum\": \"verspätete\", \"partizip_ii\": \"verspätet\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -545,7 +545,7 @@
     "article": null,
     "translation": "получать травму, ранить себя",
     "example": "Beim Sport hat er sich verletzt.",
-    "additional_forms": "{\"praeteritum\": \"verletzte\", \"partizip_ii\": \"verletzt\"}",
+    "additional_forms": "{\"praeteritum\": \"verletzte\", \"partizip_ii\": \"verletzt\", \"case\": \"Akkusativ/Dativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -555,7 +555,7 @@
     "article": null,
     "translation": "простужаться",
     "example": "Zieh dich an, sonst erkältest du dich.",
-    "additional_forms": "{\"praeteritum\": \"erkältete\", \"partizip_ii\": \"erkältet\"}",
+    "additional_forms": "{\"praeteritum\": \"erkältete\", \"partizip_ii\": \"erkältet\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "A2"
   },
@@ -565,7 +565,7 @@
     "article": null,
     "translation": "двигаться",
     "example": "Du solltest dich mehr bewegen.",
-    "additional_forms": "{\"praeteritum\": \"bewegte\", \"partizip_ii\": \"bewegt\"}",
+    "additional_forms": "{\"praeteritum\": \"bewegte\", \"partizip_ii\": \"bewegt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -575,7 +575,7 @@
     "article": null,
     "translation": "находиться",
     "example": "Das Büro befindet sich im dritten Stock.",
-    "additional_forms": "{\"praeteritum\": \"befand\", \"partizip_ii\": \"befunden\"}",
+    "additional_forms": "{\"praeteritum\": \"befand\", \"partizip_ii\": \"befunden\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -585,7 +585,7 @@
     "article": null,
     "translation": "меняться",
     "example": "Die Zeiten haben sich geändert.",
-    "additional_forms": "{\"praeteritum\": \"änderte\", \"partizip_ii\": \"geändert\"}",
+    "additional_forms": "{\"praeteritum\": \"änderte\", \"partizip_ii\": \"geändert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -595,7 +595,7 @@
     "article": null,
     "translation": "изменяться",
     "example": "Die Stadt hat sich stark verändert.",
-    "additional_forms": "{\"praeteritum\": \"veränderte\", \"partizip_ii\": \"verändert\"}",
+    "additional_forms": "{\"praeteritum\": \"veränderte\", \"partizip_ii\": \"verändert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -605,7 +605,7 @@
     "article": null,
     "translation": "развиваться",
     "example": "Das Projekt entwickelt sich gut.",
-    "additional_forms": "{\"praeteritum\": \"entwickelte\", \"partizip_ii\": \"entwickelt\"}",
+    "additional_forms": "{\"praeteritum\": \"entwickelte\", \"partizip_ii\": \"entwickelt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -615,7 +615,7 @@
     "article": null,
     "translation": "отличаться",
     "example": "Die beiden Modelle unterscheiden sich kaum.",
-    "additional_forms": "{\"praeteritum\": \"unterschied\", \"partizip_ii\": \"unterschieden\"}",
+    "additional_forms": "{\"praeteritum\": \"unterschied\", \"partizip_ii\": \"unterschieden\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B2"
   },
@@ -625,7 +625,7 @@
     "article": null,
     "translation": "приходить к соглашению",
     "example": "Wir haben uns auf einen Termin geeinigt.",
-    "additional_forms": "{\"praeteritum\": \"einigte\", \"partizip_ii\": \"geeinigt\"}",
+    "additional_forms": "{\"praeteritum\": \"einigte\", \"partizip_ii\": \"geeinigt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B2"
   },
@@ -635,7 +635,7 @@
     "article": null,
     "translation": "отказываться",
     "example": "Er weigert sich zu unterschreiben.",
-    "additional_forms": "{\"praeteritum\": \"weigerte\", \"partizip_ii\": \"geweigert\"}",
+    "additional_forms": "{\"praeteritum\": \"weigerte\", \"partizip_ii\": \"geweigert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B2"
   },
@@ -645,7 +645,7 @@
     "article": null,
     "translation": "решаться, осмеливаться",
     "example": "Ich traue mich nicht zu fragen.",
-    "additional_forms": "{\"praeteritum\": \"traute\", \"partizip_ii\": \"getraut\"}",
+    "additional_forms": "{\"praeteritum\": \"traute\", \"partizip_ii\": \"getraut\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -655,7 +655,7 @@
     "article": null,
     "translation": "полагаться",
     "example": "Auf ihn kann man sich verlassen.",
-    "additional_forms": "{\"praeteritum\": \"verließ\", \"partizip_ii\": \"verlassen\"}",
+    "additional_forms": "{\"praeteritum\": \"verließ\", \"partizip_ii\": \"verlassen\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B1"
   },
@@ -665,7 +665,7 @@
     "article": null,
     "translation": "участвовать",
     "example": "Viele Studenten beteiligen sich an dem Projekt.",
-    "additional_forms": "{\"praeteritum\": \"beteiligte\", \"partizip_ii\": \"beteiligt\"}",
+    "additional_forms": "{\"praeteritum\": \"beteiligte\", \"partizip_ii\": \"beteiligt\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B2"
   },
@@ -675,7 +675,7 @@
     "article": null,
     "translation": "ориентироваться",
     "example": "In der Altstadt orientiere ich mich schlecht.",
-    "additional_forms": "{\"praeteritum\": \"orientierte\", \"partizip_ii\": \"orientiert\"}",
+    "additional_forms": "{\"praeteritum\": \"orientierte\", \"partizip_ii\": \"orientiert\", \"case\": \"Akkusativ\", \"topic\": \"reflexive-case\"}",
     "confidence": 1.0,
     "level": "B2"
   }

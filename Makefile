@@ -133,7 +133,13 @@ seed-words:
 	if [ -z "$$TELEGRAM_ID" ]; then echo "TELEGRAM_ID is required"; exit 1; fi; \
 	uv run python scripts/seed_words.py "$$DB_PATH" "$$TELEGRAM_ID" \
 		seed/reflexive_verbs.json seed/preposition_verbs.json \
-		seed/route_phrases.json seed/cloze_route.json seed/error_fix_route.json $$FLAGS
+		seed/route_phrases.json seed/cloze_route.json seed/error_fix_route.json \
+		seed/reflexive_case.json seed/dativ_verbs.json seed/dat_akk_verbs.json \
+		seed/cloze_verb_case.json seed/pronoun_case.json seed/article_case.json \
+		seed/cloze_paradigm.json $$FLAGS; \
+	uv run python scripts/backfill_verb_case.py "$$DB_PATH" \
+		seed/reflexive_verbs.json seed/reflexive_case.json \
+		seed/dativ_verbs.json seed/dat_akk_verbs.json $$FLAGS
 
 # Deploy to production (NAS) over SSH + docker compose, no extra tooling needed
 # Usage: make deploy [TAG=v1.0.0] [HOST=other-host]

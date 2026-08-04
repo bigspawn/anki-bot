@@ -133,6 +133,36 @@ class DatabaseManager:
         """Get gap-fill and error-correction drills for study"""
         return self.word_repo.get_cloze_words(telegram_id, limit, randomize)
 
+    def get_reflexive_case_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get reflexive verbs whose pronoun case is recorded, for study"""
+        return self.word_repo.get_reflexive_case_words(telegram_id, limit, randomize)
+
+    def get_pronoun_case_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get pronoun declension cards for study"""
+        return self.word_repo.get_pronoun_case_words(telegram_id, limit, randomize)
+
+    def get_article_case_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get article declension cards for study"""
+        return self.word_repo.get_article_case_words(telegram_id, limit, randomize)
+
+    def get_dativ_verbs(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get verbs governing Dativ for study"""
+        return self.word_repo.get_dativ_verbs(telegram_id, limit, randomize)
+
+    def get_dat_akk_verbs(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get verbs taking both a Dativ and an Akkusativ object for study"""
+        return self.word_repo.get_dat_akk_verbs(telegram_id, limit, randomize)
+
     def get_words_by_topic(
         self, telegram_id: int, topic: str, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:

@@ -96,7 +96,9 @@ class TestReflexiveData:
     def test_principal_parts_are_present_and_render(self, reflexive_words):
         for word in reflexive_words:
             forms = json.loads(word["additional_forms"])
-            assert set(forms) == {"praeteritum", "partizip_ii"}, word["lemma"]
+            # case/topic were added later for /study_reflexive_case; the
+            # principal parts still have to be there and still have to render
+            assert {"praeteritum", "partizip_ii"} <= set(forms), word["lemma"]
             assert forms["praeteritum"] and forms["partizip_ii"], word["lemma"]
             assert format_verb_forms(word).startswith("🔄 "), word["lemma"]
 
@@ -151,21 +153,15 @@ class TestSeeding:
         seed = load_script("seed_words")
 
         assert (
-            seed.seed_words(
-                db_path, 777, [str(REFLEXIVE_PATH), str(PREPOSITION_PATH)]
-            )
+            seed.seed_words(db_path, 777, [str(REFLEXIVE_PATH), str(PREPOSITION_PATH)])
             is True
         )
 
         reflexive = db_manager.get_reflexive_verbs(777, limit=1000)
         rektion = db_manager.get_preposition_verbs(777, limit=1000)
 
-        assert {w["lemma"] for w in reflexive} >= {
-            w["lemma"] for w in reflexive_words
-        }
-        assert {w["lemma"] for w in rektion} >= {
-            w["lemma"] for w in preposition_words
-        }
+        assert {w["lemma"] for w in reflexive} >= {w["lemma"] for w in reflexive_words}
+        assert {w["lemma"] for w in rektion} >= {w["lemma"] for w in preposition_words}
 
     def test_reflexive_verbs_with_a_preposition_land_in_both_groups(
         self, db_manager, preposition_words
@@ -173,7 +169,9 @@ class TestSeeding:
         """'sich freuen auf' is both reflexive and governed by a preposition"""
         db_manager.add_words_to_user(777, preposition_words)
 
-        reflexive = {w["lemma"] for w in db_manager.get_reflexive_verbs(777, limit=1000)}
+        reflexive = {
+            w["lemma"] for w in db_manager.get_reflexive_verbs(777, limit=1000)
+        }
 
         assert "sich freuen auf" in reflexive
 

@@ -17,6 +17,7 @@ from ...spaced_repetition import SpacedRepetitionSystem
 from ...utils import (
     Timer,
     create_inline_keyboard_data,
+    format_case_line,
     format_study_card,
     format_verb_case,
     format_verb_forms,
@@ -184,7 +185,10 @@ class SessionManager:
         else:
             word_display = f"{word['lemma']} - {word['part_of_speech']}"
 
-        verb_forms = format_verb_forms(word) or format_verb_case(word)
+        # The case line wins: on these cards it is the answer being drilled
+        verb_forms = (
+            format_case_line(word) or format_verb_forms(word) or format_verb_case(word)
+        )
 
         return f"""🔤 <b>{word["lemma"]}</b>
 {word_display}

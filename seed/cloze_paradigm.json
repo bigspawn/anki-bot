@@ -1,0 +1,152 @@
+[
+  {
+    "lemma": "Ich sehe ___ Mann. (der Mann)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "den — Akkusativ мужского рода",
+    "example": "Ich sehe den Mann.",
+    "additional_forms": "{\"answer\": \"den\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Ich helfe ___ Frau. (die Frau)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "der — Dativ женского рода; совпадает с м. Nominativ",
+    "example": "Ich helfe der Frau.",
+    "additional_forms": "{\"answer\": \"der\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Ich helfe ___ Kindern. (die Kinder)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "den — Dativ Plural, и у существительного появляется -n",
+    "example": "Ich helfe den Kindern.",
+    "additional_forms": "{\"answer\": \"den\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Ich habe ___ Hunger. (der Hunger)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "keinen — Akkusativ мужского рода",
+    "example": "Ich habe keinen Hunger.",
+    "additional_forms": "{\"answer\": \"keinen\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Ich habe ___ Zeit. (die Zeit)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "keine — Akkusativ женского рода",
+    "example": "Ich habe keine Zeit.",
+    "additional_forms": "{\"answer\": \"keine\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Es gibt ___ Supermarkt. (der Supermarkt)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "einen — es gibt всегда с Akkusativ",
+    "example": "Es gibt einen Supermarkt.",
+    "additional_forms": "{\"answer\": \"einen\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Das Auto ___ Mannes. (der Mann)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "des — Genitiv мужского рода",
+    "example": "Das Auto des Mannes.",
+    "additional_forms": "{\"answer\": \"des\", \"topic\": \"article-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Er sieht ___. (ich)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "mich — Akkusativ от ich",
+    "example": "Er sieht mich.",
+    "additional_forms": "{\"answer\": \"mich\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Er hilft ___. (ich)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "mir — Dativ от ich; helfen требует Dativ",
+    "example": "Er hilft mir.",
+    "additional_forms": "{\"answer\": \"mir\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Ich sehe ___. (er)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "ihn — Akkusativ от er",
+    "example": "Ich sehe ihn.",
+    "additional_forms": "{\"answer\": \"ihn\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Ich helfe ___. (er)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "ihm — Dativ от er",
+    "example": "Ich helfe ihm.",
+    "additional_forms": "{\"answer\": \"ihm\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Ich helfe ___. (sie — она)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "ihr — Dativ от sie",
+    "example": "Ich helfe ihr.",
+    "additional_forms": "{\"answer\": \"ihr\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Ich danke ___. (Sie — вежливое)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "Ihnen — Dativ от Sie, с большой буквы",
+    "example": "Ich danke Ihnen.",
+    "additional_forms": "{\"answer\": \"Ihnen\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Ich sehe ___ Vater. (mein Vater)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "meinen — Akkusativ, m → -en",
+    "example": "Ich sehe meinen Vater.",
+    "additional_forms": "{\"answer\": \"meinen\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  },
+  {
+    "lemma": "Ich helfe ___ Eltern. (meine Eltern)",
+    "part_of_speech": "cloze",
+    "article": null,
+    "translation": "meinen — Dativ Plural, Pl → -en",
+    "example": "Ich helfe meinen Eltern.",
+    "additional_forms": "{\"answer\": \"meinen\", \"topic\": \"pronoun-case\", \"source\": \"vault:01 – Грамматика/Артикли\"}",
+    "confidence": 1.0,
+    "level": "A1"
+  }
+]

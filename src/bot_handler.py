@@ -264,6 +264,44 @@ class BotHandler:
         )
         app.add_handler(
             CommandHandler(
+                "study_article_case",
+                self.require_authorization(
+                    self.command_handlers.study_article_case_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_pronoun_case",
+                self.require_authorization(
+                    self.command_handlers.study_pronoun_case_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_reflexive_case",
+                self.require_authorization(
+                    self.command_handlers.study_reflexive_case_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_dativ_verbs",
+                self.require_authorization(
+                    self.command_handlers.study_dativ_verbs_command
+                ),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
+                "study_dat_akk",
+                self.require_authorization(self.command_handlers.study_dat_akk_command),
+            )
+        )
+        app.add_handler(
+            CommandHandler(
                 "study_route",
                 self.require_authorization(self.command_handlers.study_route_command),
             )
@@ -452,6 +490,13 @@ class BotHandler:
             BotCommand("study_reflexive", "🪞 Возвратные глаголы (sich ...)"),
             BotCommand("study_rektion", "🧭 Глаголы с предлогами и падежом"),
             BotCommand("study_recent", "🕐 Изучать последние N добавленных слов"),
+            BotCommand("study_article_case", "🔠 Артикли по падежам (der/den/dem)"),
+            BotCommand(
+                "study_pronoun_case", "🙋 Местоимения по падежам (ich/mir/mich)"
+            ),
+            BotCommand("study_reflexive_case", "🪞 Падеж у sich (mich или mir)"),
+            BotCommand("study_dativ_verbs", "📐 Глаголы с Dativ (helfen, gefallen)"),
+            BotCommand("study_dat_akk", "📦 Глаголы с двумя объектами (Dat + Akk)"),
             BotCommand("study_route", "🗺 Фразы для описания дороги"),
             BotCommand("study_cloze", "✍️ Пропуски и работа над ошибками"),
             BotCommand(

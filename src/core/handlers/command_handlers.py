@@ -18,33 +18,135 @@ logger = logging.getLogger(__name__)
 # Curated list of the most frequent German verbs (standard DaF/Goethe-Institut
 # frequency lists), used for the /study_common_verbs rubric.
 COMMON_VERBS = [
-    "sein", "haben", "werden", "können", "müssen", "sollen", "wollen", "mögen",
-    "dürfen", "machen", "gehen", "kommen", "sagen", "geben", "sehen", "wissen",
-    "finden", "denken", "nehmen", "lassen", "stehen", "bleiben", "liegen",
-    "heißen", "halten", "bringen", "führen", "sprechen", "leben", "fahren",
-    "meinen", "fragen", "kennen", "gelten", "stellen", "spielen", "arbeiten",
-    "brauchen", "folgen", "lernen", "verstehen", "setzen", "erhalten",
-    "schreiben", "laufen", "erklären", "sitzen", "ziehen", "scheinen",
-    "fallen", "gehören", "erwarten", "verlieren", "wohnen", "beginnen",
-    "versuchen", "treffen", "schaffen", "kaufen", "erreichen", "feiern",
-    "essen", "trinken", "schlafen", "hören", "lesen", "warten", "helfen",
-    "tragen", "öffnen", "schließen", "zeigen", "lieben", "reisen", "kochen",
-    "tanzen", "singen", "lachen", "weinen", "glauben", "verlassen",
-    "erzählen", "antworten", "verkaufen", "bezahlen", "bestellen",
-    "wechseln", "entscheiden", "vergessen", "erinnern", "wünschen", "hoffen",
-    "erfahren", "benutzen",
+    "sein",
+    "haben",
+    "werden",
+    "können",
+    "müssen",
+    "sollen",
+    "wollen",
+    "mögen",
+    "dürfen",
+    "machen",
+    "gehen",
+    "kommen",
+    "sagen",
+    "geben",
+    "sehen",
+    "wissen",
+    "finden",
+    "denken",
+    "nehmen",
+    "lassen",
+    "stehen",
+    "bleiben",
+    "liegen",
+    "heißen",
+    "halten",
+    "bringen",
+    "führen",
+    "sprechen",
+    "leben",
+    "fahren",
+    "meinen",
+    "fragen",
+    "kennen",
+    "gelten",
+    "stellen",
+    "spielen",
+    "arbeiten",
+    "brauchen",
+    "folgen",
+    "lernen",
+    "verstehen",
+    "setzen",
+    "erhalten",
+    "schreiben",
+    "laufen",
+    "erklären",
+    "sitzen",
+    "ziehen",
+    "scheinen",
+    "fallen",
+    "gehören",
+    "erwarten",
+    "verlieren",
+    "wohnen",
+    "beginnen",
+    "versuchen",
+    "treffen",
+    "schaffen",
+    "kaufen",
+    "erreichen",
+    "feiern",
+    "essen",
+    "trinken",
+    "schlafen",
+    "hören",
+    "lesen",
+    "warten",
+    "helfen",
+    "tragen",
+    "öffnen",
+    "schließen",
+    "zeigen",
+    "lieben",
+    "reisen",
+    "kochen",
+    "tanzen",
+    "singen",
+    "lachen",
+    "weinen",
+    "glauben",
+    "verlassen",
+    "erzählen",
+    "antworten",
+    "verkaufen",
+    "bezahlen",
+    "bestellen",
+    "wechseln",
+    "entscheiden",
+    "vergessen",
+    "erinnern",
+    "wünschen",
+    "hoffen",
+    "erfahren",
+    "benutzen",
 ]
 
 # German question words (Fragewörter), used for the /study_question_words rubric.
 QUESTION_WORDS = [
-    "wer", "was", "wo", "wohin", "woher", "wann", "warum", "wieso",
-    "weshalb", "wie", "welcher", "welche", "welches", "wessen", "wem",
-    "wen", "wieviel", "wie viel", "inwiefern", "inwieweit",
+    "wer",
+    "was",
+    "wo",
+    "wohin",
+    "woher",
+    "wann",
+    "warum",
+    "wieso",
+    "weshalb",
+    "wie",
+    "welcher",
+    "welche",
+    "welches",
+    "wessen",
+    "wem",
+    "wen",
+    "wieviel",
+    "wie viel",
+    "inwiefern",
+    "inwieweit",
 ]
 
 # Core German modal verbs, used for the /study_modal_verbs rubric.
 MODAL_VERBS = [
-    "können", "müssen", "dürfen", "sollen", "wollen", "mögen", "möchten",
+    "können",
+    "müssen",
+    "dürfen",
+    "sollen",
+    "wollen",
+    "mögen",
+    "möchten",
 ]
 
 
@@ -148,6 +250,11 @@ class CommandHandlers:
 /study_modal_verbs - Модальные глаголы (können, müssen, wollen...)
 
 🗺 <b>Грамматика и маршруты:</b>
+/study_article_case - Артикли по падежам (der → den → dem → des)
+/study_pronoun_case - Местоимения по падежам (ich → mir → mich)
+/study_reflexive_case - Падеж возвратного местоимения (mich или mir)
+/study_dativ_verbs - Глаголы с Dativ (helfen, gefallen, danken...)
+/study_dat_akk - Глаголы с двумя объектами (geben mir das Buch)
 /study_route - Фразы для описания дороги (am Supermarkt abbiegen...)
 /study_cloze - Пропуски и работа над ошибками (vor ___ Bahnhof → dem)
 /study_topic &lt;тема&gt; - Карточки одной темы, независимо от расписания
@@ -464,6 +571,95 @@ class CommandHandlers:
             return
 
         await self._start_study_session(update, words, "route")
+
+    async def _study_case_rubric(
+        self, update: Update, getter_name: str, empty_message: str, session_kind: str
+    ):
+        """Shared logic for the verb-case rubrics"""
+        if not update.effective_user:
+            return
+
+        user = update.effective_user
+
+        db_user = self.db_manager.get_user_by_telegram_id(user.id)
+        if not db_user:
+            await self._safe_reply(
+                update,
+                "❌ Пользователь не найден. Используйте /start для регистрации.",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+            return
+
+        getter = getattr(self.db_manager, getter_name)
+        words = getter(db_user["telegram_id"], limit=10)
+
+        if not words:
+            await self._safe_reply(
+                update, empty_message, reply_markup=ReplyKeyboardRemove()
+            )
+            return
+
+        await self._start_study_session(update, words, session_kind)
+
+    async def study_reflexive_case_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_reflexive_case - case of the reflexive pronoun (mich vs mir)"""
+        await self._study_case_rubric(
+            update,
+            "get_reflexive_case_words",
+            "🪞 У вас нет возвратных глаголов с отмеченным падежом.\n\n"
+            "Падеж проставляется набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "reflexive_case",
+        )
+
+    async def study_pronoun_case_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_pronoun_case - pronoun declension (ich/mir/mich)"""
+        await self._study_case_rubric(
+            update,
+            "get_pronoun_case_words",
+            "🙋 У вас нет карточек с местоимениями по падежам.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "pronoun_case",
+        )
+
+    async def study_article_case_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_article_case - article declension (der/den/dem/des)"""
+        await self._study_case_rubric(
+            update,
+            "get_article_case_words",
+            "🔠 У вас нет карточек с артиклями по падежам.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "article_case",
+        )
+
+    async def study_dativ_verbs_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_dativ_verbs - verbs governing Dativ (helfen, gefallen)"""
+        await self._study_case_rubric(
+            update,
+            "get_dativ_verbs",
+            "📐 У вас нет глаголов с Dativ.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "dativ_verbs",
+        )
+
+    async def study_dat_akk_command(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
+        """Handle /study_dat_akk - verbs taking a Dativ and an Akkusativ object"""
+        await self._study_case_rubric(
+            update,
+            "get_dat_akk_verbs",
+            "📦 У вас нет глаголов с двумя объектами.\n\n"
+            "Их можно загрузить набором: make seed-words TELEGRAM_ID=<ваш id>",
+            "dat_akk",
+        )
 
     async def study_cloze_command(
         self, update: Update, context: ContextTypes.DEFAULT_TYPE

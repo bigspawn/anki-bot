@@ -87,6 +87,52 @@ SQL_WORDS_BY_TOPIC = (
     + _ORDER_RANDOM_OR
     + _BY_CREATED
 )
+# Reflexive verbs annotated with the case of the reflexive pronoun. The bare
+# verbs get that annotation by backfill, so matching on the stored case rather
+# than on part_of_speech keeps them in the rubric alongside the drill cards.
+_HAS_CASE = (
+    "json_valid(w.additional_forms)"
+    " AND json_extract(w.additional_forms, '$.case') IS NOT NULL"
+)
+
+SQL_REFLEXIVE_CASE = (
+    _SELECT_STUDY_WORDS
+    + _HAS_CASE
+    + " AND (LOWER(w.lemma) LIKE 'sich %'"
+    + " OR LOWER(w.part_of_speech) LIKE '%reflexive%')"
+    # 'sich erinnern an' stores the case of the object after the preposition,
+    # not of the reflexive pronoun — it belongs to /study_rektion instead
+    + " AND LOWER(w.part_of_speech) NOT LIKE '%preposition%'"
+    + _ORDER_RANDOM_OR
+    + _BY_CREATED
+)
+SQL_PRONOUN_CASE = (
+    _SELECT_STUDY_WORDS
+    + "LOWER(w.part_of_speech) = 'pronoun case'"
+    + _ORDER_RANDOM_OR
+    + _BY_CREATED
+)
+SQL_ARTICLE_CASE = (
+    _SELECT_STUDY_WORDS
+    + "LOWER(w.part_of_speech) = 'article case'"
+    + _ORDER_RANDOM_OR
+    + _BY_CREATED
+)
+SQL_DATIV_VERBS = (
+    _SELECT_STUDY_WORDS
+    + _HAS_CASE
+    + " AND json_extract(w.additional_forms, '$.topic') = 'dativ-verbs'"
+    + _ORDER_RANDOM_OR
+    + _BY_CREATED
+)
+SQL_DAT_AKK_VERBS = (
+    _SELECT_STUDY_WORDS
+    + _HAS_CASE
+    + " AND json_extract(w.additional_forms, '$.topic') = 'dat-akk-verbs'"
+    + _ORDER_RANDOM_OR
+    + _BY_CREATED
+)
+
 # A JSON array carries the variable-length lemma set, so the statement itself
 # stays fixed no matter how many lemmas are asked for.
 _LEMMA_IN_JSON_ARRAY = "LOWER(w.lemma) IN (SELECT value FROM json_each(?))"
@@ -285,6 +331,50 @@ class WordRepository:
         """Get gap-fill and error-correction drills for study"""
         return self._fetch_study_words(
             SQL_CLOZE_WORDS, (telegram_id, int(randomize), limit), "cloze words"
+        )
+
+    def get_reflexive_case_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get reflexive verbs whose pronoun case is recorded, for study"""
+        return self._fetch_study_words(
+            SQL_REFLEXIVE_CASE,
+            (telegram_id, int(randomize), limit),
+            "reflexive case words",
+        )
+
+    def get_pronoun_case_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get personal and possessive pronoun declension cards for study"""
+        return self._fetch_study_words(
+            SQL_PRONOUN_CASE, (telegram_id, int(randomize), limit), "pronoun case words"
+        )
+
+    def get_article_case_words(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get article declension cards for study"""
+        return self._fetch_study_words(
+            SQL_ARTICLE_CASE, (telegram_id, int(randomize), limit), "article case words"
+        )
+
+    def get_dativ_verbs(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get verbs governing Dativ ('helfen', 'gefallen') for study"""
+        return self._fetch_study_words(
+            SQL_DATIV_VERBS, (telegram_id, int(randomize), limit), "dativ verbs"
+        )
+
+    def get_dat_akk_verbs(
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
+    ) -> list[dict[str, Any]]:
+        """Get verbs taking both a Dativ and an Akkusativ object for study"""
+        return self._fetch_study_words(
+            SQL_DAT_AKK_VERBS,
+            (telegram_id, int(randomize), limit),
+            "dativ+akkusativ verbs",
         )
 
     def get_words_by_topic(

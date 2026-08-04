@@ -1,0 +1,182 @@
+[
+  {
+    "lemma": "backen",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "печь кому-то что-то",
+    "example": "Ich backe meiner Nachbarin einen Kuchen.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "bringen",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "приносить кому-то что-то",
+    "example": "Kannst du mir Kaffee bringen?",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "empfehlen",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "рекомендовать кому-то что-то",
+    "example": "Ich empfehle dir das Restaurant.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "erklären",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "объяснять кому-то что-то",
+    "example": "Er erklärt mir die Regel.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "erzählen",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "рассказывать кому-то что-то",
+    "example": "Sie erzählt uns eine Geschichte.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "geben",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "давать кому-то что-то",
+    "example": "Er gibt mir das Geld.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "kaufen",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "покупать кому-то что-то",
+    "example": "Ich kaufe meinem Baby einen Teddy.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "kochen",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "готовить кому-то что-то",
+    "example": "Ich koche dir etwas.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "leihen",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "одолжить кому-то что-то",
+    "example": "Ich leihe dir das Buch.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "liefern",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "доставлять кому-то что-то",
+    "example": "Der Mann liefert dem Kunden den Fernseher.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "reparieren",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "чинить кому-то что-то",
+    "example": "Der Vater repariert dem Sohn das Fahrrad.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "schenken",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "дарить кому-то что-то",
+    "example": "Ich schenke meinen Freunden ein Buch.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "schicken",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "отправлять кому-то что-то",
+    "example": "Ich schicke dir ein Paket.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "schreiben",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "писать кому-то что-то",
+    "example": "Ich schreibe dir einen Brief.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "servieren",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "подавать кому-то что-то",
+    "example": "Der Kellner serviert den Gästen das Essen.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "vorlesen",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "читать вслух кому-то что-то",
+    "example": "Er liest dem Kind eine Geschichte vor.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "wünschen",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "желать кому-то чего-то",
+    "example": "Ich wünsche dir alles Gute.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  },
+  {
+    "lemma": "zeigen",
+    "part_of_speech": "dativ akkusativ verb",
+    "article": null,
+    "translation": "показывать кому-то что-то",
+    "example": "Er zeigt seinem Chef Fotos von der Stadt.",
+    "additional_forms": "{\"case\": \"Dativ + Akkusativ\", \"topic\": \"dat-akk-verbs\", \"source\": \"vault:01 – Грамматика/Управление глаголов падежом\"}",
+    "confidence": 1.0,
+    "level": "B1"
+  }
+]
