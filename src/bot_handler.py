@@ -144,7 +144,6 @@ class BotHandler:
                 .write_timeout(30)
                 .connect_timeout(30)
                 .pool_timeout(30)
-                .post_init(self.setup_bot_menu)
                 .build()
             )
 
@@ -154,6 +153,11 @@ class BotHandler:
             # Initialize the application
             await self.application.initialize()
             await self.application.start()
+
+            # Not a post_init hook: PTB only runs those from run_polling /
+            # run_webhook, and this bot drives the lifecycle by hand, so the
+            # menu would silently keep whatever was registered long ago.
+            await self.setup_bot_menu(self.application)
 
             # Start polling
             logger.info("Bot started successfully!")

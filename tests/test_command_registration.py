@@ -5,6 +5,7 @@ in the Telegram menu and documented in /help. A command missing from the menu
 works when typed but stays invisible in the UI.
 """
 
+import asyncio
 from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
 import pytest
@@ -172,3 +173,44 @@ async def test_every_registered_command_is_documented_in_help(bot_handler):
     }
 
     assert not undocumented, f"missing from /help: {sorted(undocumented)}"
+
+
+@pytest.mark.asyncio
+async def test_startup_pushes_the_menu_to_telegram(bot_handler):
+    """The menu must be sent on every start.
+
+    PTB only runs post_init hooks from run_polling/run_webhook, and this bot
+    drives initialize/start/start_polling by hand: registering the menu as a
+    post_init hook would leave Telegram showing a long-stale command list.
+    """
+    application = MagicMock()
+    application.initialize = AsyncMock()
+    application.start = AsyncMock()
+    application.bot.set_my_commands = AsyncMock()
+    application.updater.start_polling = AsyncMock()
+    application.updater.stop = AsyncMock()
+    application.stop = AsyncMock()
+    application.shutdown = AsyncMock()
+
+    builder = MagicMock()
+    builder.token.return_value = builder
+    builder.read_timeout.return_value = builder
+    builder.write_timeout.return_value = builder
+    builder.connect_timeout.return_value = builder
+    builder.pool_timeout.return_value = builder
+    # Accepted but never fired by PTB on this lifecycle: registering the menu
+    # here instead must fail the assertion below.
+    builder.post_init.return_value = builder
+    builder.build.return_value = application
+
+    # The bot idles in a sleep loop until interrupted; that is its stop signal
+    with (
+        patch("src.bot_handler.Application.builder", return_value=builder),
+        patch("asyncio.sleep", AsyncMock(side_effect=asyncio.CancelledError)),
+    ):
+        await bot_handler.start()
+
+    application.bot.set_my_commands.assert_awaited_once()
+    sent = {c.command for c in application.bot.set_my_commands.call_args[0][0]}
+    assert "study_route" in sent
+    assert "stats_topics" in sent
