@@ -189,6 +189,58 @@ class TestRandomizeFlag:
         )
 
 
+class TestRecentWords:
+    """/study_recent shuffles the newest N, it does not sample the whole vault"""
+
+    @pytest.fixture
+    def stocked(self, user_db):
+        user_db.add_words_with_details(TELEGRAM_ID, words(20))
+        # CURRENT_TIMESTAMP ties every row to the same second, so age is set here
+        with user_db.db_connection.get_connection() as conn:
+            conn.execute(
+                """
+                UPDATE learning_progress
+                SET created_at = datetime('now', '-' || (
+                    SELECT COUNT(*) FROM learning_progress lp2
+                    WHERE lp2.word_id > learning_progress.word_id
+                ) || ' days')
+                WHERE telegram_id = ?
+                """,
+                (TELEGRAM_ID,),
+            )
+            conn.commit()
+        return user_db
+
+    def _newest(self, stocked, count):
+        return {f"wort{i}" for i in range(20 - count, 20)}
+
+    def test_randomized_order_varies(self, stocked):
+        orders = {
+            tuple(w["lemma"] for w in stocked.get_recent_words(TELEGRAM_ID, limit=8))
+            for _ in range(15)
+        }
+
+        assert len(orders) > 1
+
+    def test_non_randomized_order_stays_newest_first(self, stocked):
+        lemmas = [
+            w["lemma"]
+            for w in stocked.get_recent_words(TELEGRAM_ID, limit=8, randomize=False)
+        ]
+
+        assert lemmas == [f"wort{i}" for i in range(19, 11, -1)]
+
+    def test_shuffling_still_draws_only_the_newest_n(self, stocked):
+        for _ in range(15):
+            drawn = {w["lemma"] for w in stocked.get_recent_words(TELEGRAM_ID, limit=5)}
+
+            assert drawn == self._newest(stocked, 5)
+
+    def test_the_limit_is_respected_either_way(self, stocked):
+        assert len(stocked.get_recent_words(TELEGRAM_ID, limit=5)) == 5
+        assert len(stocked.get_recent_words(TELEGRAM_ID, limit=5, randomize=False)) == 5
+
+
 class TestReviewWindows:
     """The day window is bound as a datetime modifier"""
 

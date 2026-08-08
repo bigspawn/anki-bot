@@ -205,6 +205,22 @@ SQL_WORDS_BY_LEMMA_SET = (
     _SELECT_STUDY_WORDS + _LEMMA_IN_JSON_ARRAY + _ORDER_RANDOM_OR + _BY_CREATED
 )
 
+# "Recent" picks the newest N first and only then shuffles them: randomizing
+# before the LIMIT would draw N words from the whole vocabulary instead.
+_SELECT_NEWEST_PAGE = """
+    SELECT * FROM (
+        SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
+               lp.next_review_date, lp.last_reviewed,
+               lp.created_at AS progress_created_at
+        FROM words w
+        JOIN learning_progress lp ON w.id = lp.word_id
+        WHERE lp.telegram_id = ?
+        ORDER BY lp.created_at DESC
+        LIMIT ?
+    )"""
+
+SQL_RECENT_WORDS = _SELECT_NEWEST_PAGE + _ORDER_RANDOM_OR + "progress_created_at DESC"
+
 
 class WordRepository:
     """Repository for word-related database operations"""
@@ -623,27 +639,12 @@ class WordRepository:
         )
 
     def get_recent_words(
-        self, telegram_id: int, limit: int = 10
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:
         """Get the most recently added words for study, regardless of SM2 due date"""
-        try:
-            with self.db_connection.get_connection() as conn:
-                cursor = conn.execute(
-                    """
-                    SELECT w.*, lp.repetitions, lp.easiness_factor, lp.interval_days,
-                           lp.next_review_date, lp.last_reviewed
-                    FROM words w
-                    JOIN learning_progress lp ON w.id = lp.word_id
-                    WHERE lp.telegram_id = ?
-                    ORDER BY lp.created_at DESC
-                    LIMIT ?
-                    """,
-                    (telegram_id, limit),
-                )
-                return [dict(row) for row in cursor.fetchall()]
-        except Exception as e:
-            logger.error(f"Error getting recent words: {e}")
-            return []
+        return self._fetch_study_words(
+            SQL_RECENT_WORDS, (telegram_id, limit, int(randomize)), "recent words"
+        )
 
     def add_words_to_user(
         self, telegram_id: int, words_data: list[dict[str, Any]]

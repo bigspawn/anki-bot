@@ -234,10 +234,10 @@ class DatabaseManager:
         return self.word_repo.get_topic_slugs(telegram_id)
 
     def get_recent_words(
-        self, telegram_id: int, limit: int = 10
+        self, telegram_id: int, limit: int = 10, randomize: bool = True
     ) -> list[dict[str, Any]]:
         """Get the most recently added words for study"""
-        return self.word_repo.get_recent_words(telegram_id, limit)
+        return self.word_repo.get_recent_words(telegram_id, limit, randomize)
 
     def get_words_by_part_of_speech(
         self,
